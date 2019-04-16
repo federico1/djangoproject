@@ -1,40 +1,42 @@
 {% extends "base.html" %}
-{% load cache %}
+ {% load i18n %}
+   {% block title %}
+       {{ object.title }}
+   {% endblock %}
+   {% block content %}
+   <div class="container admin">
+       <h1 class="header">
+           {{ module.title }}
+       </h1>
+       <div class="admin__nav">
+           <ul id="modules" class="menu">
+           {% for m in object.modules.all %}
+               <li data-id="{{ m.id }}" class="{% if m == module %}
+   selected{% endif %} menu__item">
+   <a class="menu__link" href="{% url 'student_course_detail_module' object.id m.id %}">
+       <span> Module <span class="order">{{ m.order|add:1 }} </span>
+        </span>
+    <br>
+    {{ m.title }}
+    </a> </li>
+{% empty %}
+    <li class="menu__item">No modules yet.</li>
 
-{% block title %}
-    {{ object.title }}
-{% endblock %}
+{% endfor %}
+</ul> </div>
+       <div class="admin__main">
+           <div class="modules">
+               {% for content in module.contents.all %}
+               <div class="card">
+               {% with item=content.item %}
 
-{% block content %}
-    <h1>
-        {{ module.title }}
-    </h1>
-    <div class="contents">
-        <h3>Modules</h3>
-        <ul id="modules">
-        {% for m in object.modules.all %}
-            <li data-id="{{ m.id }}" {% if m == module %}class="selected"{% endif %}>
-                <a href="{% url "student_course_detail_module" object.id m.id %}">
-                    <span>
-                        Module <span class="order">{{ m.order|add:1 }}</span>
-                    </span>
-                    <br>
-                    {{ m.title }}
-                </a>
-            </li>
-        {% empty %}
-            <li>No modules yet.</li>
-        {% endfor %}
-        </ul>
-    </div>
-    <div class="module">
-    {% cache 600 module_contents module %}
-        {% for content in module.contents.all %}
-            {% with item=content.item %}
-                <h2>{{ item.title }}</h2>
-                {{ item.render }}
-            {% endwith %}
-        {% endfor %}
-    {% endcache %}
-    </div>
-{% endblock %}
+                   <h2>{{ item.title }}</h2>
+                   {{ item.render }}
+
+               {% endwith %}
+               </div>
+               {% endfor %}
+           </div>
+       </div>
+   </div>
+   {% endblock %}

@@ -257,3 +257,18 @@ ul#course-modules li:hover {
     color:#ccc;
     padding-left:20px;
 }
+
+.signup{
+    margin: 0 auto;
+    width: 500px;
+    padding: 10px;
+}
+.clear{
+    clear: both;
+}
+.breadcrumb {
+    list-style: none;
+}
+.breadcrumb li {
+    display: inline;
+}
