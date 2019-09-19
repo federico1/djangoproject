@@ -38,11 +38,7 @@ class StudentSignupForm(UserCreationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
     password1 = forms.CharField(label=_('Password'), widget=forms.PasswordInput(attrs={'class':'form-control'}))
     password2 = forms.CharField(label=_('Password verification'), widget=forms.PasswordInput(attrs={'class':'form-control'}))
-    interests = forms.ModelMultipleChoiceField(
-        queryset=Tag.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=True
-    )
+    
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -53,18 +49,11 @@ class StudentSignupForm(UserCreationForm):
         user.is_student = True
         user.save()
         student = Student.objects.create(user=user)
-        student.interests.add(*self.cleaned_data.get('interests'))
+    
         return user
 
 
-class StudentInterestsForm(forms.ModelForm):
 
-    class Meta:
-        model = Student
-        fields = ('interests',)
-        widgets = {
-            'interests': forms.CheckboxSelectMultiple
-        }
 
 
 class QuestionForm(forms.ModelForm):

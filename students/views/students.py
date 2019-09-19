@@ -15,7 +15,7 @@ from braces.views import LoginRequiredMixin
 from django.contrib.auth import authenticate, login
 from students.forms import CourseEnrollForm
 from students.forms import StudentSignupForm
-from students.forms import StudentInterestsForm
+
 from students.forms import TakeQuizForm
 from courses.models import Course
 from students.models import Quiz
@@ -91,23 +91,7 @@ class StudentEnrollCourseView(FormView):
         return reverse_lazy('student_course_detail', args=[self.course.id])
 
 
-@method_decorator([login_required, student_required], name='dispatch')
-class StudentInterestsView(UpdateView):
-    model = Student
-    form_class = StudentInterestsForm
-    template_name = 'students/student/interests_form.html'
-    success_url = reverse_lazy('student_quiz_list')
 
-    def get_object(self):
-        try:
-            return self.request.user.student
-        except ObjectDoesNotExist:
-            return self.request.user
-
-
-    def form_valid(self, form):
-        messages.success(self.request, 'Interests updated with success.')
-        return super().form_valid(form)
 
 
 @method_decorator([login_required, student_required], name='dispatch')

@@ -11,7 +11,7 @@ urlpatterns = [
   path('course/<int:pk>/', cache_page(60 * 15)(students.StudentCourseDetailView.as_view()), name = 'student_course_detail'),
   path('course/<int:pk>/<int:module_id>/', cache_page(60 * 15)(students.StudentCourseDetailView.as_view()), name = 'student_course_detail_module'),
   path('student/quiz/', students.QuizListView.as_view(), name = 'student_quiz_list'),
-  path('interests/', students.StudentInterestsView.as_view(), name = 'student_interests'),
+
   path('taken/', students.TakenQuizListView.as_view(), name = 'taken_quiz_list'),
   path('student/quiz/<int:pk>/', students.take_quiz, name = 'take_quiz'),
   path('student/recommended-courses/', students.student_recommendation_list, name = 'student_recommendation_list'),
