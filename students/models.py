@@ -1,11 +1,14 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models.signals import post_save
 from django.utils.html import escape, mark_safe
+from agenda.models import Invitation, Contact
 
 
 class User(AbstractUser):
-    is_student = models.BooleanField(default=True)
-    is_teacher = models.BooleanField(default=True)
+    is_student = models.BooleanField(default=False)
+    is_teacher = models.BooleanField(default=False)
 
 
 class Tag(models.Model):
@@ -25,6 +28,7 @@ class Tag(models.Model):
 class Quiz(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='quizzes')
     name = models.CharField(max_length=255)
+    tags = models.ForeignKey(Tag, on_delete=models.CASCADE, related_name='quizzes')
     tags = models.ForeignKey(Tag, on_delete=models.CASCADE, related_name='quizzes')
 
     def __str__(self):
@@ -61,7 +65,7 @@ class Student(models.Model):
         return questions
 
     def __str__(self):
-        return self.user.username
+        return '{} - {}'.format(self.user.username, self.user.email)
 
 
 class TakenQuiz(models.Model):
@@ -80,3 +84,17 @@ class StudentAnswer(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.student, self.answer)
+
+
+def create_contact_on_user_create(sender, instance, created, **kwargs):
+    if created == True:
+        try:
+            invitations = Invitation.objects.filter(email=instance.email)
+            for invitation in invitations:
+                contact = Contact(owner=invitation.sender, user=instance, invitation_send=True, invitation_accepted=True)
+                contact.save()
+                invitation.delete()
+        except Invitation.DoesNotExist:
+            pass
+
+post_save.connect(create_contact_on_user_create, sender=User)

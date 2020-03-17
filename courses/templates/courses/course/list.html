@@ -1,47 +1,107 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block title %}
-    {% if subject %}
-        {{ subject.title }} courses
-    {% else %}
-        All courses
-    {% endif %}
+{% if subject %}
+   {{ subject.title }} {% trans 'courses' %}
+{% else %}
+    {% trans 'All courses' %}
+{% endif %}
 {% endblock %}
 
 {% block content %}
-    <h1>
+<div class="container-fluid">
+    <h2>
         {% if subject %}
-            {{ subject.title }} courses
+            {{ subject.title }} {% trans 'courses' %}
         {% else %}
-            All courses
+            {% trans "All courses" %}
         {% endif %}
-    </h1>
-    <div class="contents">
-        <h3>Subjects</h3>
-        <ul id="modules">
-            <li {% if not subject %}class="selected"{% endif %}>
-                <a href="{% url "course_list" %}">All </a>
-            </li>
-            {% for s in subjects %}
-                <li {% if subject == s %}class="selected"{% endif %}>
-                    <a href="{% url "course_list_subject" s.slug %}">
-                        {{ s.title }}
-                        <br><span>{{ s.total_courses }} courses</span>
-                    </a>
-                </li>
+    </h2>
+
+    {% include "partial/tabs.html" %}
+
+   <div class="subjects">
+       <ul id="modules" class="nav nav-pills" role="tablist">
+           <li role="presentation" class="{% if not subject %}active{% endif %}">
+               <a href="{% url 'course_list' %}">{% trans 'All' %}</a>
+           </li>
+           {% for s in subjects %}
+               <li role="presentation" class="{% if subject == s %}active{% endif %}">
+                   <a href="{% url 'course_list_subject' s.slug %}">
+{{ s.title }} <span class="badge">{{ s.total_courses }}</span>
+                   </a>
+               </li>
+           {% endfor %}
+</ul> </div>
+
+       <div class="courses row">
+           {% for course in courses %}
+               {% with subject=course.subject %}
+                   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                   <div class="panel">
+                       <div class="panel-heading">
+                           <a href="{% url 'course_detail' course.slug %}"> <h4>{{ course.title }}</h4> </a>
+                           <p>
+                               <span class="glyphicon glyphicon-user"></span> {% trans 'Instructor' %}: 
+                               <a href="{% url 'user_detail' course.owner.username %}">
+                                    {{ course.owner.username }}
+                                </a>
+                           </p>
+                      </div>
+                      <div class="panel-body">
+                       <p>
+                           <a href="{% url 'course_list_subject' subject.slug %}" class="link">{{ subject }} </a> - {{ course.total_modules }} {% trans 'modules' %}
+                       </p>
+
+                       <p>
+                        <a href="#" class="link"> Quiz </a> {{ course.quiz }}
+                    </p>
+                    
+                       </div>
+                       <div class="panel-heading">
+                           <hr/>
+                           <div class="row">
+                               <div class="col-xs-4 col-md-4">
+                                   <span class="glyphicon glyphicon-comment"></span> {{ course.total_reviews }} {% trans 'reviews' %}
+                               </div>
+                               <div class="col-xs-4 col-md-4">
+                                   <span class="glyphicon glyphicon-time"></span> {{ course.created | date:"M d" }}
+                               </div>
+                               <div class="col-xs-4 col-md-4">
+                                   {% if course.average_rating %}
+                                    <span class="glyphicon glyphicon-star"></span> {{ course.average_rating|floatformat:1  }} {% trans 'stars' %}
+                                   {% endif %}
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   </div>
+               {% endwith %}
+           {% endfor %}
+       </div>
+       <div class="footer__courses">
+           {% trans 'Courses owned by teachers.'%}
+       </div>
+       {% if courses.has_other_pages %}
+        <ul class="pagination">
+            {% if courses.has_previous %}
+            <li><a href="?page={{ courses.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+            <li class="disabled"><span>&laquo;</span></li>
+            {% endif %}
+            {% for i in courses.paginator.page_range %}
+            {% if courses.number == i %}
+                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+            {% else %}
+                <li><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
             {% endfor %}
+            {% if courses.has_next %}
+            <li><a href="?page={{ courses.next_page_number }}">&raquo;</a></li>
+            {% else %}
+            <li class="disabled"><span>&raquo;</span></li>
+            {% endif %}
         </ul>
-    </div>
-    <div class="module">
-        {% for course in courses %}
-            {% with subject=course.subject %}
-                <h3><a href="{% url "course_detail" course.slug %}">{{ course.title }}</a></h3>
-                <p>
-                    <a href="{% url "course_list_subject" subject.slug %}">{{ subject }}</a>.
-                    {{ course.total_modules }} modules.
-                    Instructor: {{ course.owner.get_full_name }}
-                </p>
-            {% endwith %}
-        {% endfor %}
-    </div>
-{% endblock %}
+        {% endif %}
+</div>
+ {% endblock %}

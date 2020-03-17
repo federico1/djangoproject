@@ -1,11 +1,11 @@
 import datetime
 
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, FieldDoesNotExist, FieldError
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import transaction
 from django.db.models import Count
-from django.urls import reverse_lazy
+from django.core.urlresolvers import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import CreateView, FormView, UpdateView
 from django.views.generic.list import ListView
@@ -15,7 +15,7 @@ from braces.views import LoginRequiredMixin
 from django.contrib.auth import authenticate, login
 from students.forms import CourseEnrollForm
 from students.forms import StudentSignupForm
-
+from students.forms import StudentInterestsForm
 from students.forms import TakeQuizForm
 from courses.models import Course
 from students.models import Quiz
@@ -91,7 +91,23 @@ class StudentEnrollCourseView(FormView):
         return reverse_lazy('student_course_detail', args=[self.course.id])
 
 
+@method_decorator([login_required, student_required], name='dispatch')
+class StudentInterestsView(UpdateView):
+    model = Student
+    form_class = StudentInterestsForm
+    template_name = 'students/student/interests_form.html'
+    success_url = reverse_lazy('student_quiz_list')
 
+    def get_object(self):
+        try:
+            return self.request.user.student
+        except ObjectDoesNotExist:
+            return self.request.user
+
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Interests updated with success.')
+        return super().form_valid(form)
 
 
 @method_decorator([login_required, student_required], name='dispatch')
@@ -174,6 +190,9 @@ def student_recommendation_list(request):
 
     try:
         user_cluster_name = User.objects.get(username=request.user.username).cluster_set.first().name
+    # except FieldDoesNotExist or FieldError or NameError or ValueError or ObjectDoesNotExist:
+        # update_clusters()
+        # messages.error(self.request, 'There are no recommendations courses for you. Sorry ;-)')
     except:
         update_clusters()
         user_cluster_name = User.objects.get(username=request.user.username).cluster_set.first().name

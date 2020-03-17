@@ -19,16 +19,25 @@ class CourseEnrollForm(forms.Form):
 
 
 class TeacherSignupForm(UserCreationForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+    username = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control'}))
+    email = forms.EmailField(required = True,label=_('E-mail'), widget=forms.TextInput(attrs={'class':'form-control'}))
     password1 = forms.CharField(label=_('Password'), widget=forms.PasswordInput(attrs={'class':'form-control'}))
     password2 = forms.CharField(label=_('Password verification'), widget=forms.PasswordInput(attrs={'class':'form-control'}))
 
     class Meta(UserCreationForm.Meta):
         model = User
 
+    def clean(self):
+        email = self.cleaned_data.get('email')
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(email=email).exists() or User.objects.filter(username=username).exists():
+            raise forms.ValidationError("Email or Username exists")
+        return self.cleaned_data
+
     def save(self, commit=True):
         user = super().save(commit=False)
         user.is_teacher = True
+        user.email = self.cleaned_data['email']
         if commit:
             user.save()
         return user
@@ -36,27 +45,48 @@ class TeacherSignupForm(UserCreationForm):
 
 class StudentSignupForm(UserCreationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+    email = forms.EmailField(required = True,label=_('E-mail'), widget=forms.TextInput(attrs={'class':'form-control'}))
     password1 = forms.CharField(label=_('Password'), widget=forms.PasswordInput(attrs={'class':'form-control'}))
     password2 = forms.CharField(label=_('Password verification'), widget=forms.PasswordInput(attrs={'class':'form-control'}))
-    
+    interests = forms.ModelMultipleChoiceField(
+        queryset=Tag.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=True
+    )
 
     class Meta(UserCreationForm.Meta):
         model = User
+
+    def clean(self):
+        email = self.cleaned_data.get('email')
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(email=email).exists() or User.objects.filter(username=username).exists():
+            raise forms.ValidationError("Email or Username exists")
+        return self.cleaned_data
 
     @transaction.atomic
     def save(self, commit=True):
         user = super().save(commit=False)
         user.is_student = True
+        user.email = self.cleaned_data['email']
         user.save()
         student = Student.objects.create(user=user)
-    
+        student.interests.add(*self.cleaned_data.get('interests'))
         return user
 
 
+class StudentInterestsForm(forms.ModelForm):
 
+    class Meta:
+        model = Student
+        fields = ('interests',)
+        widgets = {
+            'interests': forms.CheckboxSelectMultiple
+        }
 
 
 class QuestionForm(forms.ModelForm):
+    # text = forms.CharField(label="Question", widget=forms.TextInput(attrs={'class':'form-control'}))
 
     class Meta:
         model = Question
@@ -94,3 +124,15 @@ class TakeQuizForm(forms.ModelForm):
         question = kwargs.pop('question')
         super().__init__(*args,**kwargs)
         self.fields['answer'].queryset = question.answers.order_by('text')
+
+
+class ContactForm(forms.Form):
+    contact_name = forms.CharField(label="Your name", required=True, widget=forms.TextInput(attrs={'class':'form-control'}))
+    contact_email = forms.EmailField(label="Your email address", required=True, widget=forms.TextInput(attrs={'class':'form-control'}))
+    form_content = forms.CharField(label="Your message", required=True, widget=forms.Textarea(attrs={'class':'form-control'}))
+
+    def __init__(self, *args, **kwargs):
+        super(ContactForm, self).__init__(*args, **kwargs)
+        self.fields['contact_name'].label = 'Your name:'
+        self.fields['contact_email'].label = 'Your email address:'
+        self.fields['form_content'].label = 'Subject of your message:'

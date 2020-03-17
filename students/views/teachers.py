@@ -1,12 +1,14 @@
+from django import forms
 from django.contrib import messages
 from django.core.mail import mail_admins
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Avg, Count
+from django.forms.models import modelform_factory
 from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy, reverse
+from django.core.urlresolvers import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import (
     CreateView,
@@ -43,6 +45,10 @@ class TeacherRegistrationView(CreateView):
         login(self.request, user)
         return result
 
+    def form_invalid(self, form):
+        result = super(TeacherRegistrationView, self).form_invalid(form)
+        return result
+
 
 @method_decorator([login_required, teacher_required], name='dispatch')
 class TeacherQuizListView(ListView):
@@ -59,7 +65,8 @@ class TeacherQuizListView(ListView):
 @method_decorator([login_required, teacher_required], name='dispatch')
 class QuizCreateView(CreateView):
     model = Quiz
-    fields = ('name', 'tags',)
+    # fields = ('name', 'tags',)
+    form_class = modelform_factory(Quiz, exclude=['owner'], widgets={"name": forms.TextInput(attrs={'class':'form-control'}) })
     template_name = 'students/teacher/quiz_add_form.html'
 
     def form_valid(self, form):
@@ -73,7 +80,8 @@ class QuizCreateView(CreateView):
 @method_decorator([login_required, teacher_required], name='dispatch')
 class QuizUpdateView(UpdateView):
     model = Quiz
-    fields = ('name', 'tags', )
+    # fields = ('name', 'tags', )
+    form_class = modelform_factory(Quiz, exclude=['owner'], widgets={"name": forms.TextInput(attrs={'class':'form-control'}) })
     context_object_name = 'quiz'
     template_name = 'students/teacher/quiz_change_form.html'
 

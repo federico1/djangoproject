@@ -5,8 +5,12 @@
    {% endblock %}
    {% block content %}
    <div class="container admin">
+    <h1 class="header">
+        {{ module.title }}
+    </h1>
+
        <h1 class="header">
-           {{ module.title }}
+           <a href="{% url 'take_quiz' object.quiz_id %}">Take Quiz</a>
        </h1>
        <div class="admin__nav">
            <ul id="modules" class="menu">
