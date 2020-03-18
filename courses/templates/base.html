@@ -1,152 +1,124 @@
 {% load staticfiles %}
-{% load flatpages %}
-{% load i18n %}
-{% load gravatar %}
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>{% trans 'elearning' %} - {% block title %} {% endblock %}</title>
-    <link href="{% static 'styles/styles.css' %}" rel="stylesheet">
-    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <title>{% block title %}Educa{% endblock %}</title>
+    <link href="{% static "/css/base.css" %}" rel="stylesheet">
+    <link href="{% static "/css/style.css" %}" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="{% url 'course_list' %}">
-              <img alt="Brand" width="30" title="{% trans 'E-learning' %}" src="{% static 'images/pwa/icon-72x72.png' %}">
-          </a>
-        </div>
+     <!-- ##### Header Area Start ##### -->
+     <header class="header-area">
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><strong>{% trans "Browse" %}</strong> <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="{% url 'course_list' %}">{% trans 'Learn' %}</a></li>
-                <li><a href="{% url 'post_list' %}">{% trans 'Blog' %}</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="{% url 'videos_list' %}"><i class="glyphicon glyphicon-facetime-video
-"></i>{% trans 'Videos' %}</a></li>
-                <li><a href="{% url 'calendar' %}"><i class="glyphicon glyphicon-calendar"></i> {% trans 'Calendar' %}</a></li>
-              </ul>
-            </li>
-          </ul>
-          <form class="navbar-form navbar-left" action="{% url 'search' %}" method="get" accept-charset="utf-8" role="search">
-            <div class="form-group">
-              <input type="search" class="form-control search-bar" name="q" placeholder="{% trans 'Search for a topic ' %}">
-              <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
-            </div>
-          </form>
-          <ul class="nav navbar-nav navbar-right">
-            {% if request.user.is_authenticated and request.user.is_student %}
-                <li><a href="{% url 'student_quiz_list' %}">{% trans 'My Quizzes' %}</a></li>
-                <li><a href="{% url 'student_course_list' %}">{% trans 'My Courses' %}</a></li>
-            {% endif %}
-            {% if request.user.is_authenticated and request.user.is_teacher or request.user.is_staff %}
-                <li><a href="{% url 'manage_course_list' %}">{% trans 'Manage courses' %}</a></li>
-                <li><a href="{% url 'teacher_quiz_change_list' %}">{% trans 'Manage quizzes' %}</a></li>
-            {% endif %}
-            {% if request.user.is_authenticated %}
-            <li><a href="{% url 'notifications_list' %}"><i class="glyphicon glyphicon-bell"></i> <span class="badge">0</span></a></li>
-            <li><a href="{% url 'messages_list' %}"><i class="glyphicon glyphicon-comment"></i> <span class="badge">0</span></a></li>
-            <li class="dropdown">
-              <button type="button" class="btn btn-default dropdown-toggle"  data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img class="avatar" src="{{ request.user|gravatar }}" alt="{{ request.user.username }}"> <span class="caret"></span>
-              <span class="sr-only">Toggle Dropdown</span>
-              </button>
-              <ul class="dropdown-menu">
-                  <li><a href="{% url 'student_recommendation_list' %}">{% trans 'My recommended courses' %}</a></li>
-                  <li><a href="{% url 'listes_events' %}">{% trans 'My events' %}</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="{% url 'edit' %}">{% trans 'My account' %}</a></li>
-                <li><a href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
-              </ul>
-            </li>
-            {% else %}
-                <li class="btn-cta"><a href="{% url 'login' %}">{% trans 'Log in' %}</a></li>
-                <li class="btn-cta"><a href="{% url 'signup' %}">{% trans 'Sign up' %}</a></li>
-            {% endif %}
-          </ul>
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.container-fluid -->
-    </nav>
-
-    <div id="content" class="main">
-
-        {% if messages %}
-            <div class="container-fluid">
-                {% for message in messages %}
-                <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissible" {% endif %} role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    {{ message }}
+            <!-- Top Header Area -->
+            <div class="top-header-area d-flex justify-content-between align-items-center">
+                <!-- Contact Info -->
+                <div class="contact-info">
+                    <a href="#"><span>Phone:</span> +45 300 303 02566</a>
+                    <a href="#"><span>Email:</span> info@educa.com</a>
                 </div>
-                {% endfor %}
+                <!-- Follow Us -->
+                <div class="follow-us">
+                    <span>Follow us</span>
+                    <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                </div>
             </div>
-        {% endif %}
+    
+            <!-- Navbar Area -->
+            <div class="clever-main-menu">
+                <div class="classy-nav-container breakpoint-off">
+                    <!-- Menu -->
+                    <nav class="classy-navbar justify-content-between" id="cleverNav">
+    
+                        <!-- Logo -->
+                        <a class="nav-brand" href="/"><img src="{% static "/images/logo.png" %}" alt=""></a>
+    
+                        <!-- Navbar Toggler -->
+                        <div class="classy-navbar-toggler">
+                            <span class="navbarToggler"><span></span><span></span><span></span></span>
+                        </div>
+    
+                        <!-- Menu -->
+                        <div class="classy-menu">
+    
+                            <!-- Close Button -->
+                            <div class="classycloseIcon">
+                                <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                            </div>
+    
+                            <!-- Nav Start -->
+                            <div class="classynav">
+                                <ul>
+                                    <li><a href="/">Home</a></li>
+                                    <li><a href="#">Pages</a>
+                                        <ul class="dropdown">
+                                            <li><a href="index.html">Home</a></li>
+                                            <li><a href="courses.html">Courses</a></li>
+                                            <li><a href="single-course.html">Single Courses</a></li>
+                                            <li><a href="instructors.html">Instructors</a></li>
+                                            <li><a href="blog.html">Blog</a></li>
+                                            <li><a href="blog-details.html">Single Blog</a></li>
+                                            <li><a href="regular-page.html">Regular Page</a></li>
+                                            <li><a href="contact.html">Contact</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="courses.html">Courses</a></li>
+                                    <li><a href="instructors.html">Instructors</a></li>
+                                    <li><a href="blog.html">Blog</a></li>
+                                    <li><a href="contact.html">Contact</a></li>
+                                </ul>
+    
+                                <!-- Search Button -->
+                                <div class="search-area">
+                                    <form action="#" method="post">
+                                        <input type="search" name="search" id="search" placeholder="Search">
+                                        <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                    </form>
+                                </div>
+    
+                                {% if request.user.is_authenticated %}
+                                <div class="register-login-area">
+                                        <!-- <a href="#" class="btn">Register</a> -->
+                                        <a href="{% url "logout" %}" class="btn active">Sign out</a>
+                                    </div>
 
+         
+            {% else %}
+                <div class="register-login-area">
+                        <!-- <a href="#" class="btn">Register</a> -->
+                        <a href="{% url "login" %}" class="btn active">Sign in</a>
+                    </div>
+            {% endif %}
+
+                                <!-- Register / Login -->
+                              
+    
+                            </div>
+                            <!-- Nav End -->
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <!-- ##### Header Area End ##### -->
+
+    
+   
+    <div id="content">
         {% block content %}
         {% endblock %}
-
-        <!-- Notif offline -->
-        <div
-            class="notification"
-            id="notification"
-            aria-live="assertive"
-            aria-relevant="text"
-            hidden
-        ></div>
-
     </div>
 
-    <div class="container-fluid">
-        <footer id="footer" class="footer">
-            <div class="text-center">
-                <nav class="navbar">
-                    {% get_flatpages as flatpages %}
-                    <ul class="list-inline">
-                        {% for page in flatpages %}
-                            <li><a href="{{ page.url }}">{{ page.title }}</a></li>
-                        {% endfor %}
-                        <li><a href="{% url 'contact_us' %}">{% trans 'Contact Us' %}</a></li>
-                    </ul>
-                </nav>
-            </div>
-            <div class="text-center">
-                {% trans '&copy; elearning 2017 -' %} <span id="copyright"></span>
-            </div>
-        </footer>
-    </div>
-
-    <script src="{% static 'scripts/libs/jquery.min.js' %}"></script>
-    <script src="{% static 'scripts/main.min.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <script>
-    $(document).ready(function() {
-        {% block domready %}
-        {% endblock %}
-    });
-
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register("{% url 'sw.js' %}", { scope: '/static/' }).then(function(res) {
-            console.log("sw installed !" + res.scope);
-        }).catch(function(error) {
-            console.log("sw failed" + error);
+        $(document).ready(function() {
+            {% block domready %}
+            {% endblock %}
         });
-    }
-
-    var copyrightDate = new Date().getFullYear();
-    var footerDiv = document.getElementById("copyright");
-    footerDiv.innerHTML = copyrightDate;
     </script>
 </body>
 </html>

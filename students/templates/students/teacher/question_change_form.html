@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
+<div class="container">
     <div class="quiz">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -40,7 +40,7 @@
                         <div>{{ form.is_correct }}</div>
                         <div>
                             {% if form.instance.pk %}
-                                {{ form.DELETE }} {% trans 'delete anwser' %}
+                                {{ form.DELETE }}
                             {% endif %}
                         </div>
                     {% endfor %}
