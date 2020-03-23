@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+{% trans 'Add Quiz - Module' %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="quiz">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a
+                        href="{% url 'course_module_update' module.id %}">{% trans module.title %}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{% trans 'Manage Quiz' %}</li>
+            </ol>
+        </nav>
+
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-5">
+            <h5>
+                Add/Update Question
+            </h5>
+            <form method="post" class="form-inline" novalidate>
+                {% csrf_token %}
+                {{ formset.management_form }}
+                {{ form.as_p }}
+                <div class="{% if formset.errors %} danger {% endif %}">
+
+                    {% for error in formset.non_form_errors %}
+                    <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                    <div class="question">
+                        {% for form in formset %}
+                        <div>
+                            {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 small">
+                                <label for="exampleInputName2">Answer Title </label>
+                            </div>
+                            <div class="col-md-12">
+                                {{ form.text }}
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="checkbox">
+                                    <label class="text-muted ">Correct answer? {{ form.is_correct }}</label>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" type="submit">{% trans 'Save' %}</button>
+                <p class="text-warning">
+                    {% trans 'Your question must have at least 2 answers. Select at least one correct answer.' %}</p>
+            </form>
+        </div>
+
+        <div class="col-md-7">
+            <h5>
+                Questions List
+            </h5>
+            <div>
+                {% for item in questions %}
+
+                <div class="accordion">
+                    <h5>
+                        {{item}}
+                    </h5>
+                    <div>
+                        <ul class="list-group">
+                            {% for answer in item.answers.all %}
+                            <li class="list-group-item">
+                                {{answer}}
+
+                                {% if answer.is_correct == True %}
+                                <span class="pull-right">
+                                    Correct Answer
+                                </span>
+                                {%endif%}
+
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="buttons" pk="{{item.id}}">
+                        <a href="{% url 'app_add_question' module.id %}?question_id={{item.id}}"
+                            class="btn btn-info btn-sm">Edit</a>
+                        <button class="btn btn-info btn-sm" pk="{{item.id}}">Delete</button>
+                    </div>
+                </div>
+
+                {% endfor %}
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<div id="dialog-confirm" title="Delete Question?">
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
+</link>
+
+<style>
+    .buttons {
+        padding: 5px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $(".accordion").accordion({
+            collapsible: true, active: false
+        });
+
+        $("div.buttons").on("click", ".btn", function (e) {
+            e.preventDefault();
+
+            if ($(this).text() == 'Edit') {
+                window.location = $(this).attr('href');
+            }
+            else if ($(this).text() == 'Delete') {
+                var id = $(this).attr('pk');
+                deleteQuestion(id);
+            }
+
+        });
+    });
+
+    function deleteQuestion(id) {
+
+        $("#dialog-confirm").dialog({
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            buttons: {
+                "YES": function () {
+                   window.location = "{% url 'app_delete_question' module.id %}?question_id="+id;
+                },
+                Cancel: function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

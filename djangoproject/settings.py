@@ -54,6 +54,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'students',
     'embed_video',
+    'app_quiz'
     #'rest_framework',
 )
 

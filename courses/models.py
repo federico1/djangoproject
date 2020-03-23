@@ -50,6 +50,10 @@ class Module(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     order = OrderField(blank=True, for_fields=['course'])
+    quiz = models.ForeignKey(Quiz,
+                               related_name='module_quiz',
+                               blank=True, null=True,
+                               on_delete=models.DO_NOTHING)
 
     class Meta:
             ordering = ['order']

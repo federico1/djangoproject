@@ -23,6 +23,6 @@ urlpatterns = [
   path('quiz/<int:pk>/delete/', teachers.QuizDeleteView.as_view(), name = 'teacher_delete_quiz'),
   path('quiz/<int:pk>/results/', teachers.QuizResultsView.as_view(), name = 'teacher_quiz_results'),
   path('quiz/<int:pk>/question/add/', teachers.question_add, name = 'teacher_add_question'),
-  path('quiz/<int:quiz_id>/question/<int:question_id>/', teachers.question_change, name = 'teacher_change_question'),
+  path('quiz/<int:quiz_pk>/question/<int:question_pk>/', teachers.question_change, name = 'teacher_change_question'),
   path('quiz/<int:quiz_id>/question/<int:question_id>/delete/', teachers.QuestionDeleteView.as_view(), name = 'teacher_delete_question'),
 ]
