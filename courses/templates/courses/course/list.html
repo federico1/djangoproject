@@ -1,47 +1,112 @@
 {% extends "base.html" %}
 
 {% block title %}
-    {% if subject %}
-        {{ subject.title }} courses
-    {% else %}
-        All courses
-    {% endif %}
+{% if subject %}
+{{ subject.title }} courses
+{% else %}
+All courses
+{% endif %}
 {% endblock %}
 
 {% block content %}
-    <h1>
-        {% if subject %}
-            {{ subject.title }} courses
-        {% else %}
-            All courses
-        {% endif %}
-    </h1>
-    <div class="contents">
-        <h3>Subjects</h3>
-        <ul id="modules">
-            <li {% if not subject %}class="selected"{% endif %}>
-                <a href="{% url "course_list" %}">All </a>
-            </li>
-            {% for s in subjects %}
-                <li {% if subject == s %}class="selected"{% endif %}>
-                    <a href="{% url "course_list_subject" s.slug %}">
-                        {{ s.title }}
-                        <br><span>{{ s.total_courses }} courses</span>
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-3">
+            <nav id="sidebar" class="sidebar-wrapper">
+                <div class="sidebar-content">
+                    <div class="sidebar-brand">
+                        <a href="{% url "course_list" %}">All </a>
+                    </div>
+                    <!-- sidebar-search  -->
+                    <div class="sidebar-menu">
+                        <ul>
+
+                            {% for s in subjects %}
+                            <li>
+                                <a {% if subject == s %} class="active" {% endif %} href="{% url "course_list_subject" s.slug %}">
+                                    <span>{{ s.title }}</span>
+                                    <span class="badge badge-pill badge-primary">{{ s.total_courses }}</span>
+                                </a>
+                            </li>
+                            {% endfor %}
+
+                            <!--               
+                            <li class="sidebar-dropdown">
+                                <a href="#">
+                                    <span>E-commerce</span>
+                                    <span class="badge badge-pill badge-primary">3</span>
+                                </a>
+                                <div class="sidebar-submenu">
+                                    <ul>
+                                        <li>
+                                            <a href="#">Products
+        
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Orders</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Credit cart</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li> -->
+
+
+                        </ul>
+                    </div>
+                    <!-- sidebar-menu  -->
+                </div>
+                <!-- sidebar-content  -->
+            </nav>
+        </div>
+        <div class="col-md-9">
+            <main class="page-content">
+                <div class="row">
+                    {% for course in courses %}
+                    {% with subject=course.subject %}
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <div class="single-popular-course mb-100 wow fadeInUp" data-wow-delay="250ms">
+
+                            <div class="course-content">
+                                <h4>
+                                    {{ course.title }}
+                                </h4>
+                                <div class="meta d-flex align-items-center">
+                                    <span><i class="fa fa-circle" aria-hidden="true"></i></span>
+                                    <a href="{% url "course_list_subject" subject.slug %}">{{ subject }}</a>
+                                </div>
+                                <p> Instructor: {{ course.owner.get_full_name }}</p>
+                                <p> {{ course.total_modules }} Modules.</p>
+                            </div>
+
+                            <div class="seat-rating-fee d-flex justify-content-between">
+                                <div class="seat-rating h-100 d-flex align-items-center">
+                                  
+                                </div>
+                                <div class="course-fee h-100">
+                                    <a href="{% url "course_detail" course.slug %}" class="free">View Course</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endwith %}
+                   
+                    {% endfor %}
+                </div>
+            </main>
+        </div>
     </div>
-    <div class="module">
-        {% for course in courses %}
-            {% with subject=course.subject %}
-                <h3><a href="{% url "course_detail" course.slug %}">{{ course.title }}</a></h3>
-                <p>
-                    <a href="{% url "course_list_subject" subject.slug %}">{{ subject }}</a>.
-                    {{ course.total_modules }} modules.
-                    Instructor: {{ course.owner.get_full_name }}
-                </p>
-            {% endwith %}
-        {% endfor %}
-    </div>
+
+
+
+</div>
+
+{% endblock %}
+
+{% block domready %}
+
 {% endblock %}
