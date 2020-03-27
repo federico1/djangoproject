@@ -1987,7 +1987,7 @@ textarea:focus {
   width: 260px;
   min-width: 260px;
   min-height: 260px;
-  height: 100%;
+  height: auto;
   max-height: 100%;
   top: 0;
   left: -300px;

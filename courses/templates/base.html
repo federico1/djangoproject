@@ -1,112 +1,119 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <title>{% block title %}Educa{% endblock %}</title>
     <link href="{% static "/css/base.css" %}" rel="stylesheet">
     <link href="{% static "/css/style.css" %}" rel="stylesheet">
 </head>
+
 <body>
-     <!-- ##### Header Area Start ##### -->
-     <header class="header-area">
+    <!-- ##### Header Area Start ##### -->
+    <header class="header-area">
 
-            <!-- Top Header Area -->
-            <div class="top-header-area d-flex justify-content-between align-items-center">
-                <!-- Contact Info -->
-                <div class="contact-info">
-                    <a href="#"><span>Phone:</span> +45 300 303 02566</a>
-                    <a href="#"><span>Email:</span> info@educa.com</a>
-                </div>
-                <!-- Follow Us -->
-                <div class="follow-us">
-                    <span>Follow us</span>
-                    <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                </div>
+        <!-- Top Header Area -->
+        <div class="top-header-area d-flex justify-content-between align-items-center">
+            <!-- Contact Info -->
+            <div class="contact-info">
+                <a href="#"><span>Phone:</span> +45 300 303 02566</a>
+                <a href="#"><span>Email:</span> info@educa.com</a>
             </div>
-    
-            <!-- Navbar Area -->
-            <div class="clever-main-menu">
-                <div class="classy-nav-container breakpoint-off">
-                    <!-- Menu -->
-                    <nav class="classy-navbar justify-content-between" id="cleverNav">
-    
-                        <!-- Logo -->
-                        <a class="nav-brand" href="/"><img src="{% static "/images/logo.png" %}" alt=""></a>
-    
-                        <!-- Navbar Toggler -->
-                        <div class="classy-navbar-toggler">
-                            <span class="navbarToggler"><span></span><span></span><span></span></span>
-                        </div>
-    
-                        <!-- Menu -->
-                        <div class="classy-menu">
-    
-                            <!-- Close Button -->
-                            <div class="classycloseIcon">
-                                <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
-                            </div>
-    
-                            <!-- Nav Start -->
-                            <div class="classynav">
-                                <ul>
-                                    <li><a href="/">Home</a></li>
-                                    <li><a href="#">Pages</a>
-                                        <ul class="dropdown">
-                                            <li><a href="index.html">Home</a></li>
-                                            <li><a href="courses.html">Courses</a></li>
-                                            <li><a href="single-course.html">Single Courses</a></li>
-                                            <li><a href="instructors.html">Instructors</a></li>
-                                            <li><a href="blog.html">Blog</a></li>
-                                            <li><a href="blog-details.html">Single Blog</a></li>
-                                            <li><a href="regular-page.html">Regular Page</a></li>
-                                            <li><a href="contact.html">Contact</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="courses.html">Courses</a></li>
-                                    <li><a href="instructors.html">Instructors</a></li>
-                                    <li><a href="blog.html">Blog</a></li>
-                                    <li><a href="contact.html">Contact</a></li>
-                                </ul>
-    
-                                <!-- Search Button -->
-                                <div class="search-area">
-                                    <form action="#" method="post">
-                                        <input type="search" name="search" id="search" placeholder="Search">
-                                        <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
-                                    </form>
-                                </div>
-    
-                                {% if request.user.is_authenticated %}
-                                <div class="register-login-area">
-                                        <!-- <a href="#" class="btn">Register</a> -->
-                                        <a href="{% url "logout" %}" class="btn active">Sign out</a>
-                                    </div>
+            <!-- Follow Us -->
+            <div class="follow-us">
+                <span>Follow us</span>
+                <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+            </div>
+        </div>
 
-         
-            {% else %}
-                <div class="register-login-area">
-                        <!-- <a href="#" class="btn">Register</a> -->
-                        <a href="{% url "login" %}" class="btn active">Sign in</a>
+        <!-- Navbar Area -->
+        <div class="clever-main-menu">
+            <div class="classy-nav-container breakpoint-off">
+                <!-- Menu -->
+                <nav class="classy-navbar justify-content-between" id="cleverNav">
+
+                    <!-- Logo -->
+                    <a class="nav-brand" href="/"><img src="{% static "/images/logo.png" %}" alt=""></a>
+
+                    <!-- Navbar Toggler -->
+                    <div class="classy-navbar-toggler">
+                        <span class="navbarToggler"><span></span><span></span><span></span></span>
                     </div>
-            {% endif %}
 
-                                <!-- Register / Login -->
-                              
-    
-                            </div>
-                            <!-- Nav End -->
+                    <!-- Menu -->
+                    <div class="classy-menu">
+
+                        <!-- Close Button -->
+                        <div class="classycloseIcon">
+                            <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
                         </div>
-                    </nav>
-                </div>
-            </div>
-        </header>
-        <!-- ##### Header Area End ##### -->
 
-    
-   
+                        <!-- Nav Start -->
+                        <div class="classynav">
+                            <ul>
+                                <li><a href="/">Home</a></li>
+
+                                {% if request.user.is_authenticated and request.user.is_student == True %}
+                                <li><a href="{% url "student_course_list" %}"">My Courses</a></li>
+                                {% endif %}
+
+                                <!-- <li><a href=" #">Pages</a>
+                                    <ul class="dropdown">
+                                        <li><a href="index.html">Home</a></li>
+                                        <li><a href="courses.html">Courses</a></li>
+                                        <li><a href="single-course.html">Single Courses</a></li>
+                                        <li><a href="instructors.html">Instructors</a></li>
+                                        <li><a href="blog.html">Blog</a></li>
+                                        <li><a href="blog-details.html">Single Blog</a></li>
+                                        <li><a href="regular-page.html">Regular Page</a></li>
+                                        <li><a href="contact.html">Contact</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="courses.html">Courses</a></li>
+                                <li><a href="instructors.html">Instructors</a></li>
+                                <li><a href="blog.html">Blog</a></li>
+                                <li><a href="contact.html">Contact</a></li> -->
+                            </ul>
+
+                            <!-- Search Button -->
+                            <div class="search-area">
+                                <form action="#" method="post">
+                                    <input type="search" name="search" id="search" placeholder="Search">
+                                    <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                </form>
+                            </div>
+
+                            {% if request.user.is_authenticated %}
+                            <div class="register-login-area">
+                                <!-- <a href="#" class="btn">Register</a> -->
+                                <a href="{% url "logout" %}" class="btn active">Sign out</a>
+                            </div>
+
+
+                            {% else %}
+                            <div class="register-login-area">
+                                <!-- <a href="#" class="btn">Register</a> -->
+                                <a href="{% url "login" %}" class="btn active">Sign in</a>
+                            </div>
+                            {% endif %}
+
+                            <!-- Register / Login -->
+
+
+                        </div>
+                        <!-- Nav End -->
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <!-- ##### Header Area End ##### -->
+
+
+
     <div id="content">
         {% block content %}
         {% endblock %}
@@ -117,10 +124,11 @@
     {% block scripts %}
     {% endblock %}
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             {% block domready %}
             {% endblock %}
         });
     </script>
 </body>
+
 </html>

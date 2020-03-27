@@ -25,7 +25,8 @@ All courses
 
                             {% for s in subjects %}
                             <li>
-                                <a {% if subject == s %} class="active" {% endif %} href="{% url "course_list_subject" s.slug %}">
+                                <a {% if subject == s %} class="active" {% endif %}
+                                    href="{% url "course_list_subject" s.slug %}">
                                     <span>{{ s.title }}</span>
                                     <span class="badge badge-pill badge-primary">{{ s.total_courses }}</span>
                                 </a>
@@ -85,7 +86,7 @@ All courses
 
                             <div class="seat-rating-fee d-flex justify-content-between">
                                 <div class="seat-rating h-100 d-flex align-items-center">
-                                  
+
                                 </div>
                                 <div class="course-fee h-100">
                                     <a href="{% url "course_detail" course.slug %}" class="free">View Course</a>
@@ -94,14 +95,12 @@ All courses
                         </div>
                     </div>
                     {% endwith %}
-                   
+
                     {% endfor %}
                 </div>
             </main>
         </div>
     </div>
-
-
 
 </div>
 

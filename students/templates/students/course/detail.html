@@ -4,46 +4,88 @@
 {{ object.title }}
 {% endblock %}
 {% block content %}
-<div class="container admin">
+
+<div class="container-fluid">
     <h1 class="header">
         {{ module.title }}
     </h1>
-    <div class="admin__nav">
-        <ul id="modules" class="menu">
-            {% for m in object.modules.all %}
-            <li data-id="{{ m.id }}" class="{% if m == module %}
-   selected{% endif %} menu__item">
-                <a class="menu__link" href="{% url 'student_course_detail_module' object.id m.id %}">
-                    <span> Module <span class="order">{{ m.order|add:1 }} </span>
-                    </span>
-                    <br>
-                    {{ m.title }}
-                </a> </li>
-            {% empty %}
-            <li class="menu__item">No modules yet.</li>
 
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="admin__main">
-        <div class="modules">
-            {% for content in module.contents.all %}
-            <div class="card">
-                {% with item=content.item %}
+    <div class="row">
+        <div class="col-md-3">
+            <nav id="sidebar" class="sidebar-wrapper">
+                <div class="sidebar-content">
+                    <div class="sidebar-brand">
+                        <a href="#"> Modules </a>
+                    </div>
+                    <!-- sidebar-search  -->
+                    <div class="sidebar-menu">
+                        <ul>
 
-                <h2>{{ item.title }}</h2>
-                {{ item.render }}
+                            {% for m in object.modules.all %}
+                            <li data-id="{{ m.id }}">
+                                <a href="{% url 'student_course_detail_module' object.id m.id %}" class="{% if m == module %} active {% endif %}">
+                                    <span> Module <span class="order">{{ m.order|add:1 }} </span>
+                                    </span>
+                                    <br>
+                                    {{ m.title }}
+                                </a> </li>
+                            {% empty %}
+                            <li class="menu__item">No modules yet.</li>
 
-                {% endwith %}
-            </div>
-            {% endfor %}
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                    <!-- sidebar-menu  -->
+                </div>
+                <!-- sidebar-content  -->
+            </nav>
+        </div>
+        <div class="col-md-9">
+            <main class="page-content">
+                <div class="clever-description">
+
+                    <div class="row ">
+                        {% for content in module.contents.all %}
+
+                        <div class="col-md-12 mb-30">
+                            <div class="about-course">
+                                {% with item=content.item %}
+
+                                <h4>{{ item.title }}</h4>
+                                <div>
+                                    {{ item.render }}
+                                </div>
+
+                                {% endwith %}
+                            </div>
+                        </div>
+                       
+                        {% endfor %}
+
+                        <div class="col-md-12 mb-30">
+                            {% if module.quiz_id %}
+                            <h3>
+                                <a href="{% url 'take_quiz' module.quiz_id %}" style="color: blue;">Take Course Quiz</a>
+                            </h3>
+                            {% endif %}
+                        </div>
+
+                        
+                            {% if module.contents.count == 0 %}
+                            <div class="col-md-12 mb-30">
+                                <h3> No Content Found </h3>
+                            </div>
+                            {% endif %}
+                       
+
+                    </div>
+
+                </div>
+            </main>
         </div>
     </div>
-    {% if object.quiz_id %}
-    <h2>
-        <a href="{% url 'take_quiz' object.quiz_id %}" style="color: blue;">Take Course Quiz</a>
-    </h2>
-    {% endif %}
+
 </div>
 
 {% endblock %}
