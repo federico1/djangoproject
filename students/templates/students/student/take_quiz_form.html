@@ -5,6 +5,47 @@
 {% endblock %}
 
 {% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    {{ quiz.name }}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ question.text }}</h5>
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                    </form>
+
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-primary" type="submit" id="btnAns">{% trans 'Next' %}</button>
+                        </div>
+
+                        <div class="col-md-6 text-lg-right">
+
+                            <div>
+                                <strong>Progress</strong>
+                                <a href="#" class="badge badge-success"> {{ progress }}</a>
+                                Of
+                                <a href="#" class="badge badge-info"> {{ total_questions }}</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <div class="container">
     <div class="quiz">
         <h2>{{ quiz.name }}</h2>
@@ -16,4 +57,19 @@
         </form>
     </div>
 </div>
- {% endblock %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        $(".card ul").addClass('list-group');
+        $(".card ul li").addClass('list-group-item');
+        $(".card ul li input").css('width', 30);
+        $(".card ul li input").css('margin-top', 5);
+
+        $("#btnAns").click(function () {
+            $(".card form").submit();
+        });
+    });
+</script>
+{% endblock %}

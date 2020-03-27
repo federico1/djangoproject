@@ -53,9 +53,6 @@ class StudentSignupForm(UserCreationForm):
         return user
 
 
-
-
-
 class QuestionForm(forms.ModelForm):
 
     class Meta:

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+{{ quiz.name }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    {{ quiz.name }} {{quiz.score}}
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+
+                    {% for message in messages %}
+                    <div class="alert alert-primary" role="alert" {% if message.tags %} a="{{ message.tags }}"
+                        {% endif %}>
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+
+
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <a class="btn btn-primary" href="{% url "taken_quiz_list" %}">{% trans 'Quiz View' %}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

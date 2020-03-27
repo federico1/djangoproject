@@ -30,6 +30,7 @@ from students.decorators import student_required
 
 from courses.suggestions import update_clusters
 
+
 class StudentCourseListView(LoginRequiredMixin, ListView):
     model = Course
     template_name = 'students/course/list.html'
@@ -48,13 +49,14 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
         return qs.filter(students__in=[self.request.user])
 
     def get_context_data(self, **kwargs):
-        context = super(StudentCourseDetailView, self).get_context_data(**kwargs)
+        context = super(StudentCourseDetailView,
+                        self).get_context_data(**kwargs)
         course = self.get_object()
         if 'module_id' in self.kwargs:
-            #get current module
+            # get current module
             context['module'] = course.modules.get(id=self.kwargs['module_id'])
         else:
-            #get first module
+            # get first module
             context['module'] = course.modules.all()[0]
         return context
 
@@ -73,7 +75,8 @@ class StudentRegistrationView(CreateView):
         result = super(StudentRegistrationView, self).form_valid(form)
         cd = form.cleaned_data
         user = authenticate(username=cd['username'], password=cd['password1'])
-        mail_admins("A new student user is sign up", "check email on myelearning")
+        mail_admins("A new student user is sign up",
+                    "check email on myelearning")
         login(self.request, user)
         return result
 
@@ -92,8 +95,6 @@ class StudentEnrollCourseView(FormView):
 
 
 
-
-
 @method_decorator([login_required, student_required], name='dispatch')
 class QuizListView(ListView):
     model = Quiz
@@ -106,7 +107,8 @@ class QuizListView(ListView):
             student = self.request.user.student
             student_interests = student.interests.values_list('pk', flat=True)
             taken_quizzes = student.quizzes.values_list('pk', flat=True)
-            queryset =  Quiz.objects.filter(tags__in=student_interests).exclude(pk__in=taken_quizzes).annotate(question_count=Count('questions')).filter(question_count__gt=0)
+            queryset = Quiz.objects.filter(tags__in=student_interests).exclude(
+                pk__in=taken_quizzes).annotate(question_count=Count('questions')).filter(question_count__gt=0)
             return queryset
         except ObjectDoesNotExist:
             return self.request.user
@@ -119,7 +121,8 @@ class TakenQuizListView(ListView):
     template_name = 'students/student/taken_quiz_list.html'
 
     def get_queryset(self):
-        queryset = self.request.user.student.taken_quizzes.select_related('quiz', 'quiz__tags').order_by('quiz__name')
+        queryset = self.request.user.student.taken_quizzes.select_related(
+            'quiz', 'quiz__tags').order_by('quiz__name')
         return queryset
 
 
@@ -127,7 +130,7 @@ class TakenQuizListView(ListView):
 @student_required
 def take_quiz(request, pk):
     quiz = get_object_or_404(Quiz, pk=pk)
-    
+
     student = request.user.student
 
     if student.quizzes.filter(pk=pk).exists():
@@ -136,8 +139,12 @@ def take_quiz(request, pk):
     total_questions = quiz.questions.count()
     unanswered_questions = student.get_unanswered_questions(quiz)
     total_unanswered_questions = unanswered_questions.count()
-    progress = 100 - round(((total_unanswered_questions - 1) / total_questions) * 100)
+    progress = 100 - \
+        round(((total_unanswered_questions - 1) / total_questions) * 100)
     question = unanswered_questions.first()
+
+    print(total_questions)
+    print(total_unanswered_questions)
 
     if request.method == 'POST':
         form = TakeQuizForm(question=question, data=request.POST)
@@ -146,17 +153,27 @@ def take_quiz(request, pk):
                 student_answer = form.save(commit=False)
                 student_answer.student = student
                 student_answer.save()
-                if student.get_unanswered_questions(quiz).exists():
+                unanswered_questions = student.get_unanswered_questions(quiz)
+                total_unanswered_questions = unanswered_questions.count()
+
+                if unanswered_questions.exists():
                     return redirect('take_quiz', pk)
                 else:
-                    correct_answers = student.quiz_answers.filter(answer__question__quiz=quiz, answer__is_correct=True).count()
-                    score = round((correct_answers / total_questions ) * 100.0, 2)
-                    TakenQuiz.objects.create(student=student, quiz=quiz, score=score)
-                    if score < 50.0:
-                        messages.warning(request, 'Good luck for next time! Your score for this quiz %s was %s.' % (quiz.name, score))
-                    else:
-                        messages.success(request, 'Fantastic! You completed the quiz %s with success! Your scored %s points.' % (quiz.name, score))
-                    return redirect('student_quiz_list')
+                    correct_answers = student.quiz_answers.filter(
+                        answer__question__quiz=quiz, answer__is_correct=True).count()
+                    score = round(
+                        (correct_answers / total_questions) * 100.0, 2)
+                    
+                    TakenQuiz.objects.create(
+                        student=student, quiz=quiz, score=score)
+
+                    # if score < 50.0:
+                    #     messages.warning(
+                    #         request, 'Good luck for next time! Your score for this quiz %s was %s.' % (quiz.name, score))
+                    # else:
+                    #     messages.success(
+                    #         request, 'Fantastic! You completed the quiz %s with success! Your scored %s points.' % (quiz.name, score))
+                    return redirect('quiz_result', pk)
     else:
         form = TakeQuizForm(question=question)
 
@@ -164,7 +181,27 @@ def take_quiz(request, pk):
         'quiz': quiz,
         'question': question,
         'form': form,
-        'progress': progress
+        'progress': (total_questions - total_unanswered_questions) + 1,
+        'total_questions':total_questions
+    })
+
+
+@login_required
+@student_required
+def quiz_result(request, pk):
+    quiz = get_object_or_404(Quiz, pk=pk)
+
+    student = request.user.student
+
+    taken = student.taken_quizzes.filter(quiz=pk).last()
+    
+    if taken.score < 50.0:
+        messages.warning(request, 'Good luck for next time! Your score for this quiz %s was %s.' % (quiz.name, taken.score))
+    else:
+        messages.success(request, 'Fantastic! You completed the quiz %s with success! Your scored %s points.' % (quiz.name, taken.score))
+
+    return render(request, 'students/student/quiz_result.html', {
+        'quiz': quiz,
     })
 
 
