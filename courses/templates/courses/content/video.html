@@ -1,2 +1,7 @@
 {% load embed_video_tags %}
 {% video item.url 'small' %}
+
+<video class="module_video" id={{item.pk}} module_id="{{item.owner.id}}" width="600" height="250" controls>
+    <source src="{{ item.url }}" type="video/mp4">
+    Your browser does not support video player.
+</video>

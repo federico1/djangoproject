@@ -23,7 +23,8 @@
 
                             {% for m in object.modules.all %}
                             <li data-id="{{ m.id }}">
-                                <a href="{% url 'student_course_detail_module' object.id m.id %}" class="{% if m == module %} active {% endif %}">
+                                <a href="{% url 'student_course_detail_module' object.id m.id %}"
+                                    class="{% if m == module %} active {% endif %}">
                                     <span> Module <span class="order">{{ m.order|add:1 }} </span>
                                     </span>
                                     <br>
@@ -60,7 +61,7 @@
                                 {% endwith %}
                             </div>
                         </div>
-                       
+
                         {% endfor %}
 
                         <div class="col-md-12 mb-30">
@@ -71,13 +72,13 @@
                             {% endif %}
                         </div>
 
-                        
-                            {% if module.contents.count == 0 %}
-                            <div class="col-md-12 mb-30">
-                                <h3> No Content Found </h3>
-                            </div>
-                            {% endif %}
-                       
+
+                        {% if module.contents.count == 0 %}
+                        <div class="col-md-12 mb-30">
+                            <h3> No Content Found </h3>
+                        </div>
+                        {% endif %}
+
 
                     </div>
 
@@ -88,4 +89,110 @@
 
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+
+        videoPlayersState(true);
+
+        setInterval(function () {
+            videoPlayersState(false);
+        }, 4000);
+
+    });
+
+    function videoPlayersState(isSet) {
+
+        var count = document.querySelectorAll('.module_video').length;
+
+        for (let index = 0; index < count; index++) {
+
+            var element = document.querySelectorAll('.module_video')[index];
+
+            if (isSet) {
+                setVideoState(element);
+            }
+            else {
+                saveVideoState(element);
+            }
+
+
+            console.log(element.currentTime);
+            console.log(element.duration);
+
+        }
+    };
+
+    function setVideoState(element) {
+
+        var storedData = localStorage.getItem("userVideos");
+
+        var d = {
+            id: element.id,
+            module: element.getAttribute('module_id'),
+            watched: element.currentTime,
+            created: new Date()
+        };
+
+        if (storedData) {
+
+            var parsedData = JSON.parse(storedData);
+
+            for (let index = 0; index < parsedData.length; index++) {
+
+                var parsed = parsedData[index];
+
+                if (parsed.id == d.id && parsed.module == d.module) {
+                    element.currentTime = Math.floor(parsed.watched);
+                }
+            }
+        }
+
+
+    };
+
+    function saveVideoState(element) {
+
+        var storedData = localStorage.getItem("userVideos");
+
+        var d = {
+            id: element.id,
+            module: element.getAttribute('module_id'),
+            watched: element.currentTime,
+            created: new Date()
+        };
+
+        var parsedData = [];
+
+        if (storedData) {
+
+            parsedData = JSON.parse(storedData);
+
+            var isFound = false;
+
+            // will check & update if found
+            for (let index = 0; index < parsedData.length; index++) {
+                var parsed = parsedData[index];
+
+                if (parsed.id == d.id && parsed.module == d.module) {
+                    parsedData[index] = d;
+                    isFound = true;
+                }
+            }
+
+            // will add the new 
+            if (!isFound) {
+                parsedData.push(d);
+            }
+        }
+        else {
+            parsedData.push(d);
+        }
+
+        localStorage.setItem("userVideos", JSON.stringify(parsedData));
+    };
+
+</script>
 {% endblock %}

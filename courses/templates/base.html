@@ -7,6 +7,11 @@
     <title>{% block title %}Educa{% endblock %}</title>
     <link href="{% static "/css/base.css" %}" rel="stylesheet">
     <link href="{% static "/css/style.css" %}" rel="stylesheet">
+
+    <style>
+       
+    </style>
+
 </head>
 
 <body>
@@ -58,6 +63,11 @@
 
                                 {% if request.user.is_authenticated and request.user.is_student == True %}
                                 <li><a href="{% url "student_course_list" %}"">My Courses</a></li>
+                                <li><a href=" {% url "taken_quiz_list" %}"">My Quiz</a></li>
+                                {% endif %}
+
+                                {% if request.user.is_authenticated and request.user.is_teacher == True %}
+                                <li><a href="{% url "manage_course_list" %}"">My Courses</a></li>
                                 {% endif %}
 
                                 <!-- <li><a href=" #">Pages</a>
@@ -89,9 +99,20 @@
                             {% if request.user.is_authenticated %}
                             <div class="register-login-area">
                                 <!-- <a href="#" class="btn">Register</a> -->
-                                <a href="{% url "logout" %}" class="btn active">Sign out</a>
-                            </div>
+                                <!-- <a href="{% url "logout" %}" class="btn active">Sign out</a> -->
 
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                     Welcome,   {{ request.user }}
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="{% url "logout" %}">Sign out</a>
+                                    </div>
+                                </div>
+
+                            </div>
 
                             {% else %}
                             <div class="register-login-area">
