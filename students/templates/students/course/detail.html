@@ -3,11 +3,12 @@
 {% block title %}
 {{ object.title }}
 {% endblock %}
+
 {% block content %}
 
 <div class="container-fluid">
     <h1 class="header">
-        {{ module.title }}
+        {{ object.title }}
     </h1>
 
     <div class="row">
@@ -15,21 +16,51 @@
             <nav id="sidebar" class="sidebar-wrapper">
                 <div class="sidebar-content">
                     <div class="sidebar-brand">
-                        <a href="#"> Modules </a>
+                        <a href="{% url "student_course_detail" object.id %}"> Course Materials </a>
                     </div>
                     <!-- sidebar-search  -->
                     <div class="sidebar-menu">
                         <ul>
 
                             {% for m in object.modules.all %}
-                            <li data-id="{{ m.id }}">
-                                <a href="{% url 'student_course_detail_module' object.id m.id %}"
-                                    class="{% if m == module %} active {% endif %}">
-                                    <span> Module <span class="order">{{ m.order|add:1 }} </span>
-                                    </span>
-                                    <br>
+                            
+                            <li data-id="{{ m.id }}" class="sidebar-dropdown">
+                                <a href="javascript:;" class="{% if m == module %} active {% endif %}">
                                     {{ m.title }}
-                                </a> </li>
+                                </a>
+
+                                
+
+                                <div class="sidebar-submenu">
+                                    <ul>
+                                        {% for content in m.contents.all %}
+                                        {% with item=content.item %}
+                                        <li>
+                                            <a class="{% if request.GET.content and content_id  == content.id %}pin{% endif %}"
+                                             href="{% url 'student_course_detail_module' object.id m.id %}?content={{content.id}}">
+                                              
+                                                <i title=" {{ content.content_type }}" class="fa {{ content.content_type }}"></i>
+                                                {{ item.title }}
+                                               
+                                            </a>
+                                        </li>
+                                        {% endwith %}
+                                        {% endfor %}
+
+                                        {% if m.quiz != None %}
+                                        <li>
+                                            <a href="#">
+
+                                                <i title="Quiz" class="fa fa-question-circle-o"></i>
+
+                                            Quiz
+                                               
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </li>
                             {% empty %}
                             <li class="menu__item">No modules yet.</li>
 
@@ -47,7 +78,22 @@
                 <div class="clever-description">
 
                     <div class="row ">
+                    
+                        {% if module == None %}
+
+                        <div class="col-md-12 mb-30">
+                            <div class="about-course">
+                              {{object.overview}}
+                            </div>
+                        </div>
+                       
+                        {%endif%}
+                      
+                        {% if module != None %}
+
                         {% for content in module.contents.all %}
+
+                        {% if request.GET.content and content_id  == content.id %}
 
                         <div class="col-md-12 mb-30">
                             <div class="about-course">
@@ -61,17 +107,21 @@
                                 {% endwith %}
                             </div>
                         </div>
+                        {% endif %}
 
                         {% endfor %}
 
-                        <div class="col-md-12 mb-30">
+                        <!-- <div class="col-md-12 mb-30">
                             {% if module.quiz_id %}
                             <h3>
                                 <a href="{% url 'take_quiz' module.quiz_id %}" style="color: blue;">Take Course Quiz</a>
                             </h3>
                             {% endif %}
-                        </div>
+                        </div> -->
 
+
+                        {%endif%}
+                        
 
                         {% if module.contents.count == 0 %}
                         <div class="col-md-12 mb-30">
@@ -94,6 +144,23 @@
 {% block scripts %}
 <script>
     $(document).ready(function () {
+
+        $(".sidebar-dropdown > a").click(function () {
+           
+            $(".sidebar-submenu").slideUp(200);
+
+            if ($(this).parent().hasClass("active")) {
+                $(".sidebar-dropdown").removeClass("active");
+                $(this).parent().removeClass("active");
+            } else {
+                $(".sidebar-dropdown").removeClass("active");
+                $(this).next(".sidebar-submenu").slideDown(200);
+                $(this).parent().addClass("active");
+            }
+
+        });
+
+        $(".sidebar-dropdown > a.active").trigger('click');
 
         videoPlayersState(true);
 

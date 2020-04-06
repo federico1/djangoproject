@@ -2824,7 +2824,7 @@ input:focus, textarea:focus {
 }
 
 .sidebar-wrapper {
-  width: 260px;
+  width: 100%;
   min-width: 260px;
   min-height: 260px;
   height: auto;
@@ -2878,7 +2878,10 @@ input:focus, textarea:focus {
   position: relative;
   padding: 10px 30px 10px 20px;
   color: #bdbdbd;
+  font-size: 14px;
 }
+
+
 
 .sidebar-wrapper .sidebar-menu .sidebar-dropdown>a:after {
   width: 0;
@@ -2895,6 +2898,7 @@ input:focus, textarea:focus {
   top: 50%;
   right: 20px;
   transform: translateY(-50%);
+  transform: rotate(90deg);
 }
 
 .sidebar-wrapper .sidebar-menu .sidebar-dropdown .sidebar-submenu ul {
@@ -2904,20 +2908,6 @@ input:focus, textarea:focus {
 .sidebar-wrapper .sidebar-menu .sidebar-dropdown .sidebar-submenu li {
   padding-left: 10px;
   font-size: 13px;
-}
-
-.sidebar-wrapper .sidebar-menu .sidebar-dropdown .sidebar-submenu li a:before {
-  content: "\f111";
-  font-family: "Font Awesome 5 Free";
-  font-weight: 400;
-  font-style: normal;
-  display: inline-block;
-  text-align: center;
-  text-decoration: none;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  margin-right: 10px;
-  font-size: 8px;
 }
 
 .sidebar-wrapper .sidebar-menu ul li a span.label, .sidebar-wrapper .sidebar-menu ul li a span.badge {
@@ -2931,13 +2921,52 @@ input:focus, textarea:focus {
 }
 
 .sidebar-wrapper .sidebar-menu .sidebar-dropdown.active>a:after {
-  transform: rotate(90deg);
+  transform: rotate(0deg);
   right: 17px;
 }
 
 .sidebar-wrapper .sidebar-menu ul li a.active {
   background: #000;
 }
+
+.sidebar-wrapper .sidebar-menu .sidebar-submenu a {
+  font-size: 13px;
+padding: 7px 10px 7px 2px;
+}
+
+.sidebar-wrapper .sidebar-menu ul li a i {
+  margin-right: 2px;
+  font-size: 12px;
+  width: 24px;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  border-radius: 4px;
+  background: #4f4f4f;
+  color: #fff;
+  font-family: FontAwesome;
+  border: 1px solid #4b4848;
+}
+
+.sidebar-wrapper .sidebar-menu ul li a.pin {
+  background: #3d3d3d;
+}
+
+.sidebar-wrapper .sidebar-menu ul li a i.video:before {
+  content: "\f03d";
+}
+
+.sidebar-wrapper .sidebar-menu ul li a i.text:before {
+  content: "\f0f6";
+}
+
+.sidebar-wrapper .sidebar-menu ul li a i.image:before {
+  content: "\f03e";
+}
+.sidebar-wrapper .sidebar-menu ul li a i.file:before {
+  content: "\f016";
+}
+
 
 .page-content {
   display: inline-block;
