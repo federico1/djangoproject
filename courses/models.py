@@ -135,3 +135,19 @@ class Cluster(models.Model):
 
     def get_members(self):
         return '\n'.join([u.username for u in self.users.all()])
+
+
+class CourseProgress(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                              related_name='courses_progress',
+                              on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    #course = models.ForeignKey(Course, on_delete=models.DO_NOTHING, related_name='course_progress')
+    #module = models.ForeignKey(Module, on_delete=models.DO_NOTHING, related_name='module_progress')
+    content = models.ForeignKey(Content, on_delete=models.DO_NOTHING, related_name='content_progress')
+    is_completed = models.BooleanField(default=False)
+    progress = models.IntegerField(default=0)
+
+
+    def __str__(self):
+        return str(self.content.id)

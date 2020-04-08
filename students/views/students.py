@@ -1,4 +1,5 @@
 import datetime
+import itertools
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
@@ -24,6 +25,8 @@ from students.models import TakenQuiz
 from students.models import User
 from courses.models import Review
 from courses.models import Cluster
+from courses.models import CourseProgress
+from courses.models import Content as ModuleContent
 from django.core.mail import mail_admins
 from django.contrib import messages
 from students.decorators import student_required
@@ -54,18 +57,78 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
                         self).get_context_data(**kwargs)
         course = self.get_object()
 
-        if 'module_id' in self.kwargs:
-            # get current module
+        context['prev_completed'] = True
+        context['module'] = None
+        context['completed_contents'] = []
+        context['active_content'] = 0
+        context['next_content'] = None
+
+        if 'module_id' in self.kwargs and self.request.GET.get('content'):
+
+            content_id = int(self.request.GET.get('content'))
+
+            modules_list = course.modules.all()
+            modules_ids = list(modules_list.order_by('order').values_list('id', flat=True))
+
+            # get course content ids
+            content_ids = [md.contents.order_by('order').values_list(
+                'id', flat=True) for md in modules_list.order_by('order')]
+
+            content_ids = list(itertools.chain(*content_ids))
+
+            # Contents Progress
+            content_progress = CourseProgress.objects.filter(
+                content_id__in=content_ids, is_completed=True, user=self.request.user)
+
+            pos = content_ids.index(content_id)
+
+            context['active_content'] = content_id
+
+            if content_progress.count() > 0:
+                context['completed_contents'] = list(content_progress.values_list('content_id', flat=True))
+
+            print(content_ids)
+
+            if (pos+1) < len(content_ids):
+                print(content_ids[pos+1])
+                context['next_content'] = ModuleContent.objects.get(id=content_ids[pos+1])
+
+            # check previous content is completed
+            if pos > 0:
+                complete = content_progress.filter(
+                    content_id=content_ids[pos-1]).count()
+
+                if complete <= 0:
+                    context['prev_completed'] = False
+            # else:
+            #     context['completed_contents'] = [content_id]
+
             context['module'] = course.modules.get(id=self.kwargs['module_id'])
-          
-        else:
-            # get first module
-            context['module'] = None #course.modules.all()[0]
-        
-        if self.request.GET.get('content'):
-            context['content_id'] = int(self.request.GET.get('content'))
+
+        # active the first content
+        if not self.request.GET.get('content'):
+            context['completed_contents'] = [course.modules.all().order_by(
+                'order').first().contents.order_by('order').first().id]
 
         return context
+
+    def render_to_response(self, context, **response_kwargs):
+
+        print(context['completed_contents'])
+        print(context['next_content'])
+
+        if context['module'] and context['prev_completed'] == False:
+            return redirect('student_course_detail', self.get_object().id)
+
+        if context['active_content'] > 0:
+            CourseProgress.objects.update_or_create(
+                content_id=context['active_content'], user=self.request.user,
+                defaults={ 'user': self.request.user, 'content_id':context['active_content'], 'is_completed':True})
+
+        return super(StudentCourseDetailView, self).render_to_response(context, **response_kwargs)
+
+    def get(self, *args, **kwargs):
+        return super().get(*args, **kwargs)
 
 
 class StudentRegistrationView(CreateView):
@@ -99,7 +162,6 @@ class StudentEnrollCourseView(FormView):
 
     def get_success_url(self):
         return reverse_lazy('student_course_detail', args=[self.course.id])
-
 
 
 @method_decorator([login_required, student_required], name='dispatch')
@@ -170,7 +232,7 @@ def take_quiz(request, pk):
                         answer__question__quiz=quiz, answer__is_correct=True).count()
                     score = round(
                         (correct_answers / total_questions) * 100.0, 2)
-                    
+
                     TakenQuiz.objects.create(
                         student=student, quiz=quiz, score=score)
 
@@ -189,7 +251,7 @@ def take_quiz(request, pk):
         'question': question,
         'form': form,
         'progress': (total_questions - total_unanswered_questions) + 1,
-        'total_questions':total_questions
+        'total_questions': total_questions
     })
 
 
@@ -201,11 +263,13 @@ def quiz_result(request, pk):
     student = request.user.student
 
     taken = student.taken_quizzes.filter(quiz=pk).last()
-    
+
     if taken.score < 50.0:
-        messages.warning(request, 'Good luck for next time! Your score for this quiz %s was %s.' % (quiz.name, taken.score))
+        messages.warning(request, 'Good luck for next time! Your score for this quiz %s was %s.' % (
+            quiz.name, taken.score))
     else:
-        messages.success(request, 'Fantastic! You completed the quiz %s with success! Your scored %s points.' % (quiz.name, taken.score))
+        messages.success(request, 'Fantastic! You completed the quiz %s with success! Your scored %s points.' % (
+            quiz.name, taken.score))
 
     return render(request, 'students/student/quiz_result.html', {
         'quiz': quiz,
@@ -214,21 +278,27 @@ def quiz_result(request, pk):
 
 @login_required
 def student_recommendation_list(request):
-    user_reviews = Review.objects.filter(user_name=request.user).prefetch_related('course')
+    user_reviews = Review.objects.filter(
+        user_name=request.user).prefetch_related('course')
     user_review_course_ids = set(map(lambda x: x.course.id, user_reviews))
 
     try:
-        user_cluster_name = User.objects.get(username=request.user.username).cluster_set.first().name
+        user_cluster_name = User.objects.get(
+            username=request.user.username).cluster_set.first().name
     except:
         update_clusters()
-        user_cluster_name = User.objects.get(username=request.user.username).cluster_set.first().name
+        user_cluster_name = User.objects.get(
+            username=request.user.username).cluster_set.first().name
 
+    user_cluster_other_members = Cluster.objects.get(
+        name=user_cluster_name).users.exclude(username=request.user.username).all()
+    others_members_usernames = set(
+        map(lambda x: x, user_cluster_other_members))
 
-    user_cluster_other_members = Cluster.objects.get(name=user_cluster_name).users.exclude(username=request.user.username).all()
-    others_members_usernames = set(map(lambda x: x, user_cluster_other_members))
-
-    others_users_reviews = Review.objects.filter(user_name__in=others_members_usernames).exclude(course__id__in=user_review_course_ids)
-    others_users_reviews_courses_ids = set(map(lambda x: x.course.id, others_users_reviews))
+    others_users_reviews = Review.objects.filter(
+        user_name__in=others_members_usernames).exclude(course__id__in=user_review_course_ids)
+    others_users_reviews_courses_ids = set(
+        map(lambda x: x.course.id, others_users_reviews))
 
     course_list = sorted(
         list(Course.objects.filter(id__in=others_users_reviews_courses_ids)),

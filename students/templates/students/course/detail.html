@@ -23,26 +23,40 @@
                         <ul>
 
                             {% for m in object.modules.all %}
-                            
+
                             <li data-id="{{ m.id }}" class="sidebar-dropdown">
                                 <a href="javascript:;" class="{% if m == module %} active {% endif %}">
                                     {{ m.title }}
                                 </a>
-
-                                
 
                                 <div class="sidebar-submenu">
                                     <ul>
                                         {% for content in m.contents.all %}
                                         {% with item=content.item %}
                                         <li>
+                                            {% if content.id in completed_contents or active_content  == content.id %}
+
                                             <a class="{% if request.GET.content and content_id  == content.id %}pin{% endif %}"
-                                             href="{% url 'student_course_detail_module' object.id m.id %}?content={{content.id}}">
-                                              
-                                                <i title=" {{ content.content_type }}" class="fa {{ content.content_type }}"></i>
+                                                href="{% url 'student_course_detail_module' object.id m.id %}?content={{content.id}}">
+
+                                                <i title=" {{ content.content_type }}"
+                                                    class="fa {{ content.content_type }}"></i>
                                                 {{ item.title }}
-                                               
+
                                             </a>
+
+                                            {% else %}
+                                            <a href="javascript:;">
+
+                                                <i title=" {{ content.content_type }}"
+                                                    class="fa {{ content.content_type }}"></i>
+                                                {{ item.title }}
+
+                                            </a>
+
+                                            {% endif %}
+
+
                                         </li>
                                         {% endwith %}
                                         {% endfor %}
@@ -53,8 +67,8 @@
 
                                                 <i title="Quiz" class="fa fa-question-circle-o"></i>
 
-                                            Quiz
-                                               
+                                                Quiz
+
                                             </a>
                                         </li>
                                         {% endif %}
@@ -78,23 +92,31 @@
                 <div class="clever-description">
 
                     <div class="row ">
-                    
+
                         {% if module == None %}
 
                         <div class="col-md-12 mb-30">
                             <div class="about-course">
-                              {{object.overview}}
+                                {{object.overview}}
                             </div>
                         </div>
-                       
+
                         {%endif%}
-                      
+
                         {% if module != None %}
+
+                        {% if next_content != None %}
+
+                        <div class="col-md-12 mb-5">
+                            <a href="{% url 'student_course_detail_module' object.id next_content.module_id %}?content={{next_content.id}}"
+                                class="btn btn-primary">Next Chapter >> </a>
+                        </div>
+                        {% endif %}
 
                         {% for content in module.contents.all %}
 
-                        {% if request.GET.content and content_id  == content.id %}
-
+                        {% if active_content  == content.id %}
+                      
                         <div class="col-md-12 mb-30">
                             <div class="about-course">
                                 {% with item=content.item %}
@@ -119,9 +141,8 @@
                             {% endif %}
                         </div> -->
 
-
                         {%endif%}
-                        
+
 
                         {% if module.contents.count == 0 %}
                         <div class="col-md-12 mb-30">
@@ -146,7 +167,7 @@
     $(document).ready(function () {
 
         $(".sidebar-dropdown > a").click(function () {
-           
+
             $(".sidebar-submenu").slideUp(200);
 
             if ($(this).parent().hasClass("active")) {
