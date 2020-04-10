@@ -60,70 +60,72 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
         context['prev_completed'] = True
         context['module'] = None
         context['completed_contents'] = []
-        context['active_content'] = 0
+        context['taken_quizzes'] = []
+        context['active_content'] = None
         context['next_content'] = None
+
+        course_details = []
+        modules_list = course.modules.all().order_by('order')
+        student = self.request.user.student
+        taken_quizzes = list(student.quizzes.values_list('pk', flat=True))
+
+        for m in modules_list:
+            for c in m.contents.order_by('order'):
+                c_count = CourseProgress.objects.filter(
+                    content_id=c.id, is_completed=True, user=self.request.user).count()
+
+                item_obj = {'type': 'content', 'object': c, 'module':m,
+                            'complete': True if c_count > 0 else False}
+                course_details.append(item_obj)
+
+            if m.quiz is not None:
+                item_obj = {'type': 'quiz',
+                            'object': m.quiz, 'complete': True if m.quiz.id in taken_quizzes else False}
+
+                course_details.append(item_obj)
+
+        context['taken_quizzes'] = taken_quizzes
+        context['active_content'] = modules_list.first().contents.first()
+        context['completed_contents'] = [x['object'].id for
+                                         x in course_details if x['complete'] == True and x['type'] == 'content']
 
         if 'module_id' in self.kwargs and self.request.GET.get('content'):
 
             content_id = int(self.request.GET.get('content'))
-
-            modules_list = course.modules.all()
-            modules_ids = list(modules_list.order_by('order').values_list('id', flat=True))
-
-            # get course content ids
-            content_ids = [md.contents.order_by('order').values_list(
-                'id', flat=True) for md in modules_list.order_by('order')]
-
-            content_ids = list(itertools.chain(*content_ids))
-
-            # Contents Progress
-            content_progress = CourseProgress.objects.filter(
-                content_id__in=content_ids, is_completed=True, user=self.request.user)
-
-            pos = content_ids.index(content_id)
-
-            context['active_content'] = content_id
-
-            if content_progress.count() > 0:
-                context['completed_contents'] = list(content_progress.values_list('content_id', flat=True))
-
-            print(content_ids)
-
-            if (pos+1) < len(content_ids):
-                print(content_ids[pos+1])
-                context['next_content'] = ModuleContent.objects.get(id=content_ids[pos+1])
-
-            # check previous content is completed
-            if pos > 0:
-                complete = content_progress.filter(
-                    content_id=content_ids[pos-1]).count()
-
-                if complete <= 0:
-                    context['prev_completed'] = False
-            # else:
-            #     context['completed_contents'] = [content_id]
-
             context['module'] = course.modules.get(id=self.kwargs['module_id'])
+            context['active_content'] = context['module'].contents.filter(
+                id=content_id).first()
 
-        # active the first content
-        if not self.request.GET.get('content'):
-            context['completed_contents'] = [course.modules.all().order_by(
-                'order').first().contents.order_by('order').first().id]
+            current_index = [ix for ix, x in enumerate(
+                course_details) if x['object'].id == content_id and x['type'] == 'content'][0]
+
+            if current_index > 0:
+                prev_item = course_details[current_index-1]
+                context['prev_completed'] = prev_item['complete']
+
+            i = current_index+1
+            while i < len(course_details):
+                obj = course_details[i]
+                context['next_content'] = obj
+
+                if obj['type'] == 'quiz' and obj['complete'] == True:
+                    context['next_content'] = None
+                    i += 1
+                else:
+                    break
 
         return context
 
     def render_to_response(self, context, **response_kwargs):
 
-        print(context['completed_contents'])
-        print(context['next_content'])
-
-        if context['module'] and context['prev_completed'] == False:
+        if context['module'] and (context['prev_completed'] == False or context['active_content'] == None):
             return redirect('student_course_detail', self.get_object().id)
 
-        if context['active_content'] > 0:
+        if self.request.GET.get('content') and context['active_content'] is not None:
+
             CourseProgress.objects.update_or_create(
-                content_id=context['active_content'], user=self.request.user,
-                defaults={ 'user': self.request.user, 'content_id':context['active_content'], 'is_completed':True})
+                content_id=context['active_content'].id, user=self.request.user,
+                defaults={'user': self.request.user, 'content': context['active_content'], 'is_completed': True})
 
         return super(StudentCourseDetailView, self).render_to_response(context, **response_kwargs)
 
@@ -211,9 +213,6 @@ def take_quiz(request, pk):
     progress = 100 - \
         round(((total_unanswered_questions - 1) / total_questions) * 100)
     question = unanswered_questions.first()
-
-    print(total_questions)
-    print(total_unanswered_questions)
 
     if request.method == 'POST':
         form = TakeQuizForm(question=question, data=request.POST)

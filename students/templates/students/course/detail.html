@@ -33,10 +33,11 @@
                                     <ul>
                                         {% for content in m.contents.all %}
                                         {% with item=content.item %}
-                                        <li>
-                                            {% if content.id in completed_contents or active_content  == content.id %}
 
-                                            <a class="{% if request.GET.content and content_id  == content.id %}pin{% endif %}"
+                                        <li>
+                                            {% if content.id in completed_contents or active_content.id  == content.id %}
+
+                                            <a class="{% if content.id in completed_contents %}complete{% endif %} {% if active_content.id  == content.id %}pin{% endif %}"
                                                 href="{% url 'student_course_detail_module' object.id m.id %}?content={{content.id}}">
 
                                                 <i title=" {{ content.content_type }}"
@@ -47,28 +48,27 @@
 
                                             {% else %}
                                             <a href="javascript:;">
-
                                                 <i title=" {{ content.content_type }}"
                                                     class="fa {{ content.content_type }}"></i>
                                                 {{ item.title }}
-
                                             </a>
-
                                             {% endif %}
-
-
                                         </li>
                                         {% endwith %}
                                         {% endfor %}
 
-                                        {% if m.quiz != None %}
+                                        {% if m.quiz != None  and m.quiz_id in taken_quizzes %}
                                         <li>
-                                            <a href="#">
-
+                                            <a class="complete" href="{% url 'take_quiz' m.quiz_id %}">
                                                 <i title="Quiz" class="fa fa-question-circle-o"></i>
-
                                                 Quiz
-
+                                            </a>
+                                        </li>
+                                        {% elif m.quiz != None %}
+                                        <li>
+                                            <a href="javascript:;">
+                                                <i title="Quiz" class="fa fa-question-circle-o"></i>
+                                                Quiz
                                             </a>
                                         </li>
                                         {% endif %}
@@ -107,16 +107,27 @@
 
                         {% if next_content != None %}
 
+                        {% if module.quiz is not None and next_content.type == 'quiz' and module.quiz.id not in taken_quizzes   %}
+
                         <div class="col-md-12 mb-5">
-                            <a href="{% url 'student_course_detail_module' object.id next_content.module_id %}?content={{next_content.id}}"
+                            <a href="{% url 'take_quiz' module.quiz_id %}" class="btn btn-primary">Take Quiz >> </a>
+                        </div>
+
+                        {% elif next_content.type == 'content' %}
+
+                        <div class="col-md-12 mb-5">
+                            <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{next_content.object.id}}"
                                 class="btn btn-primary">Next Chapter >> </a>
                         </div>
+
+                        {% endif %}
+
                         {% endif %}
 
                         {% for content in module.contents.all %}
 
-                        {% if active_content  == content.id %}
-                      
+                        {% if active_content.id  == content.id %}
+
                         <div class="col-md-12 mb-30">
                             <div class="about-course">
                                 {% with item=content.item %}
@@ -129,20 +140,12 @@
                                 {% endwith %}
                             </div>
                         </div>
+
                         {% endif %}
 
                         {% endfor %}
 
-                        <!-- <div class="col-md-12 mb-30">
-                            {% if module.quiz_id %}
-                            <h3>
-                                <a href="{% url 'take_quiz' module.quiz_id %}" style="color: blue;">Take Course Quiz</a>
-                            </h3>
-                            {% endif %}
-                        </div> -->
-
                         {%endif%}
-
 
                         {% if module.contents.count == 0 %}
                         <div class="col-md-12 mb-30">
