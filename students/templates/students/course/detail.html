@@ -107,10 +107,12 @@
 
                         {% if next_content != None %}
 
-                        {% if module.quiz is not None and next_content.type == 'quiz' and module.quiz.id not in taken_quizzes   %}
+                        
+
+                        {% if next_content.type == 'quiz' and next_content.object.id not in taken_quizzes %}
 
                         <div class="col-md-12 mb-5">
-                            <a href="{% url 'take_quiz' module.quiz_id %}" class="btn btn-primary">Take Quiz >> </a>
+                            <a href="{% url 'take_quiz' next_content.object.id %}" class="btn btn-primary">Take Quiz >> </a>
                         </div>
 
                         {% elif next_content.type == 'content' %}

@@ -118,6 +118,9 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
 
     def render_to_response(self, context, **response_kwargs):
 
+        print(context['next_content'])
+        print(context['taken_quizzes'])
+
         if context['module'] and (context['prev_completed'] == False or context['active_content'] == None):
             return redirect('student_course_detail', self.get_object().id)
 
