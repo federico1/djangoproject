@@ -70,7 +70,8 @@ class Content(models.Model):
                                      limit_choices_to={'model__in':('text',
                                                                     'video',
                                                                     'image',
-                                                                    'file')},
+                                                                    'file',
+                                                                    'iframe')},
                                      on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     item = GenericForeignKey('content_type', 'object_id')
@@ -95,9 +96,6 @@ class ItemBase(models.Model):
         return self.title
 
     def render(self):
-
-        
-
         return render_to_string('courses/content/{}.html'.format(
            self._meta.model_name), {'item': self})
 
@@ -113,6 +111,10 @@ class Image(ItemBase):
 
 class Video(ItemBase):
     url = models.URLField()
+
+class IFrame(ItemBase):
+    site_url = models.TextField()
+
 
 class Review(models.Model):
     RATING_CHOICES = (

@@ -21,7 +21,6 @@ class HomePage(generic.TemplateView):
     template_name = "home.html"
 
 
-
 class OwnerMixin(object):
     def get_queryset(self):
         qs = super(OwnerMixin, self).get_queryset()
@@ -104,7 +103,7 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
     template_name = 'courses/manage/content/form.html'
 
     def get_model(self, model_name):
-        if model_name in ['text', 'video', 'image', 'file']:
+        if model_name in ['text', 'video', 'image', 'file', 'iframe']:
             return apps.get_model(app_label='courses',
                                   model_name=model_name)
         return None
