@@ -53,7 +53,7 @@ class Module(models.Model):
     quiz = models.ForeignKey(Quiz,
                                related_name='module_quiz',
                                blank=True, null=True,
-                               on_delete=models.DO_NOTHING)
+                               on_delete=models.SET_NULL)
 
     class Meta:
             ordering = ['order']
@@ -142,11 +142,9 @@ class Cluster(models.Model):
 class CourseProgress(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                               related_name='courses_progress',
-                              on_delete=models.CASCADE)
+                              on_delete=models.SET_NULL)
     created = models.DateTimeField(auto_now_add=True)
-    #course = models.ForeignKey(Course, on_delete=models.DO_NOTHING, related_name='course_progress')
-    #module = models.ForeignKey(Module, on_delete=models.DO_NOTHING, related_name='module_progress')
-    content = models.ForeignKey(Content, on_delete=models.DO_NOTHING, related_name='content_progress')
+    content = models.ForeignKey(Content, on_delete=models.CASCADE, related_name='content_progress')
     is_completed = models.BooleanField(default=False)
     progress = models.IntegerField(default=0)
 
