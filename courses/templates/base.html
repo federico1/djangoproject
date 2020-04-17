@@ -9,7 +9,7 @@
     <link href="{% static "/css/style.css" %}" rel="stylesheet">
 
     <style>
-       
+
     </style>
 
 </head>
@@ -97,22 +97,22 @@
                             </div>
 
                             {% if request.user.is_authenticated %}
-                            <div class="register-login-area">
-                                <!-- <a href="#" class="btn">Register</a> -->
-                                <!-- <a href="{% url "logout" %}" class="btn active">Sign out</a> -->
 
-                                <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
-                                     Welcome,   {{ request.user }}
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="{% url "logout" %}">Sign out</a>
+                            <div class="login-state d-flex align-items-center">
+                                <div class="user-name mr-30">
+                                    <div class="dropdown">
+                                        <a class="dropdown-toggle" href="#" role="button" id="userName"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ request.user }}</a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userName">
+                                            
+                                            <a class="dropdown-item" href="{% url "logout" %}">Sign out</a>
+                                        </div>
                                     </div>
                                 </div>
-
+                               
                             </div>
+
+                         
 
                             {% else %}
                             <div class="register-login-area">
