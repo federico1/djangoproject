@@ -35,9 +35,9 @@
                                         {% with item=content.item %}
 
                                         <li>
-                                            {% if content.id in completed_contents or active_content.id  == content.id %}
+                                            {% if content.id in completed_contents or active_content.object.id  == content.id %}
 
-                                            <a class="{% if content.id in completed_contents %}complete{% endif %} {% if active_content.id  == content.id %}pin{% endif %}"
+                                            <a class="{% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}pin{% endif %}"
                                                 href="{% url 'student_course_detail_module' object.id m.id %}?content={{content.id}}">
 
                                                 <i title=" {{ content.content_type }}"
@@ -57,12 +57,11 @@
                                         {% endwith %}
                                         {% endfor %}
 
-                                        {% if m.quiz != None  and m.quiz_id in taken_quizzes %}
+                                        {% if m.quiz != None and m.quiz_id in taken_quizzes %}
                                         <li>
-                                            <a class="complete" href="{% url 'take_quiz' m.quiz_id %}">
-                                                <i title="Quiz" class="fa fa-question-circle-o"></i>
-                                                Quiz
-                                            </a>
+                                            <a class="complete" href="{% url 'student_course_detail_module' object.id m.id %}?content={{m.quiz_id}}&type=quiz">  
+                                                <i class="fa fa-question-circle-o"></i>
+                                                Quiz </a>
                                         </li>
                                         {% elif m.quiz != None %}
                                         <li>
@@ -105,15 +104,20 @@
 
                         {% if module != None %}
 
-                        {% if next_content != None %}
+                        {% if next_content != None and active_content.complete == True %}
 
-                        
+                        {% if next_content.type == 'quiz' %}
 
-                        {% if next_content.type == 'quiz' and next_content.object.id not in taken_quizzes %}
+                        <!-- and next_content.object.id not in taken_quizzes -->
 
                         <div class="col-md-12 mb-5">
-                            <a href="{% url 'take_quiz' next_content.object.id %}" class="btn btn-primary">Take Quiz >> </a>
+                            <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{next_content.object.id}}&type=quiz"
+                                class="btn btn-primary">Next Chapter (Quiz) >> </a>
                         </div>
+
+                        <!-- <div class="col-md-12 mb-5">
+                            <a href="{% url 'take_quiz' next_content.object.id %}" class="btn btn-primary">Take Quiz >> </a>
+                        </div> -->
 
                         {% elif next_content.type == 'content' %}
 
@@ -125,10 +129,11 @@
                         {% endif %}
 
                         {% endif %}
+                        <!--  if next_content != None -->
 
                         {% for content in module.contents.all %}
 
-                        {% if active_content.id  == content.id %}
+                        {% if active_content.object.id  == content.id and active_content.type == 'content' %}
 
                         <div class="col-md-12 mb-30">
                             <div class="about-course">
@@ -147,14 +152,49 @@
 
                         {% endfor %}
 
+                        {% if active_content.type == 'quiz' %}
+                        <div class="col-md-12 mb-30">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Quiz</th>
+                                        <th>Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr>
+                                        <td>
+                                            {{active_content.object}}
+                                        </td>
+                                        <td>
+                                            {% if active_content.complete == True %}
+                                            {{active_content.score}}
+                                            {% else %}
+                                            Not Taken
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2">
+                                            {% if active_content.complete == True %}
+                                            <a href="{% url 'quiz_reset' active_content.object.id %}"
+                                                class="btn btn-primary">Retake Quiz </a>
+                                            {% else %}
+                                            <a href="{% url 'take_quiz' active_content.object.id %}"
+                                                class="btn btn-primary">Take Quiz </a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                         {%endif%}
 
-                        {% if module.contents.count == 0 %}
-                        <div class="col-md-12 mb-30">
-                            <h3> No Content Found </h3>
-                        </div>
-                        {% endif %}
-
+                        {%endif%}
 
                     </div>
 

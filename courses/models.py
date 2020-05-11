@@ -142,7 +142,7 @@ class Cluster(models.Model):
 class CourseProgress(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                               related_name='courses_progress',
-                              on_delete=models.SET_NULL)
+                              on_delete=models.SET_NULL, null=True)
     created = models.DateTimeField(auto_now_add=True)
     content = models.ForeignKey(Content, on_delete=models.CASCADE, related_name='content_progress')
     is_completed = models.BooleanField(default=False)
