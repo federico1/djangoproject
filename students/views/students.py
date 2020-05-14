@@ -3,7 +3,7 @@ import itertools
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.db import transaction
 from django.db.models import Count
 from django.urls import reverse_lazy
@@ -93,8 +93,6 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
         context['active_content'] = course_details[0] # modules_list.first().contents.first()
         context['completed_contents'] = [x['object'].id for
                                          x in course_details if x['complete'] == True and x['type'] == 'content']
-        
-        #print(course_details)
 
         if 'module_id' in self.kwargs and self.request.GET.get('content'):
 
@@ -134,7 +132,8 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
     def render_to_response(self, context, **response_kwargs):
 
         print(context['active_content'])
-        print(context['taken_quizzes'])
+        print(context['prev_completed'])
+        print(context['completed_contents'])
 
         if context['module'] and (context['prev_completed'] == False or context['active_content'] == None):
             return redirect('student_course_detail', self.get_object().id)
@@ -146,8 +145,9 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
                 
                 if context['active_content'] is not None and pr_r[1] == True:
                     context['active_content']['complete'] = True
-            except:
-                pass
+
+            except Exception as ex:
+                print(ex)
 
         return super(StudentCourseDetailView, self).render_to_response(context, **response_kwargs)
 
@@ -228,7 +228,11 @@ def take_quiz(request, pk):
     student = request.user.student
 
     if student.quizzes.filter(pk=pk).exists():
-        return render(request, 'students/student/taken_quiz_list.html')
+
+        if request.GET['ref'] is not None:
+            return redirect(request.GET['ref'])
+
+        return redirect('taken_quiz_list')
 
     total_questions = quiz.questions.count()
     unanswered_questions = student.get_unanswered_questions(quiz)
@@ -246,11 +250,16 @@ def take_quiz(request, pk):
                 student_answer.save()
                 unanswered_questions = student.get_unanswered_questions(quiz)
                 total_unanswered_questions = unanswered_questions.count()
-
+                    
+                rev_url = reverse('take_quiz', kwargs={"pk":pk})
+                    
+                if request.GET['ref'] is not None:
+                    rev_url = rev_url + "?ref=" + request.GET['ref']
+                
                 request.user.save()
 
                 if unanswered_questions.exists():
-                    return redirect('take_quiz', pk)
+                    return redirect(rev_url)
                 else:
                     correct_answers = student.quiz_answers.filter(
                         answer__question__quiz=quiz, answer__is_correct=True).count()
@@ -259,14 +268,8 @@ def take_quiz(request, pk):
 
                     TakenQuiz.objects.create(
                         student=student, quiz=quiz, score=score)
-
-                    # if score < 50.0:
-                    #     messages.warning(
-                    #         request, 'Good luck for next time! Your score for this quiz %s was %s.' % (quiz.name, score))
-                    # else:
-                    #     messages.success(
-                    #         request, 'Fantastic! You completed the quiz %s with success! Your scored %s points.' % (quiz.name, score))
-                    return redirect('quiz_result', pk)
+                    
+                    return redirect(rev_url)
     else:
         form = TakeQuizForm(question=question)
 
@@ -339,6 +342,11 @@ def quiz_reset(request, pk):
             taken = student.taken_quizzes.filter(quiz=pk).last()
             quiz = Quiz.objects.get(id=pk)
 
+            rev_url = reverse('take_quiz', kwargs={"pk":pk})
+
+            if request.GET['ref'] is not None:
+                rev_url = rev_url + "?ref=" + request.GET['ref']
+            
             if taken:
                 answers = [x for x in quiz.questions.select_related('answers').values_list('answers', flat=True)]
                 
@@ -346,9 +354,8 @@ def quiz_reset(request, pk):
                     item.delete()
                 
                 taken.delete()
-                return redirect('take_quiz', pk)
+                return redirect(rev_url)
             else:
                 return HttpResponse(0) 
     except Exception as ex:
-        print(ex)
         return HttpResponse(0)

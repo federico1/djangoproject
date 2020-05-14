@@ -181,10 +181,10 @@
                                     <tr>
                                         <td colspan="2">
                                             {% if active_content.complete == True %}
-                                            <a href="{% url 'quiz_reset' active_content.object.id %}"
+                                            <a href="{% url 'quiz_reset' active_content.object.id %}?ref={{request.get_full_path}}"
                                                 class="btn btn-primary">Retake Quiz </a>
                                             {% else %}
-                                            <a href="{% url 'take_quiz' active_content.object.id %}"
+                                            <a href="{% url 'take_quiz' active_content.object.id %}?ref={{request.get_full_path}}"
                                                 class="btn btn-primary">Take Quiz </a>
                                             {% endif %}
                                         </td>
