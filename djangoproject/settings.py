@@ -52,10 +52,12 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'students',
     'embed_video',
-    'app_quiz'
-    #'rest_framework',
+    'app_quiz',
+    'app_chat',
+    'app_api',
 )
 
 
@@ -141,8 +143,9 @@ CACHES = {
     }
 }
 
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.IsAuthenticated',
     ]
 }

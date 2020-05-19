@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if conversation is not None%}
+{{conversation}}
+{%else%}
+Manage Conversations
+{%endif%}
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-3" id="conversation-panel">
+            <div class="card">
+                <div class="card-header container-fluid">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <strong>
+                                Chat
+                            </strong>
+                        </div>
+                        <div class="col-md-2 float-right">
+                            <button class="btn btn-success btn-sm btn-new-chat">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group" id="list">
+                        <a href="" class="list-group-item active rounded-0">Dapibus ac facilisis in</a>
+                        <a href="#" class="list-group-item rounded-0">Morbi leo risus</a>
+                        <a href="#" class="list-group-item rounded-0">Porta ac consectetur ac</a>
+                        <a href="#" class="list-group-item rounded-0">Vestibulum at eros</a>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+
+            {% if conversation is not None%}
+            <div class="card">
+                <div class="card-header container-fluid">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <strong>
+                                {{conversation}}
+                            </strong>
+
+                                {% if conversation.course is not None%}
+                                ({{conversation.course}})
+                                {%endif%}
+                        </div>
+                        <div class="col-md-7 text-sm-right">
+                            <button class="btn btn-info btn-sm">
+                                <i class="fa fa-users"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                          
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-sm-12 border p-1 mb-1">
+                        message
+                    </div>
+                    <div class="col-sm-12 border p-1 mb-1">
+                        message
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer">
+                    <form>
+                        <div class="form-group row">
+                          <div class="col-sm-12">
+                            <input class="form-control" ></input>
+                          </div>
+                        </div>
+                   
+                        <div class="form-group row">
+                          <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary btn-sm">Send</button>
+                          </div>
+                        </div>
+                      </form>
+                </div>
+            </div>
+            {%else%}
+            <div>
+                <strong>
+                    No conversation selected
+                </strong>
+            </div>
+            {%endif%}
+
+
+        </div>
+    </div>
+
+</div>
+
+<div id="create-chat-modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Create New Chat
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="exampleFormControlInput1">Title</label>
+                        <input type="text" class="form-control" id="title" name="title"
+                            placeholder="Conversation title.">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Course</label>
+                        <select class="form-control" id="course" name="course">
+                        </select>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btn-save-chat">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+    (function ($) {
+        $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+
+            $.each(a, function () {
+
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+
+            return o;
+        };
+
+    })(jQuery);
+
+    (function ($) {
+
+        $.MessagesPage = function (options) {
+
+            var that = this;
+
+            var courseList = [];
+            var conversationsList = [];
+
+            var settings = $.extend({
+
+            }, options);
+
+            var getCourses = function () {
+                $.get('/api/teacher-courses/?format=json', {}, function (response) {
+                    courseList = response;
+                    fillCourseDropdown();
+                });
+            };
+
+            var fillCourseDropdown = function () {
+                $("#create-chat-modal #course").empty();
+                $("#create-chat-modal #course").append('<option value="">Select Course</option>');
+
+                $(courseList).each(function (index, item) {
+                    var opt = $("<option />", { value: item.id, text: item.title });
+                    $("#create-chat-modal #course").append(opt);
+                });
+            };
+
+            var getConversations = function () {
+                $.get('/api/conversations/?format=json', {}, function (response) {
+                    conversationsList = response;
+                    drawConversationsList();
+                });
+            };
+
+            var drawConversationsList = function () {
+                $("#conversation-panel #list").empty();
+
+                $(conversationsList).each(function (index, item) {
+                    var a = $("<a />", { text: item.title, href: '{% url "messages" %}' + item.id, class: "list-group-item rounded-0" });
+                    $("#conversation-panel #list").append(a);
+                });
+            };
+
+            var registerEvent = function () {
+
+                $("div").on("click", '.btn-new-chat', function (e) {
+                    e.stopPropagation();
+                    $("#create-chat-modal").modal('show');
+                });
+
+                $("div").on("click", '#btn-save-chat', function (e) {
+                    e.stopPropagation();
+
+                    var data = $("#create-chat-modal form").eq(0).serializeObject();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/conversations/",
+                        data: JSON.stringify(data),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        },
+                        success: function (response) {
+                            if (response) {
+                                window.location.reload();
+                            }
+                            $("#create-chat-modal").modal('hide');
+                        },
+                        failure: function (errMsg) {
+                            $("#create-chat-modal").modal('hide');
+                        }
+                    });
+
+
+                });
+
+                $(settings.searchFormID).on("click", '.linkGetProducts', function (e) {
+                    e.stopPropagation();
+                    getProducts();
+                });
+
+            };
+
+            var init = function () {
+                registerEvent();
+                getConversations();
+                getCourses();
+            };
+
+            init();
+
+            return this;
+
+        };
+
+
+    }(jQuery));
+
+    $(document).ready(function () {
+        var messagesPage = new $.MessagesPage({
+        });
+    });
+</script>
+
+{% endblock %}

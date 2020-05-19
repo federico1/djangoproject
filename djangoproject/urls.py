@@ -30,6 +30,8 @@ urlpatterns = [
     path('', CourseListView.as_view(), name='course_list'),
     path('students/', include('students.urls')),
     path('quiz/', include('app_quiz.urls')),
+    path('communicate/', include('app_chat.urls')),
+    url(r'api/', include('app_api.urls')),
     #path('api/', include('courses.api.urls', namespace='api')),
 ]
 

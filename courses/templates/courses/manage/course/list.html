@@ -4,7 +4,7 @@
 
 {% block content %}
     <h1>My courses</h1>
-
+<div class="">
     <div class="module">
         {% for course in object_list %}
             <div class="course-info">
@@ -25,4 +25,6 @@
                 <a href="{% url "course_create" %}" class="button">Create new course</a>
             </p>
     </div>
+</div>
+   
 {% endblock %}
