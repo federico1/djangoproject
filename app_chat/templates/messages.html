@@ -22,11 +22,15 @@ Manage Conversations
                                 Chat
                             </strong>
                         </div>
+
+                        {% if request.user.is_teacher == True%}
                         <div class="col-md-2 float-right">
                             <button class="btn btn-success btn-sm btn-new-chat">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>
+                        {%endif%}
+
                     </div>
                 </div>
                 <div class="card-body p-0">
@@ -50,6 +54,8 @@ Manage Conversations
                             ({{conversation.course}})
                             {%endif%}
                         </div>
+
+                        {% if request.user.is_teacher == True%}
                         <div class="col-md-7 text-sm-right">
                             <button class="btn btn-info btn-sm" id="btn-members">
                                 <i class="fa fa-users"></i>
@@ -59,10 +65,12 @@ Manage Conversations
                             </button>
 
                         </div>
+                        {%endif%}
+
                     </div>
                 </div>
                 <div class="card-body" id="conversation-list">
-                   
+
                 </div>
                 <div class="card-footer">
                     <form>
@@ -491,6 +499,11 @@ Manage Conversations
                 return mn_div;
             };
 
+            var poolingMessages = function () {
+                setInterval(function () {
+                    getLatestMessages();
+                }, 3000);
+            };
 
             var registerEvent = function () {
 
@@ -583,6 +596,7 @@ Manage Conversations
                 getStudents();
                 setConversationHeight();
                 getAllMessages();
+                poolingMessages();
             };
 
             init();

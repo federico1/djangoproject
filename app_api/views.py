@@ -25,6 +25,11 @@ class ConversationDetailView(APIView):
 
     def get(self, request, format=None):
         snippets = Conversation.objects.filter(owner=request.user)
+
+        if request.user.is_student == True:
+            c_list = request.user.conversation_member.values_list('conversation_id', flat=True)
+            snippets = Conversation.objects.filter(id__in=c_list)
+
         serializer = ConversationSerializer(snippets, many=True)
         return Response(serializer.data)
 
