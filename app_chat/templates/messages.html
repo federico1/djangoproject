@@ -31,10 +31,6 @@ Manage Conversations
                 </div>
                 <div class="card-body p-0">
                     <ul class="list-group" id="list">
-                        <a href="" class="list-group-item active rounded-0">Dapibus ac facilisis in</a>
-                        <a href="#" class="list-group-item rounded-0">Morbi leo risus</a>
-                        <a href="#" class="list-group-item rounded-0">Porta ac consectetur ac</a>
-                        <a href="#" class="list-group-item rounded-0">Vestibulum at eros</a>
                     </ul>
                 </div>
             </div>
@@ -50,45 +46,53 @@ Manage Conversations
                                 {{conversation}}
                             </strong>
 
-                                {% if conversation.course is not None%}
-                                ({{conversation.course}})
-                                {%endif%}
+                            {% if conversation.course is not None%}
+                            ({{conversation.course}})
+                            {%endif%}
                         </div>
                         <div class="col-md-7 text-sm-right">
-                            <button class="btn btn-info btn-sm">
+                            <button class="btn btn-info btn-sm" id="btn-members">
                                 <i class="fa fa-users"></i>
                             </button>
-                            <button class="btn btn-danger btn-sm">
+                            <button class="btn btn-danger btn-sm" pk="{{conversation.id}}" id="btn-delete-conversation">
                                 <i class="fa fa-trash"></i>
                             </button>
-                          
+
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-sm-12 border p-1 mb-1">
-                        message
+                <div class="card-body" id="conversation-list">
+                    <div class="d-flex justify-content-start mb-5 msg-item">
+
                     </div>
-                    <div class="col-sm-12 border p-1 mb-1">
-                        message
+                    <div class="d-flex justify-content-start mb-4 msg-item">
+                        <div class="img_cont_msg">
+                            <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"
+                                class="rounded-circle user_img_msg">
+                        </div>
+                        <div class="msg_cotainer">
+                            Hi how are oyu
+                        </div>
+                        <div class="msg_time">
+                            <span> 8:40 AM, Today</span> |
+                            <span>8:40 AM, Today</span>
+                        </div>
                     </div>
-                  </div>
                 </div>
                 <div class="card-footer">
                     <form>
                         <div class="form-group row">
-                          <div class="col-sm-12">
-                            <input class="form-control" ></input>
-                          </div>
+                            <div class="col-sm-12">
+                                <input class="form-control" id="text-msg"></input>
+                            </div>
                         </div>
-                   
+
                         <div class="form-group row">
-                          <div class="col-sm-10">
-                            <button type="submit" class="btn btn-primary btn-sm">Send</button>
-                          </div>
+                            <div class="col-sm-10">
+                                <button type="button" id="btn-send-msg" class="btn btn-primary btn-sm">Send</button>
+                            </div>
                         </div>
-                      </form>
+                    </form>
                 </div>
             </div>
             {%else%}
@@ -141,6 +145,56 @@ Manage Conversations
 </div>
 
 
+<div id="members-modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Manage Members
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-secondary text-white">
+                                Members List
+                            </div>
+
+                            <div class="card-body">
+                                <ul class="list-group" id="added-members-list">
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                Add New
+                            </div>
+
+                            <div class="card-body">
+                                <ul class="list-group" id="all-members-list">
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 {% endblock %}
 
@@ -179,6 +233,9 @@ Manage Conversations
 
             var courseList = [];
             var conversationsList = [];
+            var studentsList = [];
+            var savedMembersList = [];
+            var allMessagesList = [];
 
             var settings = $.extend({
 
@@ -217,6 +274,239 @@ Manage Conversations
                 });
             };
 
+            var getStudents = function () {
+                $.get('/api/teacher-students/?format=json', {}, function (response) {
+                    studentsList = response;
+                    drawStudentsList();
+                });
+            };
+
+            var drawStudentsList = function () {
+                $("#all-members-list").empty();
+
+                $(studentsList).each(function (index, item) {
+
+                    var li = $("<li />", { class: "list-group-item d-flex justify-content-between align-items-center" });
+
+                    var a = $("<a />", { href: '#', text: 'Add', id: item.id, class: "link-add-member badge badge-primary badge-pill text-white" });
+
+                    li.append(item.username).append(a);
+
+                    $("#all-members-list").append(li);
+                });
+            };
+
+            var getAddedMembers = function () {
+
+                id = '{{conversation.id}}';
+
+                if (id) {
+                    $.get('/api/conversation-members/?format=json', { conversation: id }, function (response) {
+                        savedMembersList = response;
+                        drawMembersList();
+                    });
+                }
+
+            };
+
+            var drawMembersList = function () {
+
+                $("#added-members-list").empty();
+
+                $(savedMembersList).each(function (index, item) {
+
+                    var li = $("<li />", { class: "list-group-item d-flex justify-content-between align-items-center" });
+
+                    var a = $("<a />", { href: '#', text: 'X', id: item.id, class: "link-remove-member badge badge-primary badge-pill text-white" });
+
+                    li.append(item.member.username).append(a);
+
+                    $("#added-members-list").append(li);
+                });
+            };
+
+            var addNewMember = function (student) {
+                var data = {
+                    member: student.id,
+                    conversation: '{{conversation.id}}'
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/conversation-members/",
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (response) {
+                        toastr.success('Member is added.', 'Success!');
+                        getAddedMembers();
+                    },
+                    failure: function (errMsg) {
+                    }
+                });
+            };
+
+            var deleteMember = function (id) {
+                $.ajax({
+                    type: "DELETE",
+                    url: "/api/conversation-members/" + id + "/",
+                    data: {},
+                    contentType: 'application/json',
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (response) {
+                        toastr.warning('Member is removed.', 'Warning!');
+                        getAddedMembers();
+                    },
+                    failure: function (errMsg) {
+                    }
+                });
+            };
+
+            var deleteConversation = function (id) {
+                $.ajax({
+                    type: "DELETE",
+                    url: "/api/conversations/" + id + "/",
+                    data: {},
+                    contentType: 'application/json',
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (response) {
+
+                        toastr.warning('Conversations is removed.', 'Warning!');
+
+                        setTimeout(function () {
+                            window.location.href = "{% url 'messages' %}";
+                        }, 1000)
+                    },
+                    failure: function (errMsg) {
+                    }
+                });
+            };
+
+            var setConversationHeight = function () {
+                var height = $(window).height() - 300;
+
+                $("#conversation-list").css({
+                    'max-height': height,
+                    'height': height,
+                    'overflow': 'auto'
+                });
+
+            };
+
+            var sendMessage = function (msg) {
+
+                var data = {
+                    sent: '{{request.user.id}}',
+                    conversation: '{{conversation.id}}',
+                    content: msg
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/messages/",
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (response) {
+                        getLatestMessages();
+                    },
+                    failure: function (errMsg) {
+                    }
+                });
+
+            };
+
+            var getAllMessages = function () {
+                id = '{{conversation.id}}';
+
+                if (id) {
+                    $.get('/api/messages/?format=json', { conversation: id }, function (response) {
+                        allMessagesList = response;
+                        drawAllMessages();
+                    });
+                }
+            };
+
+            var drawAllMessages = function () {
+
+                $("#conversation-list").empty();
+
+                $(allMessagesList).each(function (index, item) {
+
+                    var div = makeMsgItem(item);
+
+                    $("#conversation-list").append(div);
+
+                });
+
+                $("#conversation-list").scrollTop($("#conversation-list")[0].scrollHeight);
+            };
+
+            var getLatestMessages = function () {
+                id = '{{conversation.id}}';
+
+                if (id) {
+                    $.get('/api/messages/?format=json', { type: 'top10', conversation: id }, function (response) {
+                        drawLatestMessages(response);
+                    });
+                }
+            };
+
+            var drawLatestMessages = function (data) {
+
+                $(data).each(function (index, item) {
+
+                    var ln = $('#' + item.id + '.msg-item').length;
+
+                    if (ln <= 0) {
+                        var div = makeMsgItem(item);
+
+                        $("#conversation-list").append(div);
+                    }
+
+                });
+
+                $("#conversation-list").scrollTop($("#conversation-list")[0].scrollHeight);
+            };
+
+            var makeMsgItem = function (item) {
+                var img_div = $("<div />", { class: "img_cont_msg" });
+                var img = $("<img />", { class: "rounded-circle user_img_msg", src: 'https://via.placeholder.com/40x40.png?text=.' });
+
+                img_div.append(img);
+
+                var msg_div = $("<div />", { class: "msg_cotainer" });
+
+                msg_div.html(item.content);
+
+                var time_div = $("<div />", { class: "msg_time" });
+
+                var span_sent = $("<span />", { text: item.sent.username });
+
+                var dt = moment(item.created).format('YYYY-MM-DD HH:m:s');
+
+                var span_time = $("<span />", { text: dt });
+
+                time_div.append(span_sent).append(" | ").append(span_time);
+
+                var mn_div = $("<div />", { id: item.id, class: "d-flex justify-content-start mb-5 msg-item" });
+
+                mn_div.append(img_div).append(msg_div).append(time_div);
+
+                return mn_div;
+            };
+
+
             var registerEvent = function () {
 
                 $("div").on("click", '.btn-new-chat', function (e) {
@@ -249,12 +539,52 @@ Manage Conversations
                         }
                     });
 
+                });
+
+                $("div").on("click", '#btn-members', function (e) {
+                    e.stopPropagation();
+                    $("#members-modal").modal('show');
 
                 });
 
-                $(settings.searchFormID).on("click", '.linkGetProducts', function (e) {
+                $("div").on("click", '.link-add-member', function (e) {
                     e.stopPropagation();
-                    getProducts();
+                    var id = $(this).attr('id');
+
+                    if (id) {
+                        var student = studentsList.find(a => id == id);
+                        addNewMember(student);
+                    }
+                });
+
+                $("div").on("click", '.link-remove-member', function (e) {
+                    e.stopPropagation();
+                    var id = $(this).attr('id');
+
+                    if (id) {
+                        deleteMember(id);
+                    }
+                });
+
+                $("div").on("click", '#btn-delete-conversation', function (e) {
+                    e.stopPropagation();
+                    var id = $(this).attr('pk');
+
+                    if (id) {
+                        deleteConversation(id);
+                    }
+                });
+
+                $("div").on("click", '#btn-send-msg', function (e) {
+                    e.stopPropagation();
+
+                    var val = $("#text-msg").val();
+
+                    if (val) {
+                        sendMessage(val);
+                        $("#text-msg").val(null);
+                    }
+
                 });
 
             };
@@ -263,6 +593,10 @@ Manage Conversations
                 registerEvent();
                 getConversations();
                 getCourses();
+                getAddedMembers();
+                getStudents();
+                setConversationHeight();
+                getAllMessages();
             };
 
             init();

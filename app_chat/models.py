@@ -50,7 +50,7 @@ class Message(models.Model):
     is_deleted = models.BooleanField(default=0)
 
     class Meta:
-        ordering = ['content']
+        ordering = ['id']
 
     def __str__(self):
         return self.content

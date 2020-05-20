@@ -11,5 +11,10 @@ router = routers.DefaultRouter()
 urlpatterns = [
     #url(r'^', include(router.urls)),
     path('conversations/', views.ConversationDetailView.as_view()),
+    path('conversations/<int:pk>/', views.ConversationDetailView.as_view()),
     path('teacher-courses/', views.TeacherCoursesDetailView.as_view()),
+    path('teacher-students/', views.TeacherStudentsList.as_view()),
+    path('conversation-members/', views.ConversationMembersList.as_view()),
+    path('conversation-members/<int:pk>/', views.ConversationMembersList.as_view()),
+    path('messages/', views.MessageList.as_view()),
 ]
