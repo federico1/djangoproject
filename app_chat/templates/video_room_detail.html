@@ -243,7 +243,7 @@
 
         var val = $("#hf-info").val();
 
-        if(val) {
+        if(val && val != 'None') {
             room_object = JSON.parse(val);
             window.room_object = room_object;
         }
