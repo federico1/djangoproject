@@ -1,0 +1,302 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+{{ object.title }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <h1>Twilio Video Conference ({{object.title}})</h1>
+    <div class="row">
+
+        <div class="col-md-6">
+            <div>
+                <form class="form-inline">
+                    <input type="hidden" id="hf-info" value="{{object.info}}" />
+                    <input type="text" class="form-control mb-2 mr-sm-2" readonly value="{{object.title}}" id="txt-room"
+                        placeholder="Room Name">
+                    <button type="button" class="btn btn-secondary mb-2 mr-sm-2" id="btn-create-room">Create
+                        Room</button>
+                        <button type="button" class="btn mb-2 mr-sm-2" id="btn-complete-room">Mark
+                            Complete</button>
+                    <button class="btn btn-info  mb-2" id="join_leave">Join call</button>
+                </form>
+            </div>
+
+            <div>
+                <p id="count">Disconnected.</p>
+            </div>
+
+            <div id="room-info"></div>
+        </div>
+        <div class="col-md-6">
+            <div id="container">
+                <div id="local" class="participant">
+                    <div></div>
+                    <div>Me</div>
+                </div>
+                <!-- more participants will be added dynamically here -->
+            </div>
+        </div>
+
+        <div class="col-md-3">
+
+        </div>
+        <div class="col-md-12">
+
+
+
+
+
+
+            <!-- <div class="card border-0">
+                <div class="card-header border-success container-fluid bg-transparent">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <strong>
+                                {{ object.title }}
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-pills">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Active</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#">Disabled</a>
+                        </li>
+                    </ul>
+
+                
+
+                </div>
+            </div> -->
+
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col">
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+
+
+<script>
+    $(document).ready(function () {
+
+        const usernameInput = document.getElementById('username');
+        const button = document.getElementById('join_leave');
+        const container = document.getElementById('container');
+        const count = document.getElementById('count');
+        var connected = false;
+        var room;
+
+        var room_object;
+
+        function addLocalVideo() {
+            Twilio.Video.createLocalVideoTrack().then(track => {
+                $("#local").append(track.attach());
+            });
+        };
+
+        function connectButtonHandler(event) {
+
+            event.preventDefault();
+
+            addLocalVideo();
+
+            if (!connected) {
+
+                var username = '{{request.user.username}}'
+
+                if (!username) {
+                    alert('Enter your name before connecting');
+                    return;
+                }
+
+                button.disabled = true;
+                button.innerHTML = 'Connecting...';
+
+                connect(username).then(() => {
+                    button.innerHTML = 'Leave call';
+                    button.disabled = false;
+                }).catch(function (err) {
+                    alert('Connection failed. Is the backend running?');
+                    button.innerHTML = 'Join call';
+                    button.disabled = false;
+                    console.log(err);
+                });
+            }
+            else {
+                disconnect();
+                button.innerHTML = 'Join call';
+                connected = false;
+            }
+        };
+
+        function connect(username) {
+
+            var promise = new Promise((resolve, reject) => {
+
+                var ds = { 'room_sid': room_object.sid };
+                console.log(room_object);
+
+                // get a token from the back end
+                fetch('/communicate/video-token/', {
+                    method: 'POST',
+                    body: JSON.stringify(ds),
+                    headers: { "X-CSRFToken": '{{ csrf_token }}' }
+                }).then(res => res.json()).then(data => {
+                    // join video call
+                    return Twilio.Video.connect(data.token);
+                }).then(_room => {
+                    room = _room;
+                    room.participants.forEach(participantConnected);
+                    room.on('participantConnected', participantConnected);
+                    room.on('participantDisconnected', participantDisconnected);
+                    connected = true;
+                    updateParticipantCount();
+                    resolve();
+                }).catch(function (err) {
+                    console.log(err)
+                    reject();
+                });
+            });
+
+            return promise;
+        };
+
+        function updateParticipantCount() {
+            if (!connected)
+                count.innerHTML = 'Disconnected.';
+            else
+                count.innerHTML = (room.participants.size + 1) + ' participants online.';
+        };
+
+        function participantConnected(participant) {
+
+            var participant_div = document.createElement('div');
+            participant_div.setAttribute('id', participant.sid);
+            participant_div.setAttribute('class', 'participant');
+
+            var tracks_div = document.createElement('div');
+            participant_div.appendChild(tracks_div);
+
+            var label_div = document.createElement('div');
+            label_div.innerHTML = participant.identity;
+            participant_div.appendChild(label_div);
+
+            container.appendChild(participant_div);
+
+            participant.tracks.forEach(publication => {
+                if (publication.isSubscribed)
+                    trackSubscribed(tracks_div, publication.track);
+            });
+
+            participant.on('trackSubscribed', track => trackSubscribed(tracks_div, track));
+            participant.on('trackUnsubscribed', trackUnsubscribed);
+
+            updateParticipantCount();
+        };
+
+        function participantDisconnected(participant) {
+            document.getElementById(participant.sid).remove();
+            updateParticipantCount();
+        };
+
+        function trackSubscribed(div, track) {
+            div.appendChild(track.attach());
+        };
+
+        function trackUnsubscribed(track) {
+            track.detach().forEach(element => element.remove());
+        };
+
+        function disconnect() {
+            room.disconnect();
+            while (container.lastChild.id != 'local')
+                container.removeChild(container.lastChild);
+            button.innerHTML = 'Join call';
+            connected = false;
+            updateParticipantCount();
+        };
+
+        //addLocalVideo();
+        button.addEventListener('click', connectButtonHandler);
+
+        var val = $("#hf-info").val();
+
+        if(val) {
+            room_object = JSON.parse(val);
+            window.room_object = room_object;
+        }
+
+        $("#btn-create-room").click(function () {
+
+            $.ajax({
+                type: "GET",
+                url: '{% url "create-room"%}',
+                data: { id: '{{object.id}}' },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                },
+                success: function (response) {
+                    room_object = response;
+                    window.room_object = response;
+
+                    $('#room-info').html(JSON.stringify(response));
+                    $('#room-info').hide();
+
+                    if (response) {
+                        $("#btn-create-room").attr('disabled', true);
+                    }
+                },
+                failure: function (errMsg) {
+                }
+            });
+
+        });
+
+        $("#btn-complete-room").click(function () {
+
+            $.ajax({
+                type: "GET",
+                url: '{% url "complete-room"%}',
+                data: { id: '{{object.id}}' },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                },
+                success: function (response) {
+                    console.log(response);
+                },
+                failure: function (errMsg) {
+                }
+            });
+
+        });
+
+    });
+
+</script>
+{% endblock %}

@@ -17,4 +17,8 @@ urlpatterns = [
     path('conversation-members/', views.ConversationMembersList.as_view()),
     path('conversation-members/<int:pk>/', views.ConversationMembersList.as_view()),
     path('messages/', views.MessageList.as_view()),
+
+    path('video-rooms/', views.VideoRoomDetailView.as_view()),
+    path('video-rooms/<int:pk>/', views.VideoRoomDetailView.as_view()),
+
 ]

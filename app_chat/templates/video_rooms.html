@@ -1,0 +1,421 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if conversation is not None%}
+{{conversation}}
+{%else%}
+Manage Conversations
+{%endif%}
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header container-fluid">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <strong>
+                                Rooms
+                            </strong>
+                        </div>
+
+                        {% if request.user.is_teacher == True%}
+                        <div class="col-md-1 text-sm-right">
+                            <button class="btn btn-success btn-sm link-new-room">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                        {%endif%}
+
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table" id="rooms-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Course</th>
+                                <th>Status</th>
+                                <th>Participants Max</th>
+                                <th>
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div id="room-modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Manage Room
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btn-save-room">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="members-modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Manage Members
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-secondary text-white">
+                                Members List
+                            </div>
+
+                            <div class="card-body">
+                                <ul class="list-group" id="added-members-list">
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                Add New
+                            </div>
+
+                            <div class="card-body">
+                                <ul class="list-group" id="all-members-list" style="max-height: 300px; overflow: auto;">
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/x-handlebars-template" id='roomFormTemplate'>
+    <form>
+        <div class="row mb-1">
+            <div class="col">
+                <label for="exampleFormControlInput1">Title</label>
+                <input type="text" class="form-control form-control-sm" id="title" name="title"
+                    placeholder="Conversation title.">
+            </div>
+            <div class="col">
+                <label for="exampleFormControlSelect1">Course</label>
+                <select class="form-control form-control-sm" id="course" name="course">
+                </select>
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col">
+                <label for="exampleFormControlInput1">Status</label>
+                <select class="form-control form-control-sm" id="status" name="status">
+                    <option value="">Select Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="started">Started</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div class="col">
+                <label for="exampleFormControlSelect1">Max Participants</label>
+                <input type="number" class="form-control form-control-sm" value="2" id="participant_max"
+                    name="participant_max">
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="exampleFormControlSelect1">Details</label>
+                <textarea class="form-control form-control-sm" id="details" name="details"></textarea>
+
+            </div>
+        </div>
+    </form>
+</script>
+{% verbatim %}
+<script type="text/x-handlebars-template" id='roomListItemTemplate'>
+   <tr>
+       <td>
+           {{title}}
+       </td>
+       <td>
+        {{#if course}}
+       <span> {{course.title}}</span>
+        {{else}}
+        <span></span>
+        {{/if}}
+         
+       </td>
+       <td>
+           {{status}}
+       </td>
+       <td>
+           {{participant_max}}
+       </td>
+       <td>
+<a href="/communicate/video-rooms/{{id}}">Details</a>
+       </td>
+   </tr>
+</script>
+{% endverbatim %}
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+    (function ($) {
+        $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+
+            $.each(a, function () {
+
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+
+            return o;
+        };
+
+    })(jQuery);
+
+    (function ($) {
+
+        $.VideoRoomPage = function (options) {
+
+            var that = this;
+
+            var courseList = [];
+            var roomsList = [];
+            var studentsList = [];
+            var savedMembersList = [];
+
+            var settings = $.extend({
+            }, options);
+
+            var getRooms = function () {
+                $.get('/api/video-rooms/?format=json', {}, function (response) {
+                    roomsList = response;
+                    fillRoomsTable();
+                });
+            };
+
+            var fillRoomsTable = function () {
+                $("#rooms-table tbody").empty();
+                $(roomsList).each(function (index, item) {
+
+                    var source = document.getElementById("roomListItemTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+                   
+                    $("#rooms-table tbody").append(template(item ));
+                });
+            };
+
+            var getCourses = function () {
+                $.get('/api/teacher-courses/?format=json', {}, function (response) {
+                    courseList = response;
+                });
+            };
+
+            var fillCourseDropdown = function () {
+                $("#room-modal #course").empty();
+                $("#room-modal #course").append('<option value="">Select Course</option>');
+
+                $(courseList).each(function (index, item) {
+                    var opt = $("<option />", { value: item.id, text: item.title });
+                    $("#room-modal #course").append(opt);
+                });
+            };
+
+            var getStudents = function () {
+                $.get('/api/teacher-students/?format=json', {}, function (response) {
+                    studentsList = response;
+                    drawStudentsList();
+                });
+            };
+
+            var drawStudentsList = function () {
+                $("#all-members-list").empty();
+
+                $(studentsList).each(function (index, item) {
+
+                    var li = $("<li />", { class: "list-group-item d-flex justify-content-between align-items-center" });
+
+                    var a = $("<a />", { href: '#', text: 'Add', id: item.id, class: "link-add-member badge badge-primary badge-pill text-white" });
+
+                    li.append(item.username).append(a);
+
+                    $("#all-members-list").append(li);
+                });
+            };
+
+            var saveRoom = function () {
+
+                var data = $("#room-modal form").eq(0).serializeObject();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/video-rooms/",
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (response) {
+                        if (response) {
+                            window.location.reload();
+                        }
+                        $("#room-modal").modal('hide');
+                    },
+                    failure: function (errMsg) {
+                        $("#room-modal").modal('hide');
+                    }
+                });
+            };
+
+            var registerEvent = function () {
+
+                $("div").on("click", '.link-new-room', function (e) {
+                    e.stopPropagation();
+                    $("#room-modal").modal('show');
+                });
+
+                $("div").on("click", '#btn-save-room', function (e) {
+                    e.stopPropagation();
+
+                    saveRoom();
+
+                });
+
+                $("div").on("click", '#btn-members', function (e) {
+                    e.stopPropagation();
+                    $("#members-modal").modal('show');
+
+                });
+
+                $("div").on("click", '.link-add-member', function (e) {
+                    e.stopPropagation();
+
+                    var id = $(this).attr('id');
+
+                    if (id) {
+                        //var student = studentsList.find(a => id == id);
+                        addNewMember(id);
+                    }
+                });
+
+                $("div").on("click", '.link-remove-member', function (e) {
+                    e.stopPropagation();
+                    var id = $(this).attr('id');
+
+                    if (id) {
+                        deleteMember(id);
+                    }
+                });
+
+                $("div").on("click", '#btn-delete-conversation', function (e) {
+                    e.stopPropagation();
+                    var id = $(this).attr('pk');
+
+                    if (id) {
+                        deleteConversation(id);
+                    }
+                });
+
+                $("div").on("click", '#btn-send-msg', function (e) {
+                    e.stopPropagation();
+
+                    var val = $("#text-msg").val();
+
+                    if (val) {
+                        sendMessage(val);
+                        $("#text-msg").val(null);
+                    }
+
+                });
+
+                $('#room-modal').on('shown.bs.modal', function (e) {
+
+                    var source = document.getElementById("roomFormTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+                    $("#room-modal .modal-body").html(template({}));
+
+                    fillCourseDropdown();
+
+                });
+
+            };
+
+            var init = function () {
+                registerEvent();
+                getRooms();
+                getCourses();
+            };
+
+            init();
+
+            return this;
+
+        };
+
+
+    }(jQuery));
+
+    $(document).ready(function () {
+        var videoRoomPage = new $.VideoRoomPage({
+        });
+    });
+</script>
+
+{% endblock %}

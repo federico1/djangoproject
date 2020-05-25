@@ -70,6 +70,7 @@
                                 {% if request.user.is_authenticated and request.user.is_teacher == True %}
                                 <li><a href="{% url "manage_course_list" %}"">My Courses</a></li>
                                 <li><a href="{% url "messages" %}"">Messages</a></li>
+                                <li><a href="{% url "video_rooms" %}"">Video Rooms</a></li>
                                 {% endif %}
 
                                 <!-- <li><a href=" #">Pages</a>
@@ -151,6 +152,10 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js" integrity="sha256-5oApc/wMda1ntIEK4qoWJ4YItnV4fBHMwywunj8gPqc=" crossorigin="anonymous"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
+    
+    <script src="//media.twiliocdn.com/sdk/js/video/releases/2.4.0/twilio-video.min.js"></script>
+    
     {% block scripts %}
     {% endblock %}
     <script>
