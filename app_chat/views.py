@@ -15,6 +15,11 @@ from twilio.rest import Client
 
 import json
 
+t_auth_key='1bf208b4a6e2f39c03aa0f1a36a70851'
+twilio_account_sid = 'AC871833cc31c918cea2ec3b64d02e35e5'
+twilio_api_key_sid = 'SKc8ee42b3b307a1f4eb82ac53d2105dcc'
+twilio_api_key_secret = 'gBD0CdKPW1Zs55Et4SlyZK479OMx4jzJ'
+
 @method_decorator([login_required], name='dispatch')
 class MessagesView(TemplateView):
     template_name = "messages.html"
@@ -47,13 +52,10 @@ class VideoRoomDetailView(DetailView):
 @login_required
 def create_room(request):
 
-    twilio_account_sid = 'AC871833cc31c918cea2ec3b64d02e35e5'
-    twilio_api_key_sid = 'SK11919075b62352153e1e7ccd83209cb6'
-    twilio_api_key_secret = 'qRB4CpMDvI843it2MbD6Wpvp4yyVUN3B'
 
     room_obj = VideoRoom.objects.get(id=request.GET.get('id'))
     
-    client = Client(twilio_account_sid, 'c2e37615a2a86ff9e1009aaa18727a30')
+    client = Client(twilio_account_sid, t_auth_key)
 
     room = None
 
@@ -94,11 +96,7 @@ def create_room(request):
 @login_required
 def complete_room(request):
 
-    twilio_account_sid = 'AC871833cc31c918cea2ec3b64d02e35e5'
-    twilio_api_key_sid = 'SK11919075b62352153e1e7ccd83209cb6'
-    twilio_api_key_secret = 'qRB4CpMDvI843it2MbD6Wpvp4yyVUN3B'
-
-    client = Client(twilio_account_sid, 'c2e37615a2a86ff9e1009aaa18727a30')
+    client = Client(twilio_account_sid, t_auth_key)
 
     room_obj = VideoRoom.objects.get(id=request.GET.get('id'))
 
@@ -128,14 +126,10 @@ def complete_room(request):
 @login_required
 def create_video_token(request):
 
-    twilio_account_sid = 'AC871833cc31c918cea2ec3b64d02e35e5'
-    twilio_api_key_sid = 'SK11919075b62352153e1e7ccd83209cb6'
-    twilio_api_key_secret = 'qRB4CpMDvI843it2MbD6Wpvp4yyVUN3B'
-
     if request.method == 'POST':
         data = json.loads(request.body)
 
-        client = Client(twilio_account_sid, 'c2e37615a2a86ff9e1009aaa18727a30')
+        client = Client(twilio_account_sid, t_auth_key)
 
         token = AccessToken(twilio_account_sid, twilio_api_key_sid,
                         twilio_api_key_secret, identity=request.user.username)
