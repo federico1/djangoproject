@@ -15,10 +15,6 @@ from twilio.rest import Client
 
 import json
 
-t_auth_key='1bf208b4a6e2f39c03aa0f1a36a70851'
-twilio_account_sid = 'AC871833cc31c918cea2ec3b64d02e35e5'
-twilio_api_key_sid = 'SKc8ee42b3b307a1f4eb82ac53d2105dcc'
-twilio_api_key_secret = 'gBD0CdKPW1Zs55Et4SlyZK479OMx4jzJ'
 
 @method_decorator([login_required], name='dispatch')
 class MessagesView(TemplateView):
