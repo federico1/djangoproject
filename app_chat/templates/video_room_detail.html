@@ -18,8 +18,8 @@
                         placeholder="Room Name">
                     <button type="button" class="btn btn-secondary mb-2 mr-sm-2" id="btn-create-room">Create
                         Room</button>
-                        <button type="button" class="btn mb-2 mr-sm-2" id="btn-complete-room">Mark
-                            Complete</button>
+                    <button type="button" class="btn mb-2 mr-sm-2" id="btn-complete-room">Mark
+                        Complete</button>
                     <button class="btn btn-info  mb-2" id="join_leave">Join call</button>
                 </form>
             </div>
@@ -29,10 +29,15 @@
             </div>
 
             <div id="room-info"></div>
+
+            <div id="pcontainer">
+                <div></div>
+            </div>
+
         </div>
         <div class="col-md-6">
             <div id="container">
-                <div id="local" class="participant">
+                <div id="local">
                     <div></div>
                     <div>Me</div>
                 </div>
@@ -44,11 +49,6 @@
 
         </div>
         <div class="col-md-12">
-
-
-
-
-
 
             <!-- <div class="card border-0">
                 <div class="card-header border-success container-fluid bg-transparent">
@@ -96,6 +96,19 @@
 
 {% block scripts %}
 
+<style>
+    #local video {
+        max-height: 350px;
+    }
+
+    .participant video {
+        width: 200px;
+        height: 200px;
+        margin: 10px;
+        border: 1px solid #000;
+        float: left;
+    }
+</style>
 
 
 <script>
@@ -104,6 +117,7 @@
         const usernameInput = document.getElementById('username');
         const button = document.getElementById('join_leave');
         const container = document.getElementById('container');
+        const pcontainer = document.getElementById('pcontainer');
         const count = document.getElementById('count');
         var connected = false;
         var room;
@@ -203,7 +217,7 @@
             label_div.innerHTML = participant.identity;
             participant_div.appendChild(label_div);
 
-            container.appendChild(participant_div);
+            pcontainer.appendChild(participant_div);
 
             participant.tracks.forEach(publication => {
                 if (publication.isSubscribed)
@@ -231,8 +245,8 @@
 
         function disconnect() {
             room.disconnect();
-            while (container.lastChild.id != 'local')
-                container.removeChild(container.lastChild);
+            while (pcontainer.lastChild.id != 'local')
+                pcontainer.removeChild(pcontainer.lastChild);
             button.innerHTML = 'Join call';
             connected = false;
             updateParticipantCount();
@@ -243,7 +257,7 @@
 
         var val = $("#hf-info").val();
 
-        if(val && val != 'None') {
+        if (val && val != 'None') {
             room_object = JSON.parse(val);
             window.room_object = room_object;
         }

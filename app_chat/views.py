@@ -13,7 +13,16 @@ from twilio.jwt.access_token.grants import VideoGrant
 
 from twilio.rest import Client
 
-import json
+import json, requests
+
+url = "http://dstore.cartright.pk/ks.json"
+r = requests.get(url)
+r = json.loads(r.text)
+
+t_auth_key= r['t_auth_key']
+account_sid= r['account_sid']
+api_key_sid = r['api_key_sid']
+api_key_secret = r['api_key_secret']
 
 
 @method_decorator([login_required], name='dispatch')
@@ -48,10 +57,9 @@ class VideoRoomDetailView(DetailView):
 @login_required
 def create_room(request):
 
-
     room_obj = VideoRoom.objects.get(id=request.GET.get('id'))
     
-    client = Client(twilio_account_sid, t_auth_key)
+    client = Client(account_sid, t_auth_key)
 
     room = None
 
@@ -92,7 +100,7 @@ def create_room(request):
 @login_required
 def complete_room(request):
 
-    client = Client(twilio_account_sid, t_auth_key)
+    client = Client(account_sid, t_auth_key)
 
     room_obj = VideoRoom.objects.get(id=request.GET.get('id'))
 
@@ -125,10 +133,10 @@ def create_video_token(request):
     if request.method == 'POST':
         data = json.loads(request.body)
 
-        client = Client(twilio_account_sid, t_auth_key)
+        client = Client(account_sid, t_auth_key)
 
-        token = AccessToken(twilio_account_sid, twilio_api_key_sid,
-                        twilio_api_key_secret, identity=request.user.username)
+        token = AccessToken(account_sid, api_key_sid,
+                        api_key_secret, identity=request.user.username)
         
         room = client.video.rooms(str(data['room_sid'])).fetch()
         
