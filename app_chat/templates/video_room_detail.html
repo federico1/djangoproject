@@ -16,10 +16,13 @@
                     <input type="hidden" id="hf-info" value="{{object.info}}" />
                     <input type="text" class="form-control mb-2 mr-sm-2" readonly value="{{object.title}}" id="txt-room"
                         placeholder="Room Name">
+                        {% if request.user.is_teacher == True %}
+                        
                     <button type="button" class="btn btn-secondary mb-2 mr-sm-2" id="btn-create-room">Create
                         Room</button>
                     <button type="button" class="btn mb-2 mr-sm-2" id="btn-complete-room">Mark
                         Complete</button>
+                        {%endif%}
                     <button class="btn btn-info  mb-2" id="join_leave">Join call</button>
                 </form>
             </div>
