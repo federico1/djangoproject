@@ -1,0 +1,22 @@
+{% extends "teacher_base.html" %}
+
+{% block title %}Delete course{% endblock %}
+
+{% block content %}
+
+<div class="mt-3 d-sm-flex align-items-center justify-content-between mb-4 p-2">
+    <h1 class="h3 mb-0 text-gray-800">
+        Delete course "{{ object.title }}"
+    </h1>
+    <a href="{% url "manage_course_list" %}" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+        class="fas fa-add"></i> Back To Courses</a>
+</div>
+
+    <div class="module">
+        <form action="" method="post">
+            {% csrf_token %}
+            <p>Are you sure you want to delete "{{ object }}"?</p>
+            <input type="submit" class"button" value="Confirm">
+        </form>
+    </div>
+{% endblock %}

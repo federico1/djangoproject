@@ -1,0 +1,166 @@
+{% extends "teacher_base.html" %}
+{% load course %}
+
+{% block title %}
+Module {{ module.order|add:1 }}: {{ module.title }}
+{% endblock %}
+
+{% block content %}
+{% with course=module.course %}
+
+<div class="mt-3 d-sm-flex align-items-center justify-content-between mb-4 p-2">
+    <h1 class="h3 mb-0 text-gray-800">
+        Course "{{ course.title }}"
+    </h1>
+    <a href="{% url "manage_course_list" %}" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+            class="fas fa-add"></i> Back To Courses</a>
+</div>
+
+<div>
+    <div class="row">
+        <div class="col-md-3">
+
+            <nav id="sidebar" class="sidebar-wrapper">
+                <div class="sidebar-content">
+                    <div class="sidebar-brand">
+                        <a href="#"> Modules </a>
+                    </div>
+                    <!-- sidebar-search  -->
+                    <div class="sidebar-menu">
+                        <ul>
+
+                            {% for m in course.modules.all %}
+                            <li data-id="{{ m.id }}">
+                                <a {% if m == module %}class="pin" {% endif %}
+                                    href="{% url "module_content_list" m.id %}">
+                                    <span>
+                                        Module <span class="order">{{ m.order|add:1 }}</span>
+                                    </span>
+                                    <br>
+                                    {{ m.title }}
+                                </a>
+                            </li>
+                            {% empty %}
+                            <li>No modules yet.</li>
+                            {% endfor %}
+
+                            <li>
+                                <a href="{% url "course_module_update" course.id %}">Edit modules</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- sidebar-menu  -->
+                </div>
+                <!-- sidebar-content  -->
+            </nav>
+
+
+        </div>
+        <div class="col-md-9">
+            <div class="module">
+               
+                <!-- <h5>Module contents:</h5> -->
+
+                <div class="row" id="module-contents">
+                    <div class="col-md-12">
+                        <h4>Module {{ module.order|add:1 }}: {{ module.title }}</h4>
+                    </div>
+                    {% for content in module.contents.all %}
+                    <div class="col-md-8 mb-1 border p-1 bg-white" data-id="{{ content.id }}">
+                        {% with item=content.item %}
+                        <p>{{ item }} ({{ item|model_name }})</p>
+                      <div class="d-flex flex-row">
+                          <div class="mr-3">
+                            <a class="btn btn-sm btn-info" href="{% url "module_content_update" module.id item|model_name item.id %}">Edit</a>
+                            
+                          </div>
+                          <div>
+                            <form action="{% url "module_content_delete" content.id %}" method="post">
+                                <input class="btn btn-sm btn-danger" type="submit" value="Delete">
+                                {% csrf_token %}
+                            </form>
+                          </div>
+                      </div>
+                        {% endwith %}
+                    </div>
+                    {% empty %}
+                    <div class="col">This module has no contents yet.</div>
+                    {% endfor %}
+                </div>
+                <div class="row mt-3 mb-3">
+                    <div class="col p-2">
+                        <h5>Add new content:</h5>
+
+                    <a class="badge badge-primary" href="{% url "module_content_create" module.id "text" %}">Text</a>
+                    <a class="badge badge-primary" href="{% url "module_content_create" module.id "image" %}">Image</a>
+                    <a class="badge badge-primary" href="{% url "module_content_create" module.id "video" %}">Video</a>
+                    <a class="badge badge-primary" href="{% url "module_content_create" module.id "file" %}">File</a>
+                    <a class="badge badge-primary"
+                        href="{% url "module_content_create" module.id "iframe" %}">IFrame</a>
+                    <a class="badge badge-primary" href="{% url "app_add_question" module.id %}">Add Questions</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endwith %}
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    $(document).ready(function () {
+
+        $(".container input, select, textarea").addClass('form-control');
+        $(".container textarea").css('height', 70);
+
+        $('#modules').sortable({
+            stop: function (event, ui) {
+
+                modules_order = {};
+                $('#modules').children().each(function () {
+                    // update the order field
+                    $(this).find('.order').text($(this).index() + 1);
+                    // associate the module's id with its order
+                    modules_order[$(this).data('id')] = $(this).index();
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "module_order" %}',
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    data: JSON.stringify(modules_order),
+                });
+
+            }
+        });
+
+        $('#module-contents').sortable({
+            stop: function (event, ui) {
+
+                contents_order = {};
+                $('#module-contents').children().each(function () {
+                    // associate the module's id with its order
+                    contents_order[$(this).data('id')] = $(this).index();
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "content_order" %}',
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    data: JSON.stringify(contents_order),
+                });
+
+            }
+        });
+    });
+</script>
+{% endblock %}

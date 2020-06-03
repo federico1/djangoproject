@@ -46,6 +46,7 @@ ALLOWED_HOSTS = ['nyc-cst.com','18.191.255.165','127.0.0.1', '18.219.91.250', 'n
 
 INSTALLED_APPS = (
     'courses',
+    'app_teachers',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

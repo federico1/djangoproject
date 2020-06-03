@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "teacher_base.html" %}
 
 {% block title %}
 {% if conversation is not None%}
@@ -10,7 +10,13 @@ Manage Conversations
 
 {% block content %}
 
-<div class="container-fluid">
+<div class="mt-3 d-sm-flex align-items-center justify-content-between mb-4 p-2">
+    <h1 class="h3 mb-0 text-gray-800">Inbox</h1>
+    <a href="#" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm btn-new-chat"><i
+            class="fas fa-add"></i> Create New</a>
+</div>
+
+<div class="container-fluid mb-3">
 
     <div class="row">
         <div class="col-md-3" id="conversation-panel">
@@ -186,9 +192,6 @@ Manage Conversations
         </div>
     </div>
 </div>
-
-
-
 
 {% endblock %}
 
