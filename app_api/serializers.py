@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app_chat.models import Conversation, Message, ConversationMember, VideoRoom
+from app_chat.models import Conversation, Message, ConversationMember, VideoRoom, VideoParticipant
 from courses.models import Course
 from students.models import User
 
@@ -51,5 +51,16 @@ class VideoRoomSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         self.fields['owner'] =  UserSerializer(read_only=True)
-        self.fields['course'] =  ConversationSerializer(read_only=True)
+        self.fields['course'] =  CourseSerializer(read_only=True)
         return super(VideoRoomSerializer, self).to_representation(instance)
+
+class VideoParticipantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VideoParticipant
+        fields = ('id', 'member', 'room')
+        read_only_fields = ('created', )
+
+    def to_representation(self, instance):
+        self.fields['member'] =  UserSerializer(read_only=True)
+        self.fields['room'] =  VideoRoomSerializer(read_only=True)
+        return super(VideoParticipantSerializer, self).to_representation(instance)

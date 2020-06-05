@@ -1,0 +1,134 @@
+{% extends "student_base.html" %}
+
+{% block title %}
+{% if conversation is not None%}
+{{conversation}}
+{%else%}
+Manage Conversations
+{%endif%}
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <h1>
+        Conferences
+    </h1>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header container-fluid">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <strong>
+                                Rooms
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table" id="rooms-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Course</th>
+                                <th>Status</th>
+                                <th>
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% verbatim %}
+<script type="text/x-handlebars-template" id='roomListItemTemplate'>
+   <tr>
+       <td>
+           {{title}}
+       </td>
+       <td>
+        {{#if course}}
+       <span> {{course.title}}</span>
+        {{else}}
+        <span></span>
+        {{/if}}
+         
+       </td>
+       <td>
+           {{status}}
+       </td>
+       <td>
+        <a class="text-info" href="/communicate/video-rooms/{{id}}">Start</a> 
+       </td>
+   </tr>
+</script>
+{% endverbatim %}
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+    (function ($) {
+
+        $.VideoRoomPage = function (options) {
+
+            var that = this;
+
+            var roomsList = [];
+
+            var settings = $.extend({
+            }, options);
+
+            var getRooms = function () {
+                $.get('/api/video-rooms/?format=json', {}, function (response) {
+                    roomsList = response;
+                    fillRoomsTable();
+                });
+            };
+
+            var fillRoomsTable = function () {
+                $("#rooms-table tbody").empty();
+                $(roomsList).each(function (index, item) {
+
+                    var source = document.getElementById("roomListItemTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+
+                    $("#rooms-table tbody").append(template(item));
+                });
+            };
+
+            var init = function () {
+                getRooms();
+            };
+
+            init();
+
+            return this;
+
+        };
+
+
+    }(jQuery));
+
+    $(document).ready(function () {
+        var videoRoomPage = new $.VideoRoomPage({
+        });
+    });
+</script>
+
+{% endblock %}

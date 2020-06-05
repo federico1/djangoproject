@@ -1,19 +1,15 @@
-{% extends "teacher_base.html" %}
+{% extends request.user.is_student|yesno:"student_base.html,teacher_base.html" %}
 
-{% block title %}
-{% if conversation is not None%}
-{{conversation}}
-{%else%}
-Manage Conversations
-{%endif%}
-{% endblock %}
+
 
 {% block content %}
 
 <div class="mt-3 d-sm-flex align-items-center justify-content-between mb-4 p-2">
     <h1 class="h3 mb-0 text-gray-800">Inbox</h1>
+    {% if request.user.is_teacher == True %}
     <a href="#" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm btn-new-chat"><i
             class="fas fa-add"></i> Create New</a>
+            {%endif%}
 </div>
 
 <div class="container-fluid mb-3">

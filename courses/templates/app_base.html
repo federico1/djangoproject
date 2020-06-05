@@ -62,18 +62,11 @@
                                 <li><a href="/">Home</a></li>
 
                                 {% if request.user.is_authenticated and request.user.is_student == True %}
-                                <li><a href="{% url "student_course_list" %}"">My Courses</a></li>
-                                <li><a href=" {% url "taken_quiz_list" %}"">My Quiz</a></li>
-                                <li><a href="{% url "messages" %}"">Messages</a></li>
+                                <li><a href="{% url "student_course_list" %}"">My Dashboard</a></li>
                                 {% endif %}
 
                                 {% if request.user.is_authenticated and request.user.is_teacher == True %}
-                                <!-- <li><a href="{% url "manage_course_list" %}"">My Courses</a></li>
-                                <li><a href="{% url "messages" %}"">Messages</a></li>
-                                <li><a href="{% url "video_rooms" %}"">Video Rooms</a></li> -->
-
                                 <li><a href="{% url "teacher_dashboard" %}"">My Dashboard</a></li>
-
                                 {% endif %}
 
                                 <!-- <li><a href=" #">Pages</a>

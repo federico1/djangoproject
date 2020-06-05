@@ -21,4 +21,7 @@ urlpatterns = [
     path('video-rooms/', views.VideoRoomDetailView.as_view()),
     path('video-rooms/<int:pk>/', views.VideoRoomDetailView.as_view()),
 
+    path('video-participants/', views.VideoParticipantView.as_view()),
+    path('video-participants/<int:pk>/', views.VideoParticipantView.as_view()),
+
 ]

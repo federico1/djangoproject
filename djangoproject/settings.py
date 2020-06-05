@@ -37,6 +37,15 @@ DATABASES = {
     }
 }
 
+DATABASES1 = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+            'read_default_file':  os.path.join(BASE_DIR, 'my.cnf'),
+        },
+    }
+}
+
 
 ALLOWED_HOSTS = ['nyc-cst.com','18.191.255.165','127.0.0.1', '18.219.91.250', 'nullstrings.com']
 

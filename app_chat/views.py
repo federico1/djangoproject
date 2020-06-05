@@ -6,7 +6,9 @@ from braces.views import LoginRequiredMixin
 from django.views.generic.detail import DetailView
 from django.http import JsonResponse, HttpResponse
 
-from .models import Conversation, VideoRoom
+from students.decorators import teacher_required
+
+from .models import Conversation, VideoRoom, VideoRoomLog, VideoParticipant
 
 from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import VideoGrant
@@ -45,6 +47,9 @@ class VideoRoomsView(TemplateView):
        context = super(VideoRoomsView, self).get_context_data(**kwargs)
        return context
 
+    def get_template_names(self):
+        return ['video_rooms.html'] if self.request.user.is_teacher == True else ['video_rooms_students.html']
+        
 class VideoRoomDetailView(DetailView):
     model = VideoRoom
     template_name = 'video_room_detail.html'
@@ -53,7 +58,10 @@ class VideoRoomDetailView(DetailView):
         context = super(VideoRoomDetailView,
                         self).get_context_data(**kwargs)
         return context
-
+    
+    def get_template_names(self):
+        return ['video_room_detail.html'] if self.request.user.is_teacher == True else ['video_room_detail_students.html']
+    
 @login_required
 def create_room(request):
 
@@ -70,15 +78,16 @@ def create_room(request):
 
     if room is None:
         rev_url = request.build_absolute_uri(reverse('video_rooms', kwargs={"pk":room_obj.id}))
-    try:
-        room = client.video.rooms.create(
+        
+        try:
+            room = client.video.rooms.create(
                               record_participants_on_connect=True,
                               status_callback=rev_url,
                               type='group',
                               unique_name=room_obj.title
                           )
-    except Exception as ex:
-        print(ex)
+        except Exception as ex:
+            print(ex)
 
     if room is not None:
         room = {
@@ -93,7 +102,15 @@ def create_room(request):
         }
 
         room_obj.info = json.dumps(room)
+        room_obj.status = 'Started'
         room_obj.save()
+
+        room_log = VideoRoomLog()
+        room_log.owner = request.user
+        room_log.status = 'created'
+        room_log.api_info = json.dumps(room)
+        room_log.room = room_obj
+        room_log.save()
 
     return JsonResponse(room, safe=False)
 
@@ -111,7 +128,6 @@ def complete_room(request):
     for record in rooms:
         room = record.update(status='completed')
 
-
     if room is not None:
         room = {
             'sid': room.sid,
@@ -119,10 +135,21 @@ def complete_room(request):
             'status':room.status,
             'unique_name':room.unique_name,
             'duration':room.duration,
-            'end_time': room.end_time,
+            'end_time': room.end_time.strftime("%m/%d/%Y, %H:%M:%S") if room.end_time is not None else None,
             'url': room.url,
             'links': room.links
         }
+
+        room_obj.info = json.dumps(room)
+        room_obj.status = 'Completed'
+        room_obj.save()
+
+        room_log = VideoRoomLog()
+        room_log.owner = request.user
+        room_log.status = 'completed'
+        room_log.api_info = json.dumps(room)
+        room_log.room = room_obj
+        room_log.save()
 
     return JsonResponse(room, safe=False)
 
@@ -135,8 +162,15 @@ def create_video_token(request):
 
         client = Client(account_sid, t_auth_key)
 
+        idn = request.user.username
+
+        if request.user.is_teacher == True:
+            idn = idn + "__inst"
+        else:
+            idn = idn + "__std"
+
         token = AccessToken(account_sid, api_key_sid,
-                        api_key_secret, identity=request.user.username)
+                        api_key_secret, identity=idn)
         
         room = client.video.rooms(str(data['room_sid'])).fetch()
         

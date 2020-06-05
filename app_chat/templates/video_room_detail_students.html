@@ -1,7 +1,6 @@
-{% extends "teacher_base.html" %}
-{% load i18n %}
+{% extends "student_base.html" %}
 {% block title %}
-{{ object.title }}
+- attend {{object.title}}
 {% endblock %}
 
 {% block content %}
@@ -26,21 +25,20 @@
                             <button class="btn btn-danger btn-sm" disabled id="btn-stop-video">
                                 <i class="fa fa-phone"></i>
                             </button>
-
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div id="container">
+                        <div id="me-vid"></div>
                         <div id="local" class="embed-responsive embed-responsive-21by9">
-                   
+
                         </div>
                         <!-- more participants will be added dynamically here -->
                     </div>
                 </div>
                 <div class="card-footer">
-                    <div id="pcontainer">
-
+                    <div id="pcontainer" class="d-flex flex-row">
                     </div>
                 </div>
             </div>
@@ -72,6 +70,20 @@
         height: 56px;
         width: 100px;
     }
+
+    #me-vid {
+        width: 55px;
+        height: 55px;
+        position: absolute;
+        left: 5px;
+        top: 45px;
+        border: 1px solid #eee;
+    }
+
+    #me-vid video {
+        width: auto;
+        height: 100%;
+    }
 </style>
 
 <script>
@@ -93,11 +105,8 @@
         function addLocalVideo() {
             Twilio.Video.createLocalVideoTrack().then(track => {
                 videoTrack = track;
-                $("#local").append(videoTrack.attach());
-                $("#local video").css({
-                    width: $("#video-screen .card-body").width(),
-                    height: $("#video-screen .card-body").height() - 5
-                });
+                $("#me-vid").append(videoTrack.attach());
+
             });
         };
 
@@ -181,21 +190,21 @@
 
             var tracks_div = document.createElement('div');
             tracks_div.setAttribute('class', 'vd');
-
             participant_div.appendChild(tracks_div);
 
             var label_div = document.createElement('div');
-            label_div.innerHTML = participant.identity;
+            label_div.setAttribute('id', participant.sid+ "_lbl");
+            label_div.innerHTML = participant.identity.split('__')[0];
             participant_div.appendChild(label_div);
 
             pcontainer.appendChild(participant_div);
 
             participant.tracks.forEach(publication => {
                 if (publication.isSubscribed)
-                    trackSubscribed(tracks_div, publication.track);
+                    trackSubscribed(tracks_div, publication.track, participant);
             });
 
-            participant.on('trackSubscribed', track => trackSubscribed(tracks_div, track));
+            participant.on('trackSubscribed', track => trackSubscribed(tracks_div, track, participant));
             participant.on('trackUnsubscribed', trackUnsubscribed);
 
             updateParticipantCount();
@@ -203,11 +212,25 @@
 
         function participantDisconnected(participant) {
             document.getElementById(participant.sid).remove();
+            document.getElementById(participant.sid+ "_lbl").remove();
+
             updateParticipantCount();
         };
 
-        function trackSubscribed(div, track) {
+        function trackSubscribed(div, track, participant) {
+
             div.appendChild(track.attach());
+
+            if (participant.identity.indexOf('__inst') >= 0) {
+                $("#local").html(track.attach());
+
+                $("#local video").css({
+                    width: $("#video-screen .card-body").width(),
+                    height: $("#video-screen .card-body").height() - 5
+                });
+
+            }
+
         };
 
         function trackUnsubscribed(track) {
@@ -227,56 +250,9 @@
             }
 
             $("#local video").remove();
+            $("#me-vid video").remove();
             connected = false;
             updateParticipantCount();
-        };
-
-        function startCall() {
-            createRoom(true);
-        };
-
-        function createRoom(isStartVideo) {
-            $.ajax({
-                type: "GET",
-                url: '{% url "create-room"%}',
-                data: { id: '{{object.id}}' },
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                beforeSend: function (xhr, settings) {
-                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                },
-                success: function (response) {
-                    room_object = response;
-                    window.room_object = response;
-
-                    $('#room-info').html(JSON.stringify(response));
-                    $('#room-info').hide();
-
-                    if (isStartVideo) {
-                        connectButtonHandler();
-                    }
-                },
-                failure: function (errMsg) {
-                }
-            });
-        }
-
-        function completeRoom() {
-            $.ajax({
-                type: "GET",
-                url: '{% url "complete-room"%}',
-                data: { id: '{{object.id}}' },
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                beforeSend: function (xhr, settings) {
-                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                },
-                success: function (response) {
-                    console.log(response);
-                },
-                failure: function (errMsg) {
-                }
-            });
         };
 
         var val = $("#hf-info").val();
@@ -284,16 +260,18 @@
         if (val && val != 'None') {
             room_object = JSON.parse(val);
             window.room_object = room_object;
+        } else {
+            $("#btn-stop-video").attr('disabled', false);
+            $("#btn-start-video").attr('disabled', false);
+            toastr.warning('Meeting is not started yet', 'Info!');
         }
 
         $("#btn-start-video").click(function () {
-            startCall();
+            connectButtonHandler();
         });
 
         $("#btn-stop-video").click(function () {
             disconnect();
-            completeRoom();
-
             $("#btn-stop-video").attr('disabled', true);
             $("#btn-start-video").attr('disabled', false);
             $("#pcontainer").empty();
