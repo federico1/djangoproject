@@ -88,6 +88,7 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
                             'object': m.quiz, 'score':score, 'module':m, 'complete': True if m.quiz.id in taken_quizzes else False}
 
                 course_details.append(item_obj)
+        
 
         context['taken_quizzes'] = taken_quizzes
         context['active_content'] = course_details[0] # modules_list.first().contents.first()
@@ -99,17 +100,24 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
             content_id = int(self.request.GET.get('content'))
             context['module'] = course.modules.get(id=self.kwargs['module_id'])
             
-            context['active_content'] = [x for x in course_details if x['object'].id == content_id][0]
+            #context['active_content'] = [x for x in course_details if x['object'].id == content_id][0]
 
-            #  if self.request.GET.get('type') == 'quiz':
-            #     context['active_content'] = [x['object'] for
-            #                              x in course_details if x['object'].id == content_id and x['type'] == 'quiz'][0]
-            # else:
-                #context['active_content'] = context['module'].contents.filter(id=content_id).first()
-            
+            if self.request.GET.get('type') == 'quiz':
+                context['active_content'] = [x for
+                                         x in course_details if x['object'].id == content_id and x['type'] == 'quiz'][0]
+            else:
+                context['active_content'] =[x for
+                                         x in course_details if x['object'].id == content_id and x['type'] == 'content'][0]
+
+            if self.request.GET.get('type') == 'quiz':
+                current_index = [ix for ix, x in enumerate(course_details) if x['object'].id == content_id and x['type'] == 'quiz'][0]
+            else:
+                current_index = [ix for ix, x in enumerate(course_details) if x['object'].id == content_id and x['type'] == 'content'][0]
+
+
             # get current content index
-            current_index = [ix for ix, x in enumerate(
-                course_details) if x['object'].id == content_id][0]
+            # current_index = [ix for ix, x in enumerate(
+            #     course_details) if x['object'].id == content_id][0]
 
             if current_index > 0:
                 prev_item = course_details[current_index-1]
@@ -132,6 +140,7 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
     def render_to_response(self, context, **response_kwargs):
 
         print(context['active_content'])
+        print(context['next_content'])
         print(context['prev_completed'])
         print(context['completed_contents'])
 
