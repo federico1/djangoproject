@@ -6,71 +6,104 @@
 
 {% block content %}
 
-<div class="container mt-1" id="video-screen">
-    <input type="hidden" id="hf-info" value="{{object.info}}" />
+<div class="mt-1" id="video-screen">
+
+    <span id="count">Disconnected. (0)</span>
+
+    <div id="pcontainer">
+    </div>
+
+    <div id="container">
+        <div id="local">
+        </div>
+        <!-- more participants will be added dynamically here -->
+    </div>
+
+    <div id="controls">
+        <button class="btn btn-success btn-sm" title="Start Video" id="btn-start-video">
+            <i class="fa fa-video-camera "></i>
+        </button>
+
+        <button class="btn btn-info btn-sm" id="btn-full-screen" title="Full Screen">
+            <i class="fa fa-arrows-alt"></i>
+        </button>
+
+        <button class="btn btn-info btn-sm" id="btn-default-screen" title="Default Screen">
+            <i class="fa fa-compress"></i>
+        </button>
+
+        <button class="btn btn-danger btn-sm" disabled id="btn-stop-video">
+            <i class="fa fa-phone"></i>
+        </button>
+    </div>
+
     <div id="room-info"></div>
 
-    <div class="row">
-        <div class="col">
-            <div class="card">
-                <div class="card-header p-1 bg-white container-fluid">
-                    <div class="row">
-                        <div class="col-md-5">
-                            <span id="count">Disconnected. (0)</span>
-                        </div>
-                        <div class="col-md-7 text-sm-right">
-                            <button class="btn btn-success btn-sm" title="Start Video" id="btn-start-video">
-                                <i class="fa fa-video-camera "></i>
-                            </button>
-
-                            <button class="btn btn-danger btn-sm" disabled id="btn-stop-video">
-                                <i class="fa fa-phone"></i>
-                            </button>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div id="container">
-                        <div id="local" class="embed-responsive embed-responsive-21by9">
-                   
-                        </div>
-                        <!-- more participants will be added dynamically here -->
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <div id="pcontainer">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+   
 </div>
+
 
 {% endblock %}
 
 {% block scripts %}
 
 <style>
-    #local video {
+    #video-screen {
+        width: 100%;
         height: 100%;
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+
+    #container {
+        height: 100%;
+        width: 100%;
+    }
+
+    #local {
+        height: 100%;
+        width: 100%;
+        text-align: center;
+    }
+
+    #count {
+        font-size: 8px;
+        position: absolute;
+        bottom: 3px;
+        left: 0;
+        color: #cdcbcb;
+    }
+
+    #controls {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+    }
+
+    #pcontainer {
+        position: absolute;
+        max-height: 100%;
+        width: 121px;
+        padding: 10px;
     }
 
     .participant {
         width: 100px;
-        margin: 3px;
-        float: left;
+        margin-bottom: 10px;
     }
 
     .participant .vd {
-        max-height: 57px;
+        max-height: 60px;
         border: 1px solid #eaeaea;
+        height: 60px;
+        width: 100%;
     }
 
-    .participant video {
-        height: 56px;
-        width: 100px;
+    .participant .vd video {
+        width: 100%;
+        object-fit: contain;
+        height: 100%;
     }
 </style>
 
@@ -95,9 +128,10 @@
                 videoTrack = track;
                 $("#local").append(videoTrack.attach());
                 $("#local video").css({
-                    width: $("#video-screen .card-body").width(),
-                    height: $("#video-screen .card-body").height() - 5
+                    height: '100%'
                 });
+
+                $(".vd").eq(0).html(videoTrack.attach());
             });
         };
 
@@ -146,7 +180,9 @@
                     headers: { "X-CSRFToken": '{{ csrf_token }}' }
                 }).then(res => res.json()).then(data => {
                     // join video call
-                    return Twilio.Video.connect(data.token);
+                    return Twilio.Video.connect(data.token, {
+                        video: { height: 720, frameRate: 24, width: 1280 }
+                    });
                 }).then(_room => {
                     room = _room;
                     room.participants.forEach(participantConnected);
@@ -288,6 +324,7 @@
 
         $("#btn-start-video").click(function () {
             startCall();
+            //connectButtonHandler();
         });
 
         $("#btn-stop-video").click(function () {
@@ -299,10 +336,27 @@
             $("#pcontainer").empty();
         });
 
-        $("#video-screen .card-body").css({
-            'min-height': 300,
-            'height': $(window).height() - 230
+        $("#btn-full-screen").click(function () {
+
+            $("#local video").css({
+                height: '100%',
+                width: '100%',
+                'object-fit': 'cover'
+            });
         });
+
+        $("#btn-default-screen").click(function () {
+            $("#local video").css({
+                height: '100%',
+                width: '100%',
+                'object-fit': 'contain'
+            });
+        });
+
+        var width = $(window).width() - 30;
+        var height = $(window).height() - $(".navbar").eq(0).outerHeight() - 10;
+
+        $("#video-screen").css({ width: width, height: height });
 
     });
 

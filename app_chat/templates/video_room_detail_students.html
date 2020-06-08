@@ -5,45 +5,49 @@
 
 {% block content %}
 
-<div class="container mt-1" id="video-screen">
+<div class="mt-1" id="video-screen">
     <input type="hidden" id="hf-info" value="{{object.info}}" />
     <div id="room-info"></div>
 
-    <div class="row">
-        <div class="col">
-            <div class="card">
-                <div class="card-header p-1 bg-white container-fluid">
-                    <div class="row">
-                        <div class="col-md-5">
-                            <span id="count">Disconnected. (0)</span>
-                        </div>
-                        <div class="col-md-7 text-sm-right">
-                            <button class="btn btn-success btn-sm" title="Start Video" id="btn-start-video">
-                                <i class="fa fa-video-camera "></i>
-                            </button>
+    <span id="count">Disconnected. (0)</span>
 
-                            <button class="btn btn-danger btn-sm" disabled id="btn-stop-video">
-                                <i class="fa fa-phone"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div id="container">
-                        <div id="me-vid"></div>
-                        <div id="local" class="embed-responsive embed-responsive-21by9">
+    <div id="controls">
+        <button class="btn btn-success btn-sm" title="Start Video" id="btn-start-video">
+            <i class="fa fa-video-camera "></i>
+        </button>
 
-                        </div>
-                        <!-- more participants will be added dynamically here -->
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <div id="pcontainer" class="d-flex flex-row">
-                    </div>
-                </div>
-            </div>
+        <button class="btn btn-info btn-sm" id="btn-full-screen" title="Full Screen">
+            <i class="fa fa-arrows-alt"></i>
+        </button>
+
+        <button class="btn btn-info btn-sm" id="btn-default-screen" title="Default Screen">
+            <i class="fa fa-compress"></i>
+        </button>
+
+        <button class="btn btn-danger btn-sm" disabled id="btn-stop-video">
+            <i class="fa fa-phone"></i>
+        </button>
+    </div>
+
+    <a href="{% url 'video_rooms' %}" class="btn btn-primary" id="btn-exit">
+        << Close & return
+    </a>
+
+    <div id="me-vid"></div>
+    <div id="local" class="embed-responsive embed-responsive-21by9">
+
+    </div>
+
+    <div class="ps d-none">
+        <button class="btn btn-default">
+            <i class="fa fa-eye-slash"></i>
+        </button>
+
+        <div id="pcontainer">
+
         </div>
     </div>
+
 </div>
 
 {% endblock %}
@@ -51,38 +55,103 @@
 {% block scripts %}
 
 <style>
-    #local video {
+    #video-screen {
+        width: 100%;
         height: 100%;
+        top: 0;
+        left: 0;
+        background: #ecececcc;
+        position: fixed;
+        z-index: 9999;
+        margin: 0 !important;
+    }
+
+    #container {
+        height: 100%;
+        width: 100%;
+    }
+
+    #local {
+        height: 100%;
+        width: 100%;
+        text-align: center;
+    }
+
+    #count {
+        font-size: 8px;
+        position: absolute;
+        bottom: 3px;
+        left: 0;
+        color: #cdcbcb;
+    }
+
+    #controls {
+        position: absolute;
+    top: 15px;
+    right: 30px;
+    z-index: 99;
+    background: #dfdfdf;
+    padding: 7px;
+    border: 1px solid #d5d5d5;
+    border-radius: 5px;
+    }
+
+    .ps {
+        position: absolute;
+        max-height: 100%;
+        width: 100px;
+        padding: 10px;
+        z-index: 99;
+        top: 53px;
+        right: 34px;
+    }
+
+    #pcontainer {
+        width: 80px;
     }
 
     .participant {
-        width: 100px;
-        margin: 3px;
-        float: left;
+        width: 80px;
+        margin-bottom: 10px;
     }
 
     .participant .vd {
-        max-height: 57px;
+        max-height: 60px;
         border: 1px solid #eaeaea;
+        height: 60px;
+        width: 100%;
     }
 
-    .participant video {
-        height: 56px;
-        width: 100px;
+    .participant .vd video {
+        width: 100%;
+        object-fit: contain;
+        height: 100%;
     }
 
     #me-vid {
-        width: 55px;
-        height: 55px;
-        position: absolute;
-        left: 5px;
-        top: 45px;
-        border: 1px solid #eee;
+        width: 60px;
+    height: 60px;
+    position: absolute;
+    left: 42px;
+    top: 8px;
+    border: 1px solid #eee;
+    z-index: 9;
+    background: #eae7e7;
+    display: block;
     }
 
     #me-vid video {
-        width: auto;
+        width: 100%;
         height: 100%;
+        object-fit: cover;
+    }
+
+    #btn-exit {
+        position: absolute;
+    z-index: 99;
+    right: 30px;
+    bottom: 20px;
+
     }
 </style>
 
@@ -106,7 +175,8 @@
             Twilio.Video.createLocalVideoTrack().then(track => {
                 videoTrack = track;
                 $("#me-vid").append(videoTrack.attach());
-
+                //$("#local").append(videoTrack.attach());
+                
             });
         };
 
@@ -193,7 +263,7 @@
             participant_div.appendChild(tracks_div);
 
             var label_div = document.createElement('div');
-            label_div.setAttribute('id', participant.sid+ "_lbl");
+            label_div.setAttribute('id', participant.sid + "_lbl");
             label_div.innerHTML = participant.identity.split('__')[0];
             participant_div.appendChild(label_div);
 
@@ -212,7 +282,7 @@
 
         function participantDisconnected(participant) {
             document.getElementById(participant.sid).remove();
-            document.getElementById(participant.sid+ "_lbl").remove();
+            document.getElementById(participant.sid + "_lbl").remove();
 
             updateParticipantCount();
         };
@@ -222,12 +292,10 @@
             div.appendChild(track.attach());
 
             if (participant.identity.indexOf('__inst') >= 0) {
+
                 $("#local").html(track.attach());
 
-                $("#local video").css({
-                    width: $("#video-screen .card-body").width(),
-                    height: $("#video-screen .card-body").height() - 5
-                });
+                $("#btn-full-screen").trigger('click');
 
             }
 
@@ -255,6 +323,23 @@
             updateParticipantCount();
         };
 
+        $("#btn-full-screen").click(function () {
+
+            $("#local video").css({
+                height: '100%',
+                width: '100%',
+                'object-fit': 'cover'
+            });
+        });
+
+        $("#btn-default-screen").click(function () {
+            $("#local video").css({
+                height: '100%',
+                width: '100%',
+                'object-fit': 'contain'
+            });
+        });
+
         var val = $("#hf-info").val();
 
         if (val && val != 'None') {
@@ -277,10 +362,10 @@
             $("#pcontainer").empty();
         });
 
-        $("#video-screen .card-body").css({
-            'min-height': 300,
-            'height': $(window).height() - 230
-        });
+        var width = $(window).width() - 30;
+        var height = $(window).height() - $(".navbar").eq(0).outerHeight() - 10;
+
+        // $("#video-screen").css({ width: width, height: height });
 
     });
 
