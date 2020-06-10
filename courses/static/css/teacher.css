@@ -171,3 +171,45 @@
   .sidebar-wrapper .sidebar-menu ul li a i.file:before {
     content: "\f016";
   }
+
+  .notification .dropdown-list {
+    padding: 0;
+  }
+
+  .notification .dropdown-header {
+    background-color: #4e73df;
+    border: 1px solid #4e73df;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    color: #fff;
+    font-weight: 800;
+    font-size: .65rem;
+  }
+  
+  .notification .dropdown-item  {
+
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    border-left: 1px solid #e3e6f0;
+    border-right: 1px solid #e3e6f0;
+    border-bottom: 1px solid #e3e6f0;
+    line-height: 1.3rem;
+  }
+  .notification .icon-circle {
+
+      height: 1.0rem;
+      width: 1.0rem;
+      border-radius: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+  }
+  .notification .text-gray-500 {
+    color: #b7b9cc!important;
+  }
+
+  .notification .font-weight-bold {
+    font-weight: 500!important;
+    font-size: 12px;
+}

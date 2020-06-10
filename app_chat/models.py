@@ -115,3 +115,25 @@ class VideoRoomLog(models.Model):
 
     def __str__(self):
         return self.room
+
+
+class Notification(models.Model):
+    title = models.CharField(max_length=200)
+    created = models.DateTimeField(auto_now_add=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True,
+                              related_name='notifications_sent',
+                              on_delete=models.CASCADE)
+    receiver = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True,
+                              related_name='notifications_received',
+                              on_delete=models.CASCADE)
+    status = models.CharField(max_length=20)
+    action = models.CharField(max_length=50)
+    action_target = models.CharField(max_length=50)
+
+    is_deleted = models.BooleanField(default=0)
+
+    class Meta:
+        ordering = ['title']
+
+    def __str__(self):
+        return self.title

@@ -9,11 +9,11 @@ from rest_framework import status
 from django.http import Http404
 
 from app_chat.models import Conversation, Message, ConversationMember, \
-    VideoRoom, VideoParticipant
+    VideoRoom, VideoParticipant, Notification
 
 from .serializers import ConversationSerializer, CourseSerializer, \
     UserSerializer, ConversationMemberSerializer, MessageSerializer, \
-    VideoRoomSerializer, VideoParticipantSerializer
+    VideoRoomSerializer, VideoParticipantSerializer, NotificationSerializer
 
 from students.models import User
 
@@ -255,3 +255,34 @@ class VideoParticipantView(APIView):
         snippet = self.get_object(pk)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class NotificationDetailView(APIView):
+
+    def get_object(self, pk):
+        try:
+            return Notification.objects.get(pk=pk)
+        except Notification.DoesNotExist:
+            raise Http404
+
+    def get(self, request, format=None):
+
+        n_status = request.query_params.get('status')
+
+        snippets = Notification.objects.filter(receiver=request.user)
+
+        if n_status is not None:
+            snippets = \
+                snippets.filter(status=n_status).order_by('-id')
+
+        serializer = NotificationSerializer(snippets, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = NotificationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(owner=request.user)
+            return Response(serializer.data,
+                            status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,
+                        status=status.HTTP_400_BAD_REQUEST)

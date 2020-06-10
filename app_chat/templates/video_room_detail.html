@@ -39,7 +39,7 @@
 
     <div id="room-info"></div>
 
-   
+
 </div>
 
 
@@ -122,6 +122,8 @@
 
         var room_object;
         var videoTrack;
+
+        var savedMembersList;
 
         function addLocalVideo() {
             Twilio.Video.createLocalVideoTrack().then(track => {
@@ -315,49 +317,97 @@
             });
         };
 
-        var val = $("#hf-info").val();
+        var getAddedMembers = function () {
 
-        if (val && val != 'None') {
-            room_object = JSON.parse(val);
-            window.room_object = room_object;
-        }
-
-        $("#btn-start-video").click(function () {
-            startCall();
-            //connectButtonHandler();
-        });
-
-        $("#btn-stop-video").click(function () {
-            disconnect();
-            completeRoom();
-
-            $("#btn-stop-video").attr('disabled', true);
-            $("#btn-start-video").attr('disabled', false);
-            $("#pcontainer").empty();
-        });
-
-        $("#btn-full-screen").click(function () {
-
-            $("#local video").css({
-                height: '100%',
-                width: '100%',
-                'object-fit': 'cover'
+            $.get('/api/video-participants/?format=json', { room: '{{object.id}}' }, function (response) {
+                savedMembersList = response;
             });
-        });
 
-        $("#btn-default-screen").click(function () {
-            $("#local video").css({
-                height: '100%',
-                width: '100%',
-                'object-fit': 'contain'
+        };
+
+        var sentNotifications = function () {
+
+            $(savedMembersList).each(function (index, item) {
+
+                var data = {
+                    action_target: window.location.origin + '{% url "video_rooms" object.id %}',
+                    action: "link",
+                    receiver: item.member.id,
+                    status: 'pending',
+                    title: 'The podcast is started from ({{object.title}})',
+                    is_deleted:0
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/notifications/",
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (response) {
+                        console.log(response);
+                    },
+                    failure: function (errMsg) {
+                    }
+                });
+
+
             });
-        });
+        };
 
-        var width = $(window).width() - 30;
-        var height = $(window).height() - $(".navbar").eq(0).outerHeight() - 10;
 
-        $("#video-screen").css({ width: width, height: height });
+        var events = function () {
 
+            var val = $("#hf-info").val();
+
+            if (val && val != 'None') {
+                room_object = JSON.parse(val);
+                window.room_object = room_object;
+            }
+
+            $("#btn-start-video").click(function () {
+                //startCall();
+                //connectButtonHandler();
+                sentNotifications();
+            });
+
+            $("#btn-stop-video").click(function () {
+                disconnect();
+                completeRoom();
+
+                $("#btn-stop-video").attr('disabled', true);
+                $("#btn-start-video").attr('disabled', false);
+                $("#pcontainer").empty();
+            });
+
+            $("#btn-full-screen").click(function () {
+
+                $("#local video").css({
+                    height: '100%',
+                    width: '100%',
+                    'object-fit': 'cover'
+                });
+            });
+
+            $("#btn-default-screen").click(function () {
+                $("#local video").css({
+                    height: '100%',
+                    width: '100%',
+                    'object-fit': 'contain'
+                });
+            });
+
+            var width = $(window).width() - 30;
+            var height = $(window).height() - $(".navbar").eq(0).outerHeight() - 10;
+
+            $("#video-screen").css({ width: width, height: height });
+        };
+
+        getAddedMembers();
+        events();
     });
 
 </script>

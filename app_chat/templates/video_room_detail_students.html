@@ -30,23 +30,22 @@
     </div>
 
     <a href="{% url 'video_rooms' %}" class="btn btn-primary" id="btn-exit">
-        << Close & return
-    </a>
+        << Close & return </a>
 
-    <div id="me-vid"></div>
-    <div id="local" class="embed-responsive embed-responsive-21by9">
+            <div id="me-vid"></div>
+            <div id="local" class="embed-responsive embed-responsive-21by9">
 
-    </div>
+            </div>
 
-    <div class="ps d-none">
-        <button class="btn btn-default">
-            <i class="fa fa-eye-slash"></i>
-        </button>
+            <div class="ps d-none">
+                <button class="btn btn-default">
+                    <i class="fa fa-eye-slash"></i>
+                </button>
 
-        <div id="pcontainer">
+                <div id="pcontainer">
 
-        </div>
-    </div>
+                </div>
+            </div>
 
 </div>
 
@@ -87,13 +86,13 @@
 
     #controls {
         position: absolute;
-    top: 15px;
-    right: 30px;
-    z-index: 99;
-    background: #dfdfdf;
-    padding: 7px;
-    border: 1px solid #d5d5d5;
-    border-radius: 5px;
+        top: 15px;
+        right: 30px;
+        z-index: 99;
+        background: #dfdfdf;
+        padding: 7px;
+        border: 1px solid #d5d5d5;
+        border-radius: 5px;
     }
 
     .ps {
@@ -130,14 +129,14 @@
 
     #me-vid {
         width: 60px;
-    height: 60px;
-    position: absolute;
-    left: 42px;
-    top: 8px;
-    border: 1px solid #eee;
-    z-index: 9;
-    background: #eae7e7;
-    display: block;
+        height: 60px;
+        position: absolute;
+        left: 42px;
+        top: 8px;
+        border: 1px solid #eee;
+        z-index: 9;
+        background: #eae7e7;
+        display: block;
     }
 
     #me-vid video {
@@ -148,9 +147,9 @@
 
     #btn-exit {
         position: absolute;
-    z-index: 99;
-    right: 30px;
-    bottom: 20px;
+        z-index: 99;
+        right: 30px;
+        bottom: 20px;
 
     }
 </style>
@@ -176,7 +175,7 @@
                 videoTrack = track;
                 $("#me-vid").append(videoTrack.attach());
                 //$("#local").append(videoTrack.attach());
-                
+
             });
         };
 
@@ -323,49 +322,56 @@
             updateParticipantCount();
         };
 
-        $("#btn-full-screen").click(function () {
+        var events = function () {
 
-            $("#local video").css({
-                height: '100%',
-                width: '100%',
-                'object-fit': 'cover'
+            $("#btn-full-screen").click(function () {
+
+                $("#local video").css({
+                    height: '100%',
+                    width: '100%',
+                    'object-fit': 'cover'
+                });
             });
-        });
 
-        $("#btn-default-screen").click(function () {
-            $("#local video").css({
-                height: '100%',
-                width: '100%',
-                'object-fit': 'contain'
+            $("#btn-default-screen").click(function () {
+                $("#local video").css({
+                    height: '100%',
+                    width: '100%',
+                    'object-fit': 'contain'
+                });
             });
-        });
 
-        var val = $("#hf-info").val();
+            var val = $("#hf-info").val();
 
-        if (val && val != 'None') {
-            room_object = JSON.parse(val);
-            window.room_object = room_object;
-        } else {
-            $("#btn-stop-video").attr('disabled', false);
-            $("#btn-start-video").attr('disabled', false);
-            toastr.warning('Meeting is not started yet', 'Info!');
-        }
+            if (val && val != 'None') {
+                room_object = JSON.parse(val);
+                window.room_object = room_object;
+            } else {
+                $("#btn-stop-video").attr('disabled', false);
+                $("#btn-start-video").attr('disabled', false);
+                toastr.warning('Meeting is not started yet', 'Info!');
+            }
 
-        $("#btn-start-video").click(function () {
-            connectButtonHandler();
-        });
+            $("#btn-start-video").click(function () {
+                connectButtonHandler();
+            });
 
-        $("#btn-stop-video").click(function () {
-            disconnect();
-            $("#btn-stop-video").attr('disabled', true);
-            $("#btn-start-video").attr('disabled', false);
-            $("#pcontainer").empty();
-        });
+            $("#btn-stop-video").click(function () {
+                disconnect();
+                $("#btn-stop-video").attr('disabled', true);
+                $("#btn-start-video").attr('disabled', false);
+                $("#pcontainer").empty();
+            });
 
-        var width = $(window).width() - 30;
-        var height = $(window).height() - $(".navbar").eq(0).outerHeight() - 10;
+            var width = $(window).width() - 30;
+            var height = $(window).height() - $(".navbar").eq(0).outerHeight() - 10;
 
-        // $("#video-screen").css({ width: width, height: height });
+            // $("#video-screen").css({ width: width, height: height });
+        };
+
+        events();
+
+        getPendingNotifications();
 
     });
 
