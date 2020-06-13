@@ -183,7 +183,7 @@
                 }).then(res => res.json()).then(data => {
                     // join video call
                     return Twilio.Video.connect(data.token, {
-                        video: { height: 720, frameRate: 24, width: 1280 }
+                        video: { height: $(window).height(), frameRate: 24, width: $(window).width() }
                     });
                 }).then(_room => {
                     room = _room;
@@ -357,7 +357,6 @@
 
             });
         };
-
 
         var events = function () {
 

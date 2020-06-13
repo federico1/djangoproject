@@ -57,7 +57,7 @@ class VideoRoomSerializer(serializers.ModelSerializer):
 class VideoParticipantSerializer(serializers.ModelSerializer):
     class Meta:
         model = VideoParticipant
-        fields = ('id', 'member', 'room')
+        fields = ('id', 'member', 'room', 'is_approved')
         read_only_fields = ('created', )
 
     def to_representation(self, instance):

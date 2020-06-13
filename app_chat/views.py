@@ -5,6 +5,7 @@ from django.utils.decorators import method_decorator
 from braces.views import LoginRequiredMixin
 from django.views.generic.detail import DetailView
 from django.http import JsonResponse, HttpResponse
+from django.views.generic.list import ListView
 
 from students.decorators import teacher_required
 
@@ -39,6 +40,7 @@ class MessagesView(TemplateView):
            context['conversation'] = Conversation.objects.get(pk=self.kwargs['pk'])
        return context
 
+
 @method_decorator([login_required], name='dispatch')
 class VideoRoomsView(TemplateView):
     template_name = "video_rooms.html"
@@ -49,7 +51,8 @@ class VideoRoomsView(TemplateView):
 
     def get_template_names(self):
         return ['video_rooms.html'] if self.request.user.is_teacher == True else ['video_rooms_students.html']
-        
+
+
 class VideoRoomDetailView(DetailView):
     model = VideoRoom
     template_name = 'video_room_detail.html'
@@ -62,6 +65,20 @@ class VideoRoomDetailView(DetailView):
     def get_template_names(self):
         return ['video_room_detail.html'] if self.request.user.is_teacher == True else ['video_room_detail_students.html']
     
+
+class AllVideoRoomsView(ListView):
+    model = VideoRoom
+    template_name = "all_video_rooms.html"
+    
+    def get_context_data(self, **kwargs):
+       context = super(AllVideoRoomsView, self).get_context_data(**kwargs)
+       return context
+
+    def get_queryset(self):
+        qs = super(AllVideoRoomsView, self).get_queryset()
+        return qs
+
+
 @login_required
 def create_room(request):
 

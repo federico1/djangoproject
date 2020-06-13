@@ -7,6 +7,7 @@ from students.models import Student
 from students.models import TakenQuiz
 from students.models import StudentAnswer
 from students.models import Tag
+from django.contrib.auth.admin import UserAdmin as uAdmin
 
 class TagAdmin(admin.ModelAdmin):
     model = Tag
@@ -18,8 +19,19 @@ class QuestionAdmin(admin.ModelAdmin):
     inlines = [AnswerInline]
 
 
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(uAdmin):
     model = User
+    fieldsets = (
+        *uAdmin.fieldsets, 
+        (                     
+            'Other Options',  # group heading of your choice; set to None for a blank space instead of a header
+            {
+                'fields': (
+                    'is_student', 'is_teacher'
+                ),
+            },
+        ),
+    )
     list_display = ['username', 'first_name', 'last_name']
     list_filter = ['is_teacher', 'is_student', 'is_staff']
 

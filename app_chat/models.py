@@ -20,6 +20,7 @@ class Conversation(models.Model):
     def __str__(self):
         return self.title
 
+
 class ConversationMember(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     member = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -36,6 +37,7 @@ class ConversationMember(models.Model):
 
     def __str__(self):
         return self.conversation
+
 
 class Message(models.Model):
     content = models.TextField()
@@ -55,6 +57,7 @@ class Message(models.Model):
     def __str__(self):
         return self.content
 
+
 class VideoRoom(models.Model):
     title = models.CharField(max_length=200)
     details = models.TextField(null=True, blank=True)
@@ -70,7 +73,7 @@ class VideoRoom(models.Model):
     status = models.CharField(max_length=20)
     participant_count = models.IntegerField(default=0, null=True, blank=True)
     participant_max = models.IntegerField(default=2, null=True, blank=True)
-    start_date = models.DateTimeField(blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
     start_time = models.TextField(blank=True, null=True)
 
     is_deleted = models.BooleanField(default=0)
@@ -80,6 +83,7 @@ class VideoRoom(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class VideoParticipant(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -92,11 +96,14 @@ class VideoParticipant(models.Model):
 
     is_deleted = models.BooleanField(default=0)
 
+    is_approved = models.BooleanField(default=0)
+
     class Meta:
         ordering = ['room']
 
     def __str__(self):
-        return self.room
+        return self.member.username
+
 
 class VideoRoomLog(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -105,6 +112,25 @@ class VideoRoomLog(models.Model):
                               on_delete=models.CASCADE)
     room = models.ForeignKey(VideoRoom, blank=True, null=True,
                               related_name='logs',
+                              on_delete=models.CASCADE)
+
+    status = models.TextField(blank=True, null=True)
+    api_info = models.TextField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['room']
+
+    def __str__(self):
+        return self.room
+
+
+class ParticipantLog(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    participant = models.ForeignKey(settings.AUTH_USER_MODEL,
+                              related_name='participant_log_person',
+                              on_delete=models.CASCADE)
+    room = models.ForeignKey(VideoRoom, blank=True, null=True,
+                              related_name='participants_logs',
                               on_delete=models.CASCADE)
 
     status = models.TextField(blank=True, null=True)
@@ -128,7 +154,7 @@ class Notification(models.Model):
                               on_delete=models.CASCADE)
     status = models.CharField(max_length=20)
     action = models.CharField(max_length=50)
-    action_target = models.CharField(max_length=50)
+    action_target = models.CharField(max_length=200)
 
     is_deleted = models.BooleanField(default=0)
 

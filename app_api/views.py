@@ -33,8 +33,8 @@ class ConversationDetailView(APIView):
 
         if request.user.is_student == True:
             c_list = \
-                request.user.conversation_member.values_list('conversation_id'
-                    , flat=True)
+                request.user.conversation_member.values_list(
+                    'conversation_id', flat=True)
             snippets = Conversation.objects.filter(id__in=c_list)
 
         serializer = ConversationSerializer(snippets, many=True)
@@ -54,7 +54,7 @@ class ConversationDetailView(APIView):
         request,
         pk,
         format=None,
-        ):
+    ):
         snippet = self.get_object(pk)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -80,7 +80,7 @@ class ConversationMembersList(APIView):
         if serializer.is_valid():
             a_count = \
                 ConversationMember.objects.filter(conversation_id=int(request.data['conversation'
-                    ]), member_id=int(request.data['member'])).count()
+                                                                                   ]), member_id=int(request.data['member'])).count()
 
             if a_count <= 0:
                 serializer.save()
@@ -95,7 +95,7 @@ class ConversationMembersList(APIView):
         request,
         pk,
         format=None,
-        ):
+    ):
         snippet = self.get_object(pk)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -118,7 +118,7 @@ class MessageList(APIView):
         if type is not None or type == 'last10':
             snippets = \
                 Message.objects.filter(conversation_id=c_id).order_by('-id'
-                    )[:10][::-1]
+                                                                      )[:10][::-1]
 
         serializer = MessageSerializer(snippets, many=True)
         return Response(serializer.data)
@@ -137,7 +137,7 @@ class MessageList(APIView):
         request,
         pk,
         format=None,
-        ):
+    ):
         snippet = self.get_object(pk)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -170,7 +170,7 @@ class TeacherStudentsList(generics.ListCreateAPIView):
     def list(self, request):
         users_id = \
             list(request.user.courses_created.values_list('students',
-                 flat=True))
+                                                          flat=True))
         queryset = self.get_queryset().filter(id__in=users_id)
         serializer = UserSerializer(queryset, many=True)
 
@@ -189,11 +189,13 @@ class VideoRoomDetailView(APIView):
         snippets = None
 
         if request.user.is_teacher == True:
-            snippets = VideoRoom.objects.filter(owner=request.user, is_deleted = False)
+            snippets = VideoRoom.objects.filter(
+                owner=request.user, is_deleted=False)
         else:
-            ps = VideoParticipant.objects.filter(member=request.user).values_list('room_id', flat=True)
-            snippets = VideoRoom.objects.filter(id__in=ps, is_deleted = False)
-        
+            ps = VideoParticipant.objects.filter(
+                member=request.user).values_list('room_id', flat=True)
+            snippets = VideoRoom.objects.filter(id__in=ps, is_deleted=False)
+
         serializer = VideoRoomSerializer(snippets, many=True)
         return Response(serializer.data)
 
@@ -208,12 +210,13 @@ class VideoRoomDetailView(APIView):
         return Response(serializer.errors,
                         status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk,format=None,):
+    def delete(self, request, pk, format=None,):
         snippet = self.get_object(pk)
         snippet.is_deleted = True
         snippet.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class VideoParticipantView(APIView):
 
@@ -232,10 +235,11 @@ class VideoParticipantView(APIView):
 
     def post(self, request, format=None):
         serializer = VideoParticipantSerializer(data=request.data)
+
         if serializer.is_valid():
             a_count = \
                 VideoParticipant.objects.filter(room_id=int(request.data['room'
-                    ]), member_id=int(request.data['member'])).count()
+                                                                         ]), member_id=int(request.data['member'])).count()
 
             if a_count <= 0:
                 serializer.save()
@@ -245,12 +249,21 @@ class VideoParticipantView(APIView):
         return Response(serializer.errors,
                         status=status.HTTP_400_BAD_REQUEST)
 
+    def put(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = VideoParticipantSerializer(
+            snippet, data={'member': snippet.member.id, 'is_approved': True})
+        if serializer.is_valid():
+            rs = serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     def delete(
         self,
         request,
         pk,
         format=None,
-        ):
+    ):
         print(pk)
         snippet = self.get_object(pk)
         snippet.delete()

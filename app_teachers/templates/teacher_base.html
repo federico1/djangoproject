@@ -8,6 +8,7 @@
   <link href="{% static "/css/bootstrap.min.css" %}" rel="stylesheet">
   <link href="{% static "/css/font-awesome.min.css" %}" rel="stylesheet">
   <link href="{% static "/css/teacher.css" %}" rel="stylesheet">
+  <link href="{% static "/pickadate/jquery.datetimepicker.min.css" %}" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
   </link>
   <style>
@@ -45,6 +46,7 @@
               <h6 class="dropdown-header">
                 Alerts
               </h6>
+              <div id="pending-notify-list"></div>
 <!-- 
               <a class="dropdown-item d-flex align-items-center" href="#">
                 <div class="mr-3">
@@ -61,8 +63,10 @@
           
         </li>
         <li class="nav-item dropdown ml-3">
+          
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
-            <i class="fa fa-lg fa-cog text-dark"></i>
+           
+            <i class="fa fa-lg fa-cog text-dark"></i> {{request.user}}
           </a>
           <div class="dropdown-menu dropdown-menu-right">
             {% if request.user.is_authenticated %}
@@ -82,6 +86,21 @@
     </div>
   </main>
 
+  {% verbatim %}
+  <script type="text/x-handlebars-template" id='notificationItemTemplate'>
+  <a class="dropdown-item d-flex align-items-center" href="{{action_target}}">
+      <div class="mr-3">
+          <div class="icon-circle bg-primary">
+              <i class="fa fa-exclamation text-white"></i>
+          </div>
+      </div>
+      <div>
+          <div class="small text-gray-500">{{#dateOnly}}  {{created}} {{/dateOnly}}</div>
+          <span class="font-weight-bold">{{title}}</span>
+      </div>
+  </a>
+</script>
+  {% endverbatim %}
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
@@ -89,6 +108,8 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
+
+  <script src="{% static "/pickadate/jquery.datetimepicker.full.min.js" %}"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
@@ -101,6 +122,57 @@
 
   {% block scripts %}
   {% endblock %}
+
+  <script>
+   
+    Handlebars.registerHelper("dateOnly", function (options) {
+        var data = options.fn(this);
+
+        try {
+            var date = moment($.trim(data)).format('MMMM, DD, YYYY');
+            return new Handlebars.SafeString(date);
+
+        } catch (e) {
+
+        }
+
+        return options.fn(this);
+    });
+
+    var pendingNotifyList = [];
+
+    var getPendingNotifications = function () {
+
+        $.get('/api/notifications/?format=json', { status: 'pending' }, function (response) {
+            pendingNotifyList = response;
+
+            $(".notification .badge-counter").html('+' + pendingNotifyList.length);
+
+            $("#pending-notify-list").empty();
+
+            $(pendingNotifyList).each(function (index, item) {
+
+                var source = document.getElementById("notificationItemTemplate").innerHTML;
+                var template = Handlebars.compile(source);
+
+                $("#pending-notify-list").append(template(item));
+            });
+        });
+
+    };
+
+    var poolingNotifications = function () {
+        setInterval(function () {
+            getPendingNotifications();
+        }, 5000);
+    };
+
+    $(document).ready(function () {
+        getPendingNotifications();
+        poolingNotifications();
+    });
+
+</script>
 </body>
 
 </html>

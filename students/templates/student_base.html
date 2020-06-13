@@ -94,6 +94,7 @@
                         <div class="classynav">
                             <ul>
                                 <li><a href="/">Home</a></li>
+                                <li><a href="{% url "live_classes" %}">Live Courses</a></li>
 
                                 {% if request.user.is_authenticated and request.user.is_student == True %}
                                 <li><a href="{% url "student_course_list" %}""\>My Courses</a></li>

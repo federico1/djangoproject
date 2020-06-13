@@ -1,0 +1,141 @@
+{% extends "student_base.html" %}
+{% load i18n %}
+{% block title %}Live Courses{% endblock %}
+{% block content %}
+<h1>
+    Live Courses
+</h1>
+
+
+<div class="container-fluid">
+
+    <div class="row">
+        {% for room in object_list %}
+
+        <div class="col-md-4">
+            <div class="single-popular-course mb-100 wow fadeInUp" data-wow-delay="250ms">
+
+                <div class="course-content">
+
+                    {% for entry in room.participants.all %}
+                    {% if entry.member.id == request.user.id %}
+                    <input type="hidden" class="hfJoin" id="{{room.id}}" />
+                    {% endif %}
+                    {% endfor %}
+
+
+                    <h4>
+                        {{ room.title }}
+                    </h4>
+
+                    <p> Course: {{room.course}} </p>
+                    <p> Date: {{room.start_date|default_if_none:"N/A"}} </p>
+                    <p> Time: {{room.start_time|default_if_none:"N/A"}} </p>
+                </div>
+
+                <div class="seat-rating-fee d-flex justify-content-between">
+                    <div class="seat-rating h-100 d-flex align-items-center">
+
+                    </div>
+                    <div class="course-fee h-100">
+                        <a href="#"" class=" link-join free" owner="{{room.owner.id}}" title="{{room.title}}" id="{{room.id}}"> Join </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+    var addNewMember = function (roomId, owner, title) {
+
+        var data = {
+            member: '{{request.user.id}}',
+            room: roomId,
+            is_approved: false
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/api/video-participants/",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            beforeSend: function (xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+            },
+            success: function (response) {
+                toastr.success('Your request has been sent.', 'Success!');
+                sentNotification(roomId, owner, title);
+            },
+            failure: function (errMsg) {
+            }
+        });
+    };
+
+    var sentNotification = function (roomId, receiverId, videoTitle) {
+
+        var data = {
+            action_target: window.location.origin + '{% url "video_rooms" %}?id='+roomId+ '&action=member',
+            action: "link",
+            receiver: receiverId,
+            status: 'pending',
+            title: 'New student want to join the live video ' + videoTitle,
+            is_deleted: 0
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/api/notifications/",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            beforeSend: function (xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+            },
+            success: function (response) {
+                console.log(response);
+            },
+            failure: function (errMsg) {
+            }
+        });
+
+    };
+
+
+    $(document).ready(function () {
+
+        $(".hfJoin").each(function () {
+
+            var id = $(this).attr('id');
+            if (id) {
+                $(".link-join[id=" + id + "]").removeClass('link-join').text('Added');
+            }
+
+        });
+
+        $("div").on("click", '.link-join', function (e) {
+            e.stopPropagation();
+
+            var id = $(this).attr('id');
+            var title = $(this).attr('title');
+            var own = $(this).attr('owner');
+
+            if (id) {
+                addNewMember(id, own, title);
+            }
+        });
+    });
+
+</script>
+
+{% endblock %}

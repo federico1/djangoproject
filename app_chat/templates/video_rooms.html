@@ -1,7 +1,7 @@
 {% extends "teacher_base.html" %}
 
 {% block title %}
-Conferences Manager 
+Conferences Manager
 {% endblock %}
 
 {% block content %}
@@ -42,6 +42,8 @@ Conferences Manager
                                 <th>Name</th>
                                 <th>Course</th>
                                 <th>Status</th>
+                                <th>Date</th>
+                                <th>Time</th>
                                 <th></th>
                                 <th>
                                     Actions
@@ -101,7 +103,7 @@ Conferences Manager
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-header bg-secondary text-white">
-                                Members List
+                                Added Members
                             </div>
 
                             <div class="card-body">
@@ -159,23 +161,34 @@ Conferences Manager
                     <option value="cancelled">Cancelled</option>
                 </select>
             </div>
+            <div class="col">
+                <label for="exampleFormControlInput1">Start Date</label>
+                <input type="text" class="form-control form-control-sm" id="start_date" name="start_date"
+                    placeholder="Start Date.">
+            </div>
+            <div class="col">
+                <label for="exampleFormControlInput1">Start Time</label>
+                <input type="text" class="form-control form-control-sm" id="start_time" name="start_time"
+                    placeholder="Start Time.">
+            </div>
             <div class="col d-none">
                 <label for="exampleFormControlSelect1">Max Participants</label>
                 <input type="number" class="form-control form-control-sm" value="2" id="participant_max"
                     name="participant_max">
 
             </div>
+           
+        </div>
+        <div class="row">
             <div class="col">
                 <label for="exampleFormControlSelect1">Details</label>
                 <textarea class="form-control form-control-sm" id="details" name="details"></textarea>
 
             </div>
         </div>
-        <div class="row">
-            
-        </div>
     </form>
 </script>
+
 {% verbatim %}
 <script type="text/x-handlebars-template" id='roomListItemTemplate'>
    <tr>
@@ -187,9 +200,10 @@ Conferences Manager
        <span> {{course.title}}</span>
         {{else}}
         <span></span>
-        {{/if}}
-         
+        {{/if}}      
        </td>
+       <td>{{start_date}}</td>
+       <td>{{start_time}}</td>
        <td>
            {{status}}
        </td>
@@ -269,6 +283,8 @@ Conferences Manager
 
                     $("#rooms-table tbody").append(template(item));
                 });
+
+                openMemberModalOnLoad();
             };
 
             var getCourses = function () {
@@ -369,11 +385,20 @@ Conferences Manager
 
                 $(savedMembersList).each(function (index, item) {
 
+                    console.log(item.is_approved);
+
                     var li = $("<li />", { class: "list-group-item d-flex justify-content-between align-items-center" });
 
-                    var a = $("<a />", { href: '#', text: 'X', id: item.id, class: "link-remove-member badge badge-primary badge-pill text-white" });
+                    var a1 = $("<a />", { href: '#', text: 'Mark Approve', id: item.id, class: "link-approve-member badge badge-info badge-pill text-white" });
 
-                    li.append(item.member.username).append(a);
+                    var a = $("<a />", { href: '#', text: 'X', id: item.id, class: "link-remove-member badge badge-danger badge-pill text-white" });
+
+                    li.append(item.member.username);
+
+                    if (item.is_approved == false)
+                        li.append(a1)
+
+                    li.append(a);
 
                     $("#added-members-list").append(li);
                 });
@@ -382,7 +407,8 @@ Conferences Manager
             var addNewMember = function (id) {
                 var data = {
                     member: id,
-                    room: $("#members-modal").attr('pk')
+                    room: $("#members-modal").attr('pk'),
+                    is_approved: true
                 };
 
                 $.ajax({
@@ -421,6 +447,48 @@ Conferences Manager
                 });
             };
 
+            var approveMember = function (id) {
+                $.ajax({
+                    type: "PUT",
+                    url: "/api/video-participants/" + id + "/",
+                    data: {
+                        member: 0,
+                        is_approved: 1
+                    },
+                    contentType: 'application/json',
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (response) {
+                        toastr.info('Member is approved.', 'info!');
+                        getAddedMembers($("#members-modal").attr('pk'));
+                    },
+                    failure: function (errMsg) {
+                    }
+                });
+            };
+
+            var openMemberModalOnLoad = function () {
+
+                var id = getParameterByName('id');
+                var action = getParameterByName('action');
+
+                if (id && action == 'member') {
+                    $("#members-modal").attr('pk', id);
+                    $("#members-modal").modal('show');
+                }
+
+            };
+
+            var getParameterByName = function (name) {
+                var url = window.location.href;
+                name = name.replace(/[\[\]]/g, "\\$&");
+                var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                    results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return '';
+                return decodeURIComponent(results[2].replace(/\+/g, " "));
+            };
 
             var registerEvent = function () {
 
@@ -473,6 +541,15 @@ Conferences Manager
                     }
                 });
 
+                $("div").on("click", '.link-approve-member', function (e) {
+                    e.stopPropagation();
+                    var id = $(this).attr('id');
+
+                    if (id) {
+                        approveMember(id);
+                    }
+                });
+
                 $('#room-modal').on('shown.bs.modal', function (e) {
 
                     var source = document.getElementById("roomFormTemplate").innerHTML;
@@ -481,6 +558,15 @@ Conferences Manager
 
                     fillCourseDropdown();
 
+                    $("#start_date").datetimepicker({
+                        timepicker: false,
+                        format: 'Y-m-d'
+                    });
+
+                    $('#start_time').datetimepicker({
+                        datepicker: false,
+                        format: 'H:i'
+                    });
                 });
 
                 $("#members-modal").on('shown.bs.modal', function (e) {
