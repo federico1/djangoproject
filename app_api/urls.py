@@ -26,4 +26,7 @@ urlpatterns = [
 
     path('notifications/', views.NotificationDetailView.as_view()),
 
+    path('video-participantslog/', views.ParticipantLogDetailView.as_view()),
+    path('video-participantslog/<int:pk>/', views.ParticipantLogDetailView.as_view()),
+
 ]

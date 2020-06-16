@@ -136,6 +136,38 @@ Conferences Manager
     </div>
 </div>
 
+<div id="participants-modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Participants
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <th>
+                            User
+                        </th>
+                        <th>Date</th>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/x-handlebars-template" id='roomFormTemplate'>
     <form>
         <div class="row mb-1">
@@ -215,7 +247,9 @@ Conferences Manager
         <a href="javascript:void(0)" class="btn btn-sm btn-info link-participants" id="{{id}}">
             <i class="fa fa-users"></i>
         </a>
-
+        <a href="javascript:void(0)" title="View Participants" class="btn btn-sm btn-primary link-participantslog" id="{{id}}">
+            <i class="fa fa-handshake-o"></i>
+        </a>
            <a href="javascript:void(0)" title="delete" id="{{id}}" class="btn btn-sm btn-warning link-delete-room">
                <i class="fa fa-close"></i>
            </a>
@@ -480,6 +514,23 @@ Conferences Manager
 
             };
 
+            var getParticipantsLog = function (id) {
+
+                if (id) {
+                    $.get('/api/video-participantslog/?format=json', { room: id }, function (response) {
+                        $("#participants-modal table tbody").empty();
+
+                        $(response).each(function (index, item) {
+                            var tr = $("<tr />").append('<td>' + item.participant.username + '</td>');
+                            tr.append('<td>' + moment(item.created).format('LLL') + '</td>');
+
+                            $("#participants-modal table tbody").append(tr);
+                        });
+                    });
+                }
+
+            };
+
             var getParameterByName = function (name) {
                 var url = window.location.href;
                 name = name.replace(/[\[\]]/g, "\\$&");
@@ -550,6 +601,14 @@ Conferences Manager
                     }
                 });
 
+                $("div").on("click", '.link-participantslog', function (e) {
+                    e.stopPropagation();
+
+                    var id = $(this).attr('id');
+                    $("#participants-modal").attr('pk', id);
+                    $("#participants-modal").modal('show');
+                });
+
                 $('#room-modal').on('shown.bs.modal', function (e) {
 
                     var source = document.getElementById("roomFormTemplate").innerHTML;
@@ -574,6 +633,14 @@ Conferences Manager
                     var id = $("#members-modal").attr('pk');
 
                     getAddedMembers(id);
+                });
+
+                $("#participants-modal").on('shown.bs.modal', function (e) {
+
+                    var id = $("#participants-modal").attr('pk');
+
+                    getParticipantsLog(id);
+
                 });
 
             };

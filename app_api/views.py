@@ -9,11 +9,11 @@ from rest_framework import status
 from django.http import Http404
 
 from app_chat.models import Conversation, Message, ConversationMember, \
-    VideoRoom, VideoParticipant, Notification
+    VideoRoom, VideoParticipant, Notification, ParticipantLog
 
 from .serializers import ConversationSerializer, CourseSerializer, \
     UserSerializer, ConversationMemberSerializer, MessageSerializer, \
-    VideoRoomSerializer, VideoParticipantSerializer, NotificationSerializer
+    VideoRoomSerializer, VideoParticipantSerializer, NotificationSerializer, ParticipantLogSerializer
 
 from students.models import User
 
@@ -295,6 +295,37 @@ class NotificationDetailView(APIView):
         serializer = NotificationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(owner=request.user)
+
+            return Response(serializer.data,
+                            status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,
+                        status=status.HTTP_400_BAD_REQUEST)
+
+
+class ParticipantLogDetailView(APIView):
+
+    def get_object(self, pk):
+        try:
+            return ParticipantLog.objects.get(pk=pk)
+        except ParticipantLog.DoesNotExist:
+            raise Http404
+
+    def get(self, request, format=None):
+
+        room = request.query_params.get('room')
+
+        snippets = ParticipantLog.objects.filter(room_id=room).order_by('-id')
+
+        serializer = ParticipantLogSerializer(snippets, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = ParticipantLogSerializer(data=request.data)
+        
+        print(serializer)
+        if serializer.is_valid():
+            serializer.save(participant=request.user)
+
             return Response(serializer.data,
                             status=status.HTTP_201_CREATED)
         return Response(serializer.errors,

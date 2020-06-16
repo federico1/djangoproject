@@ -231,6 +231,7 @@
                     connected = true;
                     updateParticipantCount();
                     resolve();
+                    addLog();
                 }).catch(function (err) {
                     console.log(err)
                     reject();
@@ -320,6 +321,29 @@
             updateParticipantCount();
         };
 
+        var addLog = function (id) {
+                var data = {
+                    room: '{{object.id}}',
+                    participant:'{{request.user.id}}'
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/video-participantslog/",
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (response) {
+                        console.log(response)
+                    },
+                    failure: function (errMsg) {
+                    }
+                });
+            };
+
         var events = function () {
 
             $("#btn-full-screen").click(function () {
@@ -364,11 +388,10 @@
             var width = $(window).width() - 30;
             var height = $(window).height() - $(".navbar").eq(0).outerHeight() - 10;
 
-            // $("#video-screen").css({ width: width, height: height });
+            
         };
 
         events();
-
         getPendingNotifications();
 
     });
