@@ -40,10 +40,10 @@ Conferences Manager
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Course</th>
-                                <th>Status</th>
+                                <th>Courses</th>
                                 <th>Date</th>
                                 <th>Time</th>
+                                <th>Status</th>
                                 <th></th>
                                 <th>
                                     Actions
@@ -170,54 +170,63 @@ Conferences Manager
 
 <script type="text/x-handlebars-template" id='roomFormTemplate'>
     <form>
-        <div class="row mb-1">
-            <div class="col">
-                <label for="exampleFormControlInput1">Title</label>
-                <input type="text" class="form-control form-control-sm" id="title" name="title"
-                    placeholder="Conversation title.">
-            </div>
-            <div class="col">
-                <label for="exampleFormControlSelect1">Course</label>
-                <select class="form-control form-control-sm" id="course" name="course">
-                </select>
-            </div>
-        </div>
-        <div class="row mb-1">
-            <div class="col">
-                <label for="exampleFormControlInput1">Status</label>
-                <select class="form-control form-control-sm" id="status" name="status">
-                    <option value="">Select Status</option>
-                    <option value="pending">Pending</option>
-                    <option value="started">Started</option>
-                    <option value="completed">Completed</option>
-                    <option value="cancelled">Cancelled</option>
-                </select>
-            </div>
-            <div class="col">
-                <label for="exampleFormControlInput1">Start Date</label>
-                <input type="text" class="form-control form-control-sm" id="start_date" name="start_date"
-                    placeholder="Start Date.">
-            </div>
-            <div class="col">
-                <label for="exampleFormControlInput1">Start Time</label>
-                <input type="text" class="form-control form-control-sm" id="start_time" name="start_time"
-                    placeholder="Start Time.">
-            </div>
-            <div class="col d-none">
-                <label for="exampleFormControlSelect1">Max Participants</label>
-                <input type="number" class="form-control form-control-sm" value="2" id="participant_max"
-                    name="participant_max">
 
-            </div>
-           
-        </div>
         <div class="row">
-            <div class="col">
-                <label for="exampleFormControlSelect1">Details</label>
-                <textarea class="form-control form-control-sm" id="details" name="details"></textarea>
+            <div class="col-md-7">
+                <div class="row mb-1">
+                    <div class="col">
+                        <label for="exampleFormControlInput1">Title</label>
+                        <input type="text" class="form-control form-control-sm" id="title" name="title"
+                            placeholder="Conversation title.">
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col">
+                        <label for="exampleFormControlInput1">Status</label>
+                        <select class="form-control form-control-sm" id="status" name="status">
+                            <option value="">Select Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="started">Started</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="exampleFormControlInput1">Start Date</label>
+                        <input type="text" class="form-control form-control-sm" id="start_date" name="start_date"
+                            placeholder="Start Date.">
+                    </div>
+                    
+                   
+                </div>
+                <div class="row mb-1">
+                    <div class="col">
+                        <label for="exampleFormControlInput1">Start Time</label>
+                        <input type="text" class="form-control form-control-sm" id="start_time" name="start_time"
+                            placeholder="Start Time.">
+                    </div>
+                    <div class="col d-none">
+                        <label for="exampleFormControlSelect1">Max Participants</label>
+                        <input type="number" class="form-control form-control-sm" value="2" id="participant_max"
+                            name="participant_max">
+        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="exampleFormControlSelect1">Details</label>
+                        <textarea class="form-control form-control-sm" id="details" name="details"></textarea>
+        
+                    </div>
+                </div>
+            </div>
 
+            <div class="col-md-5">
+                <label for="exampleFormControlSelect1">Courses</label>
+               <div id="courseList"></div>
             </div>
         </div>
+        
     </form>
 </script>
 
@@ -228,11 +237,9 @@ Conferences Manager
            {{title}}
        </td>
        <td>
-        {{#if course}}
-       <span> {{course.title}}</span>
-        {{else}}
-        <span></span>
-        {{/if}}      
+        {{#each courses}}
+        <span>{{course.title}} <br> </span>
+        {{/each}}
        </td>
        <td>{{start_date}}</td>
        <td>{{start_time}}</td>
@@ -328,12 +335,23 @@ Conferences Manager
             };
 
             var fillCourseDropdown = function () {
-                $("#room-modal #course").empty();
-                $("#room-modal #course").append('<option value="">Select Course</option>');
+
+                $("#room-modal #courseList").empty();
 
                 $(courseList).each(function (index, item) {
-                    var opt = $("<option />", { value: item.id, text: item.title });
-                    $("#room-modal #course").append(opt);
+
+                    var lbl = $("<label />", { class: "form-check-label" });
+
+                    var opt = $("<input />", { type: 'checkbox', value: item.id, class: "form-check-input" });
+
+                    lbl.html(opt).append(item.title);
+
+                    var div = $("<div />", { class: "form-check-inline" });
+
+                    div.html(lbl);
+
+                    $("#room-modal #courseList").append(div);
+
                 });
             };
 
@@ -363,6 +381,16 @@ Conferences Manager
 
                 var data = $("#room-modal form").eq(0).serializeObject();
 
+                if (data.start_date == "") {
+                    data.start_date = null;
+                }
+
+                var courses = [];
+
+                $('#courseList input:checked').each(function () {
+                    courses.push($(this).val());
+                });
+
                 $.ajax({
                     type: "POST",
                     url: "/api/video-rooms/",
@@ -374,6 +402,7 @@ Conferences Manager
                     },
                     success: function (response) {
                         if (response) {
+                            addCourses(response.id, courses);
                             window.location.reload();
                         }
                         $("#room-modal").modal('hide');
@@ -541,6 +570,33 @@ Conferences Manager
                 return decodeURIComponent(results[2].replace(/\+/g, " "));
             };
 
+            var addCourses = function (roomId, courses) {
+                var data = [];
+
+                $(courses).each(function (indx, item) {
+                    data.push({
+                        course: item,
+                        room: roomId
+                    });
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/video-courses/?r=" + roomId,
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (response) {
+
+                    },
+                    failure: function (errMsg) {
+                    }
+                });
+            };
+
             var registerEvent = function () {
 
                 $("div").on("click", '.link-new-room', function (e) {
@@ -615,8 +671,6 @@ Conferences Manager
                     var template = Handlebars.compile(source);
                     $("#room-modal .modal-body").html(template({}));
 
-                    fillCourseDropdown();
-
                     $("#start_date").datetimepicker({
                         timepicker: false,
                         format: 'Y-m-d'
@@ -626,6 +680,9 @@ Conferences Manager
                         datepicker: false,
                         format: 'H:i'
                     });
+
+                    fillCourseDropdown();
+
                 });
 
                 $("#members-modal").on('shown.bs.modal', function (e) {

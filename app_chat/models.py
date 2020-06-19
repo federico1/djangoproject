@@ -66,11 +66,8 @@ class VideoRoom(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True,
                               related_name='rooms_created',
                               on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, blank=True, null=True,
-                              related_name='course_rooms',
-                              on_delete=models.CASCADE)
     
-    status = models.CharField(max_length=20)
+    status = models.CharField(max_length=20, blank=True)
     participant_count = models.IntegerField(default=0, null=True, blank=True)
     participant_max = models.IntegerField(default=2, null=True, blank=True)
     start_date = models.DateField(blank=True, null=True)
@@ -103,6 +100,22 @@ class VideoParticipant(models.Model):
 
     def __str__(self):
         return self.member.username
+
+
+class VideoCourses(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    course = models.ForeignKey(Course, blank=True, null=True,
+                              related_name='video_course',
+                              on_delete=models.CASCADE)
+    room = models.ForeignKey(VideoRoom, blank=True, null=True,
+                              related_name='courses',
+                              on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['room']
+
+    def __str__(self):
+        return self.course
 
 
 class VideoRoomLog(models.Model):

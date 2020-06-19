@@ -9,11 +9,12 @@ from rest_framework import status
 from django.http import Http404
 
 from app_chat.models import Conversation, Message, ConversationMember, \
-    VideoRoom, VideoParticipant, Notification, ParticipantLog
+    VideoRoom, VideoParticipant, Notification, ParticipantLog, VideoCourses
 
 from .serializers import ConversationSerializer, CourseSerializer, \
     UserSerializer, ConversationMemberSerializer, MessageSerializer, \
-    VideoRoomSerializer, VideoParticipantSerializer, NotificationSerializer, ParticipantLogSerializer
+    VideoRoomSerializer, VideoParticipantSerializer, NotificationSerializer, ParticipantLogSerializer, \
+    VideoCoursesSerializer
 
 from students.models import User
 
@@ -196,7 +197,8 @@ class VideoRoomDetailView(APIView):
                 member=request.user).values_list('room_id', flat=True)
             snippets = VideoRoom.objects.filter(id__in=ps, is_deleted=False)
 
-        serializer = VideoRoomSerializer(snippets, many=True)
+        serializer = VideoRoomSerializer(snippets.order_by('-id'), many=True)
+
         return Response(serializer.data)
 
     def post(self, request, format=None):
@@ -216,6 +218,41 @@ class VideoRoomDetailView(APIView):
         snippet.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class VideoCoursesView(APIView):
+
+    def get_object(self, pk):
+        try:
+            return VideoCourses.objects.get(pk=pk)
+        except VideoCourses.DoesNotExist:
+            raise Http404
+
+    def get(self, request, format=None):
+        c_id = request.query_params.get('room')
+
+        snippets = VideoCourses.objects.filter(room_id=c_id)
+        serializer = VideoCoursesSerializer(snippets, many=True)
+
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = VideoCoursesSerializer(data=request.data, many=True)
+
+        r = request.query_params.get('r')
+
+        if r:
+            VideoCourses.objects.filter(room_id=int(r)).delete()
+            
+        if serializer.is_valid():
+            
+            serializer.save()
+            
+            return Response(serializer.data,
+                        status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST)
 
 
 class VideoParticipantView(APIView):
@@ -321,7 +358,7 @@ class ParticipantLogDetailView(APIView):
 
     def post(self, request, format=None):
         serializer = ParticipantLogSerializer(data=request.data)
-        
+
         print(serializer)
         if serializer.is_valid():
             serializer.save(participant=request.user)

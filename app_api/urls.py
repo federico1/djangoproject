@@ -29,4 +29,7 @@ urlpatterns = [
     path('video-participantslog/', views.ParticipantLogDetailView.as_view()),
     path('video-participantslog/<int:pk>/', views.ParticipantLogDetailView.as_view()),
 
+    path('video-courses/', views.VideoCoursesView.as_view()),
+    path('video-courses/<int:pk>/', views.VideoCoursesView.as_view()),
+
 ]

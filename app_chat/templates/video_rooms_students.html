@@ -33,7 +33,7 @@ Manage Conversations
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Course</th>
+                                <th>Courses</th>
                                 <th>Status</th>
                                 <th>
                                     Actions
@@ -60,12 +60,9 @@ Manage Conversations
            {{title}}
        </td>
        <td>
-        {{#if course}}
-       <span> {{course.title}}</span>
-        {{else}}
-        <span></span>
-        {{/if}}
-         
+        {{#each courses}}
+        <span>{{course.title}} <br> </span>
+        {{/each}}
        </td>
        <td>
            {{status}}
