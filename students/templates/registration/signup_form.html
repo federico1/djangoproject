@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "student_base.html" %}
 {% load i18n %}
    {% block title %}
        {% trans 'Sign up as' %} {{ user_type }}
@@ -10,6 +10,7 @@
            <p>{% trans "Enter your details to create an account as" %} {{ user_type }}</p>
            <div class="signup-form">
                <form id="user_form" accept-charset="utf-8" action="" method="post" novalidate>
+
                    {{ form.as_p }}
                    {% csrf_token %}
 
@@ -21,4 +22,14 @@
            <div class="clear">{% trans "Already an account ?" %} <a href="{% url 'login' %}">{% trans 'Log in' %}</a>.</div>
        </div>
    </div>
+   {% endblock %}
+
+   {% block scripts %}
+
+   <script>
+       $(document).ready(function(){
+           $("p input[type='checkbox']").css('width', 'auto');
+       });
+   </script>
+
    {% endblock %}
