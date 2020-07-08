@@ -28,7 +28,7 @@
                             <button class="btn btn-primary" type="submit" id="btnAns">{% trans 'Next' %}</button>
 
                             {% if request.GET.ref is not None %}
-                            <a class="btn btn-secondary" href="{{request.GET.ref}}">Return Back</a>
+                            <a class="btn btn-secondary" href="{{request.GET.ref}}&type=quiz">Return Back</a>
                             {% endif %}
                         </div>
 
