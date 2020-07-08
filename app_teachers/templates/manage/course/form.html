@@ -1,11 +1,11 @@
 {% extends "teacher_base.html" %}
 
 {% block title %}
-    {% if object %}
-        Edit course "{{ object.title }}"
-    {% else %}
-        Create a new course
-    {% endif %}
+{% if object %}
+Edit course "{{ object.title }}"
+{% else %}
+Create a new course
+{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -13,34 +13,66 @@
 <div class="mt-3 d-sm-flex align-items-center justify-content-between mb-4 p-2">
     <h1 class="h3 mb-0 text-gray-800">
         {% if object %}
-            Edit course "{{ object.title }}"
+        Edit course "{{ object.title }}"
         {% else %}
-            Create a new course
+        Create a new course
         {% endif %}
     </h1>
     <a href="{% url "manage_course_list" %}" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-        class="fas fa-add"></i> Back To Courses</a>
+            class="fas fa-add"></i> Back To Courses</a>
 </div>
 
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-         <form action="" method="post">
-             {{ form.as_p }}
-             {% csrf_token %}
-             <p><button type="submit" class="btn btn-info" value=""> Save course</button></p>
-         </form>
+            <form action="" method="post">
+                {{ form.as_p }}
+                {% csrf_token %}
+                <p><button type="submit" class="btn btn-info" value=""> Save course</button></p>
+            </form>
         </div>
-     </div>
+    </div>
 </div>
-   
+
 {% endblock %}
 
 {% block scripts %}
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         $(".container input, select, textarea").addClass('form-control');
         $(".container textarea").css('height', 70);
+
+        $("div").on("change", "#id_title", function (e) {
+            e.stopPropagation();
+            var val = $(this).val();
+            $("#id_slug").val(null);
+            if (val) {
+                $("#id_slug").val(string_to_slug(val));
+            }
+
+        });
     });
+
+    function string_to_slug(str) {
+        str = str.replace(/^\s+|\s+$/g, ""); // trim
+        str = str.toLowerCase();
+
+        // remove accents, swap ñ for n, etc
+        var from = "åàáãäâèéëêìíïîòóöôùúüûñç·/_,:;";
+        var to = "aaaaaaeeeeiiiioooouuuunc------";
+
+        for (var i = 0, l = from.length; i < l; i++) {
+            str = str.replace(new RegExp(from.charAt(i), "g"), to.charAt(i));
+        }
+
+        str = str
+            .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
+            .replace(/\s+/g, "-") // collapse whitespace and replace by -
+            .replace(/-+/g, "-") // collapse dashes
+            .replace(/^-+/, "") // trim - from start of text
+            .replace(/-+$/, ""); // trim - from end of text
+
+        return str;
+    }
 </script>
 {% endblock %}

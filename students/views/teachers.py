@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.core.mail import mail_admins
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Avg, Count
@@ -29,7 +30,7 @@ class TeacherRegistrationView(CreateView):
     model = User
     template_name = 'registration/signup_form.html'
     form_class = TeacherSignupForm
-    success_url = reverse_lazy('teacher_quiz_change_list')
+    success_url = reverse_lazy('manage_course_list')
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'teacher'
@@ -40,6 +41,10 @@ class TeacherRegistrationView(CreateView):
         cd = form.cleaned_data
         user = authenticate(username=cd['username'], password=cd['password1'])
         mail_admins("A new teacher user is sign up ", "check your admin on myelearning")
+
+        my_group = Group.objects.get(name='teacher') 
+        my_group.user_set.add(user)
+
         login(self.request, user)
         return result
 
