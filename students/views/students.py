@@ -239,7 +239,7 @@ def take_quiz(request, pk):
     if student.quizzes.filter(pk=pk).exists():
 
         if request.GET['ref'] is not None:
-            return redirect(request.GET['ref'])
+            return redirect(request.GET['ref'] + "&type=quiz")
 
         return redirect('taken_quiz_list')
 
