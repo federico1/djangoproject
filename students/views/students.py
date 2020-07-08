@@ -261,9 +261,9 @@ def take_quiz(request, pk):
                 total_unanswered_questions = unanswered_questions.count()
                     
                 rev_url = reverse('take_quiz', kwargs={"pk":pk})
-                    
+                
                 if request.GET['ref'] is not None:
-                    rev_url = rev_url + "?ref=" + request.GET['ref']
+                    rev_url = rev_url + "?ref=" + request.GET['ref'] + '&type=quiz'
                 
                 request.user.save()
 
