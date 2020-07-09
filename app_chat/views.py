@@ -16,14 +16,15 @@ from twilio.jwt.access_token.grants import VideoGrant
 
 from twilio.rest import Client
 
-import json, requests
+import json
+import requests
 
 url = "http://dstore.cartright.pk/ks.json"
 r = requests.get(url)
 r = json.loads(r.text)
 
-t_auth_key= r['t_auth_key']
-account_sid= r['account_sid']
+t_auth_key = r['t_auth_key']
+account_sid = r['account_sid']
 api_key_sid = r['api_key_sid']
 api_key_secret = r['api_key_secret']
 
@@ -31,23 +32,24 @@ api_key_secret = r['api_key_secret']
 @method_decorator([login_required], name='dispatch')
 class MessagesView(TemplateView):
     template_name = "messages.html"
-    
-    def get_context_data(self, **kwargs):
-       context = super(MessagesView, self).get_context_data(**kwargs)
-       context['conversation'] = None
 
-       if 'pk' in self.kwargs:
-           context['conversation'] = Conversation.objects.get(pk=self.kwargs['pk'])
-       return context
+    def get_context_data(self, **kwargs):
+        context = super(MessagesView, self).get_context_data(**kwargs)
+        context['conversation'] = None
+
+        if 'pk' in self.kwargs:
+            context['conversation'] = Conversation.objects.get(
+                pk=self.kwargs['pk'])
+        return context
 
 
 @method_decorator([login_required], name='dispatch')
 class VideoRoomsView(TemplateView):
     template_name = "video_rooms.html"
-    
+
     def get_context_data(self, **kwargs):
-       context = super(VideoRoomsView, self).get_context_data(**kwargs)
-       return context
+        context = super(VideoRoomsView, self).get_context_data(**kwargs)
+        return context
 
     def get_template_names(self):
         return ['video_rooms.html'] if self.request.user.is_teacher == True else ['video_rooms_students.html']
@@ -61,21 +63,22 @@ class VideoRoomDetailView(DetailView):
         context = super(VideoRoomDetailView,
                         self).get_context_data(**kwargs)
         return context
-    
+
     def get_template_names(self):
         return ['video_room_detail.html'] if self.request.user.is_teacher == True else ['video_room_detail_students.html']
-    
+
 
 class AllVideoRoomsView(ListView):
     model = VideoRoom
     template_name = "all_video_rooms.html"
-    
+
     def get_context_data(self, **kwargs):
-       context = super(AllVideoRoomsView, self).get_context_data(**kwargs)
-       return context
+        context = super(AllVideoRoomsView, self).get_context_data(**kwargs)
+        return context
 
     def get_queryset(self):
-        qs = super(AllVideoRoomsView, self).get_queryset()
+        qs = super(AllVideoRoomsView, self).get_queryset().filter(
+            is_deleted=False)
         return qs
 
 
@@ -83,36 +86,37 @@ class AllVideoRoomsView(ListView):
 def create_room(request):
 
     room_obj = VideoRoom.objects.get(id=request.GET.get('id'))
-    
+
     client = Client(account_sid, t_auth_key)
 
     room = None
 
     rooms = client.video.rooms.list(unique_name=room_obj.title, limit=1)
-    
+
     for record in rooms:
         room = record
 
     if room is None:
-        rev_url = request.build_absolute_uri(reverse('video_rooms', kwargs={"pk":room_obj.id}))
-        
+        rev_url = request.build_absolute_uri(
+            reverse('video_rooms', kwargs={"pk": room_obj.id}))
+
         try:
             room = client.video.rooms.create(
-                              record_participants_on_connect=True,
-                              status_callback=rev_url,
-                              type='group',
-                              unique_name=room_obj.title
-                          )
+                record_participants_on_connect=True,
+                status_callback=rev_url,
+                type='group',
+                unique_name=room_obj.title
+            )
         except Exception as ex:
             print(ex)
 
     if room is not None:
         room = {
             'sid': room.sid,
-            'type':room.type,
-            'status':room.status,
-            'unique_name':room.unique_name,
-            'duration':room.duration,
+            'type': room.type,
+            'status': room.status,
+            'unique_name': room.unique_name,
+            'duration': room.duration,
             'end_time': room.end_time,
             'url': room.url,
             'links': room.links
@@ -131,6 +135,7 @@ def create_room(request):
 
     return JsonResponse(room, safe=False)
 
+
 @login_required
 def complete_room(request):
 
@@ -139,8 +144,8 @@ def complete_room(request):
     room_obj = VideoRoom.objects.get(id=request.GET.get('id'))
 
     rooms = client.video.rooms.list(unique_name=room_obj.title, limit=1)
-    
-    room=None
+
+    room = None
 
     for record in rooms:
         room = record.update(status='completed')
@@ -148,10 +153,10 @@ def complete_room(request):
     if room is not None:
         room = {
             'sid': room.sid,
-            'type':room.type,
-            'status':room.status,
-            'unique_name':room.unique_name,
-            'duration':room.duration,
+            'type': room.type,
+            'status': room.status,
+            'unique_name': room.unique_name,
+            'duration': room.duration,
             'end_time': room.end_time.strftime("%m/%d/%Y, %H:%M:%S") if room.end_time is not None else None,
             'url': room.url,
             'links': room.links
@@ -187,12 +192,12 @@ def create_video_token(request):
             idn = idn + "__std"
 
         token = AccessToken(account_sid, api_key_sid,
-                        api_key_secret, identity=idn)
-        
+                            api_key_secret, identity=idn)
+
         room = client.video.rooms(str(data['room_sid'])).fetch()
-        
+
         token.add_grant(VideoGrant(room=room.sid))
-        
+
         d = {'token': token.to_jwt().decode()}
-        
+
         return JsonResponse(d)
