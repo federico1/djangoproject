@@ -47,14 +47,20 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
     model = Course
     template_name = 'students/course/detail.html'
 
+
     def get_queryset(self):
+        
         qs = super(StudentCourseDetailView, self).get_queryset()
-        return qs.filter(students__in=[self.request.user])
+        qs = qs.filter(students__in=[self.request.user])
+
+        return qs
 
     def get_context_data(self, **kwargs):
 
         context = super(StudentCourseDetailView,
                         self).get_context_data(**kwargs)
+       
+
         course = self.get_object()
 
         context['prev_completed'] = True
@@ -368,3 +374,18 @@ def quiz_reset(request, pk):
                 return HttpResponse(0) 
     except Exception as ex:
         return HttpResponse(0)
+
+
+@login_required
+@student_required
+def quick_course_enrol(request, pk):
+    course = get_object_or_404(Course, pk=pk)
+
+    if course:
+        enrolled = request.user.courses_joined.filter(id = course.id).count()
+        if enrolled > 0:
+            rev_url = reverse('student_course_detail', args=[course.id])
+            return redirect(rev_url)
+        
+        rev_url = reverse('course_detail', args=[course.slug])
+        return redirect(rev_url)

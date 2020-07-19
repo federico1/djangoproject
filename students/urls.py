@@ -17,6 +17,7 @@ urlpatterns = [
   path('student/quiz/result/<int:pk>/', students.quiz_result, name = 'quiz_result'),
   path('quiz/reset/<int:pk>/', students.quiz_reset, name = 'quiz_reset'),
   path('student/recommended-courses/', students.student_recommendation_list, name = 'student_recommendation_list'),
+  path('enroll-course-quick/<int:pk>/', students.quick_course_enrol, name = 'quick_enroll'),
 
   path('register/teacher/', teachers.TeacherRegistrationView.as_view(), name = 'teacher_registration'),
   path('quiz/', teachers.TeacherQuizListView.as_view(), name = 'teacher_quiz_change_list'),

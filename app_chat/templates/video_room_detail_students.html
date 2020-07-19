@@ -32,6 +32,21 @@
     <a href="{% url 'video_rooms' %}" class="btn btn-primary" id="btn-exit">
         << Close & return </a>
 
+            <div class="enroll-panel">
+                <button type="button" class="btn btn-primary" data-container="body" id="btn-enroll">
+                    <i class="fa fa-arrow-up" aria-hidden="true"></i> Related Courses </button>
+
+                <div class="list-group">
+                    {% for course in courses %}
+                    <a href="{% url 'quick_enroll' course.course_id %}" class="list-group-item list-group-item-action">
+                        <small>{{course.course}}</small>
+                    </a>
+                    {% endfor %}
+                   
+                </div>
+
+            </div>
+
             <div id="me-vid"></div>
             <div id="local" class="embed-responsive embed-responsive-21by9">
 
@@ -151,6 +166,21 @@
         right: 30px;
         bottom: 20px;
 
+    }
+
+    .enroll-panel {
+        position: absolute;
+        z-index: 99;
+        left: 30px;
+        bottom: 20px;
+
+    }
+
+    .enroll-panel .list-group {
+        position: absolute;
+        bottom: 40px;
+        width: 260px;
+        display: none;
     }
 </style>
 
@@ -322,27 +352,27 @@
         };
 
         var addLog = function (id) {
-                var data = {
-                    room: '{{object.id}}',
-                    participant:'{{request.user.id}}'
-                };
-
-                $.ajax({
-                    type: "POST",
-                    url: "/api/video-participantslog/",
-                    data: JSON.stringify(data),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    beforeSend: function (xhr, settings) {
-                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                    },
-                    success: function (response) {
-                        console.log(response)
-                    },
-                    failure: function (errMsg) {
-                    }
-                });
+            var data = {
+                room: '{{object.id}}',
+                participant: '{{request.user.id}}'
             };
+
+            $.ajax({
+                type: "POST",
+                url: "/api/video-participantslog/",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                },
+                success: function (response) {
+                    console.log(response)
+                },
+                failure: function (errMsg) {
+                }
+            });
+        };
 
         var events = function () {
 
@@ -385,10 +415,15 @@
                 $("#pcontainer").empty();
             });
 
+            $("#btn-enroll").click(function () {
+                $(".list-group").toggle();
+            });
+
+
             var width = $(window).width() - 30;
             var height = $(window).height() - $(".navbar").eq(0).outerHeight() - 10;
 
-            
+
         };
 
         events();

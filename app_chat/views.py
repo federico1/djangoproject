@@ -9,7 +9,7 @@ from django.views.generic.list import ListView
 
 from students.decorators import teacher_required
 
-from .models import Conversation, VideoRoom, VideoRoomLog, VideoParticipant
+from .models import Conversation, VideoRoom, VideoRoomLog, VideoParticipant, VideoCourses
 
 from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import VideoGrant
@@ -62,7 +62,11 @@ class VideoRoomDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(VideoRoomDetailView,
                         self).get_context_data(**kwargs)
+
+        context['courses'] = VideoCourses.objects.filter(room=self.get_object())
+
         return context
+
 
     def get_template_names(self):
         return ['video_room_detail.html'] if self.request.user.is_teacher == True else ['video_room_detail_students.html']
