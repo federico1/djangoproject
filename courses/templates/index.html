@@ -1,0 +1,98 @@
+{% extends "app_base.html" %}
+{% load staticfiles %}
+
+{% block title %}
+Online Courses - Learn Anything, On Your Schedule | EDUCA
+{% endblock %}
+
+{% block content %}
+<section class="hero-area bg-img bg-overlay-2by5" style='background-image: url("{% static "/images/bg1.jpg" %}");'>
+    <div class="container h-100">
+        <div class="row h-100 align-items-center">
+            <div class="col-12">
+                <div class="hero-content text-center">
+                    <h2>Let's Study Together</h2>
+                    <a href="{% url 'courses_list' %}" class="btn clever-btn">Browse Courses</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="popular-courses-area section-padding-100-0"
+    style="background-image: url({% static "/images/texture.png" %});">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-heading">
+                    <h3>Latest Online Courses</h3>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="coursesList">
+
+
+        </div>
+    </div>
+</section>
+{% verbatim %}
+<script type="text/x-handlebars-template" id='courseItemTemplate'>
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="single-popular-course mb-100 wow fadeInUp" data-wow-delay="250ms">
+
+            <div class="course-content">
+                <strong>
+                    {{title}}
+                </strong>
+                <div class="meta d-flex align-items-center">
+                    <span><i class="fa fa-circle" aria-hidden="true"></i></span>
+                    <a href="/course/subject/{{subject.slug}}">{{subject.title}}</a>
+                </div>
+                <p> Instructor: {{#ownerName}}{{owner}}{{/ownerName}}  {{owner.first_name}} {{owner.last_name}}</p>
+                <p> {{total_modules}} Modules.</p>
+            </div>
+
+            <div class="seat-rating-fee d-flex justify-content-between">
+                <div class="seat-rating h-100 d-flex align-items-center">
+                </div>
+                <div class="course-fee h-100">
+                    <a href="/course/{{slug}}" class="free">View Course</a>
+                </div>
+            </div>
+        </div>
+    </div>
+ </script>
+{% endverbatim %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+    Handlebars.registerHelper("ownerName", function (options) {
+        if(this.owner.first_name) {
+            return new Handlebars.SafeString(this.owner.first_name+ ' ' + this.owner.last_name); 
+        }
+        return new Handlebars.SafeString(this.owner.username); 
+    });
+
+    $(document).ready(function () {
+        getLatestCourses();
+    });
+
+    function getLatestCourses() {
+        $.get('/api/courses/?format=json&limit=3', {}, function (response) {
+
+            $("#coursesList").empty();
+
+            $(response).each(function (index, item) {
+
+                var source = document.getElementById("courseItemTemplate").innerHTML;
+                var template = Handlebars.compile(source);
+
+                $("#coursesList").append(template(item));
+
+            });
+        });
+    };
+</script>
+{% endblock %}

@@ -15,7 +15,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-from courses.views import CourseListView
+from courses.views import CourseListView, IndexView
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
@@ -27,13 +27,13 @@ urlpatterns = [
     path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('admin/', admin.site.urls),
     path('course/', include('courses.urls')),
-    path('', CourseListView.as_view(), name='course_list'),
+    path('courses', CourseListView.as_view(), name='courses_list'),
+    path('', IndexView.as_view(), name='course_list'),
     path('students/', include('students.urls')),
     path('teachers/', include('app_teachers.urls')),
     path('quiz/', include('app_quiz.urls')),
     path('communicate/', include('app_chat.urls')),
     url(r'api/', include('app_api.urls')),
-    #path('api/', include('courses.api.urls', namespace='api')),
 ]
 
 if settings.DEBUG:

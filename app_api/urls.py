@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 from django.urls import path
 from rest_framework import routers
 from . import views
-
+from .more_views import course_views
 
 router = routers.DefaultRouter()
 #router.register('conversations', views.ConversationDetailView)
@@ -32,4 +32,9 @@ urlpatterns = [
     path('video-courses/', views.VideoCoursesView.as_view()),
     path('video-courses/<int:pk>/', views.VideoCoursesView.as_view()),
 
+    path('subjects/', course_views.SubjectDetailView.as_view()),
+    path('subjects/<int:pk>/', course_views.SubjectDetailView.as_view()),
+
+    path('courses/', course_views.CourseDetailView.as_view()),
+    path('courses/<int:pk>/', course_views.CourseDetailView.as_view()),
 ]

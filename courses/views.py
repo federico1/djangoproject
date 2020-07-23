@@ -198,16 +198,24 @@ class HomePage(generic.TemplateView):
 #         return self.render_json_response({'saved': 'OK'})
 
 
+class IndexView(TemplateResponseMixin, View):
+    template_name = 'index.html'
+
+    def get(self, request):
+        return self.render_to_response({})
+
 class CourseListView(TemplateResponseMixin, View):
     model = Course
     template_name = 'courses/course/list.html'
 
     def get(self, request, subject=None):
         subjects = cache.get('all_subjects')
+
         if not subjects:
             subjects = Subject.objects.annotate(
                            total_courses=Count('courses'))
             cache.set('all_subjects', subjects)
+        
         all_courses = Course.objects.annotate(
                                    total_modules=Count('modules'))
         if subject:
@@ -222,6 +230,11 @@ class CourseListView(TemplateResponseMixin, View):
             if not courses:
                 courses = all_courses
                 cache.set('all_courses', courses)
+        
+        if request.GET.get('q') is not None:
+            print(str(request.GET.get('q')))
+            courses = all_courses.filter(title__icontains=str(request.GET.get('q')))
+
         return self.render_to_response({'subjects': subjects,
                                         'subject': subject,
                                         'courses': courses})
