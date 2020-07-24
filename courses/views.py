@@ -11,11 +11,13 @@ from django.views.generic.base import TemplateResponseMixin, View
 from django.forms.models import modelform_factory
 from django.apps import apps
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
-from django.db.models import Count
+from django.db.models import Count, Q
 from .models import Subject, Course, Module, Content
 from .forms import ModuleFormSet
 from students.forms import CourseEnrollForm
 from django.core.cache import cache
+
+from students.models import User
 
 class HomePage(generic.TemplateView):
     template_name = "home.html"
@@ -232,12 +234,18 @@ class CourseListView(TemplateResponseMixin, View):
                 cache.set('all_courses', courses)
         
         if request.GET.get('q') is not None:
-            print(str(request.GET.get('q')))
             courses = all_courses.filter(title__icontains=str(request.GET.get('q')))
 
+        if request.GET.get('teacher') is not None:
+            courses = all_courses.filter(owner=int(request.GET.get('teacher')))
+
+        instructors = User.objects.annotate(
+                           total_courses=Count('courses_created')).filter(total_courses__gt=0)
+            
         return self.render_to_response({'subjects': subjects,
                                         'subject': subject,
-                                        'courses': courses})
+                                        'courses': courses,
+                                        'instructors':instructors})
 
 
 class CourseDetailView(DetailView):

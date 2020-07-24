@@ -14,12 +14,49 @@ All courses
 
     <div class="row">
         <div class="col-md-3">
-            <nav id="sidebar" class="sidebar-wrapper">
+            <div class="list-group mt-2">
+                <a href="{% url "courses_list" %}" class="list-group-item list-group-item-secondary">
+                 All 
+                </a>
+
+                {% for s in subjects %}
+                    <a class="list-group-item list-group-item-action {% if subject == s %} list-group-item-success {% endif %}"
+                        href="{% url "course_list_subject" s.slug %}">
+                        <span>{{ s.title }}</span>
+                        <span class="badge badge-pill badge-primary">{{ s.total_courses }}</span>
+                    </a>
+                {% endfor %}
+
+              </div>
+
+              <div class="list-group mt-2">
+                <a href="{% url "courses_list" %}" class="list-group-item list-group-item-secondary">
+                 All 
+                </a>
+
+                {% for s in instructors %}
+                    <a class="list-group-item list-group-item-action" href="{% url "courses_list" %}?teacher={{s.id}}">
+                        <span>
+                            {% if s.first_name %}
+                            {{s.first_name}} {{s.last_name}}
+                            {%else%}
+                            {{ s.username }}
+                            {% endif %}
+                           
+                        </span>
+                        <span class="badge badge-pill badge-primary">{{ s.total_courses }}</span>
+                    </a>
+                {% endfor %}
+
+              </div>
+
+         
+            <!-- <nav id="sidebar" class="sidebar-wrapper">
                 <div class="sidebar-content">
                     <div class="sidebar-brand">
                         <a href="{% url "courses_list" %}">All </a>
                     </div>
-                    <!-- sidebar-search  -->
+                  
                     <div class="sidebar-menu">
                         <ul>
 
@@ -32,37 +69,10 @@ All courses
                                 </a>
                             </li>
                             {% endfor %}
-
-                            <!--               
-                            <li class="sidebar-dropdown">
-                                <a href="#">
-                                    <span>E-commerce</span>
-                                    <span class="badge badge-pill badge-primary">3</span>
-                                </a>
-                                <div class="sidebar-submenu">
-                                    <ul>
-                                        <li>
-                                            <a href="#">Products
-        
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Orders</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Credit cart</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li> -->
-
-
                         </ul>
                     </div>
-                    <!-- sidebar-menu  -->
                 </div>
-                <!-- sidebar-content  -->
-            </nav>
+            </nav>  -->
         </div>
         <div class="col-md-9">
             <main class="page-content">
