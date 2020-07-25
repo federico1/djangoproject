@@ -1,0 +1,263 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Student{% block title %}{% endblock %}</title>
+    <link href="{% static "/css/base.css" %}" rel="stylesheet">
+    <link href="{% static "/css/style.css" %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    </link>
+    <style>
+        .notification {
+            position: relative !important;
+        }
+
+        .notification .dropdown-list {
+            padding: 0;
+            max-height: 329px;
+            overflow-y: auto;
+        }
+
+        .notification .dropdown-header {
+            background-color: #4e73df;
+            border: 1px solid #4e73df;
+            padding-top: .75rem;
+            padding-bottom: .75rem;
+            color: #fff;
+            font-weight: 800;
+            font-size: .65rem;
+        }
+
+        .notification .dropdown-item {
+
+            padding-top: .5rem;
+            padding-bottom: .5rem;
+            border-left: 1px solid #e3e6f0;
+            border-right: 1px solid #e3e6f0;
+            border-bottom: 1px solid #e3e6f0;
+            line-height: 1.3rem;
+            height: auto;
+        }
+
+        .notification .icon-circle {
+
+            height: 1.0rem;
+            width: 1.0rem;
+            border-radius: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .notification .text-gray-500 {
+            color: #b7b9cc !important;
+        }
+
+        .notification .font-weight-bold {
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- ##### Header Area Start ##### -->
+    <header class="header-area">
+
+        <!-- Navbar Area -->
+        <div class="clever-main-menu">
+            <div class="classy-nav-container breakpoint-off">
+                <!-- Menu -->
+                <nav class="classy-navbar justify-content-between" id="cleverNav">
+
+                    <!-- Logo -->
+                    <a class="nav-brand" href="/"><img src="{% static "/images/logo.png" %}" alt=""></a>
+
+                    <!-- Navbar Toggler -->
+                    <div class="classy-navbar-toggler">
+                        <span class="navbarToggler"><span></span><span></span><span></span></span>
+                    </div>
+
+                    <!-- Menu -->
+                    <div class="classy-menu">
+
+                        <!-- Close Button -->
+                        <div class="classycloseIcon">
+                            <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                        </div>
+
+                        <!-- Nav Start -->
+                        <div class="classynav">
+                            <ul>
+                                <li><a href="/">Home</a></li>
+                                <li><a href="{% url "live_classes" %}">Live Courses</a></li>
+
+                                {% if request.user.is_authenticated and request.user.is_student == True %}
+                                <li><a href="{% url "student_course_list" %}""\>My Courses</a></li>
+                                <li><a href=" {% url "taken_quiz_list" %}""\>My Quiz</a></li>
+                                <li><a href="{% url "messages" %}">Messages</a></li>
+                                <li><a href="{% url "video_rooms" %}""\>Conferences</a></li>
+                                {% endif %}
+                                <li class=" nav-item notification dropdown ml-3">
+                                        <a class="nav-link" data-toggle="dropdown" href="#">
+                                            <span class="badge badge-danger badge-counter">0+</span>
+                                            <i class="fa fa-lg fa-bell-o text-dark"></i></a>
+                                        <div class="dropdown-list dropdown-menu dropdown-menu-right"
+                                            aria-labelledby="alertsDropdown">
+                                            <h6 class="dropdown-header">
+                                                Alerts
+                                            </h6>
+
+                                            <div id="pending-notify-list"></div>
+                                        </div>
+
+                                </li>
+
+                            </ul>
+
+                            <!-- Search Button
+                            <div class="search-area">
+                                <form action="#" method="post">
+                                    <input type="search" name="search" id="search" placeholder="Search">
+                                    <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                </form>
+                            </div> -->
+
+                            {% if request.user.is_authenticated %}
+
+                            <div class="login-state d-flex align-items-center">
+                                <div class="user-name">
+                                    <div class="dropdown">
+                                        <a class="dropdown-toggle" href="#" role="button" id="userName"
+                                            data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">{{ request.user }}</a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userName">
+                                            <a class="dropdown-item" href="{% url "logout" %}">Sign out</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+                            {% else %}
+                            <div class="register-login-area">
+                                <!-- <a href="#" class="btn">Register</a> -->
+                                <a href="{% url "login" %}" class="btn active">Sign in</a>
+                                <a href="{% url "student_registration" %}" class="btn active">Register</a>
+                            </div>
+                            {% endif %}
+
+                            <!-- Register / Login -->
+
+
+                        </div>
+                        <!-- Nav End -->
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <!-- ##### Header Area End ##### -->
+
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    {% verbatim %}
+    <script type="text/x-handlebars-template" id='notificationItemTemplate'>
+    <a class="dropdown-item d-flex align-items-center" href="{{action_target}}">
+        <div class="mr-3">
+            <div class="icon-circle bg-primary">
+                <i class="fa fa-exclamation text-white"></i>
+            </div>
+        </div>
+        <div>
+            <div class="small text-gray-500">{{#dateOnly}}  {{created}} {{/dateOnly}}</div>
+            <span class="font-weight-bold">{{title}}</span>
+        </div>
+    </a>
+</script>
+    {% endverbatim %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js"
+        integrity="sha256-5oApc/wMda1ntIEK4qoWJ4YItnV4fBHMwywunj8gPqc=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
+
+    <script src="//media.twiliocdn.com/sdk/js/video/releases/2.4.0/twilio-video.min.js"></script>
+
+    {% block scripts %}
+    {% endblock %}
+    <script>
+        $(document).ready(function () {
+            {% block domready %}
+            {% endblock %}
+        });
+
+        Handlebars.registerHelper("dateOnly", function (options) {
+            var data = options.fn(this);
+
+            try {
+                var date = moment($.trim(data)).format('MMMM, DD, YYYY');
+                return new Handlebars.SafeString(date);
+
+            } catch (e) {
+
+            }
+
+            return options.fn(this);
+        });
+
+        var pendingNotifyList = [];
+
+        var getPendingNotifications = function () {
+
+            $.get('/api/notifications/?format=json', { status: 'pending' }, function (response) {
+                pendingNotifyList = response;
+
+                $(".notification .badge-counter").html('+' + pendingNotifyList.length);
+
+                $("#pending-notify-list").empty();
+
+                $(pendingNotifyList).each(function (index, item) {
+
+                    var source = document.getElementById("notificationItemTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+
+                    $("#pending-notify-list").append(template(item));
+                });
+            });
+
+        };
+
+        var poolingNotifications = function () {
+            setInterval(function () {
+                getPendingNotifications();
+            }, 5000);
+        };
+
+        $(document).ready(function () {
+            getPendingNotifications();
+            poolingNotifications();
+        });
+
+    </script>
+</body>
+
+</html>
