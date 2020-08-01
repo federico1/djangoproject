@@ -11,6 +11,7 @@
   <link href="{% static "/pickadate/jquery.datetimepicker.min.css" %}" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
   </link>
+  <link rel="icon" type="image/png" sizes="192x192" href="{% static "/images/apple-icon.png" %}">
   <style>
 
   </style>
@@ -32,7 +33,7 @@
           Back to Site
         </a>
       </li>
-      
+
         {% if request.user.is_authenticated and request.user.is_teacher == True %}
         <li class="nav-item">
           <a class="nav-link text-dark" href="{% url "manage_course_list" %}">My Courses</a></li>

@@ -16,6 +16,7 @@ from courses.models import Subject, Course, Module, Content
 from .forms import ModuleFormSet
 from students.forms import CourseEnrollForm
 from django.core.cache import cache
+from students.models import User
 
 
 class OwnerMixin(object):
@@ -195,4 +196,19 @@ class ContentOrderView(CsrfExemptMixin,
 
 class TeacherHomeView(generic.TemplateView):
     template_name = 'teacher_home.html'
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super(TeacherHomeView, self).get_context_data(*args, **kwargs)
+		
+        context['courses_count'] = self.request.user.courses_created.count()
+        
+        users_id = list(self.request.user.courses_created.values_list('students',
+                                                          flat=True))
+        students_count = User.objects.filter(id__in=users_id).count()
+
+        context['students_count'] = students_count;
+
+        return context
+
+    
 
