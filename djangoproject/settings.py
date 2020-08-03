@@ -47,7 +47,7 @@ DATABASES = {
 }
 
 
-ALLOWED_HOSTS = ['nyc-cst.com','18.191.255.165','127.0.0.1', '18.219.91.250', 'nullstrings.com']
+ALLOWED_HOSTS = ['nyc-cst.com','18.191.255.165','127.0.0.1', '18.219.91.250', 'nullstrings.com', 'construction-safety-nyc.com']
 
 #'18.221.173.7','127.0.0.1:8000'
 
