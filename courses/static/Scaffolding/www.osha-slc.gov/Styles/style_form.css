@@ -1,0 +1,55 @@
+/* form rules */
+
+button {
+	background-color: #AAAAAA;
+	color: #000099;
+	margin: 0px 0px 0px 0px;
+	}
+
+fieldset {
+	color: #000000;
+	border-color: #000000;
+	border-width: thin thin thin thin;
+	}
+
+fieldset.inner {
+	color: #000000;
+	border-color: #000000;
+	border-width: thin thin thin thin;
+	margin: 5px 10px 10px 10px;
+	}
+
+legend {
+	color: #000000;
+	}
+
+input {
+	background-color: #AAAAAA;
+	color: #000099;
+	margin: 0px 0px 0px 0px;
+	}
+option {
+	background-color: #AAAAAA;
+	color: #000099;
+	margin: 0px 0px 0px 0px;
+	}
+
+select {
+	background-color: #AAAAAA;
+	color: #000099;
+	margin: 0px 0px 0px 0px;
+	}
+
+textarea {
+	background-color: #AAAAAA;
+	color: #000099;
+	margin: 0px 0px 0px 0px;
+	}
+
+
+fieldset.error {
+	font-size: large;
+	color: #F40000;
+	border-color: #FF0000;
+	border-width: thin medium thin medium;
+	}
