@@ -59,7 +59,8 @@
 
                                         {% if m.quiz != None and m.quiz_id in taken_quizzes %}
                                         <li>
-                                            <a class="complete" href="{% url 'student_course_detail_module' object.id m.id %}?content={{m.quiz_id}}&type=quiz">  
+                                            <a class="complete"
+                                                href="{% url 'student_course_detail_module' object.id m.id %}?content={{m.quiz_id}}&type=quiz">
                                                 <i class="fa fa-question-circle-o"></i>
                                                 Quiz </a>
                                         </li>
@@ -208,7 +209,14 @@
 {% endblock %}
 
 {% block scripts %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"
+    integrity="sha512-4ze/a9/4jqu+tX9dfOqJYSvyYd5M6qum/3HpCLr+/Jqf0whc37VUbkpNGHR7/8pSnCFw47T1fmIpwBV7UySh3g=="
+    crossorigin="anonymous"></script>
+
 <script>
+
+
     $(document).ready(function () {
 
         $(".sidebar-dropdown > a").click(function () {
@@ -233,6 +241,8 @@
         setInterval(function () {
             videoPlayersState(false);
         }, 4000);
+
+        embedFile();
 
     });
 
@@ -327,5 +337,37 @@
         localStorage.setItem("userVideos", JSON.stringify(parsedData));
     };
 
+    function embedFile() {
+        if ($(".file-item").length > 0) {
+            var href = $(".file-item").eq(0).attr('href');
+
+            if (href) {
+                if (href.toLowerCase().indexOf(".png") >= 0) {
+
+                    var img = $("<img />", { src: href });
+
+                    $(".file-item").eq(0).replaceWith(img);
+                } else   if (href.toLowerCase().indexOf(".pdf") >= 0) {
+                    
+                    var pdfDiv = $("<div />", { id: 'pdfViewer' });
+
+                    pdfDiv.css({
+                        width:'100%',
+                        'min-height':600
+                    });
+
+                    $(".file-item").eq(0).replaceWith(pdfDiv);
+
+                    var options = {
+    height: "500px",
+    pdfOpenParams: { view: 'FitV', page: '1' }
+};
+
+                    PDFObject.embed(href, "#pdfViewer", options);
+                }
+            }
+        }
+
+    };
 </script>
 {% endblock %}
