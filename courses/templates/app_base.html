@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>{% block title %}NYC Construction Safety Tranining Llc{% endblock %}</title>
-    <link rel="icon" type="image/png" sizes="192x192" href="{% static "/images/apple-icon.png" %}">
+    <title>{% block title %}  {% endblock %}</title>
+    <link rel="icon" type="image/png" href="{% static "/images/fav2.png" %}">
     <link href="{% static "/css/base.css" %}" rel="stylesheet">
     <link href="{% static "/css/style.css" %}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -43,7 +43,9 @@
                 <nav class="classy-navbar justify-content-between" id="cleverNav">
 
                     <!-- Logo -->
-                    <a class="nav-brand" href="/"><img src="{% static "/images/logo2.png" %}" style="height: 39px;"
+                    <a class="nav-brand" href="/">
+            
+                        <img src="{% static "/images/logo3.png" %}" title="NYC CONSTRUCTION SAFETY TRAINING" style="height: 39px;"
                             alt=""></a>
 
                     <!-- Navbar Toggler -->
@@ -129,7 +131,7 @@
                             <div class="register-login-area">
                                 <!-- <a href="#" class="btn">Register</a> -->
                                 <a href="{% url "login" %}" class="btn active">Sign in</a>
-                                <a data-toggle="modal" data-target="#exampleModal" href="void(0);"
+                                <a data-toggle1="modal" data-target1="#exampleModal1" href="{% url "student_registration" %}"
                                     class="btn">Register</a>
                             </div>
                             {% endif %}

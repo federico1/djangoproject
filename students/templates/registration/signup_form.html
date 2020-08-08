@@ -1,11 +1,14 @@
-{% extends "student_base.html" %}
+{% extends "app_base.html" %}
 {% load i18n %}
+
    {% block title %}
        {% trans 'Sign up as' %} {{ user_type }}
    {% endblock %}
+
    {% block content %}
+   <h1>{% trans 'Sign up ' %}</h1>
    <div class="container">
-       <h1>{% trans 'Sign up ' %}</h1>
+      
        <div class="signup">
            <p>{% trans "Enter your details to create an account as" %} {{ user_type }}</p>
            <div class="signup-form">

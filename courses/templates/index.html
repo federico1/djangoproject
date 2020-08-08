@@ -2,16 +2,17 @@
 {% load staticfiles %}
 
 {% block title %}
-Online Courses - Learn Anything, On Your Schedule | EDUCA
+Online Courses - NYC CONSTRUCTION SAFETY TRAINING 
 {% endblock %}
 
 {% block content %}
+
 <section class="hero-area bg-img bg-overlay-2by5" style='background-image: url("{% static "/images/bg1.jpg" %}");'>
     <div class="container h-100">
         <div class="row h-100 align-items-center">
             <div class="col-12">
                 <div class="hero-content text-center">
-                    <h2>Let's Study Together</h2>
+                    <h2>NYC SST COURSES</h2>
                     <a href="{% url 'courses_list' %}" class="btn clever-btn">Browse Courses</a>
                 </div>
             </div>
@@ -36,6 +37,7 @@ Online Courses - Learn Anything, On Your Schedule | EDUCA
     </div>
 </section>
 {% verbatim %}
+
 <script type="text/x-handlebars-template" id='courseItemTemplate'>
     <div class="col-12 col-md-6 col-lg-4">
         <div class="single-popular-course mb-100 wow fadeInUp" data-wow-delay="250ms">
