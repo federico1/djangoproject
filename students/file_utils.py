@@ -14,8 +14,10 @@ def uploaded_file(file):
 
     directory = os.path.join(settings.MEDIA_ROOT, 'uploads', file_name)
 
-    #if handle_uploaded_file(directory, file) <= 0:
-     #   file_name = 0
+    return handle_uploaded_file(directory, file)
+
+    # if handle_uploaded_file(directory, file) <= 0:
+    #     file_name = 0
 
     return os.path.join(settings.MEDIA_URL, 'uploads', file_name).replace("\\", "/")
 
@@ -26,5 +28,5 @@ def handle_uploaded_file(path, file):
             for chunk in file.chunks():
                 destination.write(chunk)
             return 1
-    except Exception:
-        return 0
+    except Exception as ex:
+        return ex
