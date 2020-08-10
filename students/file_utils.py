@@ -14,8 +14,8 @@ def uploaded_file(file):
 
     directory = os.path.join(settings.MEDIA_ROOT, 'uploads', file_name)
 
-    if handle_uploaded_file(directory, file) <= 0:
-        file_name = 0
+    #if handle_uploaded_file(directory, file) <= 0:
+     #   file_name = 0
 
     return os.path.join(settings.MEDIA_URL, 'uploads', file_name).replace("\\", "/")
 

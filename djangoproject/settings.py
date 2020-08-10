@@ -105,9 +105,6 @@ TEMPLATES = [
 
 #WSGI_APPLICATION = 'wsgi.application'
 
-
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/dev/topics/i18n/
 
