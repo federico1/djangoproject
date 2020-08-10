@@ -9,7 +9,7 @@ import hashlib
 
 def uploaded_file(file):
     
-    rf = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(20))
+    rf = time.strftime("%Y%m%d-%H%M%S")
     file_name = rf + "-" + file.name
 
     directory = os.path.join(settings.MEDIA_ROOT, 'uploads', file_name)
