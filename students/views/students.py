@@ -33,6 +33,7 @@ from students.decorators import student_required
 
 from courses.suggestions import update_clusters
 
+from students.file_utils import uploaded_file
 
 class StudentCourseListView(LoginRequiredMixin, ListView):
     model = Course
@@ -181,12 +182,16 @@ class StudentRegistrationView(CreateView):
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
+
         result = super(StudentRegistrationView, self).form_valid(form)
         cd = form.cleaned_data
+
         user = authenticate(username=cd['username'], password=cd['password1'])
+
         mail_admins("A new student user is sign up",
                     "check email on myelearning")
         login(self.request, user)
+
         return result
 
 
@@ -389,3 +394,17 @@ def quick_course_enrol(request, pk):
         
         rev_url = reverse('course_detail', args=[course.slug])
         return redirect(rev_url)
+
+
+def file_upload(request):
+
+    result = 0
+
+    if request.method == 'POST' and request.FILES['file']:
+        result = uploaded_file(request.FILES['file'])
+
+    return HttpResponse(result)
+
+
+
+

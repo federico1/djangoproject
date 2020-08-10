@@ -171,6 +171,12 @@ img {
   padding-bottom: 70px;
 }
 
+.section-padding-50 {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+
 /* Preloader */
 
 #preloader {
@@ -2640,7 +2646,7 @@ input:focus, textarea:focus {
 
 /* :: 14.0 Page Content */
 
-.page-content {
+.page-content, .page-content2 {
   position: relative;
   z-index: 1;
   padding: 40px;

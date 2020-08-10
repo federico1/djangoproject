@@ -1,38 +1,137 @@
 {% extends "app_base.html" %}
 {% load i18n %}
 
-   {% block title %}
-       {% trans 'Sign up as' %} {{ user_type }}
-   {% endblock %}
+{% block title %}
+{% trans 'Sign up as' %} {{ user_type }}
+{% endblock %}
 
-   {% block content %}
-   <h1>{% trans 'Sign up ' %}</h1>
-   <div class="container">
-      
-       <div class="signup">
-           <p>{% trans "Enter your details to create an account as" %} {{ user_type }}</p>
-           <div class="signup-form">
-               <form id="user_form" accept-charset="utf-8" action="" method="post" novalidate>
+{% block content %}
 
-                   {{ form.as_p }}
-                   {% csrf_token %}
+<div class="regular-page-area section-padding-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-content2">
+                    <h3 class="mb-2">Register <p>{% trans "Enter your details to create an account as" %}
+                            {{ user_type }}</p>
+                    </h3>
 
-                    <input type="submit" class="btn btn-primary" value="{% trans 'Create an account' %}" />
-                    
-               </form>
-           </div>
-         
-           <div class="clear">{% trans "Already an account ?" %} <a href="{% url 'login' %}">{% trans 'Log in' %}</a>.</div>
-       </div>
-   </div>
-   {% endblock %}
+                    <form class="form-horizontal" role="form" action="." method="post">
 
-   {% block scripts %}
+                        {% csrf_token %}
 
-   <script>
-       $(document).ready(function(){
-           $("p input[type='checkbox']").css('width', 'auto');
-       });
-   </script>
+                        {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                        {% endfor %}
 
-   {% endblock %}
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="row">
+                                    {% for field in form.visible_fields  %}
+
+                                    <div class="col-md-6 mb-2">
+                                        <div class="form-group">
+                                            <label style="float: none;" class="control-label"
+                                                for="id_{{ field.name }}">{{ field.label }}</label>
+
+                                            {{ field }}
+                                            <!-- <p class="help-text">{{ field.help_text }} </p> -->
+                                            {% if field.errors %}<small class="form-text text-danger">{{ field.label }}:
+                                                {{ field.errors|striptags }}</small>{% endif %}
+
+                                        </div>
+                                    </div>
+
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center mt-3">
+                                <img src="https://via.placeholder.com/200x200.png?text=.." id="prevImage" alt="image"
+                                    style="max-height: 200px;" class="img-thumbnail">
+
+                                <p class="mt-2">
+                                    <a href="javascript:;" id="btnAddImage" class="btn btn-primary btn-sm"
+                                        role="button">
+                                        Upload Image
+                                    </a>
+
+                                    <a href="javascript:;" id="btnRemoveImage" class="btn btn-danger btn-sm"
+                                        role="button">
+                                        Remove
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <input type="submit" class="btn btn-primary" value="{% trans 'Create an account' %}" />
+                            </div>
+
+                            <div class="col-md-6 text-right">
+                                <div class="clear" style="padding: 30px;">{% trans "Already an account ?" %} <a
+                                        href="{% url 'login' %}">{% trans 'Log in' %}</a>.</div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="fmFile" action="{% url 'upload-file' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="file" id="fu"><br>
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    $(document).ready(function () {
+        $("p input[type='checkbox']").css('width', 'auto');
+        $("form input").css('float', 'none');
+
+        $("#btnRemoveImage").click(function () {
+            $("#prevImage").attr('src', 'https://via.placeholder.com/200x200.png?text=..');
+            $("#id_image").val(null);
+        });
+
+        $("#btnAddImage").click(function () {
+            $("#fu").trigger('click');
+        });
+
+        $("#fu").change(function () {
+            $('#fmFile').submit();
+        });
+
+        $('#fmFile').ajaxForm({
+            beforeSend: function () {
+                // status.empty();
+                // var percentVal = '0%';
+                // bar.width(percentVal)
+                // percent.html(percentVal);
+            },
+            uploadProgress: function (event, position, total, percentComplete) {
+                // var percentVal = percentComplete + '%';
+                // bar.width(percentVal)
+                // percent.html(percentVal);
+            },
+            success: function (response) {
+                if (response != 0) {
+                    $("#prevImage").attr('src', response);
+                    $("#id_image").val(response);
+                }
+            },
+            complete: function (xhr) {
+            }
+        });
+
+    });
+</script>
+
+{% endblock %}

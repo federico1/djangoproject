@@ -6,7 +6,8 @@ from django.utils.html import escape, mark_safe
 class User(AbstractUser):
     is_student = models.BooleanField(default=False)
     is_teacher = models.BooleanField(default=False)
-
+    cell_number = models.CharField(max_length=20, null=True)
+    image = models.TextField(null=True, blank=True)
 
 class Tag(models.Model):
     name = models.CharField(max_length=30)

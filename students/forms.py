@@ -36,17 +36,30 @@ class TeacherSignupForm(UserCreationForm):
 
 class StudentSignupForm(UserCreationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+    first_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+    last_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+    cell_number = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+    image = forms.CharField(widget=forms.HiddenInput())
     password1 = forms.CharField(label=_('Password'), widget=forms.PasswordInput(attrs={'class':'form-control'}))
     password2 = forms.CharField(label=_('Password verification'), widget=forms.PasswordInput(attrs={'class':'form-control'}))
 
+    field_order = ['username', 'first_name', 'last_name', 'cell_number', 'image', 'password1', 'password2']
+
     class Meta(UserCreationForm.Meta):
         model = User
+        fields = ('username', 'first_name', 'last_name', 'cell_number', 'image', 'password1', 'password2', )
 
     @transaction.atomic
     def save(self, commit=True):
+
         user = super().save(commit=False)
+        
+        print(user)
+
         user.is_student = True
+        
         user.save()
+
         student = Student.objects.create(user=user)
     
         return user
