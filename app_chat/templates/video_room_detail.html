@@ -32,6 +32,10 @@
             <i class="fa fa-compress"></i>
         </button>
 
+        <button class="btn btn-info btn-sm" id="btn-media" title="Config Screen">
+            <i class="fa fa-settings"></i>
+        </button>
+
         <button class="btn btn-danger btn-sm" disabled id="btn-stop-video">
             <i class="fa fa-phone"></i>
         </button>
@@ -42,6 +46,59 @@
 
 </div>
 
+
+<div id="devicesModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Call Configurations</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="audo">Audio Input</label>
+                            <select id="audioinput" class="form-control form-control-sm">
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-primary">Apply (Audio Input)</button>
+                    </div>
+                   
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="audo">Video Input</label>
+                            <select id="videoinput" class="form-control form-control-sm">
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-info">Apply (Video Input)</button>
+                    </div>
+                   
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="audo">Audio Output</label>
+                            <select id="audiooutput" class="form-control form-control-sm">
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-success">Apply (Audio)</button>
+                    </div>
+                   
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 
 {% endblock %}
 
@@ -127,8 +184,11 @@
 
         function addLocalVideo() {
             Twilio.Video.createLocalVideoTrack().then(track => {
+                
                 videoTrack = track;
+
                 $("#local").append(videoTrack.attach());
+
                 $("#local video").css({
                     height: '100%'
                 });
@@ -173,8 +233,6 @@
 
                 var ds = { 'room_sid': room_object.sid };
 
-                console.log(room_object);
-
                 // get a token from the back end
                 fetch('/communicate/video-token/', {
                     method: 'POST',
@@ -183,7 +241,8 @@
                 }).then(res => res.json()).then(data => {
                     // join video call
                     return Twilio.Video.connect(data.token, {
-                        video: { height: $(window).height(), frameRate: 24, width: $(window).width() }
+                        video: { height: $(window).height(), frameRate: 24, width: $(window).width() },
+                        audio: true
                     });
                 }).then(_room => {
                     room = _room;
@@ -335,7 +394,7 @@
                     receiver: item.member.id,
                     status: 'pending',
                     title: 'The podcast is started from ({{object.title}})',
-                    is_deleted:0
+                    is_deleted: 0
                 };
 
                 $.ajax({
@@ -356,6 +415,76 @@
 
 
             });
+        };
+
+        var deviceSelections = {
+            audioinput: document.querySelector('select#audioinput'),
+            audiooutput: document.querySelector('select#audiooutput'),
+            videoinput: document.querySelector('select#videoinput')
+        };
+
+        var mediaSelection = {
+            ensureMediaPermissions: function () {
+                return navigator.mediaDevices.enumerateDevices().then(function (devices) {
+                    return devices.every(function (device) {
+                        return !(device.deviceId && device.label);
+                    });
+                }).then(function (shouldAskForMediaPermissions) {
+                    if (shouldAskForMediaPermissions) {
+                        return navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(function (mediaStream) {
+                            mediaStream.getTracks().forEach(function (track) {
+                                track.stop();
+                            });
+                        });
+                    }
+                });
+            },
+            getDeviceSelectionOptions: function () {
+                // before calling enumerateDevices, get media permissions (.getUserMedia)
+                // w/o media permissions, browsers do not return device Ids and/or labels.
+                return mediaSelection.ensureMediaPermissions().then(function () {
+                    return navigator.mediaDevices.enumerateDevices().then(function (deviceInfos) {
+                        var kinds = ['audioinput', 'audiooutput', 'videoinput'];
+                        return kinds.reduce(function (deviceSelectionOptions, kind) {
+                            deviceSelectionOptions[kind] = mediaSelection.getDevicesOfKind(deviceInfos, kind);
+                            return deviceSelectionOptions;
+                        }, {});
+                    });
+                });
+            },
+            getDevicesOfKind: function (deviceInfos, kind) {
+                return deviceInfos.filter(function (deviceInfo) {
+                    return deviceInfo.kind === kind;
+                });
+            },
+            updateDeviceSelectionOptions: function () {
+                return mediaSelection.getDeviceSelectionOptions()
+                    .then(function (deviceSelectionOptions) {
+
+                        ['audioinput', 'audiooutput', 'videoinput'].forEach(function (kind) {
+
+                            var kindDeviceInfos = deviceSelectionOptions[kind];
+                            var select = deviceSelections[kind];
+
+                            [].slice.call(select.children).forEach(function (option) {
+                                option.remove();
+                            });
+
+                            kindDeviceInfos.forEach(function (kindDeviceInfo) {
+
+
+                                var deviceId = kindDeviceInfo.deviceId;
+                                var label = kindDeviceInfo.label || 'Device [ id: '
+                                    + deviceId.substr(0, 5) + '... ]';
+
+                                var option = document.createElement('option');
+                                option.value = deviceId;
+                                option.appendChild(document.createTextNode(label));
+                                select.appendChild(option);
+                            });
+                        });
+                    });
+            }
         };
 
         var events = function () {
@@ -407,6 +536,11 @@
 
         getAddedMembers();
         events();
+
+       // var r = mediaSelection.updateDeviceSelectionOptions();
+
+       // $("#devicesModal").modal('show');
+
     });
 
 </script>
