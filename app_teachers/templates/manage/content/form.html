@@ -24,23 +24,56 @@ Add a new content
 
 
 <div class="container">
-    <div class="row">
-        <div class="col-md-5">
+ 
+        
          <form action="" method="post" enctype="multipart/form-data">
-             {{ form.as_p }}
-             {% csrf_token %}
+
+            {% csrf_token %}
+
+            <div class="row">
+                {% for field in form.visible_fields  %}
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label style="float: none;" class="control-label"
+                        for="id_{{ field.name }}">{{ field.label }}</label>
+
+                    {{ field }}
+                    <!-- <p class="help-text">{{ field.help_text }} </p> -->
+                    {% if field.errors %}<small class="form-text text-danger">{{ field.label }}:
+                        {{ field.errors|striptags }}</small>{% endif %}
+
+                </div>
+            </div>
+
+            {% endfor %}
+
+            </div>
+            
+             
              <p><button type="submit" class="btn btn-info mb-3" value="">Save Content</button></p>
          </form>
-        </div>
-     </div>
+
+  
 </div>
 {% endblock %}
 
+
+
+
+
 {% block scripts %}
+
+
+
 <script>
     $(document).ready(function () {
         $(".container input, select, textarea").addClass('form-control');
         $(".container textarea").css('height', 70);
+
+        if($("#id_content").length > 0) {
+           // $("#id_content").closest(".col-md-4").eq(0).removeClass('col-md-4').addClass('col-md-9')
+        }
 
     });
 </script>

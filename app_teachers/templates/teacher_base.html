@@ -11,6 +11,9 @@
   <link href="{% static "/pickadate/jquery.datetimepicker.min.css" %}" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
   </link>
+
+  <link href="{% static "/plugins/summernote/summernote.min.css" %}" rel="stylesheet">
+
   <link rel="icon" type="image/png" sizes="192x192" href="{% static "/images/apple-icon.png" %}">
   <style>
 
@@ -113,6 +116,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
+  <script src="https://unpkg.com/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
@@ -127,6 +131,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
 
   <script src="//media.twiliocdn.com/sdk/js/video/releases/2.4.0/twilio-video.min.js"></script>
+
+  <script src="{% static "/plugins/summernote/summernote.min.js" %}"></script>
 
   {% block scripts %}
   {% endblock %}
