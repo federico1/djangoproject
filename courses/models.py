@@ -97,8 +97,9 @@ class ItemBase(models.Model):
         return self.title
 
     def render(self):
+        
         return render_to_string('courses/content/{}.html'.format(
-           self._meta.model_name), {'item': self})
+           self._meta.model_name), { 'item': self })
 
 
 class Text(ItemBase):

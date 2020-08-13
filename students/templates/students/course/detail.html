@@ -97,7 +97,7 @@
 
                         <div class="col-md-12 mb-30">
                             <div class="about-course">
-                                {{object.overview}}
+                                {{object.overview|safe}}
                             </div>
                         </div>
 
@@ -141,6 +141,7 @@
                                 {% with item=content.item %}
 
                                 <h4>{{ item.title }}</h4>
+                                
                                 <div>
                                     {{ item.render }}
                                 </div>
