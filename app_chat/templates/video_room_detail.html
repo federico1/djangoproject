@@ -32,8 +32,8 @@
             <i class="fa fa-compress"></i>
         </button>
 
-        <button class="btn btn-info btn-sm" id="btn-media" title="Config Screen">
-            <i class="fa fa-settings"></i>
+        <button class="btn btn-primary btn-sm" id="btn-mute" title="Mute">
+            <i class="fa fa-microphone"></i>
         </button>
 
         <button class="btn btn-danger btn-sm" disabled id="btn-stop-video">
@@ -67,7 +67,7 @@
                         </div>
                         <button type="button" class="btn btn-sm btn-primary">Apply (Audio Input)</button>
                     </div>
-                   
+
                 </div>
 
                 <div class="row mt-2">
@@ -79,7 +79,7 @@
                         </div>
                         <button type="button" class="btn btn-sm btn-info">Apply (Video Input)</button>
                     </div>
-                   
+
                 </div>
 
                 <div class="row mt-2">
@@ -91,7 +91,7 @@
                         </div>
                         <button type="button" class="btn btn-sm btn-success">Apply (Audio)</button>
                     </div>
-                   
+
                 </div>
 
             </div>
@@ -166,6 +166,8 @@
 
 <script>
 
+    var room;
+
     $(document).ready(function () {
 
         const usernameInput = document.getElementById('username');
@@ -175,7 +177,7 @@
         const count = document.getElementById('count');
 
         var connected = false;
-        var room;
+
 
         var room_object;
         var videoTrack;
@@ -184,7 +186,7 @@
 
         function addLocalVideo() {
             Twilio.Video.createLocalVideoTrack().then(track => {
-                
+
                 videoTrack = track;
 
                 $("#local").append(videoTrack.attach());
@@ -246,6 +248,7 @@
                     });
                 }).then(_room => {
                     room = _room;
+
                     room.participants.forEach(participantConnected);
                     room.on('participantConnected', participantConnected);
                     room.on('participantDisconnected', participantDisconnected);
@@ -528,6 +531,36 @@
                 });
             });
 
+
+            $("#btn-mute").click(function () {
+                var title = $(this).attr('title');
+
+                if (!room) { return; }
+
+                if (title == 'Mute') {
+                    $(this).attr('title', 'Unmute');
+                    $(this).find("i").addClass('fa-microphone-slash').removeClass('fa-microphone');
+                    $(this).addClass('btn-danger').removeClass('btn-primary');
+
+                    room.localParticipant.audioTracks.forEach(function (audioTrack) {
+                         audioTrack.track.disable()
+                    });
+
+                } else {
+                    $(this).attr('title', 'Mute');
+                    $(this).find("i").addClass('fa-microphone').removeClass('fa-microphone-slash');
+                    $(this).addClass('btn-primary').removeClass('btn-danger');
+
+                    room.localParticipant.audioTracks.forEach(function (audioTrack) {
+                         audioTrack.track.enable()
+                    });
+                }
+
+                alert(title);
+
+            });
+
+
             var width = $(window).width() - 30;
             var height = $(window).height() - $(".navbar").eq(0).outerHeight() - 10;
 
@@ -535,12 +568,12 @@
         };
 
         getAddedMembers();
-        
+
         events();
 
-       // var r = mediaSelection.updateDeviceSelectionOptions();
+        // var r = mediaSelection.updateDeviceSelectionOptions();
 
-       // $("#devicesModal").modal('show');
+        // $("#devicesModal").modal('show');
 
     });
 
