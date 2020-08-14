@@ -20,23 +20,23 @@
     </div>
 
     <div id="controls">
-        <button class="btn btn-success btn-sm" title="Start Video" id="btn-start-video">
+        <button class="btn btn-success btn-lg mt-1" title="Start Video" id="btn-start-video">
             <i class="fa fa-video-camera "></i>
         </button>
 
-        <button class="btn btn-info btn-sm" id="btn-full-screen" title="Full Screen">
+        <button class="btn btn-info btn-lg mt-1" id="btn-full-screen" title="Full Screen">
             <i class="fa fa-arrows-alt"></i>
         </button>
 
-        <button class="btn btn-info btn-sm" id="btn-default-screen" title="Default Screen">
+        <button class="btn btn-info btn-lg mt-1" id="btn-default-screen" title="Default Screen">
             <i class="fa fa-compress"></i>
         </button>
 
-        <button class="btn btn-primary btn-sm" id="btn-mute" title="Mute">
+        <button class="btn btn-primary btn-lg mt-1" id="btn-mute" title="Mute">
             <i class="fa fa-microphone"></i>
         </button>
 
-        <button class="btn btn-danger btn-sm" disabled id="btn-stop-video">
+        <button class="btn btn-danger btn-lg mt-1" disabled id="btn-stop-video">
             <i class="fa fa-phone"></i>
         </button>
     </div>
@@ -531,7 +531,6 @@
                 });
             });
 
-
             $("#btn-mute").click(function () {
                 var title = $(this).attr('title');
 
@@ -556,10 +555,7 @@
                     });
                 }
 
-                alert(title);
-
             });
-
 
             var width = $(window).width() - 30;
             var height = $(window).height() - $(".navbar").eq(0).outerHeight() - 10;

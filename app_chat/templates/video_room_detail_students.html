@@ -24,6 +24,10 @@
             <i class="fa fa-compress"></i>
         </button>
 
+        <button class="btn btn-primary btn-sm" id="btn-mute" title="Mute">
+            <i class="fa fa-microphone"></i>
+        </button>
+
         <button class="btn btn-danger btn-sm" disabled id="btn-stop-video">
             <i class="fa fa-phone"></i>
         </button>
@@ -42,7 +46,7 @@
                         <small>{{course.course}}</small>
                     </a>
                     {% endfor %}
-                   
+
                 </div>
 
             </div>
@@ -186,6 +190,8 @@
 
 <script>
 
+    var room;
+
     $(document).ready(function () {
 
         const usernameInput = document.getElementById('username');
@@ -195,7 +201,6 @@
         const count = document.getElementById('count');
 
         var connected = false;
-        var room;
 
         var room_object;
         var videoTrack;
@@ -415,10 +420,37 @@
                 $("#pcontainer").empty();
             });
 
+
+            $("#btn-mute").click(function () {
+                var title = $(this).attr('title');
+
+                if (!room) { return; }
+
+                if (title == 'Mute') {
+                    $(this).attr('title', 'Unmute');
+                    $(this).find("i").addClass('fa-microphone-slash').removeClass('fa-microphone');
+                    $(this).addClass('btn-danger').removeClass('btn-primary');
+
+                    room.localParticipant.audioTracks.forEach(function (audioTrack) {
+                         audioTrack.track.disable()
+                    });
+
+                } else {
+                    $(this).attr('title', 'Mute');
+                    $(this).find("i").addClass('fa-microphone').removeClass('fa-microphone-slash');
+                    $(this).addClass('btn-primary').removeClass('btn-danger');
+
+                    room.localParticipant.audioTracks.forEach(function (audioTrack) {
+                         audioTrack.track.enable()
+                    });
+                }
+
+            });
+
+
             $("#btn-enroll").click(function () {
                 $(".list-group").toggle();
             });
-
 
             var width = $(window).width() - 30;
             var height = $(window).height() - $(".navbar").eq(0).outerHeight() - 10;
