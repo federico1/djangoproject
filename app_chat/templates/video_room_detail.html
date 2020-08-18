@@ -24,16 +24,20 @@
             <i class="fa fa-video-camera "></i>
         </button>
 
-        <button class="btn btn-info btn-lg mt-1" id="btn-full-screen" title="Full Screen">
+        <button class="btn btn-info btn-lg mt-1" disabled id="btn-full-screen" title="Full Screen">
             <i class="fa fa-arrows-alt"></i>
         </button>
 
-        <button class="btn btn-info btn-lg mt-1" id="btn-default-screen" title="Default Screen">
+        <button class="btn btn-info btn-lg mt-1" disabled id="btn-default-screen" title="Default Screen">
             <i class="fa fa-compress"></i>
         </button>
 
-        <button class="btn btn-primary btn-lg mt-1" id="btn-mute" title="Mute">
+        <button class="btn btn-primary btn-lg mt-1" disabled id="btn-mute" title="Mute">
             <i class="fa fa-microphone"></i>
+        </button>
+
+        <button class="btn btn-warning btn-lg mt-1" disabled id="btn-share" title="Share Screen">
+            <i class="fa fa-window-restore"></i>
         </button>
 
         <button class="btn btn-danger btn-lg mt-1" disabled id="btn-stop-video">
@@ -43,6 +47,11 @@
 
     <div id="room-info"></div>
 
+    <div id="screen-preview">
+        <button class="btn btn-warning btn-sm m-1" id="btn-stop-screen">
+            Stop Sharing
+        </button>
+    </div>
 
 </div>
 
@@ -162,6 +171,28 @@
         object-fit: contain;
         height: 100%;
     }
+
+    #screen-preview {
+        position: absolute;
+        top: 65px;
+        right: 11px;
+        width: 264px;
+        height: 200px;
+        border: 1px solid #ffdb2a;
+        vertical-align: middle;
+        display: none;
+    }
+
+    #screen-preview button {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        z-index: 9;
+    }
+
+    #screen-preview video {
+        width: 100%;
+    }
 </style>
 
 <script>
@@ -177,7 +208,6 @@
         const count = document.getElementById('count');
 
         var connected = false;
-
 
         var room_object;
         var videoTrack;
@@ -203,7 +233,7 @@
 
             addLocalVideo();
 
-            $("#btn-stop-video").attr('disabled', false);
+            $("#controls button").attr('disabled', false);
             $("#btn-start-video").attr('disabled', true);
 
             if (!connected) {
@@ -220,12 +250,20 @@
                 }).catch(function (err) {
                     toastr.error('Connection failed. Is the meeting started?', 'Warning!');
                     console.log(err);
+
+                    $("#controls button").attr('disabled', true);
+                    $("#btn-start-video").attr('disabled', false);
+
                 });
             }
             else {
                 //disconnect();
                 //button.innerHTML = 'Join call';
                 // connected = false;
+
+                $("#controls button").attr('disabled', true);
+                $("#btn-start-video").attr('disabled', false);
+
             }
         };
 
@@ -241,12 +279,31 @@
                     body: JSON.stringify(ds),
                     headers: { "X-CSRFToken": '{{ csrf_token }}' }
                 }).then(res => res.json()).then(data => {
-                    // join video call
+
                     return Twilio.Video.connect(data.token, {
-                        video: { height: $(window).height(), frameRate: 24, width: $(window).width() },
-                        audio: true
+                        //video: { height: $(window).height(), frameRate: 24, width: $(window).width() },
+                        audio: true,
+                        video: { height: 720, frameRate: 24, width: 1280 },
+                        bandwidthProfile: {
+                            video: {
+                                mode: 'presentation',
+                                maxTracks: 10,
+                                dominantSpeakerPriority: 'standard',
+                                renderDimensions: {
+                                    high: { height: 1080, width: 1920 },
+                                    standard: { height: 720, width: 1280 },
+                                    low: { height: 176, width: 144 }
+                                }
+                            }
+                        },
+                        dominantSpeaker: true,
+                        maxAudioBitrate: 16000, //For music remove this line
+                        preferredVideoCodecs: [{ codec: 'VP8', simulcast: true }],
+                        networkQuality: { local: 1, remote: 1 }
                     });
+
                 }).then(_room => {
+
                     room = _room;
 
                     room.participants.forEach(participantConnected);
@@ -329,6 +386,12 @@
             $("#local video").remove();
             connected = false;
             updateParticipantCount();
+
+            $("#controls button").attr('disabled', true);
+            $("#btn-start-video").attr('disabled', false);
+
+            if (screenTrack)
+                screenTrack.stop();
         };
 
         function startCall() {
@@ -490,6 +553,38 @@
             }
         };
 
+        function createScreenTrack(height, width) {
+
+            if (typeof navigator === 'undefined'
+                || !navigator.mediaDevices
+                || !navigator.mediaDevices.getDisplayMedia) {
+                return Promise.reject(new Error('getDisplayMedia is not supported'));
+            }
+            return navigator.mediaDevices.getDisplayMedia({
+                video: {
+                    height: height,
+                    width: width
+                }
+            }).then(function (stream) {
+                return new Twilio.Video.LocalVideoTrack(stream.getVideoTracks()[0], {
+                    name: 'screen'
+                });
+            });
+        }
+
+        function onScreenSharingStop() {
+
+            $("#screen-preview").find("video").remove();
+            $("#btn-share").attr('disabled', false);
+            $("#screen-preview").hide();
+
+            if (screenTrack) {
+                room.localParticipant.unpublishTrack(screenTrack);
+                screenTrack = null;
+            }
+
+        };
+
         var events = function () {
 
             var val = $("#hf-info").val();
@@ -542,7 +637,7 @@
                     $(this).addClass('btn-danger').removeClass('btn-primary');
 
                     room.localParticipant.audioTracks.forEach(function (audioTrack) {
-                         audioTrack.track.disable()
+                        audioTrack.track.disable()
                     });
 
                 } else {
@@ -551,10 +646,38 @@
                     $(this).addClass('btn-primary').removeClass('btn-danger');
 
                     room.localParticipant.audioTracks.forEach(function (audioTrack) {
-                         audioTrack.track.enable()
+                        audioTrack.track.enable()
                     });
                 }
 
+            });
+
+            $("#btn-share").click(function () {
+                var title = $(this).attr('title');
+
+                createScreenTrack($(window).width(), $(window).height())
+                    .then(function (stream) {
+
+                        screenTrack = stream;
+
+                        if (screenTrack) {
+                            room.localParticipant.publishTrack(screenTrack);
+
+                            $("#screen-preview").show();
+                            $("#screen-preview").append(screenTrack.attach());
+
+                            screenTrack.on('stopped', onScreenSharingStop);
+
+                            $("#btn-share").attr('disabled', true);
+                        }
+
+                    });
+
+            });
+
+            $("#btn-stop-screen").click(function () {
+                if (screenTrack)
+                    screenTrack.stop();
             });
 
             var width = $(window).width() - 30;

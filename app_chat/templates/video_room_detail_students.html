@@ -16,15 +16,15 @@
             <i class="fa fa-video-camera "></i>
         </button>
 
-        <button class="btn btn-info btn-lg" id="btn-full-screen" title="Full Screen">
+        <button class="btn btn-info btn-lg" disabled id="btn-full-screen" title="Full Screen">
             <i class="fa fa-arrows-alt"></i>
         </button>
 
-        <button class="btn btn-info btn-lg" id="btn-default-screen" title="Default Screen">
+        <button class="btn btn-info btn-lg" disabled id="btn-default-screen" title="Default Screen">
             <i class="fa fa-compress"></i>
         </button>
 
-        <button class="btn btn-primary btn-lg" id="btn-mute" title="Mute">
+        <button class="btn btn-primary btn-lg" disabled id="btn-mute" title="Mute">
             <i class="fa fa-microphone"></i>
         </button>
 
@@ -46,14 +46,12 @@
                         <small>{{course.course}}</small>
                     </a>
                     {% endfor %}
-
                 </div>
 
             </div>
 
             <div id="me-vid"></div>
             <div id="local" class="embed-responsive embed-responsive-21by9">
-
             </div>
 
             <div class="ps d-none">
@@ -186,6 +184,28 @@
         width: 260px;
         display: none;
     }
+
+    #screen-preview {
+        position: absolute;
+        top: 86px;
+        right: 34px;
+        width: 200px;
+        height: 164px;
+        border: 1px solid #ffdb2a;
+        vertical-align: middle;
+        display: block;
+    }
+
+    #screen-preview button {
+        position: absolute;
+        right: -2px;
+        bottom: -3px;
+        z-index: 9;
+    }
+
+    #screen-preview video {
+        width: 100%;
+    }
 </style>
 
 <script>
@@ -209,8 +229,6 @@
             Twilio.Video.createLocalVideoTrack().then(track => {
                 videoTrack = track;
                 $("#me-vid").append(videoTrack.attach());
-                //$("#local").append(videoTrack.attach());
-
             });
         };
 
@@ -218,7 +236,9 @@
 
             addLocalVideo();
 
-            $("#btn-stop-video").attr('disabled', false);
+            $("#local").empty();
+
+            $("#controls button").attr('disabled', false);
             $("#btn-start-video").attr('disabled', true);
 
             if (!connected) {
@@ -235,12 +255,15 @@
                 }).catch(function (err) {
                     toastr.error('Connection failed. Is the meeting started?', 'Warning!');
                     console.log(err);
+
+                    $("#controls button").attr('disabled', true);
+                    $("#btn-start-video").attr('disabled', false);
+
                 });
             }
             else {
-                //disconnect();
-                //button.innerHTML = 'Join call';
-                // connected = false;
+                $("#controls button").attr('disabled', true);
+                $("#btn-start-video").attr('disabled', false);
             }
         };
 
@@ -322,20 +345,44 @@
 
         function trackSubscribed(div, track, participant) {
 
+            console.log(track);
+
+            //console.log(participant.identity);
+
             div.appendChild(track.attach());
 
             if (participant.identity.indexOf('__inst') >= 0) {
 
-                $("#local").html(track.attach());
+                if (track.kind == 'video' && track.name == 'screen') {
 
-                $("#btn-full-screen").trigger('click');
+                    if ($("#local video").length > 0) {
 
+                        $("#local video").css({
+                            top: '86px',
+                            right: '34px',
+                            width: '200px',
+                            height: '164px',
+                            left: 'auto',
+                            'z-index':99
+                        });
+
+                        $("#local video").addClass('face');
+                    }
+                }
+
+                $("#local").append(track.attach());
+
+                //$("#btn-full-screen").trigger('click');
             }
 
         };
 
         function trackUnsubscribed(track) {
             track.detach().forEach(element => element.remove());
+
+            if($("#local video").length == 1) {
+                $("#local video").removeClass('face').removeAttr('style');
+            }
         };
 
         function disconnect() {
@@ -352,8 +399,12 @@
 
             $("#local video").remove();
             $("#me-vid video").remove();
+
             connected = false;
             updateParticipantCount();
+
+            $("#controls button").attr('disabled', true);
+            $("#btn-start-video").attr('disabled', false);
         };
 
         var addLog = function (id) {
@@ -383,7 +434,7 @@
 
             $("#btn-full-screen").click(function () {
 
-                $("#local video").css({
+                $("#local video:not('.face')").css({
                     height: '100%',
                     width: '100%',
                     'object-fit': 'cover'
@@ -391,7 +442,7 @@
             });
 
             $("#btn-default-screen").click(function () {
-                $("#local video").css({
+                $("#local video:not('.face')").css({
                     height: '100%',
                     width: '100%',
                     'object-fit': 'contain'
@@ -432,7 +483,7 @@
                     $(this).addClass('btn-danger').removeClass('btn-primary');
 
                     room.localParticipant.audioTracks.forEach(function (audioTrack) {
-                         audioTrack.track.disable()
+                        audioTrack.track.disable()
                     });
 
                 } else {
@@ -441,7 +492,7 @@
                     $(this).addClass('btn-primary').removeClass('btn-danger');
 
                     room.localParticipant.audioTracks.forEach(function (audioTrack) {
-                         audioTrack.track.enable()
+                        audioTrack.track.enable()
                     });
                 }
 
@@ -459,6 +510,7 @@
         };
 
         events();
+
         getPendingNotifications();
 
     });
