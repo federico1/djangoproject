@@ -1,18 +1,3 @@
-{% load embed_video_tags %}
-
-{{ item.url }}
-{% video item query="rel=0&wmode=transparent" is_secure=True as my_video %}
-    {{ item.url }} {# always with https #}
-{% endvideo %}
-
-{% video item as my_video %}
-    URL: {{ my_video.url }}
-    Thumbnail: {{ my_video.thumbnail }}
-    Backend: {{ my_video.backend }}
-    {% video my_video.url 'small' %}
-    {% video item.url 'small' %}
-{% endvideo %}
-
-{% video item.url 'small' %}
-
-{% video my_video '800x600' %}
+<div class="video-item embed-responsive embed-responsive-21by9 mb-2" url="{{item.url}}">
+  <iframe class="embed-responsive-item" src="{{item.url}}" allowfullscreen></iframe>
+</div>
