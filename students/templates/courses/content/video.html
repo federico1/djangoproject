@@ -4,3 +4,12 @@
 {% video item query="rel=0&wmode=transparent" is_secure=True as my_video %}
     {{ item.url }} {# always with https #}
 {% endvideo %}
+
+{% video item.video as my_video %}
+    URL: {{ my_video.url }}
+    Thumbnail: {{ my_video.thumbnail }}
+    Backend: {{ my_video.backend }}
+    {% video my_video 'small' %}
+{% endvideo %}
+
+{% video item.ur is_secure=True 'small' %}
