@@ -1,3 +1,7 @@
 {% load embed_video_tags %}
 
 {% video item.url 'small' %}
+
+{% video item query="rel=0&wmode=transparent" is_secure=True as my_video %}
+    {{ my_video.url }} {# always with https #}
+{% endvideo %}
