@@ -9,7 +9,8 @@
     URL: {{ my_video.url }}
     Thumbnail: {{ my_video.thumbnail }}
     Backend: {{ my_video.backend }}
-    {% video my_video 'small' %}
+    {% video my_video.url 'small' %}
+    {% video item.url 'small' %}
 {% endvideo %}
 
 {% video item.url 'small' %}
