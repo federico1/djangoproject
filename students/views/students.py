@@ -32,8 +32,8 @@ from django.contrib import messages
 from students.decorators import student_required
 
 from courses.suggestions import update_clusters
-
 from students.file_utils import uploaded_file
+
 
 class StudentCourseListView(LoginRequiredMixin, ListView):
     model = Course
