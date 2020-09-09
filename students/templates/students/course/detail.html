@@ -136,7 +136,7 @@
                     </div>
                     <!-- sidebar-menu  -->
 
-                    {% if content_completed == True %}
+                    {% if content_completed == True and object.quiz is not None %}
 
                     <div class="sidebar-brand">
 
@@ -158,7 +158,7 @@
 
                         {% if module == None %}
 
-                        {% if request.GET.type == 'quiz' %}
+                        {% if request.GET.type == 'quiz' and object.quiz is not None %}
                         <div class="col-md-12 mb-30">
                             <table class="table">
                                 <thead>
