@@ -210,5 +210,13 @@ class TeacherHomeView(generic.TemplateView):
 
         return context
 
+
+class StudentsManagementView(generic.TemplateView):
+    template_name = 'students_management.html'
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super(StudentsManagementView, self).get_context_data(*args, **kwargs)
+        return context
+
     
 

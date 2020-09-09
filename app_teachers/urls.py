@@ -38,5 +38,8 @@ urlpatterns = [
          name='module_order'),
     path('content/order/',
          views.ContentOrderView.as_view(),
-         name='content_order')
+         name='content_order'),
+    path('students-manager/',
+         views.StudentsManagementView.as_view(),
+         name='students_manager'),
 ]

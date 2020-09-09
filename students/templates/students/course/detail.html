@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block nav %}
+
 <nav class="navbar navbar-expand-md navbar-bark bg-dark">
     <a class="navbar-brand mb-0 h1 text-white" href="#"> {{ object.title }}</a>
     <div class="navbar-collapse">
@@ -125,6 +126,7 @@
                                     </ul>
                                 </div>
                             </li>
+                           
                             {% empty %}
                             <li class="menu__item">No modules yet.</li>
 
@@ -133,6 +135,17 @@
                         </ul>
                     </div>
                     <!-- sidebar-menu  -->
+
+                    {% if content_completed == True %}
+
+                    <div class="sidebar-brand">
+
+                        <a href="{% url "student_course_detail" object.id %}?type=quiz" class="btn btn-primary">
+                            Take Quiz </a>
+                    </div>
+
+                    {% endif %}
+                   
                 </div>
                 <!-- sidebar-content  -->
             </nav>
@@ -145,11 +158,53 @@
 
                         {% if module == None %}
 
+                        {% if request.GET.type == 'quiz' %}
+                        <div class="col-md-12 mb-30">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Quiz</th>
+                                        <th>Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr>
+                                        <td>
+                                            {{active_content.object}}
+                                        </td>
+                                        <td>
+                                            {% if active_content.complete == True %}
+                                            {{active_content.score}}
+                                            {% else %}
+                                            Not Taken
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2">
+                                            {% if active_content.complete == True %}
+                                            <a href="{% url 'quiz_reset' active_content.object.id %}?ref={{request.get_full_path}}"
+                                                class="btn btn-primary">Retake Quiz </a>
+                                            {% else %}
+                                            <a href="{% url 'take_quiz' active_content.object.id %}?ref={{request.get_full_path}}"
+                                                class="btn btn-primary">Take Quiz </a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        {% else %}
                         <div class="col-md-12 mb-30">
                             <div class="about-course">
                                 {{object.overview|safe}}
                             </div>
                         </div>
+                        {%endif%}
 
                         {%endif%}
 

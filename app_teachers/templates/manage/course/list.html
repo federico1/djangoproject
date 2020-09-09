@@ -15,14 +15,20 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">{{ course.title }}</h5>
+
                 <p>
-                    <a class="badge badge-secondary" href="{% url "course_edit" course.id %}">Edit</a>
-                    <a class="badge badge-secondary" href="{% url "course_delete" course.id %}">Delete</a>
-                    <a class="badge badge-secondary" href="{% url "course_module_update" course.id %}">Edit modules</a>
+                    <a class="badge badge-info px-3 py-1 mx-1" href="{% url "course_edit" course.id %}">Edit</a>
+                    
+                    <a class="badge badge-warning px-3 py-1  mx-1" href="{% url "course_module_update" course.id %}">Manage Modules</a>
                     {% if course.modules.count > 0 %}
-                    <a class="badge badge-secondary"
+                    <a class="badge badge-success px-3 py-1  mx-1" 
                         href="{% url "module_content_list" course.modules.first.id %}">Manage Contents</a>
                     {% endif %}
+                </p>
+
+                <p>
+                    <a class="badge badge-primary px-3 py-1 mx-1" href="{% url "quiz_course" course.id %}">Quiz</a>
+                    <a class="badge badge-danger px-3 py-1 mx-1" href="{% url "course_delete" course.id %}">Delete Course</a>
                 </p>
             </div>
         </div>

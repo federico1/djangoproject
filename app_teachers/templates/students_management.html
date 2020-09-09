@@ -1,0 +1,361 @@
+{% extends "teacher_base.html" %}
+
+{% block title %}User Manager{% endblock %}
+
+{% block content %}
+
+
+<div class="row mt-3">
+    <div class="col-md-3">
+        <div class="card border-success">
+            <div class="card-header bg-transparent container-fluid">
+                <div class="row">
+                    <div class="col-md-9">
+                        <strong>
+                            Students
+                        </strong>
+                    </div>
+                    <div class="col-md-3 float-right">
+                        <a href="javascript:;" class="badge badge-primary p-1">ADD NEW</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div id="accordion"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <div class="card">
+
+            <div class="card-header">
+                Add Details
+
+                <button class="btn btn-success float-right btn-sm">Save Details</button>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <form>
+                            <div class="row">
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="First name">
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Last name">
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Email">
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Phone Number">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+       
+        </div>
+    </div>
+</div>
+
+
+
+{% verbatim %}
+<script type="text/x-handlebars-template" id='studentFormTemplate'>
+    <form autocomplete="off">
+
+        <div class="row">
+            <div class="col-md-7">
+                <div class="row mb-1">
+                    <div class="col">
+                        <label for="exampleFormControlInput1">Title</label>
+                        <input type="text" class="form-control form-control-sm" id="title" name="title"
+                            placeholder="Conversation title.">
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col">
+                        <label for="exampleFormControlInput1">Status</label>
+                        <select class="form-control form-control-sm" id="status" name="status">
+                            <option value="">Select Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="started">Started</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="exampleFormControlInput1">Start Date</label>
+                        <input type="text" autocomplete="off" class="form-control form-control-sm" id="start_date" name="start_date"
+                            placeholder="Start Date.">
+                    </div>
+                    
+                   
+                </div>
+                <div class="row mb-1">
+                    <div class="col">
+                        <label for="exampleFormControlInput1">Start Time</label>
+                        <input type="text" autocomplete="off" class="form-control form-control-sm" id="start_time" name="start_time"
+                            placeholder="Start Time.">
+                    </div>
+                    <div class="col d-none">
+                        <label for="exampleFormControlSelect1">Max Participants</label>
+                        <input type="number" class="form-control form-control-sm" value="2" id="participant_max"
+                            name="participant_max">
+        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="exampleFormControlSelect1">Details</label>
+                        <textarea class="form-control form-control-sm" id="details" name="details"></textarea>
+        
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <label for="exampleFormControlSelect1">Courses</label>
+               <div id="courseList"></div>
+            </div>
+        </div>
+        
+    </form>
+</script>
+{% endverbatim %}
+
+{% verbatim %}
+<script type="text/x-handlebars-template" id='studentListItemTemplate'>
+   <div class="row mb-2">
+       <div class="col">
+        <div class="card">
+            <div class="card-header p-1" id="heading-{{id}}">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{id}}" aria-expanded="true" aria-controls="collapse-{{id}}">
+                    {{#get_name}}{{this}}{{/get_name}}
+                  </button>
+            </div>
+        
+            <div id="collapse-{{id}}" class="collapse" aria-labelledby="heading-{{id}}" data-parent="#accordion">
+              <div class="card-body">
+               <ul>
+                   <li>Name: 
+                    {{#if first_name}}
+                    {{first_name}}
+                    {{else}}
+                    <span>N/A</span>
+                    {{/if}}
+
+                    {{#if last_name}}
+                    {{last_name}}
+                    {{else}}
+                    <span>N/A</span>
+                    {{/if}}
+                   </li>
+
+
+                   <li>Phone: 
+                    {{#if cell_number}}
+                    {{cell_number}}
+                    {{else}}
+                    <span>N/A</span>
+                    {{/if}}
+
+                   </li>
+
+                   <li>Email: 
+                    {{#if email}}
+                    {{email}}
+                    {{else}}
+                    <span>N/A</span>
+                    {{/if}}
+
+                   </li>
+               </ul>
+              </div>
+            </div>
+          </div>
+       </div>
+   </div>
+</script>
+{% endverbatim %}
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+    Handlebars.registerHelper("get_name", function (options) {
+        var r = this.username;
+
+        if(this.first_name && this.last_name) {
+            r =  this.first_name + " " + this.last_name;
+        } else if(this.email) {
+            r = this.email;
+        }
+
+        return new Handlebars.SafeString(r);
+    });
+
+
+    (function ($) {
+        $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+
+            $.each(a, function () {
+
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+
+            return o;
+        };
+
+    })(jQuery);
+
+    (function ($) {
+
+        $.StudentManager = function (options) {
+
+            var that = this;
+
+            var studentsList = [];
+
+            var settings = $.extend({
+            }, options);
+
+            var getStudents = function () {
+                $.get('/api/users/?format=json', {}, function (response) {
+                    studentsList = response;
+                    drawStudentsList();
+                });
+            };
+
+            var drawStudentsList = function () {
+                $("#accordion").empty();
+
+                $(studentsList).each(function (index, item) {
+
+                    var source = document.getElementById("studentListItemTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+                    $("#accordion").append(template(item));
+                });
+
+            };
+
+
+            var registerEvent = function () {
+
+                $("div").on("click", '.link-new-room', function (e) {
+                    e.stopPropagation();
+                    $("#room-modal").modal('show');
+                });
+
+                $("div").on("click", '#btn-save-room', function (e) {
+                    e.stopPropagation();
+
+                    saveRoom();
+
+                });
+
+                $("div").on("click", '.link-delete-room', function (e) {
+                    e.stopPropagation();
+
+                    var id = $(this).attr('id');
+
+                    if (id) {
+                        deleteRoom(id);
+                    }
+                });
+
+                $("div").on("click", '.link-participants', function (e) {
+                    e.stopPropagation();
+
+                    var id = $(this).attr('id');
+                    $("#members-modal").attr('pk', id);
+                    $("#members-modal").modal('show');
+                });
+
+                $("div").on("click", '.link-add-member', function (e) {
+                    e.stopPropagation();
+
+                    var id = $(this).attr('id');
+
+                    if (id) {
+                        addNewMember(id);
+                    }
+                });
+
+                $("div").on("click", '.link-remove-member', function (e) {
+                    e.stopPropagation();
+                    var id = $(this).attr('id');
+
+                    if (id) {
+                        deleteMember(id);
+                    }
+                });
+
+                $("div").on("click", '.link-approve-member', function (e) {
+                    e.stopPropagation();
+                    var id = $(this).attr('id');
+
+                    if (id) {
+                        approveMember(id);
+                    }
+                });
+
+                $("div").on("click", '.link-participantslog', function (e) {
+                    e.stopPropagation();
+
+                    var id = $(this).attr('id');
+                    $("#participants-modal").attr('pk', id);
+                    $("#participants-modal").modal('show');
+                });
+
+                $('#room-modal').on('shown.bs.modal', function (e) {
+
+                    var source = document.getElementById("roomFormTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+
+                    $("#room-modal .modal-body").html(template({}));
+
+                });
+
+            };
+
+            var init = function () {
+                registerEvent();
+                getStudents();
+            };
+
+            init();
+
+            return this;
+
+        };
+
+
+    }(jQuery));
+
+    $(document).ready(function () {
+        var studentManager = new $.StudentManager({
+        });
+    });
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,305 @@
+{% extends "admin_base.html" %}
+{% block title %}Users{% endblock %}
+
+{% block content %}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Users</h6>
+        <div class="dropdown no-arrow">
+            <button type="button" class="btn btn-success btn-sm link-new-user"> <i class="fa fa-plus"></i> ADD
+                NEW</button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="usersTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Login</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="userModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Manage User Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSaveUser">Save Changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% verbatim %}
+<script type="text/x-handlebars-template" id='studentListItemTemplate'>
+
+    <tr>
+        <td> {{#get_name}}{{this}}{{/get_name}}</td>
+        <td>{{username}}</td>
+        <td>{{cell_number}}</td>
+        <td>{{email}}</td>
+        <td></td>
+    </tr>
+  
+</script>
+{% endverbatim %}
+
+{% verbatim %}
+<script type="text/x-handlebars-template" id='studentFormTemplate'>
+    <form>
+        
+        <input type="hidden" name="id" id="id" >
+        <input type="hidden" name="image" id="image" >
+
+       <div class="row">
+           <div class="col">
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input checked type="radio" id="customRadioInline1" name="role" value="is_student" class="custom-control-input">
+                        <label class="custom-control-label" for="customRadioInline1">Student</label>
+                      </div>
+                      <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="customRadioInline2" name="role" value="is_teacher" class="custom-control-input">
+                        <label class="custom-control-label" for="customRadioInline2">Teacher</label>
+                      </div>
+                </div>
+               
+              </div>
+            <div class="row mb-3">
+                <div class="col">
+                  <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First name">
+                </div>
+                <div class="col">
+                  <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last name">
+                </div>
+              </div>
+              <div class="row mb-3">
+                  <div class="col">
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Login name">
+                  </div>
+                  <div class="col">
+                    <input type="text" class="form-control" id="email" name="email" placeholder="Email">
+                  </div>
+              </div>
+              <div class="row mb-3">
+                  <div class="col">
+                    <input type="text" class="form-control" id="password" name="password" placeholder="Password">
+                  </div>
+                  <div class="col">
+                    <input type="text" class="form-control" id="cell_number" name="cell_number" placeholder="Phone">
+                  </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col">
+                  <input type="text" class="form-control" id="address" name="address" placeholder="Address">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="customFile" name="file">
+                        <label class="custom-file-label" for="customFile">Photo</label>
+                      </div>
+                </div>
+            </div>
+           </div>
+       </div>
+      </form>
+</script>
+{% endverbatim %}
+
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+    Handlebars.registerHelper("get_name", function (options) {
+        var r = this.username;
+
+        if (this.first_name && this.last_name) {
+            r = this.first_name + " " + this.last_name;
+        } else if (this.email) {
+            r = this.email;
+        }
+
+        return new Handlebars.SafeString(r);
+    });
+
+    (function ($) {
+        $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+
+            $.each(a, function () {
+
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+
+            return o;
+        };
+
+    })(jQuery);
+
+
+    (function ($) {
+
+        $.StudentManager = function (options) {
+
+            var that = this;
+
+            var studentsList = [];
+
+            var settings = $.extend({
+            }, options);
+
+            var getStudents = function () {
+                $.get('/api/users/?format=json', {}, function (response) {
+                    studentsList = response;
+                    drawStudentsList();
+                });
+            };
+
+            var drawStudentsList = function () {
+
+                $("#usersTable tbody").empty();
+
+                $(studentsList).each(function (index, item) {
+                    var source = document.getElementById("studentListItemTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+                    $("#usersTable tbody").append(template(item));
+                });
+
+                $("#usersTable").DataTable();
+            };
+
+            var saveUser = function () {
+
+                $("#userModal form").valid();
+
+                var data = $("#userModal form").eq(0).serializeObject();
+
+                if (data.role) {
+                    data[data.role] = true;
+                    delete data.role;
+                }
+                console.log(data);
+                $("#userModal form .alert").remove();
+                $.ajax({
+                    type: "POST",
+                    url: "/api/users/",
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (response, textStatus, xhr) {
+                        console.log(textStatus);
+                        console.log(xhr)
+                    },
+                    complete: function (xhr, textStatus) {
+                        if (xhr.status == 400) {
+                            $("#userModal form .alert").remove();
+                            $("#userModal form").append($("<div />", { class: 'alert alert-warning' }).html(xhr.responseText));
+                        }
+                    },
+                    failure: function (errMsg) {
+                        alert(errMsg);
+                        $("#userModal").modal('hide');
+                    }
+                });
+            };
+
+            var registerEvent = function () {
+
+                $("div").on("click", ".link-new-user", function (e) {
+                    e.stopPropagation();
+                    $("#userModal").modal('show');
+                });
+
+                $("div").on("click", '#btnSaveUser', function (e) {
+                    e.stopPropagation();
+                    saveUser();
+                });
+
+                $("div").on("change", '#customFile', function (e) {
+                    e.stopPropagation();
+                    alert($("#customFile").val())
+                });
+
+
+                $('#userModal').on('shown.bs.modal', function (e) {
+                    var source = document.getElementById("studentFormTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+                    $("#userModal .modal-body").html(template({}));
+
+                    $("#userModal form").validate({
+                        rules: {
+                            first_name: "required",
+                            last_name: "required",
+                            password: "required",
+                            cell_number: "required",
+                            username: "required",
+                            email: {
+                                required: true,
+                                email: true
+                            }
+                        }
+                    })
+
+
+                });
+
+            };
+
+            var init = function () {
+                registerEvent();
+                getStudents();
+            };
+
+            init();
+
+            return this;
+
+        };
+
+    }(jQuery));
+
+    $(document).ready(function () {
+        var studentManager = new $.StudentManager({
+        });
+    });
+</script>
+
+{% endblock %}

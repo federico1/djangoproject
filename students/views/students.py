@@ -70,20 +70,27 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
         context['taken_quizzes'] = []
         context['active_content'] = None
         context['next_content'] = None
+        context['content_completed'] = True
 
         course_details = []
         modules_list = course.modules.all().order_by('order')
         student = self.request.user.student
         taken_quizzes = list(student.taken_quizzes.values_list('quiz_id', flat=True))
 
+
         for m in modules_list:
+
             for c in m.contents.order_by('order'):
                 c_count = CourseProgress.objects.filter(
                     content_id=c.id, is_completed=True, user=self.request.user).count()
 
                 item_obj = {'type': 'content', 'object': c, 'module':m,
                             'complete': True if c_count > 0 else False}
+
                 course_details.append(item_obj)
+
+                if c_count <=0:
+                    context['content_completed'] = False
 
             if m.quiz is not None:
                 t_q = student.taken_quizzes.filter(quiz_id=m.quiz.id).select_related('quiz').first()
@@ -95,10 +102,9 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
                             'object': m.quiz, 'score':score, 'module':m, 'complete': True if m.quiz.id in taken_quizzes else False}
 
                 course_details.append(item_obj)
-        
 
         context['taken_quizzes'] = taken_quizzes
-        context['active_content'] = course_details[0] # modules_list.first().contents.first()
+        context['active_content'] = course_details[0]
         context['completed_contents'] = [x['object'].id for
                                          x in course_details if x['complete'] == True and x['type'] == 'content']
 
@@ -107,8 +113,6 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
             content_id = int(self.request.GET.get('content'))
             context['module'] = course.modules.get(id=self.kwargs['module_id'])
             
-            #context['active_content'] = [x for x in course_details if x['object'].id == content_id][0]
-
             if self.request.GET.get('type') == 'quiz':
                 context['active_content'] = [x for
                                          x in course_details if x['object'].id == content_id and x['type'] == 'quiz'][0]
@@ -122,10 +126,6 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
                 current_index = [ix for ix, x in enumerate(course_details) if x['object'].id == content_id and x['type'] == 'content'][0]
 
 
-            # get current content index
-            # current_index = [ix for ix, x in enumerate(
-            #     course_details) if x['object'].id == content_id][0]
-
             if current_index > 0:
                 prev_item = course_details[current_index-1]
                 context['prev_completed'] = prev_item['complete']
@@ -135,21 +135,19 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
                 obj = course_details[i]
                 context['next_content'] = obj
                 break
+        elif self.request.GET.get('type') == 'quiz' and course.quiz is not None:
+            t_q = student.taken_quizzes.filter(quiz_id=course.quiz_id).select_related('quiz').first()
+            score = 0
+            
+            if t_q is not None:
+                score = t_q.score
 
-            #     if obj['type'] == 'quiz' and obj['complete'] == True:
-            #         context['next_content'] = None
-            #         i += 1
-            #     else:
-            #         break
+            context['active_content'] = {'type': 'quiz',
+                            'object': course.quiz, 'score':score, 'module':None, 'complete': True if course.quiz.id in taken_quizzes else False}
 
         return context
 
     def render_to_response(self, context, **response_kwargs):
-
-        # print(context['active_content'])
-        # print(context['next_content'])
-        # print(context['prev_completed'])
-        # print(context['completed_contents'])
 
         if context['module'] and (context['prev_completed'] == False or context['active_content'] == None):
             return redirect('student_course_detail', self.get_object().id)

@@ -8,6 +8,8 @@ class User(AbstractUser):
     is_teacher = models.BooleanField(default=False)
     cell_number = models.CharField(max_length=20, null=True)
     image = models.TextField(null=True, blank=True)
+    address = models.TextField(null=True, blank=True)
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=30)
