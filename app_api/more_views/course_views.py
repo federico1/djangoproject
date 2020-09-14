@@ -50,14 +50,10 @@ class CourseDetailView(APIView):
         if c_order is not None and c_order == 'asc':
             order_field = 'id'
         
-        print(order_field)
-
         if c_limit is not None:
             snippets = snippets.order_by(order_field)[:int(c_limit)]
         
         snippets = snippets.annotate(total_modules=Count('modules'))
-
-        print(snippets[1].total_modules)
 
         serializer = CourseSerializer(snippets, many=True)
 

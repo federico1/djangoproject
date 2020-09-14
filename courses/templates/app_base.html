@@ -194,7 +194,9 @@
 
     {% block scripts %}
     {% endblock %}
+
     <script>
+        
         $(document).ready(function () {
             {% block domready %}
             {% endblock %}
@@ -202,8 +204,6 @@
 
         $(document).ready(function () {
             getSubjects();
-
-
         });
 
         function getSubjects() {
