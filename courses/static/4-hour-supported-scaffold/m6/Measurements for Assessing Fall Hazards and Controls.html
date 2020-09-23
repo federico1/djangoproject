@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet"
+          href="https:fonts.googleapis.com/css?family=Montserrat">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"
+            integrity="sha512-4ze/a9/4jqu+tX9dfOqJYSvyYd5M6qum/3HpCLr+/Jqf0whc37VUbkpNGHR7/8pSnCFw47T1fmIpwBV7UySh3g=="
+            crossorigin="anonymous"></script>
+
+    <style>
+        #pdfViewer {
+            width:100%;
+            min-height:600px
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            var options = {
+                height: "500px",
+                pdfOpenParams: { view: 'FitH', page: '1' }
+            };
+
+            PDFObject.embed('Measurements for Assessing Fall Hazards and Controls.pdf', "#pdfViewer", options);
+        });
+    </script>
+</head>
+<body>
+
+    <div class="container-fluid">
+
+        <div class="mt-4 mb-4">
+            <audio controls>
+                <source src="audio/Measurements for Assessing Fall Hazards and Controls_.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+
+        <div class="row">
+            <div class="col" id="pdfViewer">
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
