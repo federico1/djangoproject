@@ -177,6 +177,7 @@ class ModuleOrderView(CsrfExemptMixin,
                       JsonRequestResponseMixin,
                       View):
     def post(self, request):
+        print(self.request_json)
         for id, order in self.request_json.items():
             Module.objects.filter(id=id,
                    course__owner=request.user).update(order=order)

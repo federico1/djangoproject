@@ -44,7 +44,7 @@ Module {{ module.order|add:1 }}: {{ module.title }}
                             <li>No modules yet.</li>
                             {% endfor %}
 
-                            <li>
+                            <li class="not">
                                 <a href="{% url "course_module_update" course.id %}">Edit modules</a>
                             </li>
                         </ul>
@@ -58,29 +58,33 @@ Module {{ module.order|add:1 }}: {{ module.title }}
         </div>
         <div class="col-md-9">
             <div class="module">
-               
+
                 <!-- <h5>Module contents:</h5> -->
 
-                <div class="row" id="module-contents">
-                    <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12 not">
                         <h4>Module {{ module.order|add:1 }}: {{ module.title }}</h4>
                     </div>
+                </div>
+                <div class="row" id="module-contents">
+
                     {% for content in module.contents.all %}
                     <div class="col-md-8 mb-1 border p-1 bg-white" data-id="{{ content.id }}">
                         {% with item=content.item %}
                         <p>{{ item }} ({{ item|model_name }})</p>
-                      <div class="d-flex flex-row">
-                          <div class="mr-3">
-                            <a class="btn btn-sm btn-info" href="{% url "module_content_update" module.id item|model_name item.id %}">Edit</a>
-                            
-                          </div>
-                          <div>
-                            <form action="{% url "module_content_delete" content.id %}" method="post">
-                                <input class="btn btn-sm btn-danger" type="submit" value="Delete">
-                                {% csrf_token %}
-                            </form>
-                          </div>
-                      </div>
+                        <div class="d-flex flex-row">
+                            <div class="mr-3">
+                                <a class="btn btn-sm btn-info"
+                                    href="{% url "module_content_update" module.id item|model_name item.id %}">Edit</a>
+
+                            </div>
+                            <div>
+                                <form action="{% url "module_content_delete" content.id %}" method="post">
+                                    <input class="btn btn-sm btn-danger" type="submit" value="Delete">
+                                    {% csrf_token %}
+                                </form>
+                            </div>
+                        </div>
                         {% endwith %}
                     </div>
                     {% empty %}
@@ -91,13 +95,17 @@ Module {{ module.order|add:1 }}: {{ module.title }}
                     <div class="col p-2">
                         <h5>Add new content:</h5>
 
-                    <a class="badge badge-primary" href="{% url "module_content_create" module.id "text" %}">Text</a>
-                    <a class="badge badge-primary" href="{% url "module_content_create" module.id "image" %}">Image</a>
-                    <a class="badge badge-primary" href="{% url "module_content_create" module.id "video" %}">Video</a>
-                    <a class="badge badge-primary" href="{% url "module_content_create" module.id "file" %}">File</a>
-                    <a class="badge badge-primary"
-                        href="{% url "module_content_create" module.id "iframe" %}">IFrame</a>
-                    <a class="badge badge-primary" href="{% url "app_add_question" module.id %}">Add Questions</a>
+                        <a class="badge badge-primary"
+                            href="{% url "module_content_create" module.id "text" %}">Text</a>
+                        <a class="badge badge-primary"
+                            href="{% url "module_content_create" module.id "image" %}">Image</a>
+                        <a class="badge badge-primary"
+                            href="{% url "module_content_create" module.id "video" %}">Video</a>
+                        <a class="badge badge-primary"
+                            href="{% url "module_content_create" module.id "file" %}">File</a>
+                        <a class="badge badge-primary"
+                            href="{% url "module_content_create" module.id "iframe" %}">IFrame</a>
+                        <a class="badge badge-primary" href="{% url "app_add_question" module.id %}">Add Questions</a>
                     </div>
                 </div>
 
@@ -120,16 +128,21 @@ Module {{ module.order|add:1 }}: {{ module.title }}
         $(".container input, select, textarea").addClass('form-control');
         $(".container textarea").css('height', 70);
 
-        $('#modules').sortable({
+        $('.sidebar-menu ul').sortable({
+            cancel: '.not',
             stop: function (event, ui) {
 
                 modules_order = {};
-                $('#modules').children().each(function () {
-                    // update the order field
-                    $(this).find('.order').text($(this).index() + 1);
-                    // associate the module's id with its order
-                    modules_order[$(this).data('id')] = $(this).index();
+
+                $('.sidebar-menu ul li').each(function (ix) {
+                    var _id = $(this).attr('data-id');
+
+                    if (_id) {
+                        console.log(_id);
+                        modules_order[_id] = ix;
+                    }
                 });
+
 
                 $.ajax({
                     type: 'POST',
@@ -137,18 +150,23 @@ Module {{ module.order|add:1 }}: {{ module.title }}
                     contentType: 'application/json; charset=utf-8',
                     dataType: 'json',
                     data: JSON.stringify(modules_order),
+                    success:function(r) {
+                        toastr.success('Modules order has been updated','Success')
+                    }
                 });
 
             }
         });
 
         $('#module-contents').sortable({
+            cancel: '.col-md-12.not',
             stop: function (event, ui) {
 
                 contents_order = {};
+
                 $('#module-contents').children().each(function () {
-                    // associate the module's id with its order
-                    contents_order[$(this).data('id')] = $(this).index();
+                    if ($(this).data('id'))
+                        contents_order[$(this).data('id')] = $(this).index();
                 });
 
                 $.ajax({
@@ -157,6 +175,9 @@ Module {{ module.order|add:1 }}: {{ module.title }}
                     contentType: 'application/json; charset=utf-8',
                     dataType: 'json',
                     data: JSON.stringify(contents_order),
+                    success:function(r) {
+                        toastr.success('Content order has been updated','Success')
+                    }
                 });
 
             }
