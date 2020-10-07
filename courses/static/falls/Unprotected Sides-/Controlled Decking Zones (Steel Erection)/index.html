@@ -1,0 +1,558 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+    <link rel="stylesheet" href="https:fonts.googleapis.com/css?family=Montserrat">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+   
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        ul {
+            margin: 5px;
+        }
+
+        ul li {
+            padding: 5px;
+        }
+
+        p {
+            padding: 3px;
+        }
+
+        table {
+            border: 1px solid #dddddd;
+            border-collapse: separate;
+            *border-collapse: collapse;
+            border-left: 0;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+        }
+
+        table th,
+        table td {
+            border-left: 1px solid #dddddd;
+            padding: 8px;
+            line-height: 20px;
+            text-align: left;
+            vertical-align: top;
+            border-top: 1px solid #dddddd;
+        }
+
+        table td {}
+
+        .wellheader {
+            background: #736f6f;
+            padding: 0px;
+            color: #fff;
+        }
+
+        h4 {
+            padding: 10px;
+        }
+
+        .pull-right {
+            float: right;
+            text-align: center;
+        }
+
+        a h6 {
+            padding: 5px;
+            background: #dad9d9;
+            color: #322e2e;
+            font-size: 17px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        a.accordion-toggle {
+            text-decoration: none;
+        }
+
+        .accordion-group {
+            clear: both;
+            margin-bottom: 10px;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .visible-print {
+            display: none;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        ul.unstyled,
+        ol.unstyled {
+            list-style: none;
+            display: flex;
+        }
+
+        ul.breakavoid>li {
+            -webkit-column-break-inside: avoid;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        ul.inline.img-caption {
+            margin-left: 0;
+            list-style: none;
+        }
+
+        ul.inline.img-caption li {
+            display: inline-block;
+            *display: inline;
+            *zoom: 1;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .img-polaroid {
+            padding: 4px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .span12 {
+            width: 95%;
+            clear: both;
+            margin: 0 auto;
+            border: 1px solid #e4e4e4;
+            padding: 10px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+
+
+    <div class="span12">
+        <div style="float:left;width: 62%;">
+
+
+            <div>
+                <strong>
+                    In steel erection, a new, very narrow working surface is constantly being created as skeletal steel
+                    is erected at various heights. For many steel erectors, especially connectors, the work starts at
+                    the top level of the structure. This means that anchor points above foot level are often limited or
+                    unavailable. The special circumstances of steel erection can make conventional fall protection very
+                    difficult to deploy below 15 feet. For this reason, the following requirements and exceptions in the
+                    the steel erection fall protection standard have been made. [29 CFR 1926.760]
+                </strong>
+            </div>
+            <br />
+            <div>
+                NOTE: Except where indicated, the same basic scaffold requirements that appear in this module also apply
+                to single-point adjustable, multi-point adjustable, catenary, interior hung, needle-beam, multi-level,
+                and float (ship) scaffolds.
+            </div>
+            <p>Review the elements of suspended scaffold safety with the following modules:</p>
+
+            <ul>
+                <li><a title="General Requirements" href="#general_requirements"
+                        >General Requirements</a></li>
+                <li><a title="Connectors" href="#connectors">Connectors</a>
+                </li>
+                <li><a title="Controlled Decking Zone (CDZ)" href="#controlled_decking_zone"
+                       >Controlled Decking Zone (CDZ)</a></li>
+                <li><a title="Criteria for Fall Protection Equipment" href="#criteria_fall_equipment"
+                        >Criteria for Fall Protection Equipment</a>
+                </li>
+                <li><a title="Custody of Fall Protection" href="#custody_fall_protection"
+                     >Custody of Fall Protection</a></li>
+            </ul>
+
+
+        </div>
+
+        <div style="width:30%;float: right;padding: 10px;border: 1px solid #e2e2e2;text-align: center;">
+            <img src="connector.jpg" alt="connector.jpg">
+        </div>
+
+        <div id="tasks" style="clear:both;margin-top:20px;">
+            <div class="accordion" id="accordion1">
+
+                <!-- BEGIN ONE -->
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse1" data-parent="#accordion1"
+                            href="#general_requirements" title="General requirements">
+                            <h6>General requirements</h6>
+                        </a>
+                    </div> <!-- end accordion-heading -->
+                    <div id="general_requirements" class="accordion-body in collapse1" style="height: auto;">
+                        <div class="accordion-inner">
+
+                            <!-- BEGIN ACCIDENT REPORT -->
+                            <div class="pull-right img-caption text-center safety-bulletin hidden-print">
+                                <a href="#falls1" title="Lack of Fall Protection Leads to Three Deaths"><img
+                                        src="bulletin.gif" alt="Accident Report">
+                                    <p>Lack of Fall Protection Leads to Three Deaths</p>
+                                </a>
+                            </div>
+                            <!-- END ACCIDENT REPORT -->
+
+                            <ul>
+                                <li>Employees who are on a walking/working surface with an unprotected edge more than
+                                    <em>15 feet above a lower level</em> must be protected by conventional fall
+                                    protection. [<a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(a)(1)"
+                                        title="29 CFR 1926.760(a)(1)">29 CFR 1926.760(a)(1)</a>]</li>
+                                <li><em>Perimeter safety cables</em> must be installed at the final interior and
+                                    exterior perimeters of multi-story structures <em>as soon as the decking has been
+                                        installed</em>. [<a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(a)(2)"
+                                        title="29 CFR 1926.760(a)(2)">29 CFR 1926.760(a)(2)</a>]</li>
+                                <li>Connectors and employees working in <em>controlled decking zones</em> must be
+                                    protected from fall hazards as provided below. [<a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(a)(3)"
+                                        title="29 CFR 1926.760(a)(3)">29 CFR 1926.760(a)(3)</a>] (See Connectors and <a
+                                        title="Controlled Decking Zone" href="javascript:void();"
+                                        onclick="toAccordion('#controlled_decking_zone')">Controlled Decking Zone</a>.)
+                                </li>
+                            </ul>
+                            <p><em>NOTE:</em> The perimeter safety cables protect the detail crew that follows the
+                                decking crew.</p>
+
+
+                            <!-- BEGIN Modal #falls1 -->
+                            <div class="well well-white visible-print">
+                                <h5>Lack of Fall Protection Leads to Three Deaths</h5>
+                                <p><strong>Case Reports:</strong></p>
+                                <ul>
+                                    <li>A hospital was being renovated and an additional structure attached. Two
+                                        employees were working from an existing portion of the roof, moving sections of
+                                        angle iron measuring 20 feet in length. The first employee bent over to pick up
+                                        one end of an angle iron, and was expecting the other employee to pick up his
+                                        end. When that did not occur, the first employee looked up and saw the victim
+                                        standing, bent at the waist, with his hands on his knees. He was 6-12 inches
+                                        from the edge of the roof, and did not respond when called to, but instead fell
+                                        head first over a 10-inch parapet wall. He landed on the asphalt driveway and
+                                        sustained trauma to the back of the head, as well as contusions to the right eye
+                                        and torso. Based on the height of the roof and the employees' proximity to the
+                                        edge, some form of fall protection should have been used. The victim died four
+                                        hours after the accident.</li>
+                                    <li>During steel erection, an employee was walking on a 5½-inch-wide steel beam that
+                                        was over 37 feet above dry soil. He was not using fall protection. The beam
+                                        apparently wobbled, and the employee lost his balance and fell to his death.
+                                    </li>
+                                    <li>Without any kind of fall protection, an employee was walking atop structural
+                                        steel to check joints and bolts. He apparently slipped or misjudged his footing
+                                        and fell approximately 20 feet to the concrete floor below, resulting in his
+                                        death.</li>
+                                </ul>
+                            </div><!-- end well well-white -->
+                            <!-- END Modal #falls1 -->
+
+                        </div><!-- end accordion-inner -->
+                    </div> <!-- end one -->
+                </div> <!-- end group -->
+                <!-- END ONE -->
+
+
+                <!-- BEGIN TWO -->
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse1" data-parent="#accordion1" href="#connectors"
+                            title="Connectors">
+                            <h6>Connectors</h6>
+                        </a>
+                    </div> <!-- end accordion-heading -->
+                    <div id="connectors" class="accordion-body in collapse1" style="height: auto;">
+                        <div class="accordion-inner">
+
+                            <!-- BEGIN ACCIDENT REPORT -->
+                            <div class="pull-right img-caption text-center safety-bulletin hidden-print">
+                                <a href="#falls2"
+                                    title="Connectors Pay With Lives for Failure to Wear Fall Protection"><img
+                                        src="bulletin.gif" alt="Accident Report">
+                                    <p>Connectors Pay With Lives for Failure to Wear Fall Protection</p>
+                                </a>
+                            </div>
+                            <!-- END ACCIDENT REPORT -->
+
+                            <p>Connectors must:</p>
+                            <ul>
+                                <li>Be protected by <em>conventional fall protection</em> when working on a surface with
+                                    an unprotected edge <em>more than two stories or 30 feet</em> above a lower level.
+                                    [<a href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(a)(1)"
+                                        title="29 CFR 1926.760(b)(1)">29 CFR 1926.760(b)(1)</a>]</li>
+                                <li>Have completed the <em>connector training</em> described in <a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12752"
+                                        title="29 CFR 1926.761">29 CFR 1926.761</a>. [<a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(b)(2)"
+                                        title="29 CFR 1926.760(b)(2)">29 CFR 1926.760(b)(2)</a>]</li>
+                            </ul>
+
+                            <p>While working at heights <em>over 15 and up to 30 feet</em>, connectors must [<a
+                                    href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(b)(3)"
+                                    title="29 CFR 1926.760(b)(3)">29 CFR 1926.760(b)(3)</a>:</p>
+                            <ul>
+                                <li>Be provided with a complete <em>personal fall arrest system</em> or other allowable
+                                    fall protection.</li>
+                                <li><em>Wear the equipment</em> necessary for tying off.</li>
+                            </ul>
+
+
+                            <!-- BEGIN Modal #falls2 -->
+                            <div class="well well-white visible-print">
+                                <h5>Connectors Pay With Lives for Failure to Wear Fall Protection</h5>
+                                <p><strong>Case Reports:</strong></p>
+                                <ul>
+                                    <li>Two connectors were erecting lightweight steel I-beams on the third floor of a
+                                        12-story building, 54 feet above the ground. One employee removed a choker sling
+                                        from a beam and then attempted to place the sling onto a lower empty hook on a
+                                        series of stringers. While the crawler tower crane was booming away from the
+                                        steel, the wind moved the load line and stringer into the beam on which the
+                                        employee was standing. The beam moved while the employee was trying to disengage
+                                        the hook, and he fell to his death.</li>
+                                    <li>Two steelworkers were setting beams on a steel erection project. One of them was
+                                        installing a cross beam at the third level of a stair structure. According to
+                                        his co-worker, he stepped onto the beam that had just been put into place and
+                                        fell backward in a vertical position. He tried to catch the beam, but was unable
+                                        to maintain a grasp. He then fell slightly forward and struck the beam
+                                        immediately below, causing his body to assume a horizontal position until he hit
+                                        the ground. He had fallen a total of 35 feet, and was killed.</li>
+                                    <li>An employee was working on a steel erection 23 feet above the ground. He was
+                                        instructed by the foreman to go to a connection at the eastern part of the
+                                        building and start torquing the bolts there. The employee went to the area and,
+                                        while working, slipped and fell to his death. He was not wearing a safety belt
+                                        and lifeline when tightening bolts, nor were his co-workers.</li>
+                                </ul>
+                            </div><!-- end well well-white -->
+                            <!-- END Modal #falls2 -->
+                        </div><!-- end accordion-inner -->
+                    </div> <!-- end one -->
+                </div> <!-- end group -->
+                <!-- END TWO -->
+
+
+                <!-- BEGIN THREE -->
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse1" data-parent="#accordion1"
+                            href="#controlled_decking_zone" title="Controlled Decking Zone (CDZ)">
+                            <h6>Controlled Decking Zone (CDZ)</h6>
+                        </a>
+                    </div> <!-- end accordion-heading -->
+                    <div id="controlled_decking_zone" class="accordion-body in collapse1" style="height: auto;">
+                        <div class="accordion-inner">
+                            <!-- BEGIN ACCIDENT REPORT -->
+                            <div class="pull-right img-caption text-center safety-bulletin hidden-print">
+                                <a href="#falls3" title="Worker Killed in Fall"><img src="bulletin.gif"
+                                        alt="Accident Report">
+                                    <p>Worker Killed in Fall</p>
+                                </a>
+                            </div>
+                            <!-- END ACCIDENT REPORT -->
+
+                            <ul>
+                                <li>A CDZ can be established as a substitute for fall protection where metal decking is
+                                    initially being installed and forms the <em>leading edge</em> of a work area
+                                    <em>over 15 and up to 30 feet</em> above a lower level. [<a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(c)"
+                                        title="29 CFR 1926.760(c)">29 CFR 1926.760(c)</a>]</li>
+                                <li>Leading-edge workers in a CDZ are required to:
+                                    <ul>
+                                        <li>Be protected from fall hazards <em>above 2 stories or 30 feet (whichever is
+                                                less)</em>. [<a
+                                                href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(c)(1)"
+                                                title="29 CFR 1926.760(c)(1)">29 CFR 1926.760(c)(1)</a>]</li>
+                                        <li>Have <em>completed CDZ training</em> in accordance with <a
+                                                href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12752"
+                                                title="29 CFR 1926.761">29 CFR 1926.761</a>. [<a
+                                                href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(c)(4)"
+                                                title="29 CFR 1926.760(c)(4)">29 CFR 1926.760(c)(4)</a>]</li>
+                                    </ul>
+                                </li>
+                                <li>Employees who are not engaged in leading-edge work and properly trained in the
+                                    hazards involved are <em>prohibited from entering</em> the CDZ. [<a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(c)(2)"
+                                        title="29 CFR 1926.760(c)(2)">29 CFR 1926.760(c)(2)</a> and <a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751&amp;p_text_version=FALSE#1926.760(c)(4)"
+                                        title="29 CFR 1926.760(c)(4)">29 CFR 1926.760(c)(4)</a>]</li>
+                                <li>The CDZ is required to:
+                                    <ul>
+                                        <li>Be no more than <em>90 feet wide and 90 feet deep</em> from any leading
+                                            edge. [<a
+                                                href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(c)(3)"
+                                                title="29 CFR 1926.760(c)(3)">29 CFR 1926.760(c)(3)</a>]</li>
+                                        <li>Not exceed <em>3,000 square feet</em> of unsecured decking. [<a
+                                                href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(c)(5)"
+                                                title="29 CFR 1926.760(c)(5)">29 CFR 1926.760(c)(5)</a>]</li>
+                                        <li>Have designated and clearly marked <em>boundaries with control lines</em> or
+                                            the equivalent. [<a
+                                                href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(c)(3)"
+                                                title="29 CFR 1926.760(c)(3)">29 CFR 1926.760(c)(3)</a>] <em>NOTE:</em>
+                                            Control lines are commonly used as a marker because they create a highly
+                                            visible boundary.</li>
+                                        <li>Have <em>safety deck attachments</em> placed from the leading edge back to
+                                            the control line. [<a
+                                                href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(c)(6)"
+                                                title="29 CFR 1926.760(c)(6)">29 CFR 1926.760(c)(6)</a>]</li>
+                                        <li>Have at least <em>two safety deck attachments</em> for each metal decking
+                                            panel. [<a
+                                                href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(c)(6)"
+                                                title="29 CFR 1926.760(c)(6)">29 CFR 1926.760(c)(6)</a>]</li>
+                                    </ul>
+                                </li>
+                                <li><em>Final deck attachments</em> and the installation of <em>shear connectors</em>
+                                    are prohibited from being done in the CDZ. [<a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(c)(7)"
+                                        title="29 CFR 1926.760(c)(7)">29 CFR 1926.760(c)(7)</a>]</li>
+                            </ul>
+
+
+                            <!-- BEGIN Modal #falls3 -->
+                            <div class="well well-white visible-print">
+                                <h5>Worker Killed in Fall</h5>
+                                <p><strong>Case Report:</strong></p>
+                                <ul>
+                                    <li>A crew of five employees was laying the first piece of metal decking after the
+                                        insulation had been laid over a steel structure. One employee was at the
+                                        southeast corner, standing on a platform with no guardrails, when he fell 25
+                                        feet and was killed.</li>
+                                </ul>
+                            </div><!-- end well well-white -->
+                            <!-- END Modal #falls3 -->
+
+                            <!-- BEGIN IMAGE -->
+                            <div class="img-col-3">
+                                <ul class="inline img-caption text-center breakavoid">
+                                    <li><img src="cdz.jpg" class="img-polaroid" alt="Controlled Decking Zone"
+                                            style="width: 200px;">
+                                        <p class="caption">Controlled Decking Zone</p>
+                                    </li>
+                                    <li><img src="leading_edge.jpg" class="img-polaroid" alt="Leading Edge"
+                                            style="width: 200px;">
+                                        <p class="caption">Leading Edge</p>
+                                    </li>
+                                    <li><img src="safetydeck_attach.jpg" class="img-polaroid" alt="Safety Deck"
+                                            style="width: 200px;">
+                                        <p class="caption">Safety Deck</p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- END IMAGE -->
+                        </div><!-- end accordion-inner -->
+                    </div> <!-- end one -->
+                </div> <!-- end group -->
+                <!-- END THREE -->
+               
+
+                <!-- BEGIN FOUR -->
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse1" data-parent="#accordion1"
+                            href="#criteria_fall_equipment" title="Criteria for fall protection equipment">
+                            <h6>Criteria for fall protection equipment</h6>
+                        </a>
+                    </div> <!-- end accordion-heading -->
+                    <div id="criteria_fall_equipment" class="accordion-body in collapse1" style="height: auto;">
+                        <div class="accordion-inner">
+                            <!--BEGIN Image -->
+                            <div class="pull-right img-caption text-center" >
+                                <img class="img-polaroid" src="positioning_device.jpg" alt="Positioning device">
+                                <p class="caption">Positioning device</p>
+                            </div>
+                            <!--END Image-->
+
+                            <ul>
+                                <li><em>Guardrail systems, safety-net systems, personal fall-arrest systems,
+                                        positioning-device systems</em> and their components must conform to the
+                                    criteria in <a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=10758"
+                                        title="29 CFR 1926.502">29 CFR 1926.502</a>. (See <a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12759"
+                                        title="Appendix G">Appendix G</a>.) [<a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(d)(1)"
+                                        title="29 CFR 1926.760(d)(1)">29 CFR 1926.760(d)(1)</a>]</li>
+                                <li>Fall-arrest system components must be used in <em>fall-restraint systems</em> and
+                                    conform to the criteria in <a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=10758"
+                                        title="29 CFR 1926.502">29 CFR 1926.502</a>. (See <a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12759"
+                                        title="Appendix G">Appendix G</a>.) [<a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(d)(2)"
+                                        title="29 CFR 1926.760(d)(2)">29 CFR 1926.760(d)(2)</a>]</li>
+                                <li>Either <em>body belts or body harnesses</em> may be used in fall restraint systems
+                                    for steel erection. [<a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(d)(2)"
+                                        title="29 CFR 1926.760(d)(2)">29 CFR 1926.760(d)(2)</a>]</li>
+                                <li>Perimeter safety cables must meet the criteria for guardrail systems in <a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=10758"
+                                        title="29 CFR 1926.502">29 CFR 1926.502</a>. (See <a
+                                        href="https://www.osha.gov//pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12759"
+                                        title="Appendix G">Appendix G</a>.) [<a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(d)(3)"
+                                        title="29 CFR 1926.760(d)(3)">29 CFR 1926.760(d)(3)</a>]</li>
+                            </ul>
+
+                        </div><!-- end accordion-inner -->
+                    </div> <!-- end one -->
+                </div> <!-- end group -->
+                <!-- END FOUR -->
+
+                <!-- BEGIN FIVE -->
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse1" data-parent="#accordion1"
+                            href="#custody_fall_protection" title="Custody of fall protection">
+                            <h6>Custody of fall protection</h6>
+                        </a>
+                    </div> <!-- end accordion-heading -->
+                    <div id="custody_fall_protection" class="accordion-body in collapse1" style="height: auto;">
+                        <div class="accordion-inner">
+                            <p>The steel erector may <em>leave fall protection in place</em> so it may be used by other
+                                trades only if the <em>controlling contractor</em> [<a
+                                    href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751&amp;p_text_version=FALSE#1926.760(e)"
+                                    title="29 CFR 1926.760(e)">29 CFR 1926.760(e)</a>]:</p>
+                            <ul>
+                                <li>Has <em>directed the steel erector</em> to leave the fall protection in place. [<a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(e)(1)"
+                                        title="29 CFR 1926.760(e)(1)">29 CFR 1926.760(e)(1)</a>]</li>
+                                <li>Has <em>inspected and accepted control and responsibility</em> of the fall
+                                    protection before authorizing other trades to work in the area. [<a
+                                        href="https://www.osha.gov/pls/oshaweb/owadisp.show_document?p_table=STANDARDS&amp;p_id=12751#1926.760(e)(2)"
+                                        title="29 CFR 1926.760(e)(2)">29 CFR 1926.760(e)(2)</a>]</li>
+                            </ul>
+                        </div><!-- end accordion-inner -->
+                    </div> <!-- end one -->
+                </div> <!-- end group -->
+                <!-- END FIVE -->
+
+            </div>
+
+        </div> <!-- end span12 -->
+    </div>
+</body>
+
+</html>
