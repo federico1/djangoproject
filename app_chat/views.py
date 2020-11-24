@@ -20,13 +20,13 @@ import json
 import requests
 
 url = "http://dstore.cartright.pk/ks.json"
-r = requests.get(url)
-r = json.loads(r.text)
+#r = requests.get(url)
+#r = json.loads(r.text)
 
-t_auth_key = r['t_auth_key']
-account_sid = r['account_sid']
-api_key_sid = r['api_key_sid']
-api_key_secret = r['api_key_secret']
+t_auth_key = '' #r['t_auth_key']
+account_sid =  '' #r['account_sid']
+api_key_sid = '' #r['api_key_sid']
+api_key_secret = '' #r['api_key_secret']
 
 
 @method_decorator([login_required], name='dispatch')
