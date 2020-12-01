@@ -126,7 +126,7 @@
                                     </ul>
                                 </div>
                             </li>
-                           
+
                             {% empty %}
                             <li class="menu__item">No modules yet.</li>
 
@@ -145,7 +145,7 @@
                     </div>
 
                     {% endif %}
-                   
+
                 </div>
                 <!-- sidebar-content  -->
             </nav>
@@ -316,6 +316,9 @@
 
 <script>
 
+    var totalSeconds = 0;
+    var lastSavedTime = 0;
+
     $("#top-nav").hide();
 
     $('iframe').on("load", function () {
@@ -348,6 +351,8 @@
         }, 4000);
 
         embedFile();
+
+        getTimeLog();
 
     });
 
@@ -468,7 +473,7 @@
 
                     var options = {
                         height: "500px",
-                        width:'100%',
+                        width: '100%',
                         pdfOpenParams: { view: 'FitV', page: '1' }
                     };
 
@@ -478,7 +483,6 @@
         }
 
     };
-
 
     function addAudioTop() {
 
@@ -505,5 +509,58 @@
         }
 
     }
+
+
+    function getTimeLog() {
+        $.get('/api/courses_time_logs/', { course: '{{object.id}}' }, function (response) {
+
+            if (response && response.length > 0) {
+                totalSeconds = response[response.length - 1].total_seconds;
+            }
+
+            timeCounter();
+
+        });
+    };
+
+
+    var saveTimeLog = function () {
+
+        var data = {
+            course: '{{object.id}}',
+            total_seconds: totalSeconds
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/api/courses_time_logs/",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            beforeSend: function (xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+            },
+            success: function (response) {
+                console.log(response)
+            },
+            failure: function (errMsg) {
+            }
+        });
+    };
+
+    function timeCounter() {
+        setInterval(() => {
+            totalSeconds += 10;
+
+            lastSavedTime++;
+
+            if (lastSavedTime >= 5) {
+                saveTimeLog();
+                lastSavedTime = 0;
+            }
+           
+        }, 10000);
+    };
+
 </script>
 {% endblock %}

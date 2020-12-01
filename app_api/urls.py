@@ -38,7 +38,10 @@ urlpatterns = [
     path('courses/', course_views.CourseDetailView.as_view()),
     path('courses/<int:pk>/', course_views.CourseDetailView.as_view()),
 
+    path('courses_time_logs/', course_views.CourseTimeLogDetailView.as_view()),
+
     path('users/', users_views.UserDetailView.as_view()),
     path('users/<int:pk>/', users_views.UserDetailView.as_view()),
+
 
 ]

@@ -9,7 +9,7 @@ from rest_framework import status
 from django.http import Http404
 from django.db.models import Count
 
-from courses.models import Subject, Course
+from courses.models import Subject, Course, CourseTimeLog
 from ..more_serializers.course_serializers import *
 
 from students.models import User
@@ -58,3 +58,39 @@ class CourseDetailView(APIView):
         serializer = CourseSerializer(snippets, many=True)
 
         return Response(serializer.data)
+
+
+class CourseTimeLogDetailView(APIView):
+
+    def get(self, request, format=None):
+
+        course_id = request.query_params.get('course')
+
+        snippets = CourseTimeLog.objects.filter(user=request.user, course_id=course_id)
+        serializer = CourseTimeLogSerializer(snippets, many=True)
+
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = CourseTimeLogSerializer(data=request.data)
+
+        if serializer.is_valid():
+            
+            course = serializer.validated_data['course']
+            snippets = CourseTimeLog.objects.filter(user=request.user, course=course)
+
+            print(snippets.count())
+
+            if snippets.count() > 0:
+                time_object = snippets.last()
+                time_object.total_seconds = request.data['total_seconds']
+                time_object.save()
+            else:
+                serializer.save(user=request.user)
+            
+
+            return Response(serializer.data,
+                            status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors,
+                        status=status.HTTP_400_BAD_REQUEST)

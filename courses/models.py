@@ -105,14 +105,18 @@ class ItemBase(models.Model):
 class Text(ItemBase):
     content = models.TextField()
 
+
 class File(ItemBase):
     file = models.FileField(upload_to='files')
+
 
 class Image(ItemBase):
     file = models.FileField(upload_to='images')
 
+
 class Video(ItemBase):
     url = models.URLField()
+
 
 class IFrame(ItemBase):
     site_url = models.TextField()
@@ -153,3 +157,20 @@ class CourseProgress(models.Model):
 
     def __str__(self):
         return str(self.content.id)
+
+
+class CourseTimeLog(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                              related_name='courses_time_spent',
+                              on_delete=models.SET_NULL, null=True)
+    last_updated = models.DateTimeField(auto_now=True)
+    total_seconds = models.IntegerField(default=0)
+    started_time = models.DateTimeField(auto_now_add=True)
+    course = models.ForeignKey(Course,
+                               related_name='time_logs',
+                               on_delete=models.CASCADE)
+    class Meta:
+        db_table = "courses_time_logs"
+
+    def __str__(self):
+        return str(self.total_seconds)
