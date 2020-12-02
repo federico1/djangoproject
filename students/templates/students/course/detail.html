@@ -8,7 +8,21 @@
 
 <nav class="navbar navbar-expand-md navbar-bark bg-dark">
     <a class="navbar-brand mb-0 h1 text-white" href="#"> {{ object.title }}</a>
+
     <div class="navbar-collapse">
+
+        <div class="m-auto">
+            <div class="digits">
+                <h3 class="time-output" id="hours">00</h3>
+                <h3 class="colon" id="colon-one">:</h3>
+                <h3 class="time-output" id="minutes">00</h3>
+                <h3 class="colon" id="colon-two">:</h3>
+                <h3 class="time-output" id="seconds">00</h3>
+                <h3 class="time-end" id="end">
+                </h3>
+            </div>
+        </div>
+
         <ul class="navbar-nav ml-auto">
 
             <li class="nav-item top-audio-1 d-none">
@@ -310,6 +324,18 @@
 
 {% block scripts %}
 
+<style>
+    .digits {
+        display: flex;
+        flex-direction: row;
+    }
+
+
+    .digits h3 {
+        color: #fff;
+    }
+</style>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"
     integrity="sha512-4ze/a9/4jqu+tX9dfOqJYSvyYd5M6qum/3HpCLr+/Jqf0whc37VUbkpNGHR7/8pSnCFw47T1fmIpwBV7UySh3g=="
     crossorigin="anonymous"></script>
@@ -550,16 +576,36 @@
 
     function timeCounter() {
         setInterval(() => {
-            totalSeconds += 10;
+            totalSeconds += 1;
 
             lastSavedTime++;
 
-            if (lastSavedTime >= 5) {
+            if (lastSavedTime >= 55) {
                 saveTimeLog();
                 lastSavedTime = 0;
             }
-           
-        }, 10000);
+
+            secondsToHms(totalSeconds);
+
+        }, 1000);
+    };
+
+    function pad(str, max) {
+        str = str.toString();
+        return str.length < max ? pad("0" + str, max) : str;
+    };
+
+    function secondsToHms(d) {
+
+        d = Number(d);
+        var h = Math.floor(d / 3600);
+        var m = Math.floor(d % 3600 / 60);
+        var s = Math.floor(d % 3600 % 60);
+
+        $("#hours").html(pad(h,2));
+        $("#minutes").html(pad(m,2));
+        $("#seconds").html(pad(s,2));
+
     };
 
 </script>
