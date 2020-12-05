@@ -352,6 +352,7 @@ def student_recommendation_list(request):
     )
     return render(request, 'students/reviews/student_recommendation_list.html', {'student': request.user.username, 'course_list': course_list})
 
+
 @login_required
 @student_required
 def quiz_reset(request, pk):
@@ -404,5 +405,31 @@ def file_upload(request):
     return HttpResponse(result)
 
 
+class StudentCourseDetailView2(LoginRequiredMixin, DetailView):
+    model = Course
+    template_name = 'students/course/detail2.html'
 
+
+    def get_queryset(self):
+        
+        qs = super(StudentCourseDetailView2, self).get_queryset()
+        qs = qs.filter(students__in=[self.request.user])
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+
+        context = super(StudentCourseDetailView2,
+                        self).get_context_data(**kwargs)
+       
+
+        course = self.get_object()
+
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        return super(StudentCourseDetailView2, self).render_to_response(context, **response_kwargs)
+
+    def get(self, *args, **kwargs):
+        return super().get(*args, **kwargs)
 

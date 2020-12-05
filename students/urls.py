@@ -15,6 +15,7 @@ urlpatterns = [
          (students.StudentCourseDetailView.as_view()), name='student_course_detail'),
     path('course/<int:pk>/<int:module_id>/', cache_page(60 * 15)
          (students.StudentCourseDetailView.as_view()), name='student_course_detail_module'),
+
     path('student/quiz/', students.QuizListView.as_view(),
          name='student_quiz_list'),
 
@@ -46,4 +47,9 @@ urlpatterns = [
     path('quiz/<int:quiz_id>/question/<int:question_id>/delete/',
          teachers.QuestionDeleteView.as_view(), name='teacher_delete_question'),
     path('uploadfile', students.file_upload, name='upload-file'),
+
+    path('course2/<int:pk>/', cache_page(60 * 15)
+         (students.StudentCourseDetailView2.as_view()), name='student_course_detail2'),
+    path('course2/<int:pk>/<int:module_id>/', cache_page(60 * 15)
+         (students.StudentCourseDetailView2.as_view()), name='student_course_detail_module2'),
 ]

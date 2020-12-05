@@ -6,7 +6,7 @@
 
 {% block nav %}
 
-<nav class="navbar navbar-expand-md navbar-bark bg-dark">
+<nav class="navbar navbar-expand-md navbar-bark bg-dark" id="secNav">
     <a class="navbar-brand mb-0 h1 text-white" href="#"> {{ object.title }}</a>
 
     <div class="navbar-collapse">
@@ -71,104 +71,108 @@
 {% block content %}
 
 
-<div class="container-fluid">
+<div class="container-fluid py-0 px-1" id="fixContainer">
     <!-- <h1 class="header">
         {{ object.title }}
     </h1> -->
 
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-3 p-0 position-relative">
+
             <nav id="sidebar" class="sidebar-wrapper">
-                <div class="sidebar-content">
-                    <div class="sidebar-brand">
-                        <a href="{% url "student_course_detail" object.id %}"> Course Materials </a>
-                    </div>
-                    <!-- sidebar-search  -->
-                    <div class="sidebar-menu">
-                        <ul>
 
-                            {% for m in object.modules.all %}
+                <div class="scrollbar-inner">
+                    <div class="sidebar-content">
+                        <div class="sidebar-brand">
+                            <a href="{% url "student_course_detail" object.id %}"> Course Materials </a>
+                        </div>
+                        <!-- sidebar-search  -->
+                        <div class="sidebar-menu">
+                            <ul>
 
-                            <li data-id="{{ m.id }}" class="sidebar-dropdown">
-                                <a href="javascript:;" class="{% if m == module %} active {% endif %}">
-                                    {{ m.title }}
-                                </a>
+                                {% for m in object.modules.all %}
 
-                                <div class="sidebar-submenu">
-                                    <ul>
-                                        {% for content in m.contents.all %}
-                                        {% with item=content.item %}
+                                <li data-id="{{ m.id }}" class="sidebar-dropdown">
+                                    <a href="javascript:;" class="{% if m == module %} active {% endif %}">
+                                        {{ m.title }}
+                                    </a>
 
-                                        <li>
-                                            {% if content.id in completed_contents or active_content.object.id  == content.id %}
+                                    <div class="sidebar-submenu">
+                                        <ul>
+                                            {% for content in m.contents.all %}
+                                            {% with item=content.item %}
 
-                                            <a class="{% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}pin{% endif %}"
-                                                href="{% url 'student_course_detail_module' object.id m.id %}?content={{content.id}}">
+                                            <li>
+                                                {% if content.id in completed_contents or active_content.object.id  == content.id %}
 
-                                                <i title=" {{ content.content_type }}"
-                                                    class="fa {{ content.content_type }}"></i>
-                                                {{ item.title }}
+                                                <a class="{% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}pin{% endif %}"
+                                                    href="{% url 'student_course_detail_module' object.id m.id %}?content={{content.id}}">
 
-                                            </a>
+                                                    <i title=" {{ content.content_type }}"
+                                                        class="fa {{ content.content_type }}"></i>
+                                                    {{ item.title }}
 
-                                            {% else %}
-                                            <a href="javascript:;">
-                                                <i title=" {{ content.content_type }}"
-                                                    class="fa {{ content.content_type }}"></i>
-                                                {{ item.title }}
-                                            </a>
+                                                </a>
+
+                                                {% else %}
+                                                <a href="javascript:;">
+                                                    <i title=" {{ content.content_type }}"
+                                                        class="fa {{ content.content_type }}"></i>
+                                                    {{ item.title }}
+                                                </a>
+                                                {% endif %}
+                                            </li>
+                                            {% endwith %}
+                                            {% endfor %}
+
+                                            {% if m.quiz != None and m.quiz_id in taken_quizzes %}
+                                            <li>
+                                                <a class="complete"
+                                                    href="{% url 'student_course_detail_module' object.id m.id %}?content={{m.quiz_id}}&type=quiz">
+                                                    <i class="fa fa-question-circle-o"></i>
+                                                    Quiz </a>
+                                            </li>
+                                            {% elif m.quiz != None %}
+                                            <li>
+                                                <a href="javascript:;">
+                                                    <i title="Quiz" class="fa fa-question-circle-o"></i>
+                                                    Quiz
+                                                </a>
+                                            </li>
                                             {% endif %}
-                                        </li>
-                                        {% endwith %}
-                                        {% endfor %}
+                                        </ul>
+                                    </div>
+                                </li>
 
-                                        {% if m.quiz != None and m.quiz_id in taken_quizzes %}
-                                        <li>
-                                            <a class="complete"
-                                                href="{% url 'student_course_detail_module' object.id m.id %}?content={{m.quiz_id}}&type=quiz">
-                                                <i class="fa fa-question-circle-o"></i>
-                                                Quiz </a>
-                                        </li>
-                                        {% elif m.quiz != None %}
-                                        <li>
-                                            <a href="javascript:;">
-                                                <i title="Quiz" class="fa fa-question-circle-o"></i>
-                                                Quiz
-                                            </a>
-                                        </li>
-                                        {% endif %}
-                                    </ul>
-                                </div>
-                            </li>
+                                {% empty %}
+                                <li class="menu__item">No modules yet.</li>
 
-                            {% empty %}
-                            <li class="menu__item">No modules yet.</li>
+                                {% endfor %}
 
-                            {% endfor %}
+                            </ul>
+                        </div>
+                        <!-- sidebar-menu  -->
 
-                        </ul>
+                        {% if content_completed == True and object.quiz is not None %}
+
+                        <div class="sidebar-brand">
+
+                            <a href="{% url "student_course_detail" object.id %}?type=quiz" class="btn btn-primary">
+                                Take Quiz </a>
+                        </div>
+
+                        {% endif %}
+
+
                     </div>
-                    <!-- sidebar-menu  -->
-
-                    {% if content_completed == True and object.quiz is not None %}
-
-                    <div class="sidebar-brand">
-
-                        <a href="{% url "student_course_detail" object.id %}?type=quiz" class="btn btn-primary">
-                            Take Quiz </a>
-                    </div>
-
-                    {% endif %}
-
+                    <!-- sidebar-content  -->
                 </div>
-                <!-- sidebar-content  -->
             </nav>
+
         </div>
         <div class="col-md-9">
-            <main class="page-content">
-                <div class="clever-description">
-
-                    <div class="row ">
+            <main class="page-content ">
+                <div class="row">
 
                         {% if module == None %}
 
@@ -214,8 +218,10 @@
                         </div>
                         {% else %}
                         <div class="col-md-12 mb-30">
-                            <div class="about-course">
+                            <div class="about-course p-2">
+                               
                                 {{object.overview|safe}}
+                              
                             </div>
                         </div>
                         {%endif%}
@@ -313,7 +319,6 @@
 
                     </div>
 
-                </div>
             </main>
         </div>
     </div>
@@ -334,7 +339,38 @@
     .digits h3 {
         color: #fff;
     }
+
+    .sidebar-wrapper {
+        overflow: hidden;
+        border-radius: 0;
+        min-width: auto;
+    }
+
+    .sidebar-content {
+        max-height: 100%;
+        height: 100%;
+    }
+
+    .scrollbar-inner {
+        height: 100%;
+        max-height: 100%;
+    }
+    .sidebar-wrapper  .sidebar-submenu li {
+        padding-left: 5px !important;
+    }
+
+    .sidebar-wrapper .sidebar-menu ul li a i {
+        float: left;
+        margin-right: 7px !important;
+    }
+
+    .scrollbar-inner > .scroll-element.scroll-y {
+        right: -3px;
+    }
+
 </style>
+
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"
     integrity="sha512-4ze/a9/4jqu+tX9dfOqJYSvyYd5M6qum/3HpCLr+/Jqf0whc37VUbkpNGHR7/8pSnCFw47T1fmIpwBV7UySh3g=="
@@ -352,6 +388,25 @@
     });
 
     $(document).ready(function () {
+
+        $("#fixContainer").css({
+            'max-height': $(window).height() - $("#secNav").height() - 20,
+            'height': $(window).height() - $("#secNav").height() - 20
+        });
+
+        $("#sidebar").css({
+            'max-height': $(window).height() - $("#secNav").height() - 30,
+            'height': $(window).height() - $("#secNav").height() - 30
+        });
+
+        $(".page-content").css({
+            'max-height': $(window).height() - $("#secNav").height() - 30,
+            'height': $(window).height() - $("#secNav").height() - 30,
+            'overflow':'hidden',
+            'padding':10
+        });
+
+        
 
         $(".sidebar-dropdown > a").click(function () {
 
@@ -379,6 +434,8 @@
         embedFile();
 
         getTimeLog();
+
+        jQuery('.scrollbar-inner').scrollbar();
 
     });
 
@@ -602,9 +659,9 @@
         var m = Math.floor(d % 3600 / 60);
         var s = Math.floor(d % 3600 % 60);
 
-        $("#hours").html(pad(h,2));
-        $("#minutes").html(pad(m,2));
-        $("#seconds").html(pad(s,2));
+        $("#hours").html(pad(h, 2));
+        $("#minutes").html(pad(m, 2));
+        $("#seconds").html(pad(s, 2));
 
     };
 
