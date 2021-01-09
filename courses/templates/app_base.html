@@ -75,14 +75,6 @@
                                     </ul>
                                 </li>
 
-                                <!-- {% if request.user.is_authenticated and request.user.is_student == True %}
-                                <li><a class="btn-blue" href="{% url "student_course_list" %}"">Student Dashboard</a></li>
-                                {% endif %} -->
-
-                                <!-- {% if request.user.is_authenticated and request.user.is_teacher == True %}
-                                <li><a class=" btn-blue" href="{% url "teacher_dashboard" %}"">Teacher Dashboard</a></li>
-                                {% endif %} -->
-
                             </ul>
 
                             <!-- Search Button -->
@@ -207,6 +199,9 @@
         });
 
         function getSubjects() {
+
+            $(".courses-menu ul").css('width', 315);
+
             $.get('/api/subjects', {}, function (response) {
                 $(response).each(function (indx, item) {
                     var href = 'course/subject/' + item.slug;
