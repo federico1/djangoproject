@@ -4,10 +4,10 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>{% block title %}  {% endblock %}</title>
-    <link rel="icon" type="image/png" href="{% static "/images/logo5.png" %}">
-    <link href="{% static "/css/base.css" %}" rel="stylesheet">
-    <link href="{% static "/css/style.css" %}" rel="stylesheet">
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="icon" type="image/png" href="{% static '/images/logo5.png' %}">
+    <link href="{% static '/css/base.css' %}" rel="stylesheet">
+    <link href="{% static '/css/style.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     </link>
     <style>
@@ -44,11 +44,11 @@
 
                     <!-- Logo -->
                     <a class="nav-brand" href="/">
-            
-                        <img  src="{% static "/images/logo5.png" %}" title="NYC CONSTRUCTION SAFETY TRAINING" style="height: 62px;"
-                            alt="">
-                            CONSTRUCTION SAFETY TRAINING
-                        </a>
+
+                        <img src="{% static '/images/logo5.png' %}" title="NYC CONSTRUCTION SAFETY TRAINING"
+                            style="height: 62px;" alt="">
+                        CONSTRUCTION SAFETY TRAINING
+                    </a>
 
                     <!-- Navbar Toggler -->
                     <div class="classy-navbar-toggler">
@@ -79,7 +79,7 @@
 
                             <!-- Search Button -->
                             <div class=" search-area">
-                                <form action="{% url "courses_list" %}" method="get">
+                                <form action="{% url 'courses_list' %}" method="get">
                                     <input type="search" name="q" id="search" placeholder="Search">
                                     <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
                                 </form>
@@ -91,7 +91,7 @@
                             <div class="login-state d-flex align-items-center mr-30 ">
                                 <div class="user-name">
                                     <div class="dropdown">
-                                        <a href="{% url "teacher_dashboard" %}" role="button">Teacher Dashboard</a>
+                                        <a href="{% url 'teacher_dashboard' %}" role="button">Teacher Dashboard</a>
                                     </div>
                                 </div>
                             </div>
@@ -101,7 +101,7 @@
                             <div class="login-state d-flex align-items-center mr-30 ">
                                 <div class="user-name">
                                     <div class="dropdown">
-                                        <a href="{% url "student_course_list" %}" role="button">Student Dashboard</a>
+                                        <a href="{% url  'student_course_list' %}" role="button">Student Dashboard</a>
                                     </div>
                                 </div>
                             </div>
@@ -111,11 +111,11 @@
                                 <div class="user-name">
                                     <div class="dropdown">
                                         <a class="dropdown-toggle" href="#" role="button" id="userName"
-                                            data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">{{ request.user }}</a>
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            {{ request.user }}</a>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userName">
 
-                                            <a class="dropdown-item" href="{% url "logout" %}">Sign out</a>
+                                            <a class="dropdown-item" href="{% url 'logout' %}">Sign out</a>
                                         </div>
                                     </div>
                                 </div>
@@ -124,9 +124,9 @@
                             {% else %}
                             <div class="register-login-area">
                                 <!-- <a href="#" class="btn">Register</a> -->
-                                <a href="{% url "login" %}" class="btn active">Sign in</a>
-                                <a data-toggle1="modal" data-target1="#exampleModal1" href="{% url "student_registration" %}"
-                                    class="btn">Register</a>
+                                <a href="{% url 'login' %}" class="btn active">Sign in</a>
+                                <a data-toggle1="modal" data-target1="#exampleModal1"
+                                    href="{% url 'student_registration' %}" class="btn">Register</a>
                             </div>
                             {% endif %}
 
@@ -147,6 +147,27 @@
         {% endblock %}
     </div>
 
+    <footer class="footer-area">
+
+        <div class="top-footer-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+
+                        <p class="text-white mb-1">
+                            NYC Construction Safety Training, LLC does not tolerate discrimination, nor tolerate explicit references of a discriminatory nature, based on gender, gender identity, gender expression, race, national origin, color, religion, age, disability, veteran status, socioeconomic status, marital status, pregnancy, and/or sexual orientation. 
+                        </p>
+                        <p><a href="#">
+                                Copyright © 2021 All rights reserved | NYC Construction Safety Training, LLC
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </footer>
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -159,8 +180,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <a href="{% url "student_registration" %}" class="btn btn-lg btn-primary">Register as Student</a>
-                    <a href="{% url "teacher_registration" %}" class="btn btn-lg btn-info">Register as Teacher</a>
+                    <a href="{% url 'student_registration' %}" class="btn btn-lg btn-primary">Register as Student</a>
+                    <a href="{% url 'teacher_registration' %}" class="btn btn-lg btn-info">Register as Teacher</a>
                 </div>
             </div>
         </div>
@@ -180,15 +201,17 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/gh/jquery-form/form@4.3.0/dist/jquery.form.min.js" integrity="sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn" crossorigin="anonymous"></script>
-    
+    <script src="https://cdn.jsdelivr.net/gh/jquery-form/form@4.3.0/dist/jquery.form.min.js"
+        integrity="sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn"
+        crossorigin="anonymous"></script>
+
     <script src="//media.twiliocdn.com/sdk/js/video/releases/2.4.0/twilio-video.min.js"></script>
 
     {% block scripts %}
     {% endblock %}
 
     <script>
-        
+
         $(document).ready(function () {
             {% block domready %}
             {% endblock %}

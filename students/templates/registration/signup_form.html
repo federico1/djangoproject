@@ -82,10 +82,12 @@
     </div>
 </div>
 
-<form id="fmFile" action="{% url 'upload-file' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="file" name="file" id="fu"><br>
-</form>
+<div class="d-none">
+    <form id="fmFile" action="{% url 'upload-file' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="file" id="fu"><br>
+    </form>
+</div>
 
 {% endblock %}
 
