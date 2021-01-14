@@ -232,7 +232,7 @@ Conferences Manager
 
 {% verbatim %}
 <script type="text/x-handlebars-template" id='roomListItemTemplate'>
-   <tr>
+    <tr>
        <td>
            {{title}}
        </td>
@@ -270,7 +270,6 @@ Conferences Manager
 {% block scripts %}
 
 <script>
-
     (function ($) {
         $.fn.serializeObject = function () {
             var o = {};
@@ -305,8 +304,7 @@ Conferences Manager
             var studentsList = [];
             var savedMembersList = [];
 
-            var settings = $.extend({
-            }, options);
+            var settings = $.extend({}, options);
 
             var getRooms = function () {
                 $.get('/api/video-rooms/?format=json', {}, function (response) {
@@ -340,13 +338,21 @@ Conferences Manager
 
                 $(courseList).each(function (index, item) {
 
-                    var lbl = $("<label />", { class: "form-check-label" });
+                    var lbl = $("<label />", {
+                        class: "form-check-label"
+                    });
 
-                    var opt = $("<input />", { type: 'checkbox', value: item.id, class: "form-check-input" });
+                    var opt = $("<input />", {
+                        type: 'checkbox',
+                        value: item.id,
+                        class: "form-check-input"
+                    });
 
                     lbl.html(opt).append(item.title);
 
-                    var div = $("<div />", { class: "form-check-inline" });
+                    var div = $("<div />", {
+                        class: "form-check-inline"
+                    });
 
                     div.html(lbl);
 
@@ -367,9 +373,16 @@ Conferences Manager
 
                 $(studentsList).each(function (index, item) {
 
-                    var li = $("<li />", { class: "list-group-item d-flex justify-content-between align-items-center" });
+                    var li = $("<li />", {
+                        class: "list-group-item d-flex justify-content-between align-items-center"
+                    });
 
-                    var a = $("<a />", { href: '#', text: 'Add', id: item.id, class: "link-add-member badge badge-primary badge-pill text-white" });
+                    var a = $("<a />", {
+                        href: '#',
+                        text: 'Add',
+                        id: item.id,
+                        class: "link-add-member badge badge-primary badge-pill text-white"
+                    });
 
                     li.append(item.username).append(a);
 
@@ -426,15 +439,16 @@ Conferences Manager
                         toastr.warning('Room is removed.', 'Warning!');
                         getRooms();
                     },
-                    failure: function (errMsg) {
-                    }
+                    failure: function (errMsg) {}
                 });
             };
 
             var getAddedMembers = function (id) {
 
                 if (id) {
-                    $.get('/api/video-participants/?format=json', { room: id }, function (response) {
+                    $.get('/api/video-participants/?format=json', {
+                        room: id
+                    }, function (response) {
                         savedMembersList = response;
                         drawMembersList();
                     });
@@ -450,11 +464,23 @@ Conferences Manager
 
                     console.log(item.is_approved);
 
-                    var li = $("<li />", { class: "list-group-item d-flex justify-content-between align-items-center" });
+                    var li = $("<li />", {
+                        class: "list-group-item d-flex justify-content-between align-items-center"
+                    });
 
-                    var a1 = $("<a />", { href: '#', text: 'Mark Approve', id: item.id, class: "link-approve-member badge badge-info badge-pill text-white" });
+                    var a1 = $("<a />", {
+                        href: '#',
+                        text: 'Mark Approve',
+                        id: item.id,
+                        class: "link-approve-member badge badge-info badge-pill text-white"
+                    });
 
-                    var a = $("<a />", { href: '#', text: 'X', id: item.id, class: "link-remove-member badge badge-danger badge-pill text-white" });
+                    var a = $("<a />", {
+                        href: '#',
+                        text: 'X',
+                        id: item.id,
+                        class: "link-remove-member badge badge-danger badge-pill text-white"
+                    });
 
                     li.append(item.member.username);
 
@@ -487,8 +513,7 @@ Conferences Manager
                         toastr.success('Member is added.', 'Success!');
                         getAddedMembers(data.room);
                     },
-                    failure: function (errMsg) {
-                    }
+                    failure: function (errMsg) {}
                 });
             };
 
@@ -505,8 +530,7 @@ Conferences Manager
                         toastr.warning('Member is removed.', 'Warning!');
                         getAddedMembers($("#members-modal").attr('pk'));
                     },
-                    failure: function (errMsg) {
-                    }
+                    failure: function (errMsg) {}
                 });
             };
 
@@ -526,8 +550,7 @@ Conferences Manager
                         toastr.info('Member is approved.', 'info!');
                         getAddedMembers($("#members-modal").attr('pk'));
                     },
-                    failure: function (errMsg) {
-                    }
+                    failure: function (errMsg) {}
                 });
             };
 
@@ -546,12 +569,16 @@ Conferences Manager
             var getParticipantsLog = function (id) {
 
                 if (id) {
-                    $.get('/api/video-participantslog/?format=json', { room: id }, function (response) {
+                    $.get('/api/video-participantslog/?format=json', {
+                        room: id
+                    }, function (response) {
                         $("#participants-modal table tbody").empty();
 
                         $(response).each(function (index, item) {
-                            var tr = $("<tr />").append('<td>' + item.participant.username + '</td>');
-                            tr.append('<td>' + moment(item.created).format('LLL') + '</td>');
+                            var tr = $("<tr />").append('<td>' + item.participant.username +
+                                '</td>');
+                            tr.append('<td>' + moment(item.created).format('LLL') +
+                            '</td>');
 
                             $("#participants-modal table tbody").append(tr);
                         });
@@ -592,8 +619,7 @@ Conferences Manager
                     success: function (response) {
 
                     },
-                    failure: function (errMsg) {
-                    }
+                    failure: function (errMsg) {}
                 });
             };
 
@@ -716,8 +742,7 @@ Conferences Manager
     }(jQuery));
 
     $(document).ready(function () {
-        var videoRoomPage = new $.VideoRoomPage({
-        });
+        var videoRoomPage = new $.VideoRoomPage({});
     });
 </script>
 

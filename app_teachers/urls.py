@@ -42,4 +42,7 @@ urlpatterns = [
     path('students-manager/',
          views.StudentsManagementView.as_view(),
          name='students_manager'),
+    path('course-copy/',
+         views.CourseCopy,
+         name='course_copy'),
 ]

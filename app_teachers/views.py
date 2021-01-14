@@ -3,19 +3,22 @@ from django.urls import reverse_lazy
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, \
-                                      DeleteView
+    DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, \
-                                       PermissionRequiredMixin
+    PermissionRequiredMixin
 from django.shortcuts import redirect, get_object_or_404
 from django.views.generic.base import TemplateResponseMixin, View
 from django.forms.models import modelform_factory
 from django.apps import apps
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from django.db.models import Count
+from django.core.cache import cache
+from django.http import HttpResponse
+from django.utils.text import slugify
+
 from courses.models import Subject, Course, Module, Content
 from .forms import ModuleFormSet
 from students.forms import CourseEnrollForm
-from django.core.cache import cache
 from students.models import User
 
 
@@ -46,10 +49,12 @@ class OwnerCourseEditMixin(OwnerCourseMixin, OwnerEditMixin):
 class ManageCourseListView(OwnerCourseMixin, ListView):
     template_name = 'manage/course/list.html'
 
+
 class CourseCreateView(PermissionRequiredMixin,
                        OwnerCourseEditMixin,
                        CreateView):
     permission_required = 'courses.add_course'
+
 
 class CourseUpdateView(PermissionRequiredMixin,
                        OwnerCourseEditMixin,
@@ -113,8 +118,8 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
 
     def dispatch(self, request, module_id, model_name, id=None):
         self.module = get_object_or_404(Module,
-                                       id=module_id,
-                                       course__owner=request.user)
+                                        id=module_id,
+                                        course__owner=request.user)
         self.model = self.get_model(model_name)
         if id:
             self.obj = get_object_or_404(self.model,
@@ -122,7 +127,7 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
                                          owner=request.user)
 
         return super(ContentCreateUpdateView,
-           self).dispatch(request, module_id, model_name, id)
+                     self).dispatch(request, module_id, model_name, id)
 
     def get(self, request, module_id, model_name, id=None):
         form = self.get_form(self.model, instance=self.obj)
@@ -140,7 +145,6 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
             obj.save()
             print(self.module.id)
             if not id:
-                
 
                 Content.objects.create(module_id=self.module.id,
                                        item=obj)
@@ -180,7 +184,7 @@ class ModuleOrderView(CsrfExemptMixin,
         print(self.request_json)
         for id, order in self.request_json.items():
             Module.objects.filter(id=id,
-                   course__owner=request.user).update(order=order)
+                                  course__owner=request.user).update(order=order)
         return self.render_json_response({'saved': 'OK'})
 
 
@@ -190,34 +194,79 @@ class ContentOrderView(CsrfExemptMixin,
     def post(self, request):
         for id, order in self.request_json.items():
             Content.objects.filter(id=id,
-                       module__course__owner=request.user) \
-                       .update(order=order)
+                                   module__course__owner=request.user) \
+                .update(order=order)
         return self.render_json_response({'saved': 'OK'})
 
 
 class TeacherHomeView(generic.TemplateView):
     template_name = 'teacher_home.html'
-    
+
     def get_context_data(self, *args, **kwargs):
-        context = super(TeacherHomeView, self).get_context_data(*args, **kwargs)
-		
+        context = super(TeacherHomeView, self).get_context_data(
+            *args, **kwargs)
+
         context['courses_count'] = self.request.user.courses_created.count()
-        
+
         users_id = list(self.request.user.courses_created.values_list('students',
-                                                          flat=True))
+                                                                      flat=True))
         students_count = User.objects.filter(id__in=users_id).count()
 
-        context['students_count'] = students_count;
+        context['students_count'] = students_count
 
         return context
 
 
 class StudentsManagementView(generic.TemplateView):
     template_name = 'students_management.html'
-    
+
     def get_context_data(self, *args, **kwargs):
-        context = super(StudentsManagementView, self).get_context_data(*args, **kwargs)
+        context = super(StudentsManagementView,
+                        self).get_context_data(*args, **kwargs)
         return context
 
-    
 
+def CourseCopy(request):
+    result = 0
+    if request.method == 'POST' and request.POST['id']:
+        course_object = Course.objects.get(pk=request.POST['id'])
+
+        modules = course_object.modules.all()
+
+        course_object.pk = None
+        course_object.id = None
+
+        if request.POST['name']:
+            course_object.title = request.POST['name']
+
+        old_slug = course_object.slug
+        course_object.slug = slugify(course_object.title)
+
+        if old_slug and old_slug == course_object.slug:
+            course_object.slug = course_object.slug + '-copied'
+
+        course_object.save()
+
+        for mod in modules:
+
+            contents = mod.contents.all()
+            mod.pk = None
+            mod.id = None
+            mod.course = course_object
+            mod.save()
+
+            for content in contents:
+
+                content_item = None
+
+                if content.item:
+                    content_item = content.item
+                    content_item.pk = None
+                    content_item.id = None
+                    content_item.save()
+
+                Content.objects.create(module_id=mod.id, item=content_item)
+
+        result = course_object.id
+
+    return HttpResponse(result, content_type='text/plain')

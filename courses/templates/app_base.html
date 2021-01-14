@@ -8,11 +8,8 @@
     <link rel="icon" type="image/png" href="{% static '/images/logo5.png' %}">
     <link href="{% static '/css/base.css' %}" rel="stylesheet">
     <link href="{% static '/css/style.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    </link>
-    <style>
+    <link rel="stylesheet" href="{% static "/plugins/toastr/toastr.min.css" %}">
 
-    </style>
 
 </head>
 
@@ -155,7 +152,10 @@
                     <div class="col-12">
 
                         <p class="text-white mb-1">
-                            NYC Construction Safety Training, LLC does not tolerate discrimination, nor tolerate explicit references of a discriminatory nature, based on gender, gender identity, gender expression, race, national origin, color, religion, age, disability, veteran status, socioeconomic status, marital status, pregnancy, and/or sexual orientation. 
+                            NYC Construction Safety Training, LLC does not tolerate discrimination, nor tolerate
+                            explicit references of a discriminatory nature, based on gender, gender identity, gender
+                            expression, race, national origin, color, religion, age, disability, veteran status,
+                            socioeconomic status, marital status, pregnancy, and/or sexual orientation.
                         </p>
                         <p><a href="#">
                                 Copyright © 2021 All rights reserved | NYC Construction Safety Training, LLC
@@ -187,23 +187,15 @@
         </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js"
-        integrity="sha256-5oApc/wMda1ntIEK4qoWJ4YItnV4fBHMwywunj8gPqc=" crossorigin="anonymous"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/gh/jquery-form/form@4.3.0/dist/jquery.form.min.js"
-        integrity="sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn"
-        crossorigin="anonymous"></script>
+    <script src="{% static "/plugins/jquery/jquery.min.js" %}"></script>
+    <script src="{% static "/plugins/jquery/jquery-ui.min.js" %}"></script>
+    <script src="{% static "/plugins/bootstrap/bootstrap.min.js" %}"></script>
+    <script src="{% static "/plugins/popper.min.js" %}"></script>
+    <script src="{% static "/pickadate/jquery.datetimepicker.full.min.js" %}"></script>
+    <script src="{% static "/plugins/toastr/toastr.min.js" %}"></script>
+    <script src="{% static "/plugins/jquery.form.min.js" %}"></script>
+    <script src="{% static "/plugins/handlebars.min.js" %}"></script>
 
     <script src="//media.twiliocdn.com/sdk/js/video/releases/2.4.0/twilio-video.min.js"></script>
 
@@ -211,12 +203,7 @@
     {% endblock %}
 
     <script>
-
-        $(document).ready(function () {
-            {% block domready %}
-            {% endblock %}
-        });
-
+       
         $(document).ready(function () {
             getSubjects();
         });
@@ -228,11 +215,11 @@
             $.get('/api/subjects', {}, function (response) {
                 $(response).each(function (indx, item) {
                     var href = 'course/subject/' + item.slug;
-                    $(".courses-menu ul").append('<li><a href="' + href + '"">' + item.title + '</a></li>');
+                    $(".courses-menu ul").append('<li><a href="' + href + '"">' + item.title +
+                        '</a></li>');
                 });
             });
         }
-
     </script>
 </body>
 

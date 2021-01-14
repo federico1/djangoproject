@@ -174,3 +174,14 @@ class CourseTimeLog(models.Model):
 
     def __str__(self):
         return str(self.total_seconds)
+
+
+def CopyCourse(request, id):
+    result = 0
+
+    if id is not None:
+        course_object = Course.objects.get(pk=id)
+        
+        result = 1
+    
+    return HttpResponse(result, content_type='text/plain')

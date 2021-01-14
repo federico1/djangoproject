@@ -10,6 +10,7 @@ from django.http import HttpResponse
 
 from .forms import QuestionForm, BaseAnswerInlineFormSet
 
+
 def question_add(request, module_id=None):
     module = get_object_or_404(Module, pk=module_id)
     question = Question()
@@ -68,6 +69,7 @@ def question_add(request, module_id=None):
         'formset': formset
     })
 
+
 def question_delete(request, module_id=None):
 
     if request.GET.get('question_id') is not None:
@@ -76,6 +78,7 @@ def question_delete(request, module_id=None):
         Answer.objects.filter(question=question_pk).delete()
     
     return redirect('app_add_question', module_id)
+
 
 def quiz_course(request, course_id=None):
     course = get_object_or_404(Course, pk=course_id)

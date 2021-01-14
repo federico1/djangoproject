@@ -9,112 +9,111 @@
 <div class="mt-3 d-sm-flex align-items-center justify-content-between mb-4 p-2">
     <h1 class="h3 mb-0 text-gray-800">
         {% trans 'Manage Quiz' %}
-        
+
     </h1>
 
-    <a href="{% url 'module_content_list' module.id %}"
-        class="d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-add"></i> << Back To {% trans module.title %}</a>
-</div>
+    <a href="{% url 'module_content_list' module.id %}" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+            class="fas fa-add"></i>
+        << Back To {% trans module.title %}</a> </div> <div class="container-fluid">
 
-<div class="container-fluid">
-   
-
-    <div class="row">
-        <div class="col-md-5">
-            <h5>
-                Add/Update Question
-            </h5>
 
             <div class="row">
-                <form method="post" class="form-inline" novalidate>
-                    {% csrf_token %}
-                    {{ formset.management_form }}
-                    <div class="col-md-12">
-                        {{ form.as_p }}
-                    </div>
-                    <div class="col-md-12 {% if formset.errors %} danger {% endif %}">
-    
-                        {% for error in formset.non_form_errors %}
-                        <div class="text-danger">{{ error }}</div>
-                        {% endfor %}
-                        <div class="question">
-                            {% for form in formset %}
-                            <div>
-                                {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
-                            </div>
-    
-                            <div class="row">
-                                <div class="col-md-12 small">
-                                    <label for="lbl">Answer Title </label>
-                                </div>
-                                <div class="col-md-12">
-                                    {{ form.text }}
-                                </div>
-    
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="checkbox">
-                                        <span class="text-muted ">Correct answer? {{ form.is_correct }}</span>
-                                    </div>
-                                </div>
-    
-                            </div>
-    
-                            {% endfor %}
-                        </div>
-                    </div>
-    
-                    <button class="btn btn-primary" type="submit">{% trans 'Save' %}</button>
-                    <p class="text-info">
-                        {% trans 'Your question must have at least 2 answers. Select at least one correct answer.' %}</p>
-                </form>
-            </div>
-           
-        </div>
-
-        <div class="col-md-7">
-            <h5>
-                Questions List
-            </h5>
-            <div>
-                {% for item in questions %}
-
-                <div class="accordion">
+                <div class="col-md-5">
                     <h5>
-                        {{item}}
+                        Add/Update Question
+                    </h5>
+
+                    <div class="row">
+                        <form method="post" class="form-inline" novalidate>
+                            {% csrf_token %}
+                            {{ formset.management_form }}
+                            <div class="col-md-12">
+                                {{ form.as_p }}
+                            </div>
+                            <div class="col-md-12 {% if formset.errors %} danger {% endif %}">
+
+                                {% for error in formset.non_form_errors %}
+                                <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                                <div class="question">
+                                    {% for form in formset %}
+                                    <div>
+                                        {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12 small">
+                                            <label for="lbl">Answer Title </label>
+                                        </div>
+                                        <div class="col-md-12">
+                                            {{ form.text }}
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="checkbox">
+                                                <span class="text-muted ">Correct answer? {{ form.is_correct }}</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary" type="submit">{% trans 'Save' %}</button>
+                            <p class="text-info">
+                                {% trans 'Your question must have at least 2 answers. Select at least one correct answer.' %}
+                            </p>
+                        </form>
+                    </div>
+
+                </div>
+
+                <div class="col-md-7">
+                    <h5>
+                        Questions List
                     </h5>
                     <div>
-                        <ul class="list-group">
-                            {% for answer in item.answers.all %}
-                            <li class="list-group-item">
-                                {{answer}}
+                        {% for item in questions %}
 
-                                {% if answer.is_correct == True %}
-                                <span class="pull-right">
-                                    Correct Answer
-                                </span>
-                                {%endif%}
+                        <div class="accordion">
+                            <h5>
+                                {{item}}
+                            </h5>
+                            <div>
+                                <ul class="list-group">
+                                    {% for answer in item.answers.all %}
+                                    <li class="list-group-item">
+                                        {{answer}}
 
-                            </li>
-                            {% endfor %}
-                        </ul>
+                                        {% if answer.is_correct == True %}
+                                        <span class="pull-right">
+                                            Correct Answer
+                                        </span>
+                                        {%endif%}
+
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="buttons" pk="{{item.id}}">
+                                <a href="{% url 'app_add_question' module.id %}?question_id={{item.id}}"
+                                    class="btn btn-info btn-sm">Edit</a>
+                                <button class="btn btn-info btn-sm" pk="{{item.id}}">Delete</button>
+                            </div>
+                        </div>
+
+                        {% endfor %}
                     </div>
-                </div>
-                <div>
-                    <div class="buttons" pk="{{item.id}}">
-                        <a href="{% url 'app_add_question' module.id %}?question_id={{item.id}}"
-                            class="btn btn-info btn-sm">Edit</a>
-                        <button class="btn btn-info btn-sm" pk="{{item.id}}">Delete</button>
-                    </div>
-                </div>
 
-                {% endfor %}
+
+                </div>
             </div>
-
-
-        </div>
-    </div>
 </div>
 
 <div id="dialog-confirm" title="Delete Question?">
@@ -125,8 +124,7 @@
 
 {% block scripts %}
 
-<link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
-</link>
+<link href="{% static "/plugins/jquery/jquery-ui.css" %}" rel="stylesheet">
 
 <style>
     .buttons {
@@ -141,7 +139,8 @@
         $("form label").css('justify-content', 'left');
 
         $(".accordion").accordion({
-            collapsible: true, active: false
+            collapsible: true,
+            active: false
         });
 
         $("div.buttons").on("click", ".btn", function (e) {
@@ -149,8 +148,7 @@
 
             if ($(this).text() == 'Edit') {
                 window.location = $(this).attr('href');
-            }
-            else if ($(this).text() == 'Delete') {
+            } else if ($(this).text() == 'Delete') {
                 var id = $(this).attr('pk');
                 deleteQuestion(id);
             }
@@ -167,7 +165,7 @@
             modal: true,
             buttons: {
                 "YES": function () {
-                   window.location = "{% url 'app_delete_question' module.id %}?question_id="+id;
+                    window.location = "{% url 'app_delete_question' module.id %}?question_id=" + id;
                 },
                 Cancel: function () {
                     $(this).dialog("close");
