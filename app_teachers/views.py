@@ -270,3 +270,35 @@ def CourseCopy(request):
         result = course_object.id
 
     return HttpResponse(result, content_type='text/plain')
+
+
+def ModuleCopy(request):
+    result = 0
+    if request.method == 'POST' and request.POST['id'] and request.POST['course']:
+        module_object = Module.objects.get(pk=request.POST['id'])
+        contents = module_object.contents.all()
+
+        module_object.pk = None
+        module_object.id = None
+
+        if request.POST['name']:
+            module_object.title = request.POST['name']
+
+        module_object.course_id = request.POST['course']
+        module_object.save()
+
+        for content in contents:
+            content_item = None
+
+            if content.item:
+
+                content_item = content.item
+                content_item.pk = None
+                content_item.id = None
+                content_item.save()
+
+                Content.objects.create(module_id=module_object.id, item=content_item)
+        
+        result = module_object.id
+
+    return HttpResponse(result, content_type='text/plain')

@@ -45,4 +45,8 @@ urlpatterns = [
     path('course-copy/',
          views.CourseCopy,
          name='course_copy'),
+
+    path('module-copy/',
+         views.ModuleCopy,
+         name='module_copy'),
 ]

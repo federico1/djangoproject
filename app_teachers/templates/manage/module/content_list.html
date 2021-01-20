@@ -6,19 +6,33 @@ Module {{ module.order|add:1 }}: {{ module.title }}
 {% endblock %}
 
 {% block content %}
+
 {% with course=module.course %}
 
-<div class="mt-3 d-sm-flex align-items-center justify-content-between mb-4 p-2">
-    <h1 class="h3 mb-0 text-gray-800">
-        Course "{{ course.title }}"
-    </h1>
-    <a href="{% url "manage_course_list" %}" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-            class="fas fa-add"></i> Back To Courses</a>
+<div class="row my-2">
+
+    <div class="col-md-8">
+        <h1 class="h3 mb-0 text-gray-800">
+            Course "{{ course.title }}"
+        </h1>
+    </div>
+
+    <div class="col-md-4 text-right">
+
+        <a href="javascript:void(0);" class="d-sm-inline-block btn btn-sm btn-info shadow-sm link-copy-module"
+            pk="{{module.id}}">
+            <i class="fa fa-clone"></i> Copy Module </a>
+
+        <a href="{% url "manage_course_list" %}" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fa fa-mail-reply"></i> Back To Courses</a>
+    </div>
+
 </div>
+
 
 <div>
     <div class="row">
-        
+
         <div class="col-md-3">
             <nav id="sidebar" class="sidebar-wrapper">
                 <div class="sidebar-content">
@@ -63,7 +77,7 @@ Module {{ module.order|add:1 }}: {{ module.title }}
                 <!-- <h5>Module contents:</h5> -->
 
                 <div class="row">
-                    <div class="col-md-12 not">
+                    <div class="col-md-12 not p-0">
                         <h4>Module {{ module.order|add:1 }}: {{ module.title }}</h4>
                     </div>
                 </div>
@@ -107,6 +121,7 @@ Module {{ module.order|add:1 }}: {{ module.title }}
                         <a class="badge badge-primary"
                             href="{% url "module_content_create" module.id "iframe" %}">IFrame</a>
                         <a class="badge badge-primary" href="{% url "app_add_question" module.id %}">Add Questions</a>
+
                     </div>
                 </div>
 
@@ -116,13 +131,65 @@ Module {{ module.order|add:1 }}: {{ module.title }}
 </div>
 
 {% endwith %}
+
+
+<div id="copyModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Copy Module <small> {{module.title}} </small> </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form method="post" action="{% url 'module_copy' %}">
+
+                    {% csrf_token %}
+
+                    <input type="hidden" id="txtModule" name="id">
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Select Course</label>
+                        <select class="form-control" id="ddlCourse" name="course">
+                            <option value="">Choose</option>
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Name</label>
+                        <input type="text" class="form-control" id="txtName" value="{{module.title}}" name="name">
+                    </div>
+
+                    <div class="text-center spin">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Copying...</span>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnStartCopy">Start Copy</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block scripts %}
 
 <script>
     $(document).ready(function () {
+        onLoadPage();
+        new $.CopyModuleManager({});
+    });
 
+    function onLoadPage() {
         $(".container input, select, textarea").addClass('form-control');
         $(".container textarea").css('height', 70);
 
@@ -180,6 +247,129 @@ Module {{ module.order|add:1 }}: {{ module.title }}
 
             }
         });
-    });
+    };
+
+    (function ($) {
+
+        $.CopyModuleManager = function (options) {
+
+            var that = this;
+
+            var courseList;
+
+            var settings = $.extend({}, options);
+
+            var getCourses = function () {
+                $.get('/api/teacher-courses/?format=json', {}, function (response) {
+                    courseList = response;
+                    fillCourseDropdown();
+                });
+            };
+
+            var fillCourseDropdown = function () {
+                $("#copyModal #ddlCourse").empty();
+                $("#copyModal #ddlCourse").append('<option value="">Choose</option>');
+
+                $(courseList).each(function (index, item) {
+                    var opt = $("<option />", {
+                        value: item.id,
+                        text: item.title
+                    });
+
+                    $("#copyModal #ddlCourse").append(opt);
+                });
+            };
+
+            var initForm = function () {
+
+                $('#copyModal form').ajaxForm({
+
+                    beforeSubmit: function () {
+                        $('#copyModal .spin').removeClass('d-none');
+                        $("#copyModal button, input, select").attr('disabled', true);
+                    },
+                    success: function (response) {
+
+                          $('#copyModal').modal('hide');
+
+                        if (response > 0) {
+                            toastr.success('Module has been copied.');
+                        } else {
+                            
+                            toastr.error(
+                                'Sorry, We are failed to created the copy. Kindly refresh the page and try again.'
+                            );
+                           
+                           setTimeout(function(){
+                                window.location.reload();
+                           }, 1000);
+                        }
+                    }
+                });
+
+            };
+
+            var registerEvent = function () {
+
+                $("div").on("click", ".link-copy-module", function (e) {
+                    e.stopPropagation();
+
+                    var id = $(this).attr('pk');
+
+                    if (id) {
+
+                        $("#copyModal #txtModule").val(id);
+
+                        $("#copyModal").modal({
+                            backdrop: 'static',
+                            show: true
+                        });
+                    }
+
+
+                });
+
+                $("div").on("click", "#btnStartCopy", function (e) {
+                    e.stopPropagation();
+
+                    var course = $("#copyModal #ddlCourse").val()
+
+                    if (course) {
+
+                        $('#copyModal form').submit();
+
+                    } else {
+                        toastr.danger('Please select the course');
+                    }
+
+                });
+
+                $('#copyModal').on('hidden.bs.modal', function (e) {
+                    $('#copyModal .spin').addClass('d-none');
+                    $("#copyModal button, input, select").attr('disabled', false);
+                });
+
+                $('#copyModal').on('shown.bs.modal', function (e) {
+                    $('#copyModal .spin').addClass('d-none');
+                    $("#copyModal button, input, select").attr('disabled', false);
+                });
+
+            };
+
+            var init = function () {
+                registerEvent();
+                getCourses();
+                initForm();
+            };
+
+            init();
+
+            return this;
+
+        };
+
+
+    }(jQuery));
 </script>
+
 {% endblock %}
