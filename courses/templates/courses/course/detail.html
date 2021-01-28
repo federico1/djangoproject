@@ -1,33 +1,283 @@
 {% extends "app_base.html" %}
+{% load staticfiles %}
 
 {% block title %}
-    {{ object.title }}
+{{ object.title }}
 {% endblock %}
 
 {% block content %}
-    {% with subject=object.subject %}
-        <h1>
-            {{ object.title }}
-        </h1>
-        <div class="module">
-            <h2>Overview </h2>
-            <p>
-                <a href="{% url "course_list_subject" subject.slug %}">{{ subject.title }}</a>.
-                {{ object.modules.count }} modules.
-                Instructor: {{ object.owner.get_full_name }}
-            </p>
-            {{ object.overview|linebreaks }}
-            {% if request.user.is_authenticated %}
-                <form action="{% url "student_enroll_course" %}" method="post">
-                    {{ enroll_form }}
-                    {% csrf_token %}
-                    <input type="submit" class="button" value="Enroll now">
-                </form>
-            {% else %}
-                <a href="{% url "student_registration" %}" class="button">
-                    Register to enroll
-                </a>
-            {% endif %}
+{% with subject=object.subject %}
+
+{% comment %} <div class="single-course-intro d-flex align-items-center justify-content-center"
+    style="background-image: url({% static "/images/4hrs.png" %});">
+
+
+</div> {% endcomment %}
+
+<h1>
+    {{ object.title }}
+</h1>
+
+<div class="single-course-content section-padding-50">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-12 col-lg-8">
+
+                <div class="course--content">
+                    <div class="clever-tabs-content">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="tab--1" data-toggle="tab" href="#tab1" role="tab"
+                                    aria-controls="tab1" aria-selected="false">Description</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab--2" data-toggle="tab" href="#tab2" role="tab"
+                                    aria-controls="tab2" aria-selected="true">Learning Outcomes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab--3" data-toggle="tab" href="#tab3" role="tab"
+                                    aria-controls="tab3" aria-selected="true">Course Notes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab--4" data-toggle="tab" href="#tab4" role="tab"
+                                    aria-controls="tab4" aria-selected="true">Completion Requirements</a>
+                            </li>
+
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1">
+                                <div class="clever-description">
+
+                                    <div class="about-course mb-30">
+                                        <h4>About this course</h4>
+                                        <p>
+                                            {{ object.overview|linebreaks }}
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div> <!-- END TAB1 -->
+
+
+                            <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab--2">
+                                <div class="clever-curriculum">
+
+                                    <div class="about-curriculum mb-30">
+
+                                        <h4>
+                                            Upon completion of this course, the student will be able to:
+                                        </h4>
+
+                                        <ul class="list-group">
+                                            <li class="list-group-item">List supported scaffold types and its major
+                                                components</li>
+                                            <li class="list-group-item">Identify the most common supported scaffold
+                                                safety hazards</li>
+                                            <li class="list-group-item">Protect themselves from supported scaffold
+                                                safety hazards</li>
+                                            <li class="list-group-item">Outline New York City Building Code supported
+                                                scaffold safety
+                                                requirements</li>
+                                            <li class="list-group-item">Inspect supported scaffolds in accordance with
+                                                federal and local safety
+                                                regulations</li>
+                                        </ul>
+
+
+
+                                    </div>
+
+
+                                </div>
+                            </div> <!-- END TAB2 -->
+
+
+                            <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab--3">
+                                <div class="clever-curriculum">
+
+                                    <div class="about-curriculum mb-30">
+
+                                        <div>
+
+                                            <h4>CEU Requirements</h4>
+
+                                            <ul class="list-group">
+                                                <li class="list-group-item">100% attendance for the course<u></u><u></u>
+                                                </li>
+                                                <li class="list-group-item">Completion of Continuing Education and
+                                                    Training Registration
+                                                    Form<u></u><u></u></li>
+                                                <li class="list-group-item">Active participation in all class exercises
+                                                    (determined by course
+                                                    instructor)<u></u><u></u></li>
+                                                <li class="list-group-item">Completion of required pre-and post-quiz
+                                                    assessment<u></u><u></u>
+                                                </li>
+                                                <li class="list-group-item">As applicable, achievement of minimum
+                                                    passing score on required
+                                                    end-of-course examination<u></u><u></u></li>
+                                                <li class="list-group-item">Participation and submittal of end-of-course
+                                                    evaluation form (must
+                                                    provide name on form to receive credit)</li>
+                                            </ul>
+
+                                            <h4 class="mt-3">Prerequisites</h4>
+                                            <p>There are no prerequisites needed to attend this course. Students must be
+                                                able to verbally communicate with instructor in primary language of the
+                                                training.</p>
+                                            <h4>Training Requirements for&nbsp;4 Hour Supported Scaffold User &amp;
+                                                Refresher Course</h4>
+                                            <p>As per Local Law 52 of 2005, this course is required for workers using
+                                                supported scaffolds on construction sites in New York City. This
+                                                training is required every 4 years.</p>
+                                            <h4>Audience</h4>
+                                            <p>Any individual who needs to use or work on a Supported Scaffold in New
+                                                York City.</p>
+                                        </div>
+
+
+
+                                    </div>
+
+
+                                </div>
+                            </div> <!-- END TAB3 -->
+
+
+                            <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab--4">
+                                <div class="clever-curriculum">
+
+                                    <div class="about-curriculum mb-30">
+
+
+                                        <h4>Completion Requirements</h4>
+                                        <p>Students are required to complete 100% of the course and actively participate
+                                            in all learning activities including hands-on exercises and review quiz to
+                                            receive the 4 Hour Supported Scaffold course completion ID card.</p>
+                                        <p>Make-up time is not permitted for this training course. Should students miss
+                                            any portion of the training, it is the student’s responsibility to contact
+                                            NYCCST to arrange to attend another scheduled event.</p>
+                                        <p class="d-none"><a
+                                                href="#">Read
+                                                NYCCST's full attendance and make-up time policies here.</a></p>
+
+
+
+                                    </div>
+
+
+                                </div>
+                            </div> <!-- END TAB4 -->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-4">
+                <div class="course-sidebar">
+
+                    {% if request.user.is_authenticated %}
+                    <form action="{% url "student_enroll_course" %}" method="post">
+                        {{ enroll_form }}
+                        {% csrf_token %}
+                        <input type="submit" class="btn clever-btn mb-30" value="Enroll now">
+                    </form>
+                    {% else %}
+                    <a href="{% url "student_registration" %}" class="btn clever-btn mb-30">
+                        Register to enroll
+                    </a>
+                    {% endif %}
+
+
+                    <div class="sidebar-widget">
+                        <h5> Instructor</h5>
+                        <ul class="features-list">
+                            <li>
+                                <h6>{{ object.owner.get_full_name }}</h6>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                    <div class="sidebar-widget">
+
+                        <h5> Modules</h5>
+
+                        <ul class="features-list">
+                            <li>
+                                <h6>{{ object.modules.count }} modules</h6>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                    <div class="sidebar-widget">
+
+
+                        <h5>Tags</h5>
+                        <ul class="features-list">
+                            <li>
+                                <a class="badge badge-primary"
+                                    href="{% url "course_list_subject" subject.slug %}">{{ subject.title }}</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
         </div>
-    {% endwith %}
+
+    </div>
+</div>
+
+<div class="d-none module">
+    <h2>Overview </h2>
+    <p>
+        <a href="{% url "course_list_subject" subject.slug %}">{{ subject.title }}</a>.
+        {{ object.modules.count }} modules.
+        Instructor: {{ object.owner.get_full_name }}
+    </p>
+    {{ object.overview|linebreaks }}
+    {% if request.user.is_authenticated %}
+    <form action="{% url "student_enroll_course" %}" method="post">
+        {{ enroll_form }}
+        {% csrf_token %}
+        <input type="submit" class="button" value="Enroll now">
+    </form>
+    {% else %}
+    <a href="{% url "student_registration" %}" class="button">
+        Register to enroll
+    </a>
+    {% endif %}
+</div>
+
+{% endwith %}
+{% endblock %}
+
+{% block scripts %}
+
+<style>
+    .single-course-intro {
+        background-position: center -233px;
+        background-repeat: no-repeat;
+        background-color: #eaeaea;
+        height: 350px;
+    }
+
+    .nav-link {
+        background: #878787 !important;
+        color: #fff !important;
+        border: 1px solid #878787 !important;
+    }
+
+    .clever-tabs-content .nav-tabs .nav-link.active {
+        background: #494949 !important;
+        color: #fff !important;
+        border: 1px solid #000;
+    }
+</style>
+
 {% endblock %}
