@@ -180,11 +180,13 @@
                 <div class="course-sidebar">
 
                     {% if request.user.is_authenticated %}
+                    <div class="clearfix">
                     <form action="{% url "student_enroll_course" %}" method="post">
                         {{ enroll_form }}
                         {% csrf_token %}
-                        <input type="submit" class="btn clever-btn mb-30" value="Enroll now">
+                        <input type="submit" class="btn btn-success mb-30" value="Enroll now">
                     </form>
+                    </div>
                     {% else %}
                     <a href="{% url "student_registration" %}" class="btn clever-btn mb-30">
                         Register to enroll
@@ -278,6 +280,8 @@
         color: #fff !important;
         border: 1px solid #000;
     }
+
+    
 </style>
 
 {% endblock %}

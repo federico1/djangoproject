@@ -166,7 +166,7 @@ select {
     width:324px;
 }
 
-input[type=submit], a.button {
+/* input[type=submit], a.button {
     border-radius:5px;
     background:#4dcc43;
     color:#fff;
@@ -175,7 +175,7 @@ input[type=submit], a.button {
     border:none;
     padding:10px 20px;
     margin:20px 0;
-}
+} */
 
 a.secondary-button {
     border:3px solid #4dcc43;
