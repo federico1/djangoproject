@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block content %}
+
 {% with subject=object.subject %}
 
 {% comment %} <div class="single-course-intro d-flex align-items-center justify-content-center"
@@ -29,17 +30,18 @@
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" id="tab--1" data-toggle="tab" href="#tab1" role="tab"
-                                    aria-controls="tab1" aria-selected="false">Description</a>
+                                    aria-controls="tab1" aria-selected="false">Description & Schedule</a>
                             </li>
-                            <li class="nav-item {% if object.id != 17 %} d-none  {% endif %}">
+
+                            <li class="nav-item">
                                 <a class="nav-link" id="tab--2" data-toggle="tab" href="#tab2" role="tab"
                                     aria-controls="tab2" aria-selected="true">Learning Outcomes</a>
                             </li>
-                            <li class="nav-item {% if object.id != 17 %} d-none  {% endif %}">
+                            <li class="nav-item">
                                 <a class="nav-link" id="tab--3" data-toggle="tab" href="#tab3" role="tab"
                                     aria-controls="tab3" aria-selected="true">Course Notes</a>
                             </li>
-                            <li class="nav-item {% if object.id != 17 %} d-none  {% endif %}">
+                            <li class="nav-item">
                                 <a class="nav-link" id="tab--4" data-toggle="tab" href="#tab4" role="tab"
                                     aria-controls="tab4" aria-selected="true">Completion Requirements</a>
                             </li>
@@ -52,13 +54,24 @@
                                     <div class="about-course mb-30">
                                         <h4>About this course</h4>
                                         <p>
-                                            {{ object.overview|linebreaks }}
+                                            {{ object.overview| safe }}
 
                                         </p>
                                     </div>
 
+                                     <div class="about-course mb-30">
+                                        <h4>Schedule</h4>
+                                        <p>
+                                            {{ object.schedule | safe }}
+
+                                        </p>
+                                    </div>
+
+
                                 </div>
                             </div> <!-- END TAB1 -->
+
+
 
 
                             <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab--2">
@@ -66,45 +79,7 @@
 
                                     <div class="about-curriculum mb-30">
 
-                                        <h4>
-                                            Upon completion of this course, the student will be able to:
-                                        </h4>
-
-                                        <ul class="list-group">
-                                            <li class="list-group-item">
-                                                By the end of the learning module, participants will
-                                                identify/differentiate between different types of supported scaffolds
-                                            </li>
-
-                                            <li class="list-group-item">
-                                                By the end of the learning module, participants will have known hazards
-                                                related to improper supported scaffolds use accidents
-                                            </li>
-                                            <li class="list-group-item">
-                                                By the end of the learning module, participants will become familiar
-                                                with 1926 OSHA Overview -Safety and Health Regulations for Construction
-                                            </li>
-                                            <li class="list-group-item">Outline New York City Building Code supported
-                                                scaffold safety
-                                                requirements</li>
-                                            <li class="list-group-item">
-                                                By the end of the learning module, participants will identify Personal
-                                                Protected Equipment related to Life-Saving Equipment
-
-                                            </li>
-
-                                            <li class="list-group-item">
-                                                Protect themselves from supported scaffold safety hazards
-                                            </li>
-
-                                            <li class="list-group-item">
-                                                Inspect supported scaffolds in accordance with federal and local safety
-                                                regulations
-                                            </li>
-
-                                        </ul>
-
-
+                                        {{ object.features.first.outcomes  | safe  }}
 
                                     </div>
 
@@ -117,55 +92,7 @@
                                 <div class="clever-curriculum">
 
                                     <div class="about-curriculum mb-30">
-
-                                        <div>
-
-                                            <h4>CEU Requirements</h4>
-
-                                            <ul class="list-group">
-                                                <li class="list-group-item">
-                                                    100% appearance for the course
-                                                </li>
-                                                <li class="list-group-item">
-                                                    Fully involvement in all class trainings (determined by instructor)
-                                                </li>
-
-                                                <li class="list-group-item">Completion of Continuing Education and
-                                                    Training Registration
-                                                    Form</li>
-
-                                                <li class="list-group-item">Completion of mandatory quiz assessments
-                                                </li>
-
-                                                <li class="list-group-item">As applicable, attainment of least passing
-                                                    score on required end-of-course examination</li>
-
-                                                <li class="list-group-item">Participation and submittal of end-of-course
-                                                    assessment form (must provide name on form to obtain credit)</li>
-                                            </ul>
-
-                                            <h4 class="mt-3">Prerequisites</h4>
-                                            <p>
-                                                There are no preconditions compulsory to appear in this course. Students
-                                                must be able to orally communicate with instructor in primary language
-                                                of the training.
-                                            </p>
-                                            <h4>Training Requirements for&nbsp;4 Hour Supported Scaffold User &amp;
-                                                Refresher Course</h4>
-                                            <p>This course is requisite for workers using supported scaffolds on
-                                                construction places in New York City. This training is required every 4
-                                                years.
-                                                (As per Local Law 52 of 2005).
-                                                </p>
-                                            <h4>Audience</h4>
-                                            <p>
-                                                Any individual, who needs to practice or work on a Supported Scaffold in
-                                                New York City
-                                            </p>
-                                        </div>
-
-
-
+                                        {{ object.features.first.notes  |safe  }}
                                     </div>
 
 
@@ -177,19 +104,7 @@
                                 <div class="clever-curriculum">
 
                                     <div class="about-curriculum mb-30">
-
-
-                                        <h4>Completion Requirements</h4>
-                                        <p>Students are required to complete 100% of the course and actively participate
-                                            in all learning activities including hands-on exercises and review quiz to
-                                            receive the 4 Hour Supported Scaffold course completion ID card.</p>
-                                        <p>Make-up time is not permitted for this training course. Should students miss
-                                            any portion of the training, it is the student’s responsibility to contact
-                                            NYCCST to arrange to attend another scheduled event.</p>
-                                        <p class="d-none"><a href="#">Read
-                                                NYCCST's full attendance and make-up time policies here.</a></p>
-
-
+                                        {{ object.features.first.completion_requirements  |safe  }}
 
                                     </div>
 

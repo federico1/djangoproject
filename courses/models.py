@@ -176,12 +176,18 @@ class CourseTimeLog(models.Model):
         return str(self.total_seconds)
 
 
-def CopyCourse(request, id):
-    result = 0
+class CourseFeature(models.Model):
+    course = models.ForeignKey(Course,
+                               related_name='features',
+                               on_delete=models.CASCADE)
+    schedule = models.TextField(blank=True, null=True)
+    outcomes = models.TextField(blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
+    completion_requirements = models.TextField(blank=True, null=True)
 
-    if id is not None:
-        course_object = Course.objects.get(pk=id)
-        
-        result = 1
-    
-    return HttpResponse(result, content_type='text/plain')
+    class Meta:
+            ordering = ['pk']
+            db_table = "courses_feature"
+
+    def __str__(self):
+        return '{}'.format(self.course.id)
