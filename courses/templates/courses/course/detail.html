@@ -54,25 +54,21 @@
                                     <div class="about-course mb-30">
                                         <h4>About this course</h4>
                                         <p>
-                                            {{ object.overview| safe }}
+                                            {{ object.overview | safe }}
 
                                         </p>
                                     </div>
 
-                                     <div class="about-course mb-30">
+                                    <div class="about-course mb-30">
                                         <h4>Schedule</h4>
-                                        <p>
-                                            {{ object.schedule | safe }}
 
-                                        </p>
+                                        {{ object.features.first.schedule | safe }}
+
                                     </div>
 
 
                                 </div>
                             </div> <!-- END TAB1 -->
-
-
-
 
                             <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab--2">
                                 <div class="clever-curriculum">
@@ -82,7 +78,6 @@
                                         {{ object.features.first.outcomes  | safe  }}
 
                                     </div>
-
 
                                 </div>
                             </div> <!-- END TAB2 -->
@@ -176,26 +171,7 @@
     </div>
 </div>
 
-<div class="d-none module">
-    <h2>Overview </h2>
-    <p>
-        <a href="{% url "course_list_subject" subject.slug %}">{{ subject.title }}</a>.
-        {{ object.modules.count }} modules.
-        Instructor: {{ object.owner.get_full_name }}
-    </p>
-    {{ object.overview|linebreaks }}
-    {% if request.user.is_authenticated %}
-    <form action="{% url "student_enroll_course" %}" method="post">
-        {{ enroll_form }}
-        {% csrf_token %}
-        <input type="submit" class="button" value="Enroll now">
-    </form>
-    {% else %}
-    <a href="{% url "student_registration" %}" class="button">
-        Register to enroll
-    </a>
-    {% endif %}
-</div>
+
 
 {% endwith %}
 {% endblock %}
@@ -221,6 +197,30 @@
         color: #fff !important;
         border: 1px solid #000;
     }
+
+    .tbl-schedule {}
+
+    .tbl-schedule thead th {
+        vertical-align: top;
+        border: 1px solid #4093a8;
+        border-bottom: 2px solid #2c525c;
+        text-align: center;
+    }
+
+    .tbl-schedule td {
+        border: 1px solid #e1f9ff;
+        vertical-align: middle;
+    }
 </style>
+
+<script>
+    $(document).ready(function () {
+
+        $(".link-enroll").click(function () {
+
+        });
+
+    });
+</script>
 
 {% endblock %}
