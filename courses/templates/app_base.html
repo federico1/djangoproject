@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>{% block title %} {% endblock %}</title>
+    <title> Online - NYC CONSTRUCTION SAFETY TRAINING {% block title %} {% endblock %}</title>
     <link rel="icon" type="image/png" href="{% static '/images/logo5.png' %}">
     <link href="{% static '/css/base.css' %}" rel="stylesheet">
     <link href="{% static '/css/style.css' %}" rel="stylesheet">
@@ -24,13 +24,29 @@
                 <a href="#"><span>Phone:</span> 914-473-6791</a>
                 <a href="#"><span>Email:</span> info@educa.com</a>
             </div>
-            <!-- Follow Us -->
+
+            {% if request.user.is_authenticated  %}
+
             <div class="follow-us">
-                <span>Follow us</span>
-                <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                {% if request.user.is_teacher == True %}
+                <a href="{% url 'teacher_dashboard' %}">Teacher Dashboard</a>
+                {% endif %}
+
+                {% if request.user.is_student == True %}
+                <a href="{% url  'student_course_list' %}">Student Dashboard</a>
+                {% endif %}
             </div>
+
+            {% else %}
+
+            <div class="follow-us">
+
+                <a href="{% url 'login' %}">Sign in</a>
+                <a href="{% url 'student_registration' %}">Register</a>
+
+            </div>
+
+            {% endif %}
         </div>
 
         <!-- Navbar Area -->
@@ -64,7 +80,7 @@
                         <div class="classynav">
 
                             <ul>
-
+                                <li><a href="/">Home</a></li>
                                 <li class="cn-dropdown-item has-down courses-menu">
                                     <a href=" #">Courses</a>
                                     <ul class="dropdown">
@@ -72,10 +88,13 @@
                                     </ul>
                                 </li>
 
+                                <li><a href="/">About Us</a></li>
+                                <li><a href="/">Contact Us</a></li>
+
                             </ul>
 
                             <!-- Search Button -->
-                            <div class=" search-area">
+                            <div class=" search-area d-none">
                                 <form action="{% url 'courses_list' %}" method="get">
                                     <input type="search" name="q" id="search" placeholder="Search">
                                     <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
@@ -83,26 +102,6 @@
                             </div>
 
                             {% if request.user.is_authenticated %}
-
-                            {% if request.user.is_teacher == True %}
-                            <div class="login-state d-flex align-items-center mr-30 ">
-                                <div class="user-name">
-                                    <div class="dropdown">
-                                        <a href="{% url 'teacher_dashboard' %}" role="button">Teacher Dashboard</a>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endif %}
-
-                            {% if request.user.is_student == True %}
-                            <div class="login-state d-flex align-items-center mr-30 ">
-                                <div class="user-name">
-                                    <div class="dropdown">
-                                        <a href="{% url  'student_course_list' %}" role="button">Student Dashboard</a>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endif %}
 
                             <div class="login-state d-flex align-items-center ">
                                 <div class="user-name">
@@ -119,7 +118,7 @@
                             </div>
 
                             {% else %}
-                            <div class="register-login-area">
+                            <div class="register-login-area d-none">
                                 <!-- <a href="#" class="btn">Register</a> -->
                                 <a href="{% url 'login' %}" class="btn active">Sign in</a>
                                 <a data-toggle1="modal" data-target1="#exampleModal1"
@@ -166,8 +165,26 @@
             </div>
         </div>
 
+        <div class="bottom-footer-area d-flex justify-content-between align-items-center">
+
+            <div class="contact-info">
+                <a href="#">Support</a>
+                <a href="/legal">Legal</a>
+                <a href="#">Sitemap</a>
+            </div>
+
+            <div class="follow-us">
+                <span>Follow us</span>
+                <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+            </div>
+
+        </div>
+
 
     </footer>
+
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -203,7 +220,6 @@
     {% endblock %}
 
     <script>
-       
         $(document).ready(function () {
             getSubjects();
         });

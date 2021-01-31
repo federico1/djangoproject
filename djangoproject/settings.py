@@ -68,7 +68,8 @@ INSTALLED_APPS = (
     'app_quiz',
     'app_chat',
     'app_api',
-    'app_admin'
+    'app_admin',
+    'app_public'
 )
 
 

@@ -6,6 +6,7 @@ from braces.views import LoginRequiredMixin
 from django.views.generic.detail import DetailView
 from django.http import JsonResponse, HttpResponse
 from django.views.generic.list import ListView
+from django.conf import settings
 
 from students.decorators import teacher_required
 
@@ -13,20 +14,20 @@ from .models import Conversation, VideoRoom, VideoRoomLog, VideoParticipant, Vid
 
 from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import VideoGrant
-
 from twilio.rest import Client
 
 import json
 import requests
+import os
 
-url = "http://dstore.cartright.pk/ks.json"
-#r = requests.get(url)
-#r = json.loads(r.text)
+r = open(os.path.join(settings.MEDIA_ROOT, 'ks.json'), 'rb').read()
+r = json.loads(r)
 
-t_auth_key = '' #r['t_auth_key']
-account_sid =  '' #r['account_sid']
-api_key_sid = '' #r['api_key_sid']
-api_key_secret = '' #r['api_key_secret']
+t_auth_key = r['t_auth_key']
+account_sid =  r['account_sid']
+api_key_sid = r['api_key_sid']
+api_key_secret = r['api_key_secret']
+
 
 
 @method_decorator([login_required], name='dispatch')
@@ -185,7 +186,7 @@ def create_video_token(request):
 
     if request.method == 'POST':
         data = json.loads(request.body)
-
+        
         client = Client(account_sid, t_auth_key)
 
         idn = request.user.username
@@ -194,14 +195,17 @@ def create_video_token(request):
             idn = idn + "__inst"
         else:
             idn = idn + "__std"
+        
 
         token = AccessToken(account_sid, api_key_sid,
                             api_key_secret, identity=idn)
+        
+        print(data['room_sid'])
 
         room = client.video.rooms(str(data['room_sid'])).fetch()
 
         token.add_grant(VideoGrant(room=room.sid))
 
-        d = {'token': token.to_jwt().decode()}
+        d = {'token': token.to_jwt().decode() }
 
         return JsonResponse(d)

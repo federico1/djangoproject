@@ -35,6 +35,7 @@ urlpatterns = [
     path('communicate/', include('app_chat.urls')),
     path('super/', include('app_admin.urls')),
     url(r'api/', include('app_api.urls')),
+    path('', include('app_public.urls')),
 ]
 
 if settings.DEBUG:

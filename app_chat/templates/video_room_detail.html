@@ -196,7 +196,6 @@
 </style>
 
 <script>
-
     var room;
 
     $(document).ready(function () {
@@ -213,13 +212,14 @@
         var videoTrack;
 
         var savedMembersList;
+        var screenTrack;
 
         function addLocalVideo() {
             Twilio.Video.createLocalVideoTrack().then(track => {
 
                 videoTrack = track;
 
-                $("#local").append(videoTrack.attach());
+                $("#local").html(videoTrack.attach());
 
                 $("#local video").css({
                     height: '100%'
@@ -255,8 +255,7 @@
                     $("#btn-start-video").attr('disabled', false);
 
                 });
-            }
-            else {
+            } else {
                 //disconnect();
                 //button.innerHTML = 'Join call';
                 // connected = false;
@@ -271,35 +270,58 @@
 
             var promise = new Promise((resolve, reject) => {
 
-                var ds = { 'room_sid': room_object.sid };
+                var ds = {
+                    'room_sid': room_object.sid
+                };
 
                 // get a token from the back end
                 fetch('/communicate/video-token/', {
                     method: 'POST',
                     body: JSON.stringify(ds),
-                    headers: { "X-CSRFToken": '{{ csrf_token }}' }
+                    headers: {
+                        "X-CSRFToken": '{{ csrf_token }}'
+                    }
                 }).then(res => res.json()).then(data => {
 
                     return Twilio.Video.connect(data.token, {
                         //video: { height: $(window).height(), frameRate: 24, width: $(window).width() },
                         audio: true,
-                        video: { height: 720, frameRate: 24, width: 1280 },
+                        video: {
+                            height: 720,
+                            frameRate: 24,
+                            width: 1280
+                        },
                         bandwidthProfile: {
                             video: {
                                 mode: 'presentation',
                                 maxTracks: 10,
                                 dominantSpeakerPriority: 'standard',
                                 renderDimensions: {
-                                    high: { height: 1080, width: 1920 },
-                                    standard: { height: 720, width: 1280 },
-                                    low: { height: 176, width: 144 }
+                                    high: {
+                                        height: 1080,
+                                        width: 1920
+                                    },
+                                    standard: {
+                                        height: 720,
+                                        width: 1280
+                                    },
+                                    low: {
+                                        height: 176,
+                                        width: 144
+                                    }
                                 }
                             }
                         },
                         dominantSpeaker: true,
                         maxAudioBitrate: 16000, //For music remove this line
-                        preferredVideoCodecs: [{ codec: 'VP8', simulcast: true }],
-                        networkQuality: { local: 1, remote: 1 }
+                        preferredVideoCodecs: [{
+                            codec: 'VP8',
+                            simulcast: true
+                        }],
+                        networkQuality: {
+                            local: 1,
+                            remote: 1
+                        }
                     });
 
                 }).then(_room => {
@@ -402,25 +424,30 @@
             $.ajax({
                 type: "GET",
                 url: '{% url "create-room"%}',
-                data: { id: '{{object.id}}' },
+                data: {
+                    id: '{{object.id}}'
+                },
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 beforeSend: function (xhr, settings) {
                     xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
                 },
                 success: function (response) {
-                    room_object = response;
-                    window.room_object = response;
+                    try {
 
-                    $('#room-info').html(JSON.stringify(response));
-                    $('#room-info').hide();
+                        room_object = response;
+                        window.room_object = response;
 
-                    if (isStartVideo) {
-                        connectButtonHandler();
-                    }
+                        $('#room-info').html(JSON.stringify(response));
+                        $('#room-info').hide();
+
+                        if (isStartVideo) {
+                            connectButtonHandler();
+                        }
+
+                    } catch (error) {}
                 },
-                failure: function (errMsg) {
-                }
+                failure: function (errMsg) {}
             });
         }
 
@@ -428,7 +455,9 @@
             $.ajax({
                 type: "GET",
                 url: '{% url "complete-room"%}',
-                data: { id: '{{object.id}}' },
+                data: {
+                    id: '{{object.id}}'
+                },
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 beforeSend: function (xhr, settings) {
@@ -437,14 +466,15 @@
                 success: function (response) {
                     console.log(response);
                 },
-                failure: function (errMsg) {
-                }
+                failure: function (errMsg) {}
             });
         };
 
         var getAddedMembers = function () {
 
-            $.get('/api/video-participants/?format=json', { room: '{{object.id}}' }, function (response) {
+            $.get('/api/video-participants/?format=json', {
+                room: '{{object.id}}'
+            }, function (response) {
                 savedMembersList = response;
             });
 
@@ -475,8 +505,7 @@
                     success: function (response) {
                         console.log(response);
                     },
-                    failure: function (errMsg) {
-                    }
+                    failure: function (errMsg) {}
                 });
 
 
@@ -497,7 +526,10 @@
                     });
                 }).then(function (shouldAskForMediaPermissions) {
                     if (shouldAskForMediaPermissions) {
-                        return navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(function (mediaStream) {
+                        return navigator.mediaDevices.getUserMedia({
+                            audio: true,
+                            video: true
+                        }).then(function (mediaStream) {
                             mediaStream.getTracks().forEach(function (track) {
                                 track.stop();
                             });
@@ -509,10 +541,12 @@
                 // before calling enumerateDevices, get media permissions (.getUserMedia)
                 // w/o media permissions, browsers do not return device Ids and/or labels.
                 return mediaSelection.ensureMediaPermissions().then(function () {
-                    return navigator.mediaDevices.enumerateDevices().then(function (deviceInfos) {
+                    return navigator.mediaDevices.enumerateDevices().then(function (
+                        deviceInfos) {
                         var kinds = ['audioinput', 'audiooutput', 'videoinput'];
                         return kinds.reduce(function (deviceSelectionOptions, kind) {
-                            deviceSelectionOptions[kind] = mediaSelection.getDevicesOfKind(deviceInfos, kind);
+                            deviceSelectionOptions[kind] = mediaSelection
+                                .getDevicesOfKind(deviceInfos, kind);
                             return deviceSelectionOptions;
                         }, {});
                     });
@@ -540,8 +574,9 @@
 
 
                                 var deviceId = kindDeviceInfo.deviceId;
-                                var label = kindDeviceInfo.label || 'Device [ id: '
-                                    + deviceId.substr(0, 5) + '... ]';
+                                var label = kindDeviceInfo.label ||
+                                    'Device [ id: ' +
+                                    deviceId.substr(0, 5) + '... ]';
 
                                 var option = document.createElement('option');
                                 option.value = deviceId;
@@ -555,9 +590,9 @@
 
         function createScreenTrack(height, width) {
 
-            if (typeof navigator === 'undefined'
-                || !navigator.mediaDevices
-                || !navigator.mediaDevices.getDisplayMedia) {
+            if (typeof navigator === 'undefined' ||
+                !navigator.mediaDevices ||
+                !navigator.mediaDevices.getDisplayMedia) {
                 return Promise.reject(new Error('getDisplayMedia is not supported'));
             }
             return navigator.mediaDevices.getDisplayMedia({
@@ -597,7 +632,7 @@
             $("#btn-start-video").click(function () {
                 startCall();
                 //connectButtonHandler();
-                sentNotifications();
+                //sentNotifications();
             });
 
             $("#btn-stop-video").click(function () {
@@ -629,7 +664,9 @@
             $("#btn-mute").click(function () {
                 var title = $(this).attr('title');
 
-                if (!room) { return; }
+                if (!room) {
+                    return;
+                }
 
                 if (title == 'Mute') {
                     $(this).attr('title', 'Unmute');
@@ -680,10 +717,15 @@
                     screenTrack.stop();
             });
 
+            window.addEventListener('beforeunload', () => disconnect());
+
             var width = $(window).width() - 30;
             var height = $(window).height() - $(".navbar").eq(0).outerHeight() - 10;
 
-            $("#video-screen").css({ width: width, height: height });
+            $("#video-screen").css({
+                width: width,
+                height: height
+            });
         };
 
         getAddedMembers();
@@ -695,6 +737,5 @@
         // $("#devicesModal").modal('show');
 
     });
-
 </script>
 {% endblock %}
