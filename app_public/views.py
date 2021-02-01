@@ -6,3 +6,7 @@ class LegalView(generic.TemplateView):
 
 class AboutView(generic.TemplateView):
     template_name = "about/about.html"
+
+
+class ContactView(generic.TemplateView):
+    template_name = "contact/contact.html"
