@@ -54,8 +54,6 @@ class StudentSignupForm(UserCreationForm):
 
         user = super().save(commit=False)
         
-        print(user)
-
         user.is_student = True
         
         user.save()

@@ -174,150 +174,153 @@
             <main class="page-content ">
                 <div class="row">
 
-                        {% if module == None %}
+                    <div class="col">
 
-                        {% if request.GET.type == 'quiz' and object.quiz is not None %}
-                        <div class="col-md-12 mb-30">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Quiz</th>
-                                        <th>Score</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                    
+                    {% if module == None %}
 
-                                    <tr>
-                                        <td>
-                                            {{active_content.object}}
-                                        </td>
-                                        <td>
-                                            {% if active_content.complete == True %}
-                                            {{active_content.score}}
-                                            {% else %}
-                                            Not Taken
-                                            {% endif %}
-                                        </td>
-                                    </tr>
+                    {% if request.GET.type == 'quiz' and object.quiz is not None %}
+                    <div class="col-md-12 mb-30">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Quiz</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="2">
-                                            {% if active_content.complete == True %}
-                                            <a href="{% url 'quiz_reset' active_content.object.id %}?ref={{request.get_full_path}}"
-                                                class="btn btn-primary">Retake Quiz </a>
-                                            {% else %}
-                                            <a href="{% url 'take_quiz' active_content.object.id %}?ref={{request.get_full_path}}"
-                                                class="btn btn-primary">Take Quiz </a>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                        {% else %}
-                        <div class="col-md-12 mb-30">
-                            <div class="about-course p-2">
-                               
-                                {{object.overview|safe}}
-                              
-                            </div>
-                        </div>
-                        {%endif%}
+                                <tr>
+                                    <td>
+                                        {{active_content.object}}
+                                    </td>
+                                    <td>
+                                        {% if active_content.complete == True %}
+                                        {{active_content.score}}
+                                        {% else %}
+                                        Not Taken
+                                        {% endif %}
+                                    </td>
+                                </tr>
 
-                        {%endif%}
-
-                        {% if module != None %}
-
-                        {% if next_content != None and active_content.complete == True %}
-
-                        {% if next_content.type == 'quiz' %}
-
-                        <div class="col-md-12 mb-5 d-none">
-                            <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{next_content.object.id}}&type=quiz"
-                                class="btn btn-primary">Next Chapter (Quiz) >> </a>
-                        </div>
-
-                        {% elif next_content.type == 'content' %}
-
-                        <div class="col-md-12 mb-5 d-none">
-                            <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{next_content.object.id}}"
-                                class="btn btn-primary">Next Chapter >> </a>
-                        </div>
-
-                        {% endif %}
-
-                        {% endif %}
-                        <!--  if next_content != None -->
-
-                        {% for content in module.contents.all %}
-
-                        {% if active_content.object.id  == content.id and active_content.type == 'content' %}
-
-                        <div class="col-md-12 mt-2 mb-30">
-                            <div class="about-course">
-                                {% with item=content.item %}
-
-                                <h4>{{ item.title }}</h4>
-
-                                <div>
-                                    {{ item.render }}
-                                </div>
-
-                                {% endwith %}
-                            </div>
-                        </div>
-
-                        {% endif %}
-
-                        {% endfor %}
-
-                        {% if active_content.type == 'quiz' %}
-                        <div class="col-md-12 mb-30">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Quiz</th>
-                                        <th>Score</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    <tr>
-                                        <td>
-                                            {{active_content.object}}
-                                        </td>
-                                        <td>
-                                            {% if active_content.complete == True %}
-                                            {{active_content.score}}
-                                            {% else %}
-                                            Not Taken
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="2">
-                                            {% if active_content.complete == True %}
-                                            <a href="{% url 'quiz_reset' active_content.object.id %}?ref={{request.get_full_path}}"
-                                                class="btn btn-primary">Retake Quiz </a>
-                                            {% else %}
-                                            <a href="{% url 'take_quiz' active_content.object.id %}?ref={{request.get_full_path}}"
-                                                class="btn btn-primary">Take Quiz </a>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                        {%endif%}
-
-                        {%endif%}
-
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2">
+                                        {% if active_content.complete == True %}
+                                        <a href="{% url 'quiz_reset' active_content.object.id %}?ref={{request.get_full_path}}"
+                                            class="btn btn-primary">Retake Quiz </a>
+                                        {% else %}
+                                        <a href="{% url 'take_quiz' active_content.object.id %}?ref={{request.get_full_path}}"
+                                            class="btn btn-primary">Take Quiz </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
+                    {% else %}
+                    <div class="col-md-12 mb-30">
+                        <div class="about-course p-2">
+
+                            {{object.overview|safe}}
+
+                        </div>
+                    </div>
+                    {%endif%}
+
+                    {%endif%}
+
+                    {% if module != None %}
+
+                    {% if next_content != None and active_content.complete == True %}
+
+                    {% if next_content.type == 'quiz' %}
+
+                    <div class="col-md-12 mb-5 d-none">
+                        <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{next_content.object.id}}&type=quiz"
+                            class="btn btn-primary">Next Chapter (Quiz) >> </a>
+                    </div>
+
+                    {% elif next_content.type == 'content' %}
+
+                    <div class="col-md-12 mb-5 d-none">
+                        <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{next_content.object.id}}"
+                            class="btn btn-primary">Next Chapter >> </a>
+                    </div>
+
+                    {% endif %}
+
+                    {% endif %}
+                    <!--  if next_content != None -->
+
+                    {% for content in module.contents.all %}
+
+                    {% if active_content.object.id  == content.id and active_content.type == 'content' %}
+
+                    <div class="col-md-12 mt-2 mb-30">
+                        <div class="about-course">
+                            {% with item=content.item %}
+
+                            {% comment %} <h4>{{ item.title }}</h4> {% endcomment %}
+
+                            <div>
+                                {{ item.render }}
+                            </div>
+
+                            {% endwith %}
+                        </div>
+                    </div>
+
+                    {% endif %}
+
+                    {% endfor %}
+
+                    {% if active_content.type == 'quiz' %}
+                    <div class="col-md-12 mb-30">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Quiz</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr>
+                                    <td>
+                                        {{active_content.object}}
+                                    </td>
+                                    <td>
+                                        {% if active_content.complete == True %}
+                                        {{active_content.score}}
+                                        {% else %}
+                                        Not Taken
+                                        {% endif %}
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2">
+                                        {% if active_content.complete == True %}
+                                        <a href="{% url 'quiz_reset' active_content.object.id %}?ref={{request.get_full_path}}"
+                                            class="btn btn-primary">Retake Quiz </a>
+                                        {% else %}
+                                        <a href="{% url 'take_quiz' active_content.object.id %}?ref={{request.get_full_path}}"
+                                            class="btn btn-primary">Take Quiz </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    {%endif%}
+
+                    {%endif%}
+
+                </div>
 
             </main>
         </div>
@@ -355,7 +358,8 @@
         height: 100%;
         max-height: 100%;
     }
-    .sidebar-wrapper  .sidebar-submenu li {
+
+    .sidebar-wrapper .sidebar-submenu li {
         padding-left: 5px !important;
     }
 
@@ -364,10 +368,9 @@
         margin-right: 7px !important;
     }
 
-    .scrollbar-inner > .scroll-element.scroll-y {
+    .scrollbar-inner>.scroll-element.scroll-y {
         right: -3px;
     }
-
 </style>
 
 
@@ -377,7 +380,6 @@
     crossorigin="anonymous"></script>
 
 <script>
-
     var totalSeconds = 0;
     var lastSavedTime = 0;
 
@@ -402,11 +404,11 @@
         $(".page-content").css({
             'max-height': $(window).height() - $("#secNav").height() - 30,
             'height': $(window).height() - $("#secNav").height() - 30,
-            'overflow':'hidden',
-            'padding':10
+            'overflow': 'hidden',
+            'padding': 10
         });
 
-        
+
 
         $(".sidebar-dropdown > a").click(function () {
 
@@ -449,8 +451,7 @@
 
             if (isSet) {
                 setVideoState(element);
-            }
-            else {
+            } else {
                 saveVideoState(element);
             }
 
@@ -522,8 +523,7 @@
             if (!isFound) {
                 parsedData.push(d);
             }
-        }
-        else {
+        } else {
             parsedData.push(d);
         }
 
@@ -540,12 +540,16 @@
 
                 if (href.toLowerCase().indexOf(".png") >= 0) {
 
-                    var img = $("<img />", { src: href });
+                    var img = $("<img />", {
+                        src: href
+                    });
 
                     $(".file-item").eq(0).replaceWith(img);
                 } else if (href.toLowerCase().indexOf(".pdf") >= 0) {
 
-                    var pdfDiv = $("<div />", { id: 'pdfViewer' });
+                    var pdfDiv = $("<div />", {
+                        id: 'pdfViewer'
+                    });
 
                     pdfDiv.css({
                         width: '100%',
@@ -557,7 +561,10 @@
                     var options = {
                         height: "500px",
                         width: '100%',
-                        pdfOpenParams: { view: 'FitV', page: '1' }
+                        pdfOpenParams: {
+                            view: 'FitV',
+                            page: '1'
+                        }
                     };
 
                     PDFObject.embed(href, "#pdfViewer", options);
@@ -595,7 +602,9 @@
 
 
     function getTimeLog() {
-        $.get('/api/courses_time_logs/', { course: '{{object.id}}' }, function (response) {
+        $.get('/api/courses_time_logs/', {
+            course: '{{object.id}}'
+        }, function (response) {
 
             if (response && response.length > 0) {
                 totalSeconds = response[response.length - 1].total_seconds;
@@ -626,8 +635,7 @@
             success: function (response) {
                 console.log(response)
             },
-            failure: function (errMsg) {
-            }
+            failure: function (errMsg) {}
         });
     };
 
@@ -664,6 +672,5 @@
         $("#seconds").html(pad(s, 2));
 
     };
-
 </script>
 {% endblock %}
