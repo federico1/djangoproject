@@ -6,67 +6,86 @@ Live Class {{object.title}}
 {% block content %}
 
 <div class="mt-1" id="video-screen">
-    
+
     <input type="hidden" id="hf-info" value="{{object.info}}" />
 
-    <div id="room-info"></div>
-
-    <span id="count">Disconnected. (0)</span>
-
-    <div id="controls">
-        <button class="btn btn-success btn-lg" title="Start Video" id="btn-start-video">
-            <i class="fa fa-video-camera "></i>
-        </button>
-
-        <button class="btn btn-info btn-lg" disabled id="btn-full-screen" title="Full Screen">
-            <i class="fa fa-arrows-alt"></i>
-        </button>
-
-        <button class="btn btn-info btn-lg" disabled id="btn-default-screen" title="Default Screen">
-            <i class="fa fa-compress"></i>
-        </button>
-
-        <button class="btn btn-primary btn-lg" disabled id="btn-mute" title="Mute">
-            <i class="fa fa-microphone"></i>
-        </button>
-
-        <button class="btn btn-danger btn-lg" disabled id="btn-stop-video">
-            <i class="fa fa-phone"></i>
-        </button>
-    </div>
-
-    <a href="{% url 'video_rooms' %}" class="btn btn-primary" id="btn-exit">
-        << Close & return </a>
-
-            <div class="enroll-panel">
-                <button type="button" class="btn btn-primary" data-container="body" id="btn-enroll">
-                    <i class="fa fa-arrow-up" aria-hidden="true"></i> Related Courses </button>
-
-                <div class="list-group">
-                    {% for course in courses %}
-                    <a href="{% url 'quick_enroll' course.course_id %}" class="list-group-item list-group-item-action">
-                        <small>{{course.course}}</small>
-                    </a>
-                    {% endfor %}
-                </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card embed-responsive embed-responsive-21by9" id="local">
 
             </div>
+        </div>
+    </div> <!-- end row -->
 
-            <div id="me-vid"></div>
-            <div id="local" class="embed-responsive embed-responsive-21by9">
-            </div>
 
-            <div class="ps d-none">
-                <button class="btn btn-default">
-                    <i class="fa fa-eye-slash"></i>
+    <div class="row">
+
+        <div class="col-md-8">
+            <div class="p-1 bg-white" id="controls">
+
+                <button class="btn btn-success btn-sm" title="Start Call" id="btn-start-video">
+                    <i class="fa fa-video-camera "></i> Start Call
                 </button>
 
-                <div id="pcontainer">
+                <button class="btn btn-info btn-sm" disabled id="btn-full-screen" title="Full Screen">
+                    <i class="fa fa-arrows-alt"></i> Full Screen
+                </button>
 
-                </div>
+                <button class="btn btn-info btn-sm" disabled id="btn-default-screen" title="Small Screen">
+                    <i class="fa fa-compress"></i> Small Screen
+                </button>
+
+                <button class="btn btn-primary btn-sm" disabled id="btn-mute" title="Mute">
+                    <i class="fa fa-microphone"></i> Mute
+                </button>
+
+                <button class="btn btn-danger btn-sm" disabled id="btn-stop-video">
+                    <i class="fa fa-phone"></i> End Call
+                </button>
             </div>
+        </div> <!-- end col -->
+
+        <div class="col-md-4">
+            <div class="p-1 bg-white text-right d-flex flex-row-reverse">
+
+                <div>
+                    <a href="{% url 'video_rooms' %}" class="btn btn-primary btn-sm" id="btn-exit">
+                        <i class="fa fa-undo"></i> Close & return </a>
+                </div>
+
+                <div>
+                    <div class="btn-group dropup mr-1">
+                        <button type="button" class="btn btn-secondary dropdown-toggle btn-sm" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            Back to Course
+                        </button>
+                        <div class="dropdown-menu">
+
+                            {% for course in courses %}
+                            <a href="{% url 'quick_enroll' course.course_id %}" class="dropdown-item">
+                                <small>{{course.course}}</small>
+                            </a>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div> <!-- end col -->
+
+    </div> <!-- end row -->
+
+    <div class="img-thumbnail embed-responsive embed-responsive-21by9" id="me-vid">
+    </div> <!-- end img-thumbnail -->
+
+    <div id="participant-list">
+    </div> <!-- end participant-list -->
+
+    <span id="count">Disconnected. (0)</span> <!-- end count -->
 
 </div>
+
 
 {% endblock %}
 
@@ -74,152 +93,63 @@ Live Class {{object.title}}
 
 <style>
     #video-screen {
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        background: #fffffffa;
-        position: fixed;
-        z-index: 9999;
-        margin: 0 !important;
+        position: relative;
     }
 
-    #container {
-        height: 100%;
-        width: 100%;
+    #me-vid {
+        width: 150px;
+        height: 150px;
+        position: absolute;
+        right: 25px;
+        top: 10px;
+        background: #d3d3d3;
+        cursor: pointer;
     }
 
-    #local {
-        height: 100%;
-        width: 100%;
-        text-align: center;
+    #me-vid:hover {
+        border: 1px solid #515151;
     }
 
     #count {
         font-size: 8px;
         position: absolute;
-        bottom: 3px;
-        left: 0;
-        color: #cdcbcb;
+        bottom: 44px;
+        left: 7px;
+        color: #7f7a7a;
     }
 
-    #controls {
+    #participant-list {
+        width: 150px;
         position: absolute;
-        top: 15px;
-        right: 30px;
-        z-index: 99;
-        background: #dfdfdf;
-        padding: 7px;
-        border: 1px solid #d5d5d5;
-        border-radius: 5px;
-    }
-
-    .ps {
-        position: absolute;
-        max-height: 100%;
-        width: 100px;
-        padding: 10px;
-        z-index: 99;
-        top: 53px;
-        right: 34px;
-    }
-
-    #pcontainer {
-        width: 80px;
-    }
-
-    .participant {
-        width: 80px;
-        margin-bottom: 10px;
-    }
-
-    .participant .vd {
-        max-height: 60px;
-        border: 1px solid #eaeaea;
-        height: 60px;
-        width: 100%;
-    }
-
-    .participant .vd video {
-        width: 100%;
-        object-fit: contain;
-        height: 100%;
-    }
-
-    #me-vid {
-        width: 60px;
-        height: 60px;
-        position: absolute;
-        left: 42px;
-        top: 8px;
-        border: 1px solid #eee;
-        z-index: 9;
-        background: #eae7e7;
-        display: block;
-    }
-
-    #me-vid video {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    #btn-exit {
-        position: absolute;
-        z-index: 99;
-        right: 30px;
-        bottom: 20px;
-
-    }
-
-    .enroll-panel {
-        position: absolute;
-        z-index: 99;
-        left: 30px;
-        bottom: 20px;
-
-    }
-
-    .enroll-panel .list-group {
-        position: absolute;
-        bottom: 40px;
-        width: 260px;
+        left: 10px;
+        top: 10px;
+        background: #d3d3d3;
+        padding: 5px;
         display: none;
     }
 
-    #screen-preview {
-        position: absolute;
-        top: 86px;
-        right: 34px;
-        width: 200px;
-        height: 164px;
-        border: 1px solid #ffdb2a;
-        vertical-align: middle;
-        display: block;
-    }
-
-    #screen-preview button {
-        position: absolute;
-        right: -2px;
-        bottom: -3px;
-        z-index: 9;
-    }
-
-    #screen-preview video {
+    .participant {
+        margin-bottom: 5px;
         width: 100%;
+        font-size: 10px;
+    }
+
+    .connecting-sign {
+        position: absolute;
+        top: 16%;
+        left: 36%;
+        color: #1cba45;
     }
 </style>
 
 <script>
-
     var room;
 
     $(document).ready(function () {
 
-        const usernameInput = document.getElementById('username');
-        const button = document.getElementById('btn-start-video');
-        const container = document.getElementById('container');
-        const pcontainer = document.getElementById('pcontainer');
+        // const button = document.getElementById('btn-start-video');
+        //const container = document.getElementById('container');
+        const pcontainer = document.getElementById('participant-list');
         const count = document.getElementById('count');
 
         var connected = false;
@@ -230,7 +160,9 @@ Live Class {{object.title}}
         function addLocalVideo() {
             Twilio.Video.createLocalVideoTrack().then(track => {
                 videoTrack = track;
-                $("#me-vid").append(videoTrack.attach());
+                $("#me-vid").html(videoTrack.attach());
+                //$("#local").html(videoTrack.attach());
+                //$("#local video").addClass('embed-responsive-item');
             });
         };
 
@@ -238,8 +170,11 @@ Live Class {{object.title}}
 
             addLocalVideo();
 
-            $("#local").empty();
+            $("#local").html(
+                '<div class="connecting-sign"><h5> <i class="fa fa-lg fa-phone-square"></i> Connecting Live Class...</h5></div>'
+            );
 
+            $("#participant-list").empty();
             $("#controls button").attr('disabled', false);
             $("#btn-start-video").attr('disabled', true);
 
@@ -255,17 +190,20 @@ Live Class {{object.title}}
                 connect(username).then(() => {
 
                 }).catch(function (err) {
+
                     toastr.error('Connection failed. Is the meeting started?', 'Warning!');
-                    console.log(err);
 
                     $("#controls button").attr('disabled', true);
                     $("#btn-start-video").attr('disabled', false);
 
                 });
-            }
-            else {
+
+            } else {
+
                 $("#controls button").attr('disabled', true);
                 $("#btn-start-video").attr('disabled', false);
+
+                toastr.info('Connection failed. meeting is started!', 'Warning!');
             }
         };
 
@@ -273,17 +211,63 @@ Live Class {{object.title}}
 
             var promise = new Promise((resolve, reject) => {
 
-                var ds = { 'room_sid': room_object.sid };
+                var ds = {
+                    'room_sid': room_object.sid
+                };
+
+                var videoOptions = {
+                    audio: true,
+                    video: {
+                        height: 720,
+                        frameRate: 24,
+                        width: 1280
+                    },
+                    bandwidthProfile: {
+                        video: {
+                            mode: 'presentation',
+                            maxTracks: 10,
+                            dominantSpeakerPriority: 'standard',
+                            renderDimensions: {
+                                high: {
+                                    height: 1080,
+                                    width: 1920
+                                },
+                                standard: {
+                                    height: 720,
+                                    width: 1280
+                                },
+                                low: {
+                                    height: 176,
+                                    width: 144
+                                }
+                            }
+                        }
+                    },
+                    dominantSpeaker: true,
+                    maxAudioBitrate: 16000,
+                    preferredVideoCodecs: [{
+                        codec: 'VP8',
+                        simulcast: true
+                    }],
+                    networkQuality: {
+                        local: 1,
+                        remote: 1
+                    }
+                };
+
 
                 // get a token from the back end
                 fetch('/communicate/video-token/', {
                     method: 'POST',
                     body: JSON.stringify(ds),
-                    headers: { "X-CSRFToken": '{{ csrf_token }}' }
+                    headers: {
+                        "X-CSRFToken": '{{ csrf_token }}'
+                    }
                 }).then(res => res.json()).then(data => {
                     // join video call
-                    return Twilio.Video.connect(data.token);
+                    return Twilio.Video.connect(data.token, videoOptions);
                 }).then(_room => {
+
                     room = _room;
                     room.participants.forEach(participantConnected);
                     room.on('participantConnected', participantConnected);
@@ -292,9 +276,15 @@ Live Class {{object.title}}
                     updateParticipantCount();
                     resolve();
                     addLog();
+
                 }).catch(function (err) {
-                    console.log(err)
+                    console.log(err);
+                    disconnect();
                     reject();
+                    $("#local").html(
+                        '<div class="connecting-sign text-danger"> <h5> <i class="fa fa-lg fa-exclamation-triangle"></i> Connection Failed .. </h5> </div>'
+                    );
+
                 });
             });
 
@@ -317,10 +307,11 @@ Live Class {{object.title}}
             participant_div.setAttribute('class', 'participant');
 
             var tracks_div = document.createElement('div');
-            tracks_div.setAttribute('class', 'vd');
+            tracks_div.setAttribute('class', 'vd img-thumbnail embed-responsive embed-responsive-21by9 ');
             participant_div.appendChild(tracks_div);
 
             var label_div = document.createElement('div');
+
             label_div.setAttribute('id', participant.sid + "_lbl");
             label_div.innerHTML = participant.identity.split('__')[0];
             participant_div.appendChild(label_div);
@@ -332,7 +323,8 @@ Live Class {{object.title}}
                     trackSubscribed(tracks_div, publication.track, participant);
             });
 
-            participant.on('trackSubscribed', track => trackSubscribed(tracks_div, track, participant));
+            participant.on('trackSubscribed', track => trackSubscribed(tracks_div, track,
+                participant));
             participant.on('trackUnsubscribed', trackUnsubscribed);
 
             updateParticipantCount();
@@ -365,14 +357,14 @@ Live Class {{object.title}}
                             width: '200px',
                             height: '164px',
                             left: 'auto',
-                            'z-index':99
+                            'z-index': 99
                         });
 
                         $("#local video").addClass('face');
                     }
                 }
 
-                $("#local").append(track.attach());
+                $("#local").html(track.attach());
 
                 //$("#btn-full-screen").trigger('click');
             }
@@ -380,11 +372,13 @@ Live Class {{object.title}}
         };
 
         function trackUnsubscribed(track) {
+
             track.detach().forEach(element => element.remove());
 
-            if($("#local video").length == 1) {
+            if ($("#local video").length == 1) {
                 $("#local video").removeClass('face').removeAttr('style');
             }
+
         };
 
         function disconnect() {
@@ -399,8 +393,9 @@ Live Class {{object.title}}
                 videoTrack = undefined;
             }
 
-            $("#local video").remove();
-            $("#me-vid video").remove();
+            $("#local").empty();
+            $("#me-vid").empty();
+            $("#participant-list").empty();
 
             connected = false;
             updateParticipantCount();
@@ -427,8 +422,7 @@ Live Class {{object.title}}
                 success: function (response) {
                     console.log(response)
                 },
-                failure: function (errMsg) {
-                }
+                failure: function (errMsg) {}
             });
         };
 
@@ -439,7 +433,7 @@ Live Class {{object.title}}
                 $("#local video:not('.face')").css({
                     height: '100%',
                     width: '100%',
-                    'object-fit': 'cover'
+                    'object-fit': 'fill'
                 });
             });
 
@@ -450,18 +444,6 @@ Live Class {{object.title}}
                     'object-fit': 'contain'
                 });
             });
-
-            var val = $("#hf-info").val();
-
-            if (val && val != 'None') {
-                room_object = JSON.parse(val);
-                window.room_object = room_object;
-            } else {
-
-                $("#btn-stop-video").attr('disabled', true);
-                $("#btn-start-video").attr('disabled', true);
-                toastr.warning('Live meeting is not started yet', 'Info!');
-            }
 
             $("#btn-start-video").click(function () {
                 connectButtonHandler();
@@ -477,11 +459,14 @@ Live Class {{object.title}}
             $("#btn-mute").click(function () {
                 var title = $(this).attr('title');
 
-                if (!room) { return; }
+                if (!room) {
+                    return;
+                }
 
                 if (title == 'Mute') {
                     $(this).attr('title', 'Unmute');
-                    $(this).find("i").addClass('fa-microphone-slash').removeClass('fa-microphone');
+                    $(this).find("i").addClass('fa-microphone-slash').removeClass(
+                        'fa-microphone');
                     $(this).addClass('btn-danger').removeClass('btn-primary');
 
                     room.localParticipant.audioTracks.forEach(function (audioTrack) {
@@ -490,7 +475,8 @@ Live Class {{object.title}}
 
                 } else {
                     $(this).attr('title', 'Mute');
-                    $(this).find("i").addClass('fa-microphone').removeClass('fa-microphone-slash');
+                    $(this).find("i").addClass('fa-microphone').removeClass(
+                        'fa-microphone-slash');
                     $(this).addClass('btn-primary').removeClass('btn-danger');
 
                     room.localParticipant.audioTracks.forEach(function (audioTrack) {
@@ -504,6 +490,20 @@ Live Class {{object.title}}
                 $(".list-group").toggle();
             });
 
+            var val = $("#hf-info").val();
+
+            if (val && val != 'None') {
+                room_object = JSON.parse(val);
+                window.room_object = room_object;
+            } else {
+
+                $("#btn-stop-video").attr('disabled', true);
+                $("#btn-start-video").attr('disabled', true);
+                toastr.warning('Live meeting is not started yet', 'Info!');
+            }
+
+            $(".navbar").hide();
+
             var width = $(window).width() - 30;
             var height = $(window).height() - $(".navbar").eq(0).outerHeight() - 10;
 
@@ -514,6 +514,5 @@ Live Class {{object.title}}
         getPendingNotifications();
 
     });
-
 </script>
 {% endblock %}
