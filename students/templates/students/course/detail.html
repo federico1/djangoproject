@@ -712,10 +712,15 @@
 
         $(roomsList).each(function (index, item) {
 
-            var source = document.getElementById("roomListItemTemplate").innerHTML;
-            var template = Handlebars.compile(source);
+            var course = item.courses.find(a => a.course.id == '{{object.id}}');
 
-            $("#live-rooms").append(template(item));
+            if (course) {
+                var source = document.getElementById("roomListItemTemplate").innerHTML;
+                var template = Handlebars.compile(source);
+
+                $("#live-rooms").append(template(item));
+            }
+
         });
 
         if (roomsList.length <= 0) {
