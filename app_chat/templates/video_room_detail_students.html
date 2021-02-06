@@ -1,12 +1,14 @@
 {% extends "student_base.html" %}
 {% block title %}
-- attend {{object.title}}
+Live Class {{object.title}}
 {% endblock %}
 
 {% block content %}
 
 <div class="mt-1" id="video-screen">
+    
     <input type="hidden" id="hf-info" value="{{object.info}}" />
+
     <div id="room-info"></div>
 
     <span id="count">Disconnected. (0)</span>
@@ -455,9 +457,10 @@
                 room_object = JSON.parse(val);
                 window.room_object = room_object;
             } else {
-                $("#btn-stop-video").attr('disabled', false);
-                $("#btn-start-video").attr('disabled', false);
-                toastr.warning('Meeting is not started yet', 'Info!');
+
+                $("#btn-stop-video").attr('disabled', true);
+                $("#btn-start-video").attr('disabled', true);
+                toastr.warning('Live meeting is not started yet', 'Info!');
             }
 
             $("#btn-start-video").click(function () {
@@ -470,7 +473,6 @@
                 $("#btn-start-video").attr('disabled', false);
                 $("#pcontainer").empty();
             });
-
 
             $("#btn-mute").click(function () {
                 var title = $(this).attr('title');
@@ -498,14 +500,12 @@
 
             });
 
-
             $("#btn-enroll").click(function () {
                 $(".list-group").toggle();
             });
 
             var width = $(window).width() - 30;
             var height = $(window).height() - $(".navbar").eq(0).outerHeight() - 10;
-
 
         };
 
