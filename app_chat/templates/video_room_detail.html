@@ -215,6 +215,7 @@
         var screenTrack;
 
         function addLocalVideo() {
+
             Twilio.Video.createLocalVideoTrack().then(track => {
 
                 videoTrack = track;
@@ -284,7 +285,6 @@
                 }).then(res => res.json()).then(data => {
 
                     return Twilio.Video.connect(data.token, {
-                        //video: { height: $(window).height(), frameRate: 24, width: $(window).width() },
                         audio: true,
                         video: {
                             height: 720,
@@ -313,7 +313,7 @@
                             }
                         },
                         dominantSpeaker: true,
-                        maxAudioBitrate: 16000, //For music remove this line
+                        maxAudioBitrate: 16000,
                         preferredVideoCodecs: [{
                             codec: 'VP8',
                             simulcast: true
