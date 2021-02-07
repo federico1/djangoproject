@@ -345,9 +345,9 @@
 {% verbatim %}
 <script type="text/x-handlebars-template" id='roomListItemTemplate'>
     <li class="list-group-item d-flex justify-content-between align-items-center">
-    {{title}}
-    <a href="/communicate/video-rooms/{{id}}" class="link-add-member badge badge-primary badge-pill text-white">Connect</a></li>
-</script>
+        {{title}}
+        <a href="/communicate/video-rooms/{{id}}?ref_course={{ref_course}}" target="_blank" class="link-add-member badge badge-primary badge-pill text-white">Connect</a></li>
+    </script>
 {% endverbatim %}
 
 {% endblock %}
@@ -715,8 +715,11 @@
             var course = item.courses.find(a => a.course.id == '{{object.id}}');
 
             if (course) {
+
                 var source = document.getElementById("roomListItemTemplate").innerHTML;
                 var template = Handlebars.compile(source);
+
+                item.ref_course = window.location.href.replace(window.location.origin, "");
 
                 $("#live-rooms").append(template(item));
             }

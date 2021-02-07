@@ -54,6 +54,11 @@ Live Class {{object.title}}
                 </div>
 
                 <div>
+                    {% if request.GET.ref_course %}
+
+                    <a href="{{ request.GET.ref_course }}" class="btn btn-secondary btn-sm mr-1" id="btn-exit">
+                        <i class="fa fa-undo"></i> Back To Course </a>
+                    {% else %}
                     <div class="btn-group dropup mr-1">
                         <button type="button" class="btn btn-secondary dropdown-toggle btn-sm" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
@@ -69,6 +74,7 @@ Live Class {{object.title}}
 
                         </div>
                     </div>
+                    {% endif %}
                 </div>
 
             </div>
