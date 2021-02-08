@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import LegalView, AboutView, ContactView
+from .views import LegalView, AboutView, ContactView, StudentManualView
 
 
 urlpatterns = [
@@ -12,4 +12,7 @@ urlpatterns = [
     path('contact/',
          ContactView.as_view(),
          name='contact_detail'),
+    path('student-manual/',
+         StudentManualView.as_view(),
+         name='student_manual_detail'),
 ]

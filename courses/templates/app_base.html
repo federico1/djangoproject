@@ -88,8 +88,8 @@
                                     </ul>
                                 </li>
 
-                                <li><a href="/about">About Us</a></li>
-                                <li><a href="/contact">Contact Us</a></li>
+                                <li><a href="{% url 'about_detail' %}">About Us</a></li>
+                                <li><a href="{% url 'contact_detail' %}">Contact Us</a></li>
 
                             </ul>
 
@@ -167,7 +167,8 @@
 
             <div class="contact-info">
                 <a href="#">Support</a>
-                <a href="/legal">Legal</a>
+                <a href="{% url 'legal_detail' %}">Legal</a>
+                 <a href="{% url 'student_manual_detail' %}">Student Manual</a>
                 <a href="#">Sitemap</a>
             </div>
 

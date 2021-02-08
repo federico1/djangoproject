@@ -10,3 +10,7 @@ class AboutView(generic.TemplateView):
 
 class ContactView(generic.TemplateView):
     template_name = "contact/contact.html"
+
+
+class StudentManualView(generic.TemplateView):
+    template_name = "student_manual/student_manual.html"
