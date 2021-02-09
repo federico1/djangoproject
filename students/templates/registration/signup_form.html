@@ -13,10 +13,12 @@
             <div class="col-12">
                 <div class="page-content2">
                     <h3 class="mb-2">Register <p>{% trans "Enter your details to create an account as" %}
-                            {{ user_type }}</p>
+                            {{ user_type }} </p>
                     </h3>
 
                     <form class="form-horizontal" role="form" action="." method="post">
+
+                        {{ form.errors }}
 
                         {% csrf_token %}
 
