@@ -1,19 +1,24 @@
 ﻿<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="utf-8" />
     <title></title>
-    <link rel="stylesheet"
-          href="https:fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href="https:fonts.googleapis.com/css?family=Montserrat">
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
 
     <style>
-
         body {
             font-family: 'Tangerine', serif;
         }
@@ -22,9 +27,9 @@
             margin: 5px;
         }
 
-            ul li {
-                padding: 5px;
-            }
+        ul li {
+            padding: 5px;
+        }
 
         p {
             padding: 3px;
@@ -40,17 +45,17 @@
             border-radius: 4px;
         }
 
-            table th, table td {
-                border-left: 1px solid #dddddd;
-                padding: 8px;
-                line-height: 20px;
-                text-align: left;
-                vertical-align: top;
-                border-top: 1px solid #dddddd;
-            }
+        table th,
+        table td {
+            border-left: 1px solid #dddddd;
+            padding: 8px;
+            line-height: 20px;
+            text-align: left;
+            vertical-align: top;
+            border-top: 1px solid #dddddd;
+        }
 
-            table td {
-            }
+        table td {}
 
         .wellheader {
             background: #736f6f;
@@ -96,21 +101,24 @@
             display: none;
         }
 
-        ul.unstyled, ol.unstyled {
+        ul.unstyled,
+        ol.unstyled {
             list-style: none;
             display: flex;
         }
 
-        ul.breakavoid > li {
+        ul.breakavoid>li {
             -webkit-column-break-inside: avoid;
             page-break-inside: avoid;
             break-inside: avoid;
         }
 
-        #support {clear:both;}
+        #support {
+            clear: both;
+        }
 
-        .img-caption  img {
-            width:100%;
+        .img-caption img {
+            width: 100%;
         }
 
         .row-fluid .alert {
@@ -118,28 +126,38 @@
             width: 100%;
         }
     </style>
+
+    <script>
+    $(document).ready(function(){
+
+        $('.accordion-body.collapse').show();
+
+    });
+    </script>
+
 </head>
+
 <body>
 
-   
+
 
     <div class="container-fluid">
-        
+
         <input type="hidden" id="audio" value="audio/Fall Protection-converted.mp3">
-        
+
         <div class="mt-4 mb-4">
             <audio controls>
                 <source src="audio/Fall Protection-converted.mp3" type="audio/mpeg">
-              Your browser does not support the audio element.
-              </audio>
+                Your browser does not support the audio element.
+            </audio>
         </div>
 
         <div class="row">
             <div class="col">
-             
+
                 <div id="tasks">
                     <!-- BEGIN BASE SECTION -->
- 
+
                     <!-- BEGIN FALL PROTECTION -->
                     <div id="fallprotection"></div>
                     <div class="well well-white">
@@ -150,25 +168,34 @@
                         <img src="framed_cross.gif" alt="Fall Protection" class="pull-right">
                         <!-- END IMAGE -->
 
-                        <p>The number one scaffold hazard is worker falls. Fall protection consists of either personal fall-arrest systems or guardrail systems, and must be provided on any scaffold 10 feet or more above a lower level. Specific requirements are described below.</p>
-                        <p><em>NOTE</em>: Except where indicated, these requirements also apply to manually propelled, pump jack, ladder jack, tube and coupler, and pole scaffolds, as well as the specialty scaffolds described in the Supported Scaffolds module.</p>
-                  
+                        <p>The number one scaffold hazard is worker falls. Fall protection consists of either personal
+                            fall-arrest systems or guardrail systems, and must be provided on any scaffold 10 feet or
+                            more above a lower level. Specific requirements are described below.</p>
+                        <p><em>NOTE</em>: Except where indicated, these requirements also apply to manually propelled,
+                            pump jack, ladder jack, tube and coupler, and pole scaffolds, as well as the specialty
+                            scaffolds described in the Supported Scaffolds module.</p>
+
                         <!-- BEGIN ACCORDION -->
                         <div class="accordion" id="accordion4">
 
                             <!-- BEGIN ONE -->
                             <div class="accordion-group">
                                 <div class="accordion-heading">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion4" href="#General_Fall" title="General">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion4"
+                                        href="#General_Fall" title="General">
                                         <h6>General</h6>
                                     </a>
                                 </div> <!-- end accordion-heading -->
                                 <div id="General_Fall" class="accordion-body collapse">
                                     <div class="accordion-inner">
                                         <ul>
-                                            <li>Each employee on a scaffold more than 10 feet above a lower level must be protected from falling to that lower level. </li>
-                                            <li>Fall protection consists of either personal fall arrest systems or guardrail systems meeting OSHA requirements. </li>
-                                            <li>Employees performing overhand bricklaying operations from a supported scaffold must be protected from falling from all open sides and ends of the scaffold, except at the side next to the wall being laid. </li>
+                                            <li>Each employee on a scaffold more than 10 feet above a lower level must
+                                                be protected from falling to that lower level. </li>
+                                            <li>Fall protection consists of either personal fall arrest systems or
+                                                guardrail systems meeting OSHA requirements. </li>
+                                            <li>Employees performing overhand bricklaying operations from a supported
+                                                scaffold must be protected from falling from all open sides and ends of
+                                                the scaffold, except at the side next to the wall being laid. </li>
                                         </ul>
                                     </div><!-- end accordion-inner -->
                                 </div> <!-- end one -->
@@ -177,7 +204,8 @@
                             <!-- BEGIN TWO -->
                             <div class="accordion-group">
                                 <div class="accordion-heading">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion4" href="#Fall-Arrest_Systems" title="Fall-Arrest Systems">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion4"
+                                        href="#Fall-Arrest_Systems" title="Fall-Arrest Systems">
                                         <h6>Fall-Arrest Systems</h6>
                                     </a>
                                 </div> <!-- end accordion-heading -->
@@ -185,25 +213,40 @@
                                     <div class="accordion-inner">
                                         <!-- BEGIN IMAGE -->
                                         <div class="img-caption pull-right" style="width:213px;" id="Figure10">
-                                            <img src="slide20.jpg" alt="Figure 10. An example of a lanyard attached to a vertical lifeline. Note that the worker is wearing a safety belt, whereas the new standard requires a full body harness." class="img-polaroid">
-                                            <p class="caption">Figure 10. An example of a lanyard attached to a vertical lifeline. Note that the worker is wearing a safety belt, whereas the new standard requires a full body harness.</p>
+                                            <img src="slide20.jpg"
+                                                alt="Figure 10. An example of a lanyard attached to a vertical lifeline. Note that the worker is wearing a safety belt, whereas the new standard requires a full body harness."
+                                                class="img-polaroid">
+                                            <p class="caption">Figure 10. An example of a lanyard attached to a vertical
+                                                lifeline. Note that the worker is wearing a safety belt, whereas the new
+                                                standard requires a full body harness.</p>
                                         </div>
                                         <!-- END IMAGE -->
 
                                         <ul>
-                                            <li>In addition to meeting the requirements of, personal fall-arrest systems used on scaffolds are to be attached by lanyard to a vertical lifeline, horizontal lifeline, or scaffold structural member. </li>
-                                            <li>When vertical lifelines are used, they must be fastened to a fixed safe point of anchorage,  independent of the scaffold, and be protected from sharp edges and abrasion. Safe  points of anchorage include structural members of buildings, but not standpipes, vents, electrical conduit, etc., which may give way under the force of a fall. </li>
-                                            <li>It is dangerous and therefore impermissible for two or more vertical lifelines to be attached to each other, or to the same point of anchorage. </li>
-                                            <li>When horizontal lifelines are used, they are to be secured to two or more structural members of the scaffold. </li>
+                                            <li>In addition to meeting the requirements of, personal fall-arrest systems
+                                                used on scaffolds are to be attached by lanyard to a vertical lifeline,
+                                                horizontal lifeline, or scaffold structural member. </li>
+                                            <li>When vertical lifelines are used, they must be fastened to a fixed safe
+                                                point of anchorage, independent of the scaffold, and be protected from
+                                                sharp edges and abrasion. Safe points of anchorage include structural
+                                                members of buildings, but not standpipes, vents, electrical conduit,
+                                                etc., which may give way under the force of a fall. </li>
+                                            <li>It is dangerous and therefore impermissible for two or more vertical
+                                                lifelines to be attached to each other, or to the same point of
+                                                anchorage. </li>
+                                            <li>When horizontal lifelines are used, they are to be secured to two or
+                                                more structural members of the scaffold. </li>
                                         </ul>
                                     </div><!-- end accordion-inner -->
                                 </div> <!-- end one -->
                             </div> <!-- end group -->
                             <!-- END TWO -->
+
                             <!-- BEGIN THREE -->
                             <div class="accordion-group">
                                 <div class="accordion-heading">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion4" href="#Guardrail_Systems" title="Guardrail Systems">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion4"
+                                        href="#Guardrail_Systems" title="Guardrail Systems">
                                         <h6>Guardrail Systems</h6>
                                     </a>
                                 </div> <!-- end accordion-heading -->
@@ -211,38 +254,66 @@
                                     <div class="accordion-inner">
                                         <!-- BEGIN ACCIDENT REPORT -->
                                         <div class="pull-right img-caption text-center safety-bulletin hidden-print">
-                                            <a href="#accident_report_5" title="Employee is Pulled off Scaffold, Suffers Injuries. Guardrails May Have Saved Him" ddata-toggle="">
+                                            <a href="#accident_report_5"
+                                                title="Employee is Pulled off Scaffold, Suffers Injuries. Guardrails May Have Saved Him"
+                                                ddata-toggle="">
                                                 <img src="bulletin.gif" style="width: 50px;" alt="Accident Report">
-                                                <p>Employee is Pulled off Scaffold, Suffers Injuries. Guardrails May Have Saved Him</p>
+                                                <p>Employee is Pulled off Scaffold, Suffers Injuries. Guardrails May
+                                                    Have Saved Him</p>
                                             </a>
                                         </div>
                                         <!-- END ACCIDENT REPORT -->
 
                                         <ul>
-                                            <li>Guardrail systems must be installed along all open sides and ends of platforms, and must be in place before the scaffold is released for use by employees other than erection/dismantling crews. </li>
-                                            <li>Walkways located within a scaffold must have guardrail systems installed within 9½ inches of and along at least one side of the walkway. </li>
+                                            <li>Guardrail systems must be installed along all open sides and ends of
+                                                platforms, and must be in place before the scaffold is released for use
+                                                by employees other than erection/dismantling crews. </li>
+                                            <li>Walkways located within a scaffold must have guardrail systems installed
+                                                within 9½ inches of and along at least one side of the walkway. </li>
                                             <li>
-                                                Each toprail or equivalent member of a guardrail system must be able to withstand a force of at least 200 pounds applied in any downward or horizontal direction, at any point along its top edge. 
+                                                Each toprail or equivalent member of a guardrail system must be able to
+                                                withstand a force of at least 200 pounds applied in any downward or
+                                                horizontal direction, at any point along its top edge.
                                                 <ul>
-                                                    <li>The top edge height of toprails on supported scaffolds must be between 36 inches and 45 inches.</li>
-                                                    <li>When conditions warrant, the height of the top edge may exceed the 45-inch height, provided the guardrail system meets all other criteria. (<em>NOTE</em>: The minimum top edge height on scaffolds manufactured or placed in service after January 1, 2000 is 38 inches). </li>
+                                                    <li>The top edge height of toprails on supported scaffolds must be
+                                                        between 36 inches and 45 inches.</li>
+                                                    <li>When conditions warrant, the height of the top edge may exceed
+                                                        the 45-inch height, provided the guardrail system meets all
+                                                        other criteria. (<em>NOTE</em>: The minimum top edge height on
+                                                        scaffolds manufactured or placed in service after January 1,
+                                                        2000 is 38 inches). </li>
                                                 </ul>
                                             </li>
                                             <li>
-                                                Midrails, screens, mesh, intermediate vertical members, solid panels, etc., must be able to withstand a force of at least 150 pounds applied in any downward or horizontal direction, at any point along the midrail or other member. 
+                                                Midrails, screens, mesh, intermediate vertical members, solid panels,
+                                                etc., must be able to withstand a force of at least 150 pounds applied
+                                                in any downward or horizontal direction, at any point along the midrail
+                                                or other member.
                                                 <ul>
-                                                    <li>When midrails are used, they must be installed at a height approximately midway between the top edge of the guardrail system and the platform surface. </li>
-                                                    <li>When screens and mesh are used, they must extend from the top edge of the guardrail system to the scaffold platform, and along the entire opening between the supports. </li>
-                                                    <li>When intermediate members (such as balusters or additional rails) are used, they must be no more than 19 inches apart. </li>
+                                                    <li>When midrails are used, they must be installed at a height
+                                                        approximately midway between the top edge of the guardrail
+                                                        system and the platform surface. </li>
+                                                    <li>When screens and mesh are used, they must extend from the top
+                                                        edge of the guardrail system to the scaffold platform, and along
+                                                        the entire opening between the supports. </li>
+                                                    <li>When intermediate members (such as balusters or additional
+                                                        rails) are used, they must be no more than 19 inches apart.
+                                                    </li>
                                                 </ul>
                                             </li>
-                                            <li>Guardrails must be surfaced to prevent punctures or lacerations to employees and to prevent snagging of clothing, which may cause employees to lose their balance. </li>
-                                            <li>Ends of rails may not extend beyond their terminal posts, unless they do not constitute a projection hazard to employees. </li>
+                                            <li>Guardrails must be surfaced to prevent punctures or lacerations to
+                                                employees and to prevent snagging of clothing, which may cause employees
+                                                to lose their balance. </li>
+                                            <li>Ends of rails may not extend beyond their terminal posts, unless they do
+                                                not constitute a projection hazard to employees. </li>
                                             <li>
-                                                In lieu of guardrails, crossbracing may serve as a toprail or midrail, providing the crossing point is:
+                                                In lieu of guardrails, crossbracing may serve as a toprail or midrail,
+                                                providing the crossing point is:
                                                 <ul>
-                                                    <li>Between 20 and 30 inches above the work platform for a midrail, or</li>
-                                                    <li>Between 38 and 48 inches above the work platform for a toprail. </li>
+                                                    <li>Between 20 and 30 inches above the work platform for a midrail,
+                                                        or</li>
+                                                    <li>Between 38 and 48 inches above the work platform for a toprail.
+                                                    </li>
                                                 </ul>
                                             </li>
                                         </ul>
@@ -251,24 +322,39 @@
                                         <div class="img-col-2">
                                             <ul class="unstyled img-caption text-center breakavoid">
                                                 <li id="Figure11">
-                                                    <img src="slide70.jpg" class="img-polaroid" alt="Figure 11. Obvious violation: No guardrail and no fall-arrest system. Also, because scaffold is six tiers high, it must be tied in to the building. [1926.451(c)(1)]">
-                                                    <p class="caption">Figure 11. Obvious violation: No guardrail and no fall-arrest system. Also, because scaffold is six tiers high, it must be tied in to the building. </p>
+                                                    <img src="slide70.jpg" class="img-polaroid"
+                                                        alt="Figure 11. Obvious violation: No guardrail and no fall-arrest system. Also, because scaffold is six tiers high, it must be tied in to the building. [1926.451(c)(1)]">
+                                                    <p class="caption">Figure 11. Obvious violation: No guardrail and no
+                                                        fall-arrest system. Also, because scaffold is six tiers high, it
+                                                        must be tied in to the building. </p>
                                                 </li>
                                                 <li id="Figure12">
-                                                    <img src="slide13.jpg" class="img-polaroid" alt="Figure 12. Violation: Scaffold has X-brace at a height that should be verified as meeting the requirements to act as a top rail, 1926.451(g)(4)(xv) and a midrail and toe boards are still required as these workers are not wearing fall protection. There is a mortarboard on the cantilevered platform, in possible violation of 1926.452(c)(5)(iii).">
-                                                    <p class="caption">Figure 12. Violation: Scaffold has X-brace at a height that should be verified as meeting the requirements to act as a top rail,
-                                                     and a midrail and toe boards are still required as these workers are not wearing fall protection. There is a mortarboard on the cantilevered platform, in possible violation of 
-      </p>
+                                                    <img src="slide13.jpg" class="img-polaroid"
+                                                        alt="Figure 12. Violation: Scaffold has X-brace at a height that should be verified as meeting the requirements to act as a top rail, 1926.451(g)(4)(xv) and a midrail and toe boards are still required as these workers are not wearing fall protection. There is a mortarboard on the cantilevered platform, in possible violation of 1926.452(c)(5)(iii).">
+                                                    <p class="caption">Figure 12. Violation: Scaffold has X-brace at a
+                                                        height that should be verified as meeting the requirements to
+                                                        act as a top rail,
+                                                        and a midrail and toe boards are still required as these workers
+                                                        are not wearing fall protection. There is a mortarboard on the
+                                                        cantilevered platform, in possible violation of
+                                                    </p>
                                                 </li>
                                             </ul>
                                         </div>
                                         <!-- END IMAGE -->
                                         <!-- BEGIN Modal #accident_report_5 -->
                                         <div class="well well-white visible-print">
-                                            <h5>Employee is Pulled off Scaffold, Suffers Injuries. Guardrails May Have Saved Him</h5>
+                                            <h5>Employee is Pulled off Scaffold, Suffers Injuries. Guardrails May Have
+                                                Saved Him</h5>
                                             <p><strong>Case Report:</strong></p>
                                             <ul>
-                                                <li>While sitting or kneeling on a fixed deck plank attached to a fabricated frame scaffold, a worker was pulling a 16-foot long 2x4 off the bucket of an excavator. There were no guardrails at the working level. When the other end of the 2x4 slipped off the bucket, the employee did not let go of his end, and was pulled off the deck. He fell 16 feet to the ground, sustaining facial fractures and other injuries.</li>
+                                                <li>While sitting or kneeling on a fixed deck plank attached to a
+                                                    fabricated frame scaffold, a worker was pulling a 16-foot long 2x4
+                                                    off the bucket of an excavator. There were no guardrails at the
+                                                    working level. When the other end of the 2x4 slipped off the bucket,
+                                                    the employee did not let go of his end, and was pulled off the deck.
+                                                    He fell 16 feet to the ground, sustaining facial fractures and other
+                                                    injuries.</li>
                                             </ul>
                                         </div><!-- end well well-white -->
                                         <!-- END Modal #accident_report_5 -->
@@ -276,43 +362,59 @@
                                 </div> <!-- end one -->
                             </div> <!-- end group -->
                             <!-- END THREE -->
+
                             <!-- BEGIN Modal #accident_report_5 -->
-                            <div id="accident_report_5" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+                            <div id="accident_report_5" class="modal hide fade" tabindex="-1" role="dialog"
+                                aria-labelledby="myModalLabel5" aria-hidden="true">
                                 <div class="modal-header">
                                     <a class="btn btn-link close" data-dismiss="modal" aria-hidden="true">x</a>
-                                    <h3 id="myModalLabel5">Employee is Pulled off Scaffold, Suffers Injuries. Guardrails May Have Saved Him</h3>
+                                    <h3 id="myModalLabel5">Employee is Pulled off Scaffold, Suffers Injuries. Guardrails
+                                        May Have Saved Him</h3>
                                 </div>
                                 <div class="modal-body">
                                     <p><strong>Case Report:</strong></p>
                                     <ul>
-                                        <li>While sitting or kneeling on a fixed deck plank attached to a fabricated frame scaffold, a worker was pulling a 16-foot long 2x4 off the bucket of an excavator. There were no guardrails at the working level. When the other end of the 2x4 slipped off the bucket, the employee did not let go of his end, and was pulled off the deck. He fell 16 feet to the ground, sustaining facial fractures and other injuries.</li>
+                                        <li>While sitting or kneeling on a fixed deck plank attached to a fabricated
+                                            frame scaffold, a worker was pulling a 16-foot long 2x4 off the bucket of an
+                                            excavator. There were no guardrails at the working level. When the other end
+                                            of the 2x4 slipped off the bucket, the employee did not let go of his end,
+                                            and was pulled off the deck. He fell 16 feet to the ground, sustaining
+                                            facial fractures and other injuries.</li>
                                     </ul>
                                 </div><!-- end modal-body -->
                             </div><!-- end modal -->
+
                             <!-- BEGIN FOUR -->
                             <div class="accordion-group">
                                 <div class="accordion-heading">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion4" href="#Erectors_and_Dismantlers_Fall" title="Erectors and Dismantlers">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion4"
+                                        href="#Erectors_and_Dismantlers_Fall" title="Erectors and Dismantlers">
                                         <h6>Erectors and Dismantlers</h6>
                                     </a>
                                 </div> <!-- end accordion-heading -->
                                 <div id="Erectors_and_Dismantlers_Fall" class="accordion-body collapse">
                                     <div class="accordion-inner">
-                                        <p>Employers are required to provide fall protection for employees erecting or dismantling supported scaffolds where it is feasible, and where installing and using it does not create a greater hazard. </p>
+                                        <p>Employers are required to provide fall protection for employees erecting or
+                                            dismantling supported scaffolds where it is feasible, and where installing
+                                            and using it does not create a greater hazard. </p>
                                     </div><!-- end accordion-inner -->
                                 </div> <!-- end one -->
                             </div> <!-- end group -->
                             <!-- END FOUR -->
+
                             <!-- BEGIN FIVE -->
                             <div class="accordion-group">
                                 <div class="accordion-heading">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion4" href="#Competent_Person_Fall" title="Competent Person">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion4"
+                                        href="#Competent_Person_Fall" title="Competent Person">
                                         <h6>Competent Person</h6>
                                     </a>
                                 </div> <!-- end accordion-heading -->
                                 <div id="Competent_Person_Fall" class="accordion-body collapse">
                                     <div class="accordion-inner">
-                                        <p>The employer must designate a competent person, who would be responsible for determining the feasibility and safety of providing fall protection for employees erecting or dismantling supported scaffolds. </p>
+                                        <p>The employer must designate a competent person, who would be responsible for
+                                            determining the feasibility and safety of providing fall protection for
+                                            employees erecting or dismantling supported scaffolds. </p>
                                     </div><!-- end accordion-inner -->
                                 </div> <!-- end one -->
                             </div> <!-- end group -->
@@ -320,7 +422,7 @@
 
                         </div> <!-- end FALL PROTECTION -->
                     </div><!-- end well well-white -->
-                  
+
 
                 </div>
 
@@ -328,4 +430,5 @@
         </div>
     </div>
 </body>
+
 </html>
