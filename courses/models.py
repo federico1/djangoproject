@@ -156,7 +156,7 @@ class CourseProgress(models.Model):
 
 
     def __str__(self):
-        return str(self.content.id)
+        return str(self.content)
 
 
 class CourseTimeLog(models.Model):

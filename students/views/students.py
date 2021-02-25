@@ -41,26 +41,31 @@ class StudentCourseListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         qs = super(StudentCourseListView, self).get_queryset()
-        return qs.filter(students__in=[self.request.user])
+
+        qs = qs.filter(students__in=[self.request.user])
+        return qs
 
 
 class StudentCourseDetailView(LoginRequiredMixin, DetailView):
     model = Course
     template_name = 'students/course/detail.html'
 
+    # def get_queryset(self):
 
-    def get_queryset(self):
-        
-        qs = super(StudentCourseDetailView, self).get_queryset()
-        qs = qs.filter(students__in=[self.request.user])
+    #     qs = super(StudentCourseDetailView, self).get_queryset()
 
-        return qs
+    #     print(qs)
+
+    #     qs = qs.filter(students__in=[self.request.user])
+
+    #     print(qs)
+
+    #     return qs
 
     def get_context_data(self, **kwargs):
 
         context = super(StudentCourseDetailView,
                         self).get_context_data(**kwargs)
-       
 
         course = self.get_object()
 
@@ -74,34 +79,43 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
 
         course_details = []
         modules_list = course.modules.all().order_by('order')
-        student = self.request.user.student
-        taken_quizzes = list(student.taken_quizzes.values_list('quiz_id', flat=True))
 
+        student = self.request.user.student
+
+        taken_quizzes = list(
+            student.taken_quizzes.values_list('quiz_id', flat=True))
 
         for m in modules_list:
 
             for c in m.contents.order_by('order'):
+
                 c_count = CourseProgress.objects.filter(
                     content_id=c.id, is_completed=True, user=self.request.user).count()
 
-                item_obj = {'type': 'content', 'object': c, 'module':m,
+                item_obj = {'type': 'content', 'object': c, 'module': m,
                             'complete': True if c_count > 0 else False}
 
                 course_details.append(item_obj)
 
-                if c_count <=0:
+                if c_count <= 0:
                     context['content_completed'] = False
 
             if m.quiz is not None:
-                t_q = student.taken_quizzes.filter(quiz_id=m.quiz.id).select_related('quiz').first()
-                score = 0
-                if t_q is not None:
-                    score = t_q.score
+                
+                if m.quiz.questions.count() > 0:
+                    
+                    t_q = student.taken_quizzes.filter(
+                    quiz_id=m.quiz.id).select_related('quiz').first()
 
-                item_obj = {'type': 'quiz',
-                            'object': m.quiz, 'score':score, 'module':m, 'complete': True if m.quiz.id in taken_quizzes else False}
+                    score = 0
 
-                course_details.append(item_obj)
+                    if t_q is not None:
+                        score = t_q.score
+
+                    item_obj = {'type': 'quiz',
+                                'object': m.quiz, 'score': score, 'module': m, 'complete': True if m.quiz.id in taken_quizzes else False}
+
+                    course_details.append(item_obj)
 
         context['taken_quizzes'] = taken_quizzes
         context['active_content'] = course_details[0]
@@ -112,38 +126,41 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
 
             content_id = int(self.request.GET.get('content'))
             context['module'] = course.modules.get(id=self.kwargs['module_id'])
-            
+
             if self.request.GET.get('type') == 'quiz':
                 context['active_content'] = [x for
-                                         x in course_details if x['object'].id == content_id and x['type'] == 'quiz'][0]
+                                             x in course_details if x['object'].id == content_id and x['type'] == 'quiz'][0]
             else:
-                context['active_content'] =[x for
-                                         x in course_details if x['object'].id == content_id and x['type'] == 'content'][0]
+                context['active_content'] = [x for
+                                             x in course_details if x['object'].id == content_id and x['type'] == 'content'][0]
 
             if self.request.GET.get('type') == 'quiz':
-                current_index = [ix for ix, x in enumerate(course_details) if x['object'].id == content_id and x['type'] == 'quiz'][0]
+                current_index = [ix for ix, x in enumerate(
+                    course_details) if x['object'].id == content_id and x['type'] == 'quiz'][0]
             else:
-                current_index = [ix for ix, x in enumerate(course_details) if x['object'].id == content_id and x['type'] == 'content'][0]
-
+                current_index = [ix for ix, x in enumerate(
+                    course_details) if x['object'].id == content_id and x['type'] == 'content'][0]
 
             if current_index > 0:
                 prev_item = course_details[current_index-1]
                 context['prev_completed'] = prev_item['complete']
 
             i = current_index+1
+
             while i < len(course_details):
                 obj = course_details[i]
                 context['next_content'] = obj
                 break
         elif self.request.GET.get('type') == 'quiz' and course.quiz is not None:
-            t_q = student.taken_quizzes.filter(quiz_id=course.quiz_id).select_related('quiz').first()
+            t_q = student.taken_quizzes.filter(
+                quiz_id=course.quiz_id).select_related('quiz').first()
             score = 0
-            
+
             if t_q is not None:
                 score = t_q.score
 
             context['active_content'] = {'type': 'quiz',
-                            'object': course.quiz, 'score':score, 'module':None, 'complete': True if course.quiz.id in taken_quizzes else False}
+                                         'object': course.quiz, 'score': score, 'module': None, 'complete': True if course.quiz.id in taken_quizzes else False}
 
         return context
 
@@ -152,16 +169,16 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
         if context['module'] and (context['prev_completed'] == False or context['active_content'] == None):
             return redirect('student_course_detail', self.get_object().id)
 
-        if self.request.GET.get('content') and context['active_content'] is not None:
-            try:
-                pr_r = CourseProgress.objects.update_or_create(content_id=context['active_content']['object'].id,
-                 user=self.request.user,defaults={'user': self.request.user, 'content': context['active_content']['object'], 'is_completed': True})
-                
-                if context['active_content'] is not None and pr_r[1] == True:
-                    context['active_content']['complete'] = True
+        # if self.request.GET.get('content') and context['active_content'] is not None:
+        #     try:
+        #         pr_r = CourseProgress.objects.update_or_create(content_id=context['active_content']['object'].id,
+        #                                                        user=self.request.user, defaults={'user': self.request.user, 'content': context['active_content']['object'], 'is_completed': True})
 
-            except Exception as ex:
-                print(ex)
+        #         if context['active_content'] is not None and pr_r[1] == True:
+        #             context['active_content']['complete'] = True
+
+        #     except Exception as ex:
+        #         print(ex)
 
         return super(StudentCourseDetailView, self).render_to_response(context, **response_kwargs)
 
@@ -235,7 +252,7 @@ class TakenQuizListView(ListView):
     def get_queryset(self):
         queryset = self.request.user.student.taken_quizzes.select_related(
             'quiz', 'quiz__tags').order_by('quiz__name')
-        
+
         return queryset
 
 
@@ -269,12 +286,13 @@ def take_quiz(request, pk):
                 student_answer.save()
                 unanswered_questions = student.get_unanswered_questions(quiz)
                 total_unanswered_questions = unanswered_questions.count()
-                    
-                rev_url = reverse('take_quiz', kwargs={"pk":pk})
-                
+
+                rev_url = reverse('take_quiz', kwargs={"pk": pk})
+
                 if request.GET['ref'] is not None:
-                    rev_url = rev_url + "?ref=" + request.GET['ref'] + '&type=quiz'
-                
+                    rev_url = rev_url + "?ref=" + \
+                        request.GET['ref'] + '&type=quiz'
+
                 request.user.save()
 
                 if unanswered_questions.exists():
@@ -287,7 +305,7 @@ def take_quiz(request, pk):
 
                     TakenQuiz.objects.create(
                         student=student, quiz=quiz, score=score)
-                    
+
                     return redirect(rev_url)
     else:
         form = TakeQuizForm(question=question)
@@ -358,25 +376,26 @@ def student_recommendation_list(request):
 @student_required
 def quiz_reset(request, pk):
     try:
-            student = request.user.student
-            taken = student.taken_quizzes.filter(quiz=pk).last()
-            quiz = Quiz.objects.get(id=pk)
+        student = request.user.student
+        taken = student.taken_quizzes.filter(quiz=pk).last()
+        quiz = Quiz.objects.get(id=pk)
 
-            rev_url = reverse('take_quiz', kwargs={"pk":pk})
+        rev_url = reverse('take_quiz', kwargs={"pk": pk})
 
-            if request.GET['ref'] is not None:
-                rev_url = rev_url + "?ref=" + request.GET['ref']
-            
-            if taken:
-                answers = [x for x in quiz.questions.select_related('answers').values_list('answers', flat=True)]
-                
-                for item in student.quiz_answers.filter(answer_id__in=answers):
-                    item.delete()
-                
-                taken.delete()
-                return redirect(rev_url)
-            else:
-                return HttpResponse(0) 
+        if request.GET['ref'] is not None:
+            rev_url = rev_url + "?ref=" + request.GET['ref']
+
+        if taken:
+            answers = [x for x in quiz.questions.select_related(
+                'answers').values_list('answers', flat=True)]
+
+            for item in student.quiz_answers.filter(answer_id__in=answers):
+                item.delete()
+
+            taken.delete()
+            return redirect(rev_url)
+        else:
+            return HttpResponse(0)
     except Exception as ex:
         return HttpResponse(0)
 
@@ -387,11 +406,11 @@ def quick_course_enrol(request, pk):
     course = get_object_or_404(Course, pk=pk)
 
     if course:
-        enrolled = request.user.courses_joined.filter(id = course.id).count()
+        enrolled = request.user.courses_joined.filter(id=course.id).count()
         if enrolled > 0:
             rev_url = reverse('student_course_detail', args=[course.id])
             return redirect(rev_url)
-        
+
         rev_url = reverse('course_detail', args=[course.slug])
         return redirect(rev_url)
 
@@ -410,9 +429,8 @@ class StudentCourseDetailView2(LoginRequiredMixin, DetailView):
     model = Course
     template_name = 'students/course/detail2.html'
 
-
     def get_queryset(self):
-        
+
         qs = super(StudentCourseDetailView2, self).get_queryset()
         qs = qs.filter(students__in=[self.request.user])
 
@@ -422,7 +440,6 @@ class StudentCourseDetailView2(LoginRequiredMixin, DetailView):
 
         context = super(StudentCourseDetailView2,
                         self).get_context_data(**kwargs)
-       
 
         course = self.get_object()
 
@@ -433,4 +450,3 @@ class StudentCourseDetailView2(LoginRequiredMixin, DetailView):
 
     def get(self, *args, **kwargs):
         return super().get(*args, **kwargs)
-

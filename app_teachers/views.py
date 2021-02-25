@@ -143,7 +143,6 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
             obj = form.save(commit=False)
             obj.owner = request.user
             obj.save()
-            print(self.module.id)
             if not id:
 
                 Content.objects.create(module_id=self.module.id,

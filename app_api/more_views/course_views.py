@@ -9,8 +9,8 @@ from rest_framework import status
 from django.http import Http404
 from django.db.models import Count
 
-from courses.models import Subject, Course, CourseTimeLog
-from ..more_serializers.course_serializers import *
+from courses.models import Subject, Course, CourseTimeLog, CourseProgress
+from app_api.more_serializers.course_serializers import *
 
 from students.models import User
 from django.conf import settings
@@ -79,8 +79,6 @@ class CourseTimeLogDetailView(APIView):
             course = serializer.validated_data['course']
             snippets = CourseTimeLog.objects.filter(user=request.user, course=course)
 
-            print(snippets.count())
-
             if snippets.count() > 0:
                 time_object = snippets.last()
                 time_object.total_seconds = request.data['total_seconds']
@@ -94,3 +92,27 @@ class CourseTimeLogDetailView(APIView):
 
         return Response(serializer.errors,
                         status=status.HTTP_400_BAD_REQUEST)
+
+
+class CourseProgressApiView(APIView):
+   
+    def get(self, request, format=None):
+        snippets = CourseProgress.objects.all()
+        serializer = CourseProgressSerializer(snippets, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = CourseProgressSerializer(data=request.data)
+        if serializer.is_valid():
+            content = serializer.validated_data['content']
+
+            snippets = CourseProgress.objects.filter(user=request.user, content=content)
+
+            if snippets.count() <= 0:
+                serializer.save(user=request.user)
+            else:
+                snippets.first().save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

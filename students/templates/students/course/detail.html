@@ -26,23 +26,24 @@
         <ul class="navbar-nav ml-auto">
 
             <li class="nav-item top-audio-1 d-none">
-
             </li>
 
             {% if module != None %}
 
-            {% if next_content != None and active_content.complete == True %}
+            {% comment %} {% if next_content != None and active_content.complete == True %} {% endcomment %}
+
+            {% if next_content != None %}
 
             {% if next_content.type == 'quiz' %}
 
-            <li class="nav-item">
+            <li class="nav-item {% if active_content.complete != True %} d-none {% endif %} next-item-link">
                 <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{next_content.object.id}}&type=quiz"
                     class="nav-link text-white btn btn-sm btn-success">Next Chapter (Quiz) >> </a>
             </li>
 
             {% elif next_content.type == 'content' %}
 
-            <li class="nav-item">
+            <li class="nav-item {% if active_content.complete != True %} d-none {% endif %} next-item-link">
                 <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{next_content.object.id}}"
                     class="nav-link text-white btn btn-sm btn-success">Next Chapter >> </a>
             </li>
@@ -84,7 +85,6 @@
 
 {% block content %}
 
-
 <div class="container-fluid py-0 px-1" id="fixContainer">
     <!-- <h1 class="header">
         {{ object.title }}
@@ -119,7 +119,7 @@
                                             <li>
                                                 {% if content.id in completed_contents or active_content.object.id  == content.id %}
 
-                                                <a class="{% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}pin{% endif %}"
+                                                <a class="content-{{content.id}} {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}pin{% endif %}"
                                                     href="{% url 'student_course_detail_module' object.id m.id %}?content={{content.id}}">
 
                                                     <i title=" {{ content.content_type }}"
@@ -139,14 +139,15 @@
                                             {% endwith %}
                                             {% endfor %}
 
-                                            {% if m.quiz != None and m.quiz_id in taken_quizzes %}
+                                            {% if m.quiz != None and m.quiz_id in taken_quizzes and m.quiz.questions.count > 0  %}
+
                                             <li>
                                                 <a class="complete"
                                                     href="{% url 'student_course_detail_module' object.id m.id %}?content={{m.quiz_id}}&type=quiz">
                                                     <i class="fa fa-question-circle-o"></i>
                                                     Quiz </a>
                                             </li>
-                                            {% elif m.quiz != None %}
+                                            {% elif m.quiz != None and m.quiz.questions.count > 0 %}
                                             <li>
                                                 <a href="javascript:;">
                                                     <i title="Quiz" class="fa fa-question-circle-o"></i>
@@ -245,6 +246,8 @@
 
                         {%endif%}
 
+                        {% comment %} if module == None {% endcomment %}
+
                         {% if module != None %}
 
                         {% if next_content != None and active_content.complete == True %}
@@ -266,6 +269,7 @@
                         {% endif %}
 
                         {% endif %}
+
                         <!--  if next_content != None -->
 
                         {% for content in module.contents.all %}
@@ -274,15 +278,18 @@
 
                         <div class="col-md-12 mt-2 mb-30">
                             <div class="about-course">
+
                                 {% with item=content.item %}
 
                                 {% comment %} <h4>{{ item.title }}</h4> {% endcomment %}
 
-                                <div>
+                                <div id="contentSection" data-id="{{content.id}}" data-type="{{content.content_type}}"
+                                    data-completed="{{active_content.complete}}">
                                     {{ item.render }}
                                 </div>
 
                                 {% endwith %}
+
                             </div>
                         </div>
 
@@ -291,7 +298,7 @@
                         {% endfor %}
 
                         {% if active_content.type == 'quiz' %}
-                        <div class="col-md-12 mb-30">
+                        <div class=" col-md-12 mb-30">
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -404,6 +411,7 @@
     crossorigin="anonymous"></script>
 
 <script>
+
     var totalSeconds = 0;
     var lastSavedTime = 0;
 
@@ -413,6 +421,7 @@
 
     $('iframe').on("load", function () {
         addAudioTop();
+        alert(1);
     });
 
     $(document).ready(function () {
@@ -451,10 +460,10 @@
 
         $(".sidebar-dropdown > a.active").trigger('click');
 
-        videoPlayersState(true);
+        //videoPlayersState(true);
 
         setInterval(function () {
-            videoPlayersState(false);
+            // videoPlayersState(false);
         }, 4000);
 
         embedFile();
@@ -462,6 +471,8 @@
         getTimeLog();
 
         getRooms();
+
+        checkCourseProgress();
 
         jQuery('.scrollbar-inner').scrollbar();
 
@@ -480,10 +491,6 @@
             } else {
                 saveVideoState(element);
             }
-
-
-            console.log(element.currentTime);
-            console.log(element.duration);
 
         }
     };
@@ -571,7 +578,7 @@
                     });
 
                     $(".file-item").eq(0).replaceWith(img);
-                    
+
                 } else if (href.toLowerCase().indexOf(".pdf") >= 0) {
 
                     var pdfDiv = $("<div />", {
@@ -630,6 +637,7 @@
     }
 
     function getTimeLog() {
+
         $.get('/api/courses_time_logs/', {
             course: '{{object.id}}'
         }, function (response) {
@@ -668,6 +676,7 @@
 
     function timeCounter() {
         setInterval(() => {
+
             totalSeconds += 1;
 
             lastSavedTime++;
@@ -732,5 +741,54 @@
         }
 
     };
+
+    var checkCourseProgress = function () {
+
+        if ($("#contentSection").length > 0) {
+
+            var id = $("#contentSection").attr('data-id');
+            var content_type = $("#contentSection").attr('data-type');
+            var is_completed = $("#contentSection").attr('data-completed');
+
+            if (is_completed != 'False') {
+                return;
+            }
+
+            var data = {
+                content: id,
+                is_completed: true,
+                content_type: content_type
+            };
+
+            if (content_type != 'video') {
+                saveCourseProgress(data);
+            }
+
+        }
+
+    };
+
+    var saveCourseProgress = function (data) {
+
+        $.ajax({
+            type: "POST",
+            url: "/api/course_progress/",
+            data: data,
+            //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            beforeSend: function (xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+            },
+            success: function (response) {
+                if (response.id > 0) {
+                    $(".next-item-link").removeClass('d-none');
+                    $(".content-" + data.content).addClass('complete');
+                }
+            },
+            failure: function (errMsg) {}
+        });
+
+    };
+
 </script>
 {% endblock %}
