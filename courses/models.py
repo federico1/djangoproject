@@ -115,7 +115,7 @@ class Image(ItemBase):
 
 
 class Video(ItemBase):
-    url = models.URLField()
+    url = models.TextField()
 
 
 class IFrame(ItemBase):

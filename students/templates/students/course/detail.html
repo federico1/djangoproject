@@ -361,6 +361,8 @@
 
 {% block scripts %}
 
+<link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet" />
+
 <style>
     .digits {
         display: flex;
@@ -410,12 +412,15 @@
     integrity="sha512-4ze/a9/4jqu+tX9dfOqJYSvyYd5M6qum/3HpCLr+/Jqf0whc37VUbkpNGHR7/8pSnCFw47T1fmIpwBV7UySh3g=="
     crossorigin="anonymous"></script>
 
-<script>
+<script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
 
+<script>
     var totalSeconds = 0;
     var lastSavedTime = 0;
 
     var roomsList;
+
+    var videoManagerInstance;
 
     $("#top-nav").hide();
 
@@ -470,6 +475,8 @@
         getTimeLog();
 
         getRooms();
+
+        videoManagerInstance = new $.VideoManager({});
 
         checkCourseProgress();
 
@@ -759,7 +766,9 @@
                 content_type: content_type
             };
 
-            if (content_type != 'video') {
+            if (content_type != 'video' || $("#videoFrame").length > 0) {
+                saveCourseProgress(data);
+            } else if (content_type == 'video' && $("#myVideo[completed='true']").length > 0) {
                 saveCourseProgress(data);
             }
 
@@ -789,5 +798,54 @@
 
     };
 
+
+    (function ($) {
+
+        $.VideoManager = function (options) {
+
+            var that = this;
+            var player;
+
+            var settings = $.extend({}, options);
+
+            var registerEvent = function () {
+
+                if ($("#myVideo").length > 0) {
+
+                    player = videojs('myVideo', {
+                        controls: true,
+                        autoplay: false,
+                        preload: 'auto',
+                        fluid: true
+                    });
+
+                    player.ready(function () {
+
+                        var duration_time = Math.floor(this.duration());
+
+                        this.on("ended", function () {
+                            $("#myVideo").attr('completed', 'true');
+                            checkCourseProgress();
+                        });
+
+                    });
+
+                }
+            };
+
+            var init = function () {
+                registerEvent();
+               // $("#myVideo").css('width', '1005');
+               // $("#myVideo").css('height', 'auto')
+            };
+
+            init();
+
+            return this;
+
+        };
+
+
+    }(jQuery));
 </script>
 {% endblock %}
