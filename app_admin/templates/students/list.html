@@ -70,7 +70,13 @@
                     </div>
                     <div class="col">
                         <button class="btn btn-info" id="btnAssignCourse">Add Course </button>
+
+
                     </div>
+                </div>
+
+                <div class="spinner-border text-primary mb-2 d-none" role="status">
+                    <span class="sr-only">Loading...</span>
                 </div>
 
                 <div class="row mb-3">
@@ -446,6 +452,9 @@
 
             var assignCourse = function (user, course) {
 
+                $("#courseModal .spinner-border").removeClass('d-none');
+                $("#courseModal button").attr('disabled', true);
+
                 var data = {
                     student: user,
                     course: course
@@ -466,11 +475,16 @@
 
                                 setTimeout(function () {
                                     getStudentCourses();
+
+                                    $("#courseModal .spinner-border")
+                                        .removeClass('d-none');
+                                        
+                                    $("#courseModal button").attr('disabled',
+                                        false);
+
                                 }, 2000);
 
                             });
-
-
                         }
                     },
                     complete: function (xhr, textStatus) {
