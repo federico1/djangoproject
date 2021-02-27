@@ -40,6 +40,7 @@
             {% if request.user.is_authenticated  %}
 
             <div class="follow-us">
+            
                 {% if request.user.is_teacher == True %}
                 <a href="{% url 'teacher_dashboard' %}">Teacher Dashboard</a>
                 {% endif %}
@@ -47,6 +48,11 @@
                 {% if request.user.is_student == True %}
                 <a href="{% url  'student_course_list' %}">Student Dashboard</a>
                 {% endif %}
+
+                {% if request.user.is_superuser == True %}
+                <a href="{% url  'admin_dashboard' %}">Dashboard</a>
+                {% endif %}
+
             </div>
 
             {% else %}

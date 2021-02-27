@@ -4,7 +4,7 @@ from courses.models import Course
 from students.models import (
     Answer,
     Question,
-    Student,
+    #Student,
     StudentAnswer,
     Tag,
     User

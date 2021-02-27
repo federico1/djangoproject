@@ -1,12 +1,16 @@
 from django.urls import path
-from . import views
-#from django.conf import settings
+from .views import general, students
+# from views.students import StudentsView
+# from django.conf import settings
 
 urlpatterns = [
     path('',
-         views.HomeView.as_view(),
+         general.HomeView.as_view(),
          name='admin_dashboard'),
-    path('users',
-         views.UsersView.as_view(),
-         name='admin_users'),
+#     path('users',
+#          views.UsersView.as_view(),
+         #name = 'admin_users'),
+    path('students',
+         students.StudentsView.as_view(),
+         name='admin_students'),
 ]

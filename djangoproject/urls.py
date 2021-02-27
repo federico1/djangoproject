@@ -33,7 +33,7 @@ urlpatterns = [
     path('teachers/', include('app_teachers.urls')),
     path('quiz/', include('app_quiz.urls')),
     path('communicate/', include('app_chat.urls')),
-    path('super/', include('app_admin.urls')),
+    path('dashboard/', include('app_admin.urls')),
     url(r'api/', include('app_api.urls')),
     path('', include('app_public.urls')),
 ]

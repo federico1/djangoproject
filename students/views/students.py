@@ -20,7 +20,7 @@ from students.forms import StudentSignupForm
 from students.forms import TakeQuizForm
 from courses.models import Course
 from students.models import Quiz
-from students.models import Student
+#from students.models import Student
 from students.models import TakenQuiz
 from students.models import User
 from courses.models import Review
@@ -80,7 +80,7 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
         course_details = []
         modules_list = course.modules.all().order_by('order')
 
-        student = self.request.user.student
+        student = self.request.user
 
         taken_quizzes = list(
             student.taken_quizzes.values_list('quiz_id', flat=True))
@@ -261,9 +261,9 @@ class TakenQuizListView(ListView):
 def take_quiz(request, pk):
     quiz = get_object_or_404(Quiz, pk=pk)
 
-    student = request.user.student
+    student = request.user
 
-    if student.quizzes.filter(pk=pk).exists():
+    if student.taken_quizzes.filter(quiz=pk).exists():
 
         if request.GET['ref'] is not None:
             return redirect(request.GET['ref'] + "&type=quiz")
@@ -273,12 +273,14 @@ def take_quiz(request, pk):
     total_questions = quiz.questions.count()
     unanswered_questions = student.get_unanswered_questions(quiz)
     total_unanswered_questions = unanswered_questions.count()
+
     progress = 100 - \
         round(((total_unanswered_questions - 1) / total_questions) * 100)
     question = unanswered_questions.first()
 
     if request.method == 'POST':
         form = TakeQuizForm(question=question, data=request.POST)
+
         if form.is_valid():
             with transaction.atomic():
                 student_answer = form.save(commit=False)
@@ -376,7 +378,7 @@ def student_recommendation_list(request):
 @student_required
 def quiz_reset(request, pk):
     try:
-        student = request.user.student
+        student = request.user
         taken = student.taken_quizzes.filter(quiz=pk).last()
         quiz = Quiz.objects.get(id=pk)
 

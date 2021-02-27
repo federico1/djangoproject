@@ -27,18 +27,32 @@ class UserDetailView(APIView):
             raise Http404
 
     def get(self, request, format=None):
-        snippets = User.objects
+        snippets = User.objects.all()
+
+        is_student = self.request.query_params.get('is_student', None)
+
+        if is_student is not None:
+            snippets = snippets.filter(is_student=is_student)
 
         serializer = UserSerializer(snippets.order_by('-id'), many=True)
 
         return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = UserSerializer(snippet, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request, format=None):
         serializer = UserSerializer(data=request.data)
 
         if serializer.is_valid():
             serializer.save()
-            print(serializer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors,

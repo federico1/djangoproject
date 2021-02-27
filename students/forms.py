@@ -8,7 +8,7 @@ from courses.models import Course
 from students.models import (
     Answer,
     Question,
-    Student,
+    #Student,
     StudentAnswer,
     Tag,
     User
@@ -59,9 +59,7 @@ class StudentSignupForm(UserCreationForm):
         
         user.save()
 
-        print(user)
-        
-        student = Student.objects.create(user=user)
+        #student = Student.objects.create(user=user)
     
         return user
 

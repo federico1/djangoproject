@@ -9,9 +9,9 @@ class HomeView(generic.TemplateView):
         return context
 
 
-class UsersView(generic.TemplateView):
-    template_name = 'admin_users.html'
+# class UsersView(generic.TemplateView):
+#     template_name = 'admin_users.html'
     
-    def get_context_data(self, *args, **kwargs):
-        context = super(UsersView, self).get_context_data(*args, **kwargs)
-        return context
+#     def get_context_data(self, *args, **kwargs):
+#         context = super(UsersView, self).get_context_data(*args, **kwargs)
+#         return context

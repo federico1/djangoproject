@@ -10,6 +10,14 @@ class User(AbstractUser):
     image = models.TextField(null=True, blank=True)
     address = models.TextField(null=True, blank=True)
 
+    def get_unanswered_questions(self, quiz):
+        answered_questions = self.quiz_answers \
+            .filter(answer__question__quiz=quiz) \
+            .values_list('answer__question__pk', flat=True)
+        questions = quiz.questions.exclude(
+            pk__in=answered_questions).order_by('text')
+        return questions
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=30)
@@ -21,21 +29,25 @@ class Tag(models.Model):
     def get_html_badge(self):
         name = escape(self.name)
         color = escape(self.color)
-        html = '<span class="badge badge-primary" style="background-color: %s">%s</span>' % (color, name)
+        html = '<span class="badge badge-primary" style="background-color: %s">%s</span>' % (
+            color, name)
         return mark_safe(html)
 
 
 class Quiz(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='quizzes')
+    owner = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='quizzes')
     name = models.CharField(max_length=255)
-    tags = models.ForeignKey(Tag, on_delete=models.CASCADE, related_name='quizzes')
+    tags = models.ForeignKey(
+        Tag, on_delete=models.CASCADE, related_name='quizzes')
 
     def __str__(self):
         return self.name
 
 
 class Question(models.Model):
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='questions')
+    quiz = models.ForeignKey(
+        Quiz, on_delete=models.CASCADE, related_name='questions')
     text = models.CharField('Question', max_length=255)
 
     def __str__(self):
@@ -43,7 +55,8 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
+    question = models.ForeignKey(
+        Question, on_delete=models.CASCADE, related_name='answers')
     text = models.CharField('Answer', max_length=255)
     is_correct = models.BooleanField('Correct answer', default=False)
 
@@ -51,25 +64,27 @@ class Answer(models.Model):
         return self.text
 
 
-class Student(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    quizzes = models.ManyToManyField(Quiz, through='TakenQuiz')
-    interests = models.ManyToManyField(Tag, related_name='interested_students')
+# class Student(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+#     quizzes = models.ManyToManyField(Quiz, through='TakenQuiz')
+#     interests = models.ManyToManyField(Tag, related_name='interested_students')
 
-    def get_unanswered_questions(self, quiz):
-        answered_questions = self.quiz_answers \
-            .filter(answer__question__quiz=quiz) \
-            .values_list('answer__question__pk', flat=True)
-        questions = quiz.questions.exclude(pk__in=answered_questions).order_by('text')
-        return questions
+#     def get_unanswered_questions(self, quiz):
+#         answered_questions = self.quiz_answers \
+#             .filter(answer__question__quiz=quiz) \
+#             .values_list('answer__question__pk', flat=True)
+#         questions = quiz.questions.exclude(pk__in=answered_questions).order_by('text')
+#         return questions
 
-    def __str__(self):
-        return self.user.username
+#     def __str__(self):
+#         return self.user.username
 
 
 class TakenQuiz(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='taken_quizzes')
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='taken_quizzes')
+    student = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='taken_quizzes')
+    quiz = models.ForeignKey(
+        Quiz, on_delete=models.CASCADE, related_name='taken_quizzes')
     score = models.FloatField()
     date = models.DateTimeField(auto_now_add=True)
 
@@ -78,8 +93,10 @@ class TakenQuiz(models.Model):
 
 
 class StudentAnswer(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='quiz_answers')
-    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='+')
+    student = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='quiz_answers')
+    answer = models.ForeignKey(
+        Answer, on_delete=models.CASCADE, related_name='+')
 
     def __str__(self):
         return '{} {}'.format(self.student, self.answer)
