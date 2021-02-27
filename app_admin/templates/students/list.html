@@ -52,6 +52,51 @@
     </div>
 </div>
 
+<div id="courseModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Student Courses</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col">
+                        <select class="form-control" id="ddlCourses" name="course">
+                            <option value="">Select Course</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-info" id="btnAssignCourse">Add Course </button>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <table class="table table-bordered" id="tblStudentCourses">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Course</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <div class="d-none">
     <form id="fmFile" action="{% url 'upload-file' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -194,11 +239,23 @@
             <a href="javascript:;" class="btn btn-info btn-sm link-edit-user" id="{{id}}">
                     Edit
             </a>
+             <a href="javascript:;" class="btn btn-dark btn-sm link-course-user" id="{{id}}">
+                    Courses
+            </a>
         </div>
     </div>
  
 </script>
 {% endverbatim %}
+
+{% verbatim %}
+
+<script type="text/x-handlebars-template" id='studentCourseItemTemplate'>
+    <tr id="{{id}}"><td>{{id}}</td><td>{{title}}</td></tr>
+</script>
+{% endverbatim %}
+
+
 
 {% endblock %}
 
@@ -250,6 +307,8 @@
             var studentsList = [];
             var userDataTable;
 
+            var coursesList = [];
+
             var settings = $.extend({}, options);
 
             var getStudents = function () {
@@ -258,6 +317,12 @@
                 }, function (response) {
                     studentsList = response;
                     drawStudentsList();
+                });
+            };
+
+            var getCourses = function () {
+                return $.get('/api/courses/?format=json', {}, function (response) {
+                    coursesList = response;
                 });
             };
 
@@ -305,6 +370,16 @@
 
             };
 
+            var fillCoursesList = function () {
+
+                $("#ddlCourses").html('<option value="">Select Course</option>');
+
+                $(coursesList).each(function (index, item) {
+                    $("#ddlCourses").append('<option value="' + item.id + '">' + item.title +
+                        '</option>');
+                });
+            };
+
             var saveUser = function () {
 
                 $("#userModal form").valid();
@@ -350,6 +425,62 @@
 
             };
 
+            var getStudentCourses = function () {
+
+                var id = $("#courseModal").attr('data-id');
+
+                id = parseInt(id);
+
+                $("#tblStudentCourses tbody").empty();
+
+                $(coursesList).each(function (index, item) {
+
+                    if (item.students.indexOf(id) >= 0) {
+                        var source = document.getElementById("studentCourseItemTemplate").innerHTML;
+                        var template = Handlebars.compile(source);
+                        $("#tblStudentCourses tbody").append(template(item));
+                    }
+
+                });
+            };
+
+            var assignCourse = function (user, course) {
+
+                var data = {
+                    student: user,
+                    course: course
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/student_course_assign/",
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (response, textStatus, xhr) {
+                        if (textStatus == 'success') {
+                            getCourses().then(function () {
+
+                                setTimeout(function () {
+                                    getStudentCourses();
+                                }, 2000);
+
+                            });
+
+
+                        }
+                    },
+                    complete: function (xhr, textStatus) {
+                        if (xhr.status == 400) {}
+                    },
+                    failure: function (errMsg) {}
+                });
+
+            };
+
             var registerEvent = function () {
 
                 $("div").on("click", ".link-new-user", function (e) {
@@ -373,6 +504,38 @@
                         show: true,
                         backdrop: 'static'
                     });
+
+                });
+
+                $("div").on("click", ".link-course-user", function (e) {
+                    e.stopPropagation();
+
+                    var id = $(this).attr('id');
+
+                    $("#courseModal").attr('data-id', $(this).attr('id'));
+
+                    $("#courseModal").modal({
+                        show: true,
+                        backdrop: 'static'
+                    });
+
+                    fillCoursesList();
+                    getStudentCourses();
+
+                });
+
+                $("div").on("click", "#btnAssignCourse", function (e) {
+                    e.stopPropagation();
+
+                    var val = $('#ddlCourses').val();
+
+                    var trs = $("#tblStudentCourses tr#" + (val ? val : 0));
+
+                    var user = $("#courseModal").attr('data-id');
+
+                    if (val && trs.length <= 0) {
+                        assignCourse(user, val);
+                    }
 
                 });
 
@@ -434,7 +597,7 @@
                                 email: true
                             }
                         }
-                    })
+                    });
 
 
                 });
@@ -444,6 +607,7 @@
             var init = function () {
                 registerEvent();
                 getStudents();
+                getCourses();
             };
 
             init();

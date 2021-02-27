@@ -49,5 +49,6 @@ urlpatterns = [
     path('users/', users_views.UserDetailView.as_view()),
     path('users/<int:pk>/', users_views.UserDetailView.as_view()),
 
+    path('student_course_assign/', course_views.StudentCourseApiView.as_view()),
 
 ]
