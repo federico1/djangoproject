@@ -116,9 +116,18 @@
     <tr id="{{id}}">
         <td>{{id}}</td>
         <td>
+
+        {{#if image}}
+        
          <a href="{{image}}" target="_blank">
             <img src="{{image}}" width="35" alt="img">
          </a>
+        {{else}}
+            <img src="https://via.placeholder.com/200x200.png?text=.." width="35" alt="img">
+        {{/if}}
+                
+        
+
         </td>
         <td>{{username}}</td>
         <td>{{first_name}}</td>
