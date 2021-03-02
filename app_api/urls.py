@@ -50,5 +50,6 @@ urlpatterns = [
     path('users/<int:pk>/', users_views.UserDetailView.as_view()),
 
     path('student_course_assign/', course_views.StudentCourseApiView.as_view()),
-
+    
+    path('sst-cards/', users_views.SSTCardApiView.as_view()),
 ]
