@@ -40,7 +40,7 @@
             {% if request.user.is_authenticated  %}
 
             <div class="follow-us">
-            
+
                 {% if request.user.is_teacher == True %}
                 <a href="{% url 'teacher_dashboard' %}">Teacher Dashboard</a>
                 {% endif %}
@@ -108,7 +108,7 @@
 
                                 <li><a href="{% url 'about_detail' %}">About Us</a></li>
                                 <li><a href="{% url 'contact_detail' %}">Contact Us</a></li>
-
+                                <li><a href="{% url 'sst_verify' %}">SST Card</a></li>
                             </ul>
 
                             <!-- Search Button -->

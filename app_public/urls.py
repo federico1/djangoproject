@@ -17,5 +17,5 @@ urlpatterns = [
          name='student_manual_detail'),
     path('sst-verify/',
          SSTVerifyView.as_view(),
-         name='ss_verify'),
+         name='sst_verify'),
 ]
