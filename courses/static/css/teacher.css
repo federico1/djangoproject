@@ -1,13 +1,12 @@
 .sidebar-wrapper .sidebar-brand {
-    padding: 10px 20px;
-    display: flex;
+    padding: 10px 7px;
     align-items: center;
     background: #4f4e4e;
     border-radius: 2px;
     border: 1px solid #4d4b4b;
   }
   
-  .sidebar-wrapper .sidebar-brand>a {
+  .sidebar-wrapper .sidebar-brand a {
     text-transform: uppercase;
     font-weight: bold;
     flex-grow: 1;

@@ -98,8 +98,25 @@
                 <div class="scrollbar-inner">
                     <div class="sidebar-content">
                         <div class="sidebar-brand">
-                            <a href="{% url "student_course_detail" object.id %}"> Course Materials </a>
+
+                            <div class="d-flex justify-content-center">
+                                <div class="w-50"> <a href="{% url "student_course_detail" object.id %}"> Course
+                                        Materials
+                                    </a></div>
+                                <div class="w-50 p-1">
+
+                                    <div class="progress position-relative">
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 0%"
+                                           aria-valuemin="0" aria-valuemax="100"></div>
+                                        <small class="justify-content-center d-flex position-absolute w-100">0%
+                                            complete</small>
+                                    </div>
+
+                               
+                                </div>
+                            </div>
                         </div>
+
                         <!-- sidebar-search  -->
                         <div class="sidebar-menu">
                             <ul>
@@ -107,6 +124,7 @@
                                 {% for m in object.modules.all %}
 
                                 <li data-id="{{ m.id }}" class="sidebar-dropdown">
+
                                     <a href="javascript:;" class="{% if m == module %} active {% endif %}">
                                         {{ m.title }}
                                     </a>
@@ -116,7 +134,7 @@
                                             {% for content in m.contents.all %}
                                             {% with item=content.item %}
 
-                                            <li>
+                                            <li class="content-item">
                                                 {% if content.id in completed_contents or active_content.object.id  == content.id %}
 
                                                 <a class="content-{{content.id}} {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}pin{% endif %}"
@@ -141,14 +159,15 @@
 
                                             {% if m.quiz != None and m.quiz_id in taken_quizzes and m.quiz.questions.count > 0  %}
 
-                                            <li>
+                                            <li class="content-item">
                                                 <a class="complete"
                                                     href="{% url 'student_course_detail_module' object.id m.id %}?content={{m.quiz_id}}&type=quiz">
                                                     <i class="fa fa-question-circle-o"></i>
                                                     Quiz </a>
                                             </li>
+
                                             {% elif m.quiz != None and m.quiz.questions.count > 0 %}
-                                            <li>
+                                            <li class="content-item">
                                                 <a href="javascript:;">
                                                     <i title="Quiz" class="fa fa-question-circle-o"></i>
                                                     Quiz
@@ -480,6 +499,8 @@
 
         checkCourseProgress();
 
+        calculateProgressPercentage();
+
         jQuery('.scrollbar-inner').scrollbar();
 
     });
@@ -798,6 +819,19 @@
 
     };
 
+    var calculateProgressPercentage = function () {
+        var total = $(".content-item").length;
+        var completeTotal = $(".content-item .complete").length;
+
+        var per = (completeTotal / total) * 100;
+
+        per = Math.ceil(per);
+
+        $(".progress-bar").css('width', per + '%');
+
+         $(".progress small").html(per + '% complete');
+
+    };
 
     (function ($) {
 
@@ -835,8 +869,8 @@
 
             var init = function () {
                 registerEvent();
-               // $("#myVideo").css('width', '1005');
-               // $("#myVideo").css('height', 'auto')
+                // $("#myVideo").css('width', '1005');
+                // $("#myVideo").css('height', 'auto')
             };
 
             init();
