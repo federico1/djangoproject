@@ -52,4 +52,6 @@ urlpatterns = [
     path('student_course_assign/', course_views.StudentCourseApiView.as_view()),
     
     path('sst-cards/', users_views.SSTCardApiView.as_view()),
+    
+    path('enable-content-progress/', course_views.hello_world),
 ]

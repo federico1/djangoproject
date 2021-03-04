@@ -134,7 +134,7 @@
                                             {% for content in m.contents.all %}
                                             {% with item=content.item %}
 
-                                            <li class="content-item">
+                                            <li class="content-item" data-progress="{{ content.has_progress }}">
                                                 {% if content.id in completed_contents or active_content.object.id  == content.id %}
 
                                                 <a class="content-{{content.id}} {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}pin{% endif %}"
@@ -153,13 +153,15 @@
                                                     {{ item.title }}
                                                 </a>
                                                 {% endif %}
+
                                             </li>
+
                                             {% endwith %}
                                             {% endfor %}
 
                                             {% if m.quiz != None and m.quiz_id in taken_quizzes and m.quiz.questions.count > 0  %}
 
-                                            <li class="content-item">
+                                            <li class="content-item" data-progress="True">
                                                 <a class="complete"
                                                     href="{% url 'student_course_detail_module' object.id m.id %}?content={{m.quiz_id}}&type=quiz">
                                                     <i class="fa fa-question-circle-o"></i>
@@ -167,7 +169,7 @@
                                             </li>
 
                                             {% elif m.quiz != None and m.quiz.questions.count > 0 %}
-                                            <li class="content-item">
+                                            <li class="content-item" data-progress="True">
                                                 <a href="javascript:;">
                                                     <i title="Quiz" class="fa fa-question-circle-o"></i>
                                                     Quiz
@@ -820,8 +822,9 @@
     };
 
     var calculateProgressPercentage = function () {
-        var total = $(".content-item").length;
-        var completeTotal = $(".content-item .complete").length;
+
+        var total = $(".content-item[data-progress='True']").length;
+        var completeTotal = $(".content-item[data-progress='True'] .complete").length;
 
         var per = (completeTotal / total) * 100;
 

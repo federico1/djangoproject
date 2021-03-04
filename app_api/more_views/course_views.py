@@ -6,11 +6,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import api_view
+
 from django.http import Http404
 from django.db.models import Count
 
-from courses.models import Subject, Course, CourseTimeLog, CourseProgress
-from app_api.more_serializers.course_serializers import *
+from courses.models import Subject, Course, CourseTimeLog, CourseProgress, Content
+from app_api.more_serializers.course_serializers import SubjectSerializer, CourseSerializer, CourseTimeLogSerializer, CourseProgressSerializer, StudentCourseSerializer
 
 from students.models import User
 from django.conf import settings
@@ -45,14 +47,14 @@ class CourseDetailView(APIView):
         c_order = request.query_params.get('order')
         c_limit = request.query_params.get('limit')
 
-        order_field = '-id';
+        order_field = '-id'
 
         if c_order is not None and c_order == 'asc':
             order_field = 'id'
-        
+
         if c_limit is not None:
             snippets = snippets.order_by(order_field)[:int(c_limit)]
-        
+
         snippets = snippets.annotate(total_modules=Count('modules'))
 
         serializer = CourseSerializer(snippets, many=True)
@@ -66,7 +68,8 @@ class CourseTimeLogDetailView(APIView):
 
         course_id = request.query_params.get('course')
 
-        snippets = CourseTimeLog.objects.filter(user=request.user, course_id=course_id)
+        snippets = CourseTimeLog.objects.filter(
+            user=request.user, course_id=course_id)
         serializer = CourseTimeLogSerializer(snippets, many=True)
 
         return Response(serializer.data)
@@ -75,9 +78,10 @@ class CourseTimeLogDetailView(APIView):
         serializer = CourseTimeLogSerializer(data=request.data)
 
         if serializer.is_valid():
-            
+
             course = serializer.validated_data['course']
-            snippets = CourseTimeLog.objects.filter(user=request.user, course=course)
+            snippets = CourseTimeLog.objects.filter(
+                user=request.user, course=course)
 
             if snippets.count() > 0:
                 time_object = snippets.last()
@@ -85,7 +89,6 @@ class CourseTimeLogDetailView(APIView):
                 time_object.save()
             else:
                 serializer.save(user=request.user)
-            
 
             return Response(serializer.data,
                             status=status.HTTP_201_CREATED)
@@ -95,7 +98,7 @@ class CourseTimeLogDetailView(APIView):
 
 
 class CourseProgressApiView(APIView):
-   
+
     def get(self, request, format=None):
         snippets = CourseProgress.objects.all()
         serializer = CourseProgressSerializer(snippets, many=True)
@@ -106,7 +109,8 @@ class CourseProgressApiView(APIView):
         if serializer.is_valid():
             content = serializer.validated_data['content']
 
-            snippets = CourseProgress.objects.filter(user=request.user, content=content)
+            snippets = CourseProgress.objects.filter(
+                user=request.user, content=content)
 
             if snippets.count() <= 0:
                 serializer.save(user=request.user)
@@ -119,7 +123,7 @@ class CourseProgressApiView(APIView):
 
 
 class StudentCourseApiView(APIView):
-   
+
     def post(self, request, format=None):
         serializer = StudentCourseSerializer(data=request.data)
 
@@ -128,3 +132,19 @@ class StudentCourseApiView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'POST'])
+def hello_world(request):
+
+    result = 0
+    message = ""
+
+    if request.method == 'POST':
+        content = Content.objects.get(pk=request.data['id'])
+        content.has_progress = request.data['progress']
+
+        content.save()
+        result = 1
+
+    return Response({ "message": message, "result": result })

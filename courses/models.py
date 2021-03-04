@@ -74,6 +74,7 @@ class Content(models.Model):
                                                                     'file',
                                                                     'iframe')},
                                      on_delete=models.CASCADE)
+    has_progress = models.BooleanField(default=True)
     object_id = models.PositiveIntegerField()
     item = GenericForeignKey('content_type', 'object_id')
     order = OrderField(blank=True, for_fields=['module'])

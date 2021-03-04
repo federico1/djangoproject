@@ -90,14 +90,25 @@ Module {{ module.order|add:1 }}: {{ module.title }}
                         <div class="d-flex flex-row">
                             <div class="mr-3">
                                 <a class="btn btn-sm btn-info"
-                                    href="{% url "module_content_update" module.id item|model_name item.id %}">Edit</a>
-
+                                    href="{% url 'module_content_update' module.id item|model_name item.id %}">
+                                    Edit
+                                </a>
                             </div>
                             <div>
-                                <form action="{% url "module_content_delete" content.id %}" method="post">
+                                <form action="{% url 'module_content_delete' content.id %}" method="post">
                                     <input class="btn btn-sm btn-danger" type="submit" value="Delete">
                                     {% csrf_token %}
                                 </form>
+                            </div>
+
+                            <div class="ml-1 p-1">
+                                <div class="form-check">
+                                    <input class="form-check-input chk-progress" value="{{content.id}}" type="checkbox"
+                                        {% if content.has_progress == True %} checked {%endif%}>
+                                    <label class="form-check-label" for="flexCheckDefault{{content.id}}">
+                                        Progress Enable!
+                                    </label>
+                                </div>
                             </div>
                         </div>
                         {% endwith %}
@@ -190,7 +201,9 @@ Module {{ module.order|add:1 }}: {{ module.title }}
     });
 
     function onLoadPage() {
+
         $(".container input, select, textarea").addClass('form-control');
+
         $(".container textarea").css('height', 70);
 
         $('.sidebar-menu ul').sortable({
@@ -247,6 +260,36 @@ Module {{ module.order|add:1 }}: {{ module.title }}
 
             }
         });
+
+        $(".chk-progress").change(function () {
+            var val = $(this).val();
+            var checked = $(this).is(":checked");
+
+            var data = {
+                id: val,
+                progress: checked == true ? 'True' : 'False'
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/api/enable-content-progress/",
+                data: data,
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                },
+                success: function (response) {
+
+                    if (response.result > 0) {
+                        toastr.success('Content progress status updated..');
+                    }
+
+                },
+                failure: function (errMsg) {}
+            });
+
+
+        });
+
     };
 
     (function ($) {
@@ -290,19 +333,19 @@ Module {{ module.order|add:1 }}: {{ module.title }}
                     },
                     success: function (response) {
 
-                          $('#copyModal').modal('hide');
+                        $('#copyModal').modal('hide');
 
                         if (response > 0) {
                             toastr.success('Module has been copied.');
                         } else {
-                            
+
                             toastr.error(
                                 'Sorry, We are failed to created the copy. Kindly refresh the page and try again.'
                             );
-                           
-                           setTimeout(function(){
+
+                            setTimeout(function () {
                                 window.location.reload();
-                           }, 1000);
+                            }, 1000);
                         }
                     }
                 });
