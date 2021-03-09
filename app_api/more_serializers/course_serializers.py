@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from courses.models import Subject, Course, CourseTimeLog, CourseProgress
+from courses.models import Subject, Course, CourseTimeLog, CourseProgress, CourseFeature
 from students.models import User
 from app_api.serializers import UserSerializer
 
@@ -47,3 +47,9 @@ class StudentCourseSerializer(serializers.Serializer):
         Course.objects.get(pk=course_id).students.add(student_id)
 
         return {'student':student_id, 'course':course_id}
+
+
+class CourseFeatureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CourseFeature
+        fields = '__all__'

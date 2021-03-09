@@ -11,8 +11,8 @@ from rest_framework.decorators import api_view
 from django.http import Http404
 from django.db.models import Count
 
-from courses.models import Subject, Course, CourseTimeLog, CourseProgress, Content
-from app_api.more_serializers.course_serializers import SubjectSerializer, CourseSerializer, CourseTimeLogSerializer, CourseProgressSerializer, StudentCourseSerializer
+from courses.models import Subject, Course, CourseTimeLog, CourseProgress, Content, CourseFeature
+from app_api.more_serializers.course_serializers import SubjectSerializer, CourseSerializer, CourseTimeLogSerializer, CourseProgressSerializer, StudentCourseSerializer, CourseFeatureSerializer
 
 from students.models import User
 from django.conf import settings
@@ -134,8 +134,41 @@ class StudentCourseApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class CourseFeatureApiView(APIView):
+
+    def get(self, request, format=None):
+        snippets = CourseFeature.objects.all()
+
+        course_id = request.query_params.get('course')
+
+        if course_id:
+            snippets = CourseFeature.objects.filter(course_id=course_id)
+
+        
+        serializer = CourseFeatureSerializer(snippets, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = CourseFeatureSerializer(data=request.data)
+
+        if serializer.is_valid():
+        
+            course_id = serializer.validated_data['course']
+
+            snippets = CourseFeature.objects.filter(course_id=course_id)
+
+            for item in snippets:
+                item.delete()
+
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['GET', 'POST'])
-def hello_world(request):
+def UpdateHasProgress(request):
 
     result = 0
     message = ""
@@ -147,4 +180,4 @@ def hello_world(request):
         content.save()
         result = 1
 
-    return Response({ "message": message, "result": result })
+    return Response({"message": message, "result": result})

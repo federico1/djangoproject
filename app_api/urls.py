@@ -53,5 +53,9 @@ urlpatterns = [
     
     path('sst-cards/', users_views.SSTCardApiView.as_view()),
     
-    path('enable-content-progress/', course_views.hello_world),
+    path('enable-content-progress/', course_views.UpdateHasProgress),
+
+    path('course-features/', course_views.CourseFeatureApiView.as_view()),
+    path('course-features/<int:pk>/', course_views.CourseFeatureApiView.as_view()),
+
 ]

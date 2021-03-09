@@ -247,10 +247,11 @@
 
             $.get('/api/subjects', {}, function (response) {
                 $(response).each(function (indx, item) {
-                    var href = 'course/subject/' + item.slug;
+                    var href = '/course/subject/' + item.slug;
                     $(".courses-menu ul").append('<li><a href="' + href + '"">' + item.title +
                         '</a></li>');
                 });
+
             });
         }
     </script>
