@@ -7,6 +7,11 @@
 {% block nav %}
 
 <nav class="navbar navbar-expand-md navbar-bark bg-dark" id="secNav">
+
+    <button type="button" class="btn btn-warning btn-show mr-2">
+        <i class="fa fa-lg fa-long-arrow-right text-white"></i>
+    </button>
+    
     <a class="navbar-brand mb-0 h1 text-white" href="#"> {{ object.title }}</a>
 
     <div class="navbar-collapse">
@@ -85,128 +90,132 @@
 
 {% block content %}
 
-<div class="container-fluid py-0 px-1" id="fixContainer">
+
+<div class="container-fluid py-0 px-0" id="fixContainer">
     <!-- <h1 class="header">
         {{ object.title }}
     </h1> -->
 
-    <div class="row">
-        <div class="col-md-3 p-0 position-relative">
 
-            <nav id="sidebar" class="sidebar-wrapper">
 
-                <div class="scrollbar-inner">
-                    <div class="sidebar-content">
-                        <div class="sidebar-brand">
+    <nav id="sidebar" class="sidebar-wrapper shadow">
 
-                            <div class="d-flex justify-content-center">
-                                <div class="w-50"> <a href="{% url "student_course_detail" object.id %}"> Course
-                                        Materials
-                                    </a></div>
-                                <div class="w-50 p-1">
+        <button type="button" class="btn btn-info btn-sm btn-hide">
+            <i class="fa fa-lg fa-long-arrow-left"></i>
+        </button>
+        <div class="scrollbar-inner">
+            <div class="sidebar-content">
+                <div class="sidebar-brand">
 
-                                    <div class="progress position-relative">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 0%"
-                                           aria-valuemin="0" aria-valuemax="100"></div>
-                                        <small class="justify-content-center d-flex position-absolute w-100">0%
-                                            complete</small>
-                                    </div>
+                    <div class="d-flex justify-content-center">
+                        <div class="w-50"> <a href="{% url "student_course_detail" object.id %}"> Course
+                                Materials
+                            </a></div>
+                        <div class="w-50 p-1">
 
-                               
-                                </div>
+                            <div class="progress position-relative">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 0%"
+                                    aria-valuemin="0" aria-valuemax="100"></div>
+                                <small style="top:47%" class="justify-content-center d-flex position-absolute w-100">0%
+                                    complete</small>
                             </div>
+
+
                         </div>
-
-                        <!-- sidebar-search  -->
-                        <div class="sidebar-menu">
-                            <ul>
-
-                                {% for m in object.modules.all %}
-
-                                <li data-id="{{ m.id }}" class="sidebar-dropdown">
-
-                                    <a href="javascript:;" class="{% if m == module %} active {% endif %}">
-                                        {{ m.title }}
-                                    </a>
-
-                                    <div class="sidebar-submenu">
-                                        <ul>
-                                            {% for content in m.contents.all %}
-                                            {% with item=content.item %}
-
-                                            <li class="content-item" data-progress="{{ content.has_progress }}">
-                                                {% if content.id in completed_contents or active_content.object.id  == content.id %}
-
-                                                <a class="content-{{content.id}} {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}pin{% endif %}"
-                                                    href="{% url 'student_course_detail_module' object.id m.id %}?content={{content.id}}">
-
-                                                    <i title=" {{ content.content_type }}"
-                                                        class="fa {{ content.content_type }}"></i>
-                                                    {{ item.title }}
-
-                                                </a>
-
-                                                {% else %}
-                                                <a href="javascript:;">
-                                                    <i title=" {{ content.content_type }}"
-                                                        class="fa {{ content.content_type }}"></i>
-                                                    {{ item.title }}
-                                                </a>
-                                                {% endif %}
-
-                                            </li>
-
-                                            {% endwith %}
-                                            {% endfor %}
-
-                                            {% if m.quiz != None and m.quiz_id in taken_quizzes and m.quiz.questions.count > 0  %}
-
-                                            <li class="content-item" data-progress="True">
-                                                <a class="complete"
-                                                    href="{% url 'student_course_detail_module' object.id m.id %}?content={{m.quiz_id}}&type=quiz">
-                                                    <i class="fa fa-question-circle-o"></i>
-                                                    Quiz </a>
-                                            </li>
-
-                                            {% elif m.quiz != None and m.quiz.questions.count > 0 %}
-                                            <li class="content-item" data-progress="True">
-                                                <a href="javascript:;">
-                                                    <i title="Quiz" class="fa fa-question-circle-o"></i>
-                                                    Quiz
-                                                </a>
-                                            </li>
-                                            {% endif %}
-                                        </ul>
-                                    </div>
-                                </li>
-
-                                {% empty %}
-                                <li class="menu__item">No modules yet.</li>
-
-                                {% endfor %}
-
-                            </ul>
-                        </div>
-                        <!-- sidebar-menu  -->
-
-                        {% if content_completed == True and object.quiz is not None %}
-
-                        <div class="sidebar-brand">
-
-                            <a href="{% url "student_course_detail" object.id %}?type=quiz" class="btn btn-primary">
-                                Take Quiz </a>
-                        </div>
-
-                        {% endif %}
-
-
                     </div>
-                    <!-- sidebar-content  -->
                 </div>
-            </nav>
 
+                <!-- sidebar-search  -->
+                <div class="sidebar-menu">
+                    <ul>
+
+                        {% for m in object.modules.all %}
+
+                        <li data-id="{{ m.id }}" class="sidebar-dropdown">
+
+                            <a href="javascript:;" class="{% if m == module %} active {% endif %}">
+                                {{ m.title }}
+                            </a>
+
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    {% for content in m.contents.all %}
+                                    {% with item=content.item %}
+
+                                    <li class="content-item" data-progress="{{ content.has_progress }}">
+                                        {% if content.id in completed_contents or active_content.object.id  == content.id %}
+
+                                        <a class="content-{{content.id}} {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}pin{% endif %}"
+                                            href="{% url 'student_course_detail_module' object.id m.id %}?content={{content.id}}">
+
+                                            <i title=" {{ content.content_type }}"
+                                                class="fa {{ content.content_type }}"></i>
+                                            {{ item.title }}
+
+                                        </a>
+
+                                        {% else %}
+                                        <a href="javascript:;">
+                                            <i title=" {{ content.content_type }}"
+                                                class="fa {{ content.content_type }}"></i>
+                                            {{ item.title }}
+                                        </a>
+                                        {% endif %}
+
+                                    </li>
+
+                                    {% endwith %}
+                                    {% endfor %}
+
+                                    {% if m.quiz != None and m.quiz_id in taken_quizzes and m.quiz.questions.count > 0  %}
+
+                                    <li class="content-item" data-progress="True">
+                                        <a class="complete"
+                                            href="{% url 'student_course_detail_module' object.id m.id %}?content={{m.quiz_id}}&type=quiz">
+                                            <i class="fa fa-question-circle-o"></i>
+                                            Quiz </a>
+                                    </li>
+
+                                    {% elif m.quiz != None and m.quiz.questions.count > 0 %}
+                                    <li class="content-item" data-progress="True">
+                                        <a href="javascript:;">
+                                            <i title="Quiz" class="fa fa-question-circle-o"></i>
+                                            Quiz
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </li>
+
+                        {% empty %}
+                        <li class="menu__item">No modules yet.</li>
+
+                        {% endfor %}
+
+                    </ul>
+                </div>
+                <!-- sidebar-menu  -->
+
+                {% if content_completed == True and object.quiz is not None %}
+
+                <div class="sidebar-brand">
+
+                    <a href="{% url "student_course_detail" object.id %}?type=quiz" class="btn btn-primary">
+                        Take Quiz </a>
+                </div>
+
+                {% endif %}
+
+
+            </div>
+            <!-- sidebar-content  -->
         </div>
-        <div class="col-md-9">
+    </nav>
+
+    <div class="row">
+
+        <div class="col">
             <main class="page-content ">
                 <div class="row">
 
@@ -396,9 +405,33 @@
     }
 
     .sidebar-wrapper {
-        overflow: hidden;
         border-radius: 0;
         min-width: auto;
+        position: fixed !important;
+        width: 300px;
+        left: 1px;
+        top: 0px;
+        background: #fff;
+        border: 1px solid #dddddd;
+        border-radius: 2px;
+        border-bottom: 3px solid #438aad;
+        transition: all 200ms ease 0s;
+    }
+
+    .sidebar-wrapper .sidebar-brand {
+        margin-bottom: 2px;
+        border-radius: 0px;
+        background: #0f8aad;
+        border: 1px solid #1e7dac;
+    }
+
+    .sidebar-wrapper .sidebar-brand a {
+        color: #fff;
+    }
+
+    .sidebar-wrapper .sidebar-brand a:hover {
+        color: #fff;
+        background: none;
     }
 
     .sidebar-content {
@@ -411,13 +444,74 @@
         max-height: 100%;
     }
 
+    .sidebar-wrapper .sidebar-menu {
+        padding: 5px;
+
+    }
+
     .sidebar-wrapper .sidebar-submenu li {
         padding-left: 5px !important;
+    }
+
+    .sidebar-wrapper .sidebar-menu ul li a {
+        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
+        border-radius: 6px;
+        background: rgb(13 110 253 / .12);
+        color: #008cff;
+        margin-bottom: 6px;
+    }
+
+    .sidebar-wrapper .sidebar-menu ul li.active {
+        background: #fff;
+    }
+
+    .sidebar-wrapper .sidebar-menu ul li a.active {
+         background: #e2edff;
+    }
+
+    .sidebar-wrapper .sidebar-menu ul li.active > a {
+        color: #fff;
+        background: #747474;
+    }
+
+    .sidebar-wrapper .sidebar-menu ul li a:hover {
+        background: #747474;
+        color: #fff;
+    }
+
+    .sidebar-wrapper .sidebar-menu .sidebar-submenu a {
+        background: #fff;
+        color: #000;
+        box-shadow: none;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .sidebar-wrapper .sidebar-menu .sidebar-submenu a:hover {
+        background: #fff;
+        color: #008cff;
     }
 
     .sidebar-wrapper .sidebar-menu ul li a i {
         float: left;
         margin-right: 7px !important;
+        background: #fff;
+        border: none;
+        color: #000;
+    }
+
+    .sidebar-wrapper .sidebar-menu ul li a.pin i {
+        background: #e7e7e7;
+        color: #000;
+    }
+
+    .sidebar-wrapper .sidebar-menu ul li a.complete {
+        border-bottom: 1px solid #f3f3f3;
+    }
+
+    .sidebar-wrapper .sidebar-menu ul li a.pin {
+            background: #e7e7e7;
+    color: #353434
     }
 
     .scrollbar-inner>.scroll-element.scroll-y {
@@ -427,7 +521,21 @@
     .dropdown-menu.rooms {
         min-width: 25rem;
     }
+
+    .btn-hide {
+        position: absolute;
+        right: -37px;
+        bottom: 0px;
+        z-index: 9999;
+        border-radius: 0;
+    }
+
+    .btn-show {
+        border-radius: 0;
+        z-index: 9;
+    }
 </style>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"
     integrity="sha512-4ze/a9/4jqu+tX9dfOqJYSvyYd5M6qum/3HpCLr+/Jqf0whc37VUbkpNGHR7/8pSnCFw47T1fmIpwBV7UySh3g=="
@@ -457,8 +565,8 @@
         });
 
         $("#sidebar").css({
-            'max-height': $(window).height() - $("#secNav").height() - 30,
-            'height': $(window).height() - $("#secNav").height() - 30
+            'max-height': '98%',
+            'height': '98%'
         });
 
         $(".page-content").css({
@@ -482,6 +590,19 @@
             }
 
         });
+
+        $(".btn-hide").click(function () {
+
+            $("#sidebar").hide();
+
+        });
+
+        $(".btn-show").click(function () {
+
+            $("#sidebar").show();
+
+        });
+
 
         $(".sidebar-dropdown > a.active").trigger('click');
 
@@ -832,7 +953,7 @@
 
         $(".progress-bar").css('width', per + '%');
 
-         $(".progress small").html(per + '% complete');
+        $(".progress small").html(per + '% complete');
 
     };
 
