@@ -11,7 +11,7 @@
     <button type="button" class="btn btn-warning btn-show mr-2">
         <i class="fa fa-lg fa-long-arrow-right text-white"></i>
     </button>
-    
+
     <a class="navbar-brand mb-0 h1 text-white" href="#"> {{ object.title }}</a>
 
     <div class="navbar-collapse">
@@ -446,7 +446,7 @@
 
     .sidebar-wrapper .sidebar-menu {
         padding: 5px;
-
+        padding-right: 10px;
     }
 
     .sidebar-wrapper .sidebar-submenu li {
@@ -466,10 +466,10 @@
     }
 
     .sidebar-wrapper .sidebar-menu ul li a.active {
-         background: #e2edff;
+        background: #e2edff;
     }
 
-    .sidebar-wrapper .sidebar-menu ul li.active > a {
+    .sidebar-wrapper .sidebar-menu ul li.active>a {
         color: #fff;
         background: #747474;
     }
@@ -510,8 +510,8 @@
     }
 
     .sidebar-wrapper .sidebar-menu ul li a.pin {
-            background: #e7e7e7;
-    color: #353434
+        background: #e7e7e7;
+        color: #353434
     }
 
     .scrollbar-inner>.scroll-element.scroll-y {
@@ -533,6 +533,10 @@
     .btn-show {
         border-radius: 0;
         z-index: 9;
+    }
+
+    .sidebar-wrapper .sidebar-menu ul li a i.frame:before {
+        content: "\f2dc";
     }
 </style>
 
