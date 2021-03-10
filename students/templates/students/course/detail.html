@@ -97,7 +97,6 @@
     </h1> -->
 
 
-
     <nav id="sidebar" class="sidebar-wrapper shadow">
 
         <button type="button" class="btn btn-info btn-sm btn-hide">
@@ -201,7 +200,7 @@
 
                 <div class="sidebar-brand">
 
-                    <a href="{% url "student_course_detail" object.id %}?type=quiz" class="btn btn-primary">
+                    <a href="{% url "student_course_detail" object.id %}?type=quiz" class="btn btn-dark">
                         Take Quiz </a>
                 </div>
 
@@ -215,8 +214,10 @@
 
     <div class="row">
 
-        <div class="col">
+        <div class="col offset-md-3">
+
             <main class="page-content ">
+
                 <div class="row">
 
                     <div class="col">
@@ -599,12 +600,13 @@
 
             $("#sidebar").hide();
 
+            $(".page-content").parent().removeClass('offset-md-3');
         });
 
         $(".btn-show").click(function () {
 
             $("#sidebar").show();
-
+            $(".page-content").parent().addClass('offset-md-3');
         });
 
 
