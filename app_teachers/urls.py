@@ -49,4 +49,10 @@ urlpatterns = [
     path('module-copy/',
          views.ModuleCopy,
          name='module_copy'),
+
+    path('course/<int:pk>/',
+         views.CourseDetailView.as_view(), name='teacher_course_detail'),
+    path('course/<int:pk>/<int:module_id>/',
+         views.CourseDetailView.as_view(), name='teacher_course_detail_module'),
+
 ]

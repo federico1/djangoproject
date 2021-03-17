@@ -9,12 +9,14 @@
   <a href="{% url "course_create" %}" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
       class="fas fa-add"></i> Create New Course</a>
 </div>
+
 <div class="row">
   {% for course in object_list %}
   <div class="col-md-4">
     <div class="card border-0 shadow mb-2">
       <div class="card-body">
         <h5 class="card-title" pk="{{course.id}}">{{ course.title }}</h5>
+
         <h6 class="card-subtitle small text-muted mt-1">
           Date: {{course.created|date:"M d, Y" }}
         </h6>
@@ -40,7 +42,13 @@
           <a class="badge badge-primary px-3 py-1 mx-1 d-none" href="{% url "quiz_course" course.id %}">Quiz</a>
           <a class="badge badge-danger px-3 py-1 mx-1" href="{% url "course_delete" course.id %}">Delete Course</a>
         </div>
+
       </div>
+
+      <div class="card-footer text-center">
+        <a href="{% url 'teacher_course_detail' course.id %}" class="btn btn-sm btn-success">Take Course</a>
+      </div>
+
     </div>
   </div>
   {% empty %}

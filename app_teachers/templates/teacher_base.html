@@ -34,7 +34,7 @@
 
 <body class="bg-light">
 
-  <nav class="navbar navbar-expand-lg navbar-light fixed-top1 bg-white border">
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top1 bg-white border" id="top-nav">
     <a class="navbar-brand mb-0 h1" href="{% url 'teacher_dashboard' %}">NYC</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
       aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,6 +88,9 @@
 
     </div>
   </nav>
+
+  {% block nav %}
+  {% endblock %}
 
   <main class="container-fluid" role="main">
     <div id="content">
@@ -144,6 +147,29 @@
 
       return options.fn(this);
     });
+
+    (function ($) {
+      $.fn.serializeObject = function () {
+        var o = {};
+        var a = this.serializeArray();
+
+        $.each(a, function () {
+
+          if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+              o[this.name] = [o[this.name]];
+            }
+
+            o[this.name].push(this.value || '');
+          } else {
+            o[this.name] = this.value || '';
+          }
+        });
+
+        return o;
+      };
+
+    })(jQuery);
 
     var pendingNotifyList = [];
 

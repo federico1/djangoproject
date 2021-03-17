@@ -176,3 +176,22 @@ class Notification(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ExternalVideoRoom(models.Model):
+    title = models.CharField(max_length=200)
+    url = models.TextField(blank=True, null=True)
+    course = models.ForeignKey(Course, blank=True, null=True,
+                              related_name='external_video_rooms',
+                              on_delete=models.CASCADE)
+
+    is_deleted = models.BooleanField(default=False)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['title']
+
+    def __str__(self):
+        return self.title

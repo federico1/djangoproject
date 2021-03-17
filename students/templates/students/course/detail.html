@@ -86,6 +86,7 @@
     </div>
 
 </nav>
+
 {% endblock %}
 
 {% block content %}
@@ -216,7 +217,7 @@
 
         <div class="col offset-md-3">
 
-            <main class="page-content ">
+            <main class="page-content shadow">
 
                 <div class="row">
 
@@ -374,6 +375,8 @@
 
                     </div>
 
+                </div>
+
             </main>
         </div>
     </div>
@@ -383,8 +386,16 @@
 {% verbatim %}
 <script type="text/x-handlebars-template" id='roomListItemTemplate'>
     <li class="list-group-item d-flex justify-content-between align-items-center">
-        {{title}}
+        {{title}} (INTERNAL)
         <a href="/communicate/video-rooms/{{id}}?ref_course={{ref_course}}" target="_blank" class="link-add-member badge badge-primary badge-pill text-white">Connect</a></li>
+    </script>
+{% endverbatim %}
+
+{% verbatim %}
+<script type="text/x-handlebars-template" id='externalMeetItemTemplate'>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{title}} (EXTERNAL)
+            <a href="{{url}}" target="_blank" class="link-add-member badge badge-primary badge-pill text-white">Connect</a></li>
     </script>
 {% endverbatim %}
 
@@ -552,8 +563,6 @@
     var totalSeconds = 0;
     var lastSavedTime = 0;
 
-    var roomsList;
-
     var videoManagerInstance;
 
     $("#top-nav").hide();
@@ -580,6 +589,13 @@
             'overflow': 'hidden',
             'padding': 10
         });
+
+        $("#contentSection").css({
+            'max-height': $(window).height() - $("#secNav").height() - 60,
+            'height': $(window).height() - $("#secNav").height() - 60,
+
+        });
+
 
         $(".sidebar-dropdown > a").click(function () {
 
@@ -622,9 +638,8 @@
 
         getTimeLog();
 
-        getRooms();
-
         videoManagerInstance = new $.VideoManager({});
+        var liveMeetManager = new $.LiveVideoMeetManager({});
 
         checkCourseProgress();
 
@@ -865,38 +880,7 @@
 
     };
 
-    function getRooms() {
-        $.get('/api/video-rooms/?format=json', {}, function (response) {
-            roomsList = response;
-            fillRoomsTable();
-        });
-    };
 
-    var fillRoomsTable = function () {
-
-        $("#live-rooms").empty();
-
-        $(roomsList).each(function (index, item) {
-
-            var course = item.courses.find(a => a.course.id == '{{object.id}}');
-
-            if (course) {
-
-                var source = document.getElementById("roomListItemTemplate").innerHTML;
-                var template = Handlebars.compile(source);
-
-                item.ref_course = window.location.href.replace(window.location.origin, "");
-
-                $("#live-rooms").append(template(item));
-            }
-
-        });
-
-        if (roomsList.length <= 0) {
-            $("#live-rooms").append('<li class="list-group-item">No live connection is created yet.</li>');
-        }
-
-    };
 
     var checkCourseProgress = function () {
 
@@ -972,15 +956,27 @@
 
             var settings = $.extend({}, options);
 
+            var gcd  = function(a, b) {
+                return (b == 0) ? a : gcd(b, a % b);
+            };
+
             var registerEvent = function () {
 
                 if ($("#myVideo").length > 0) {
+
+                    var w = $("#contentSection").width();
+                    var h = $("#contentSection").height();
+
+                    var r = gcd(w, h);
 
                     player = videojs('myVideo', {
                         controls: true,
                         autoplay: false,
                         preload: 'auto',
-                        fluid: true
+                        //height: $("#contentSection").height(),
+                        //width: $("#contentSection").width(),
+                        fluid: true,
+                        aspectRatio:'945:524'
                     });
 
                     player.ready(function () {
@@ -999,8 +995,92 @@
 
             var init = function () {
                 registerEvent();
-                // $("#myVideo").css('width', '1005');
-                // $("#myVideo").css('height', 'auto')
+            };
+
+            init();
+
+            return this;
+
+        };
+
+
+        $.LiveVideoMeetManager = function (options) {
+
+            var internalMeetList = [];
+            var externalMeetList = [];
+
+            var settings = $.extend({}, options);
+
+            var getExternalVideos = function () {
+
+                var data = {
+                    course: '{{object.id}}',
+                    today: true,
+                    delete: false
+                };
+
+                $.get('/api/external-video-room/?format=json', data, function (response) {
+                    externalMeetList = response;
+                    drawExternalURLs();
+                });
+
+            };
+
+            var getRooms = function () {
+                $.get('/api/video-rooms/?format=json', {}, function (response) {
+                    internalMeetList = response;
+                    fillRoomsTable();
+                });
+            };
+
+            var fillRoomsTable = function () {
+
+                $(internalMeetList).each(function (index, item) {
+
+                    var course = item.courses.find(a => a.course.id == '{{object.id}}');
+
+                    if (course) {
+
+                        var source = document.getElementById("roomListItemTemplate").innerHTML;
+                        var template = Handlebars.compile(source);
+
+                        item.ref_course = window.location.href.replace(window.location.origin, "");
+
+                        $("#live-rooms").append(template(item));
+                    }
+
+                });
+
+                if ($("#live-rooms li").length <= 0) {
+                    $("#live-rooms").append(
+                        '<li class="list-group-item">No live connection is created yet.</li>');
+                }
+
+            };
+
+            var drawExternalURLs = function () {
+
+                $(externalMeetList).each(function (index, item) {
+
+                    var source = document.getElementById("externalMeetItemTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+
+                    $("#live-rooms").append(template(item));
+
+                });
+
+                getRooms();
+
+            };
+
+
+            var registerEvent = function () {
+                $("#live-rooms").empty();
+            };
+
+            var init = function () {
+                registerEvent();
+                getExternalVideos();
             };
 
             init();

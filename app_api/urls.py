@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 from django.urls import path
 from rest_framework import routers
 from . import views
-from .more_views import course_views, users_views
+from .more_views import course_views, users_views, chat_views
 
 router = routers.DefaultRouter()
 #router.register('conversations', views.ConversationDetailView)
@@ -57,5 +57,9 @@ urlpatterns = [
 
     path('course-features/', course_views.CourseFeatureApiView.as_view()),
     path('course-features/<int:pk>/', course_views.CourseFeatureApiView.as_view()),
+
+    path('external-video-room/', chat_views.ExternalVideoRoomDetailView.as_view()),
+    path('external-video-room/<int:pk>/', chat_views.ExternalVideoRoomDetailView.as_view()),
+
 
 ]

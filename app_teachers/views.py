@@ -16,10 +16,10 @@ from django.core.cache import cache
 from django.http import HttpResponse
 from django.utils.text import slugify
 
-from courses.models import Subject, Course, Module, Content
+from courses.models import Subject, Course, Module, Content, CourseProgress
 from .forms import ModuleFormSet
 from students.forms import CourseEnrollForm
-from students.models import User
+from students.models import User, Quiz
 
 
 class OwnerMixin(object):
@@ -222,6 +222,32 @@ class StudentsManagementView(generic.TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super(StudentsManagementView,
                         self).get_context_data(*args, **kwargs)
+        return context
+
+
+class CourseDetailView(DetailView):
+    model = Course
+    template_name = 'course_detail/index.html'
+    
+    def get_queryset(self):
+        qs = super(CourseDetailView, self).get_queryset()
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super(CourseDetailView,self).get_context_data(**kwargs)
+
+        course = self.get_object()
+
+        context['module'] = None
+        context['quiz'] = None
+
+        if 'module_id' in self.kwargs and self.request.GET.get('content'):
+
+            context['module'] = course.modules.get(id=self.kwargs['module_id'])
+
+            if self.request.GET.get('type') == 'quiz':
+                 context['quiz'] = Quiz.objects.get(pk=self.request.GET.get('content'))
+
         return context
 
 
