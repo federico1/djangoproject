@@ -215,7 +215,7 @@
 
     <div class="row">
 
-        <div class="col offset-md-3">
+        <div class="col offset-md-3 mt-2">
 
             <main class="page-content shadow">
 
@@ -267,8 +267,8 @@
                             </table>
                         </div>
                         {% else %}
-                        <div class="col-md-12 mb-30">
-                            <div class="about-course p-2">
+                        <div class="col-md-12">
+                            <div class="about-course">
 
                                 {{object.overview|safe}}
 
@@ -308,7 +308,7 @@
 
                         {% if active_content.object.id  == content.id and active_content.type == 'content' %}
 
-                        <div class="col-md-12 mt-2 mb-30">
+                        <div class="col-md-12">
                             <div class="about-course">
 
                                 {% with item=content.item %}
@@ -330,7 +330,7 @@
                         {% endfor %}
 
                         {% if active_content.type == 'quiz' %}
-                        <div class=" col-md-12 mb-30">
+                        <div class=" col-md-12">
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -639,6 +639,7 @@
         getTimeLog();
 
         videoManagerInstance = new $.VideoManager({});
+
         var liveMeetManager = new $.LiveVideoMeetManager({});
 
         checkCourseProgress();
