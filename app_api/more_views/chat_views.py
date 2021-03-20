@@ -17,7 +17,7 @@ from app_api.more_serializers.chat_serializers import ExternalVideoRoomSerialize
 from students.models import User
 from django.conf import settings
 
-import datetime
+from django.utils.timezone import localtime, now
 
 class ExternalVideoRoomDetailView(APIView):
 
@@ -36,7 +36,7 @@ class ExternalVideoRoomDetailView(APIView):
         snippets = ExternalVideoRoom.objects.filter(course_id=course_id)
         
         if today:
-            snippets = snippets.filter(created__startswith=datetime.date.today())
+            snippets = snippets.filter(created__startswith=localtime(now()).date())
         
         if is_delete:
             is_delete =  True if is_delete == 'true' else False

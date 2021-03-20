@@ -223,6 +223,10 @@
 
                     <div class="col">
 
+                        <button class="btn btn-danger" id="btnMarkAttendance" type="button">
+                            <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                            Mark Your Attendance
+                        </button>
 
                         {% if module == None %}
 
@@ -378,10 +382,55 @@
                 </div>
 
             </main>
+
         </div>
     </div>
 
 </div>
+
+<div id="attendanceModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Mark Today Attendance
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col">
+                        <video id="picVideo">Video stream not available.</video>
+                        <div class="">
+                            <button class="btn btn-info btn-sm" id="btnTakePicture">Take Photo</button></div>
+                    </div>
+
+                    <div class="col">
+
+                        <canvas id="picCanvas"></canvas>
+
+                        <div class="pic-output text-center">
+                            Please take your photo.
+                        </div>
+                        <div class="">
+                            <button class="btn btn-warning mt-1 btn-sm" id="btnClearPhoto">Clear Photo</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnSaveAttendance">
+                    Mark Attendance
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 {% verbatim %}
 <script type="text/x-handlebars-template" id='roomListItemTemplate'>
@@ -550,6 +599,36 @@
     .sidebar-wrapper .sidebar-menu ul li a i.frame:before {
         content: "\f2dc";
     }
+
+    #picVideo {
+        border: 1px solid #acacac;
+        width: 360px;
+        height: 270px;
+    }
+
+    #picCanvas {
+        display: none;
+    }
+
+    .pic-output {
+        width: 360px;
+        display: inline-block;
+        height: 270px;
+        border: 1px solid #acacac;
+    }
+
+
+    .pic-out img {
+        width: 100%;
+        height: 270px;
+    }
+
+    #btnMarkAttendance {
+        position: absolute;
+        right: 20px;
+        z-index: 999;
+        top: -6px;
+    }
 </style>
 
 
@@ -641,6 +720,8 @@
         videoManagerInstance = new $.VideoManager({});
 
         var liveMeetManager = new $.LiveVideoMeetManager({});
+
+        var attendanceManager = new $.AttendanceManager({});
 
         checkCourseProgress();
 
@@ -957,7 +1038,7 @@
 
             var settings = $.extend({}, options);
 
-            var gcd  = function(a, b) {
+            var gcd = function (a, b) {
                 return (b == 0) ? a : gcd(b, a % b);
             };
 
@@ -977,7 +1058,7 @@
                         //height: $("#contentSection").height(),
                         //width: $("#contentSection").width(),
                         fluid: true,
-                        aspectRatio:'945:524'
+                        aspectRatio: '945:524'
                     });
 
                     player.ready(function () {
@@ -1082,6 +1163,232 @@
             var init = function () {
                 registerEvent();
                 getExternalVideos();
+            };
+
+            init();
+
+            return this;
+
+        };
+
+        $.AttendanceManager = function (options) {
+
+            var that = this;
+            var attendesList = [];
+
+            var streaming = false;
+
+            var width = 360;
+            var height = 0;
+
+            var video = document.getElementById('picVideo');
+            var canvas = document.getElementById('picCanvas');
+
+            var videoStream;
+
+            var settings = $.extend({}, options);
+
+            var getTodayAttendance = function () {
+                $.get('/api/attendance/', {
+                    today: true,
+                    course: '{{object.id}}',
+                    student: '{{ request.user.id }}'
+                }, function (response) {
+                    attendesList = response;
+                    drawTodayAttendance();
+                });
+            };
+
+            var drawTodayAttendance = function () {
+
+                if (attendesList.length > 0)
+                    $("#btnMarkAttendance").remove();
+            }
+
+            var startCamera = function () {
+
+                navigator.mediaDevices.getUserMedia({
+                        video: true,
+                        audio: false
+                    })
+                    .then(function (stream) {
+                        video.srcObject = stream;
+                        video.play();
+                        videoStream = stream;
+                    })
+                    .catch(function (err) {
+                        $(".pic-output img").attr('alt', 'Please allow camera to capture the image.')
+                    });
+
+                video.addEventListener('canplay', function (ev) {
+
+                    if (!streaming) {
+                        height = video.videoHeight / (video.videoWidth / width);
+
+                        if (isNaN(height)) {
+                            height = width / (4 / 3);
+                        }
+
+                        video.setAttribute('width', width);
+                        video.setAttribute('height', height);
+                        canvas.setAttribute('width', width);
+                        canvas.setAttribute('height', height);
+                        streaming = true;
+                    }
+                }, false);
+
+            };
+
+            var takePicture = function () {
+
+                var context = canvas.getContext('2d');
+
+                if (width && height) {
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    context.drawImage(video, 0, 0, width, height);
+
+                    var data = canvas.toDataURL('image/png');
+
+                    var img = $("<img />", {
+                        src: data,
+                        id: 'photo'
+                    });
+
+                    $(".pic-output").html(img);
+
+
+                } else {
+                    clearphoto();
+                }
+            }
+
+            var clearPhoto = function () {
+
+                var context = canvas.getContext('2d');
+                context.fillStyle = "#AAA";
+                context.fillRect(0, 0, canvas.width, canvas.height);
+
+                var data = canvas.toDataURL('image/png');
+
+                $(".pic-output").html('Please take your photo');
+
+            };
+
+
+            var saveBaseImage = function () {
+
+                var imgSrc = $(".pic-output img").attr('src');
+
+                if (!imgSrc) {
+                    toastr.error('Please provide the image');
+                    return;
+                }
+
+                var formData = {
+                    image_data: imgSrc,
+                    course: '{{object.id}}'
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/save-base64/",
+                    data: JSON.stringify(formData),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken",
+                            '{{ csrf_token }}');
+                    },
+                    success: function (response) {
+                        if (response.result) {
+                            markAttendance(response.result);
+                        } else {
+                            toastr.error(
+                                'Sorry your request has been failed. Please try again');
+                        }
+                    },
+                    failure: function (errMsg) {}
+                });
+
+            };
+
+            var markAttendance = function (imageSrc) {
+
+                var formData = {
+                    course: '{{ object.id }}',
+                    student: '{{request.user.id}}',
+                    event_type: 1,
+                    image: imageSrc
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/attendance/",
+                    data: JSON.stringify(formData),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken",
+                            '{{ csrf_token }}');
+                    },
+                    success: function (response) {
+                        toastr.success('Attendance is marked.');
+                        $("#btnMarkAttendance").remove();
+                        $("#attendanceModal").modal('hide');
+                    },
+                    failure: function (errMsg) {}
+                });
+
+            };
+
+            var registerEvent = function () {
+
+                $("div").on("click", '#btnMarkAttendance', function (e) {
+                    e.stopPropagation();
+                    $("#attendanceModal").modal('show');
+                });
+
+                $("div").on("click", '#btnTakePicture', function (e) {
+                    e.stopPropagation();
+                    takePicture();
+
+                });
+
+                $("div").on("click", '#btnClearPhoto', function (e) {
+                    e.stopPropagation();
+                    clearPhoto();
+                });
+
+                $("div").on("click", '#btnSaveAttendance', function (e) {
+                    e.stopPropagation();
+                    saveBaseImage();
+                });
+
+                $('#attendanceModal').on('shown.bs.modal', function () {
+                    startCamera();
+                });
+
+                $('#attendanceModal').on('hidden.bs.modal', function () {
+                    try {
+
+                        videoStream.getTracks().forEach((track) => {
+                            track.stop();
+                        });
+
+                        video.srcObject = null;
+                        $(".pic-output").html('Please take your photo');
+
+                    } catch (e) {}
+                });
+
+
+            };
+
+            var init = function () {
+                registerEvent();
+                getTodayAttendance();
             };
 
             init();

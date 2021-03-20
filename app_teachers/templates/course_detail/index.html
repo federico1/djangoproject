@@ -18,6 +18,12 @@
             </li>
 
             <li class="nav-item">
+                <a class="nav-link text-white link-students" href="javascript:;">
+                    Students
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a class="nav-link text-white " href="{%url 'teacher_dashboard'%}">
                     Dashboard
                 </a>
@@ -227,7 +233,6 @@
 
 </div>
 
-
 <div id="externalVideoMeetModal" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -286,6 +291,62 @@
                 <button type="button" class="btn btn-primary" id="btnSaveExternalVideo">Save changes</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<div id="studentListModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Student Enrolled
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Attendance</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for m in object.students.all %}
+
+                        <tr id="{{m.id}}">
+
+                            <td>{{m.id}}</td>
+                            <td>
+                                {{m.first_name}} {{m.last_name}} </td>
+                            <td>
+                                {{m.email}} </td>
+
+                            <td class="attend">
+                            </td>
+
+                        </tr>
+                        <tr data-action="{{m.id}}">
+                            <td colspan="4" class="text-right">
+                                <button class="btn btn-secondary btn-sm link-mark-attendance" pk="{{m.id}}">
+                                    Mark Attendance</button>
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </div>
+
         </div>
     </div>
 </div>
@@ -499,6 +560,7 @@
 
         var videoManager = new $.VideoManager({});
         var externalVideoManager = new $.ExternalVideoManager({});
+        var studentManager = new $.StudentManager({});
 
     });
 
@@ -562,7 +624,8 @@
                     course: '{{object.id}}'
                 };
 
-                $.get('/api/external-video-room/?format=json', data, function (response) {
+                $.get('/api/external-video-room/?format=json', data, function (
+                    response) {
                     videoList = response;
                     drawList();
                 });
@@ -571,7 +634,8 @@
 
             var addNewVideo = function () {
 
-                var formData = $("#externalVideoMeetModal form").eq(0).serializeObject();
+                var formData = $("#externalVideoMeetModal form").eq(0)
+                    .serializeObject();
 
                 if (!formData.url) {
                     toastr.error('Please provide the video meet URL');
@@ -585,11 +649,13 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     beforeSend: function (xhr, settings) {
-                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        xhr.setRequestHeader("X-CSRFToken",
+                            '{{ csrf_token }}');
                     },
                     success: function (response) {
                         toastr.success('Video source is added.');
-                        $("#externalVideoMeetModal form input[type='text']").val(null);
+                        $("#externalVideoMeetModal form input[type='text']")
+                            .val(null);
                         getVideos();
                     },
                     failure: function (errMsg) {}
@@ -603,7 +669,8 @@
                     data: {},
                     contentType: 'application/json',
                     beforeSend: function (xhr, settings) {
-                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        xhr.setRequestHeader("X-CSRFToken",
+                            '{{ csrf_token }}');
                     },
                     success: function (response) {
                         toastr.warning('Member is removed.');
@@ -619,10 +686,12 @@
                 $(videoList).each(function (index, item) {
 
                     if (item.is_deleted != true) {
-                        var source = document.getElementById("externalVideoItemTemplate")
+                        var source = document.getElementById(
+                                "externalVideoItemTemplate")
                             .innerHTML;
                         var template = Handlebars.compile(source);
-                        $("#externalVideoMeetModal table tbody").append(template(item));
+                        $("#externalVideoMeetModal table tbody").append(
+                            template(item));
                     }
 
                 });
@@ -660,6 +729,157 @@
 
         };
 
+
+        $.StudentManager = function (options) {
+
+            var that = this;
+            var attendesList = [];
+
+            var settings = $.extend({}, options);
+
+            var getTodayAttendance = function () {
+                $.get('/api/attendance/', {
+                    today: true,
+                    course: '{{object.id}}'
+                }, function (response) {
+                    attendesList = response;
+                    drawTodayAttendance();
+                });
+            };
+
+            var markAttendance = function (student) {
+
+                var formData = {
+                    course: '{{ object.id }}',
+                    student: student,
+                    is_approved: 'True',
+                    event_type: 1
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/attendance/",
+                    data: JSON.stringify(formData),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken",
+                            '{{ csrf_token }}');
+                    },
+                    success: function (response) {
+                        toastr.success('Attanace is marked.');
+                        getTodayAttendance();
+                    },
+                    failure: function (errMsg) {}
+                });
+
+            };
+
+            var approveAttendance = function (status, id) {
+
+                var formData = {
+                    id: id,
+                    is_approved: status,
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/approve-attendance/",
+                    data: JSON.stringify(formData),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken",
+                            '{{ csrf_token }}');
+                    },
+                    success: function (response) {
+                        toastr.success('Attanace is approved.');
+                        getTodayAttendance();
+                    },
+                    failure: function (errMsg) {}
+                });
+
+            };
+
+            var drawTodayAttendance = function () {
+
+                $(attendesList).each(function (index, item) {
+
+                    if (item.is_approved) {
+
+                        $("tr[data-action='" + item.student + "'] .link-mark-attendance").remove();
+                        $("tr[data-action='" + item.student + "'] .link-approve-attendance")
+                            .remove();
+                    } else {
+
+                        var button = $("<button />", {
+                            pk: item.id,
+                            class: 'btn btn-sm btn-warning link-approve-attendance',
+                            text: 'Approve Attendance'
+                        });
+
+                        $(".link-mark-attendance[pk='" + item.student + "']").replaceWith(button);
+                    }
+
+                    var date = moment(item.created).format('MMMM Do YYYY, h:mm:ss a');
+
+                    var linkImage = $("<a />", {
+                        href: item.image,
+                        target: '_blank',
+                        class:'ml-2'
+                    });
+
+                    var img = $("<img />", {
+                        src: item.image,
+                        alt: 'Image',
+                        width: 50
+                    });
+
+                    linkImage.html(img);
+
+                    $("#studentListModal tr#" + item.student + " td.attend").html(date);
+
+                    if (item.image) {
+                        $("#studentListModal tr#" + item.student + " td.attend").append(linkImage);
+                    }
+
+                });
+            };
+
+            var registerEvent = function () {
+
+                $("div").on("click", '.link-students', function (e) {
+                    e.stopPropagation();
+                    $("#studentListModal").modal('show');
+                });
+
+                $("div").on("click", '.link-mark-attendance', function (e) {
+                    e.stopPropagation();
+                    var student = $(this).attr('pk');
+                    markAttendance(student);
+                });
+
+                $("div").on("click", '.link-approve-attendance', function (e) {
+                    e.stopPropagation();
+                    var id = $(this).attr('pk');
+                    approveAttendance(true, id);
+                });
+
+                $('#studentListModal').on('shown.bs.modal', function () {
+                    getTodayAttendance();
+                });
+
+            };
+
+            var init = function () {
+                registerEvent();
+            };
+
+            init();
+
+            return this;
+
+        };
 
     }(jQuery));
 </script>

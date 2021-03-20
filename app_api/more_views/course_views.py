@@ -144,7 +144,6 @@ class CourseFeatureApiView(APIView):
         if course_id:
             snippets = CourseFeature.objects.filter(course_id=course_id)
 
-        
         serializer = CourseFeatureSerializer(snippets, many=True)
         return Response(serializer.data)
 
@@ -152,7 +151,7 @@ class CourseFeatureApiView(APIView):
         serializer = CourseFeatureSerializer(data=request.data)
 
         if serializer.is_valid():
-        
+
             course_id = serializer.validated_data['course']
 
             snippets = CourseFeature.objects.filter(course_id=course_id)

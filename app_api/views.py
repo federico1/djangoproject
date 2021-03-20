@@ -5,8 +5,11 @@ from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from rest_framework import status
 from django.http import Http404
+from django.utils.timezone import localtime, now
+from django.conf import settings
 
 from app_chat.models import Conversation, Message, ConversationMember, \
     VideoRoom, VideoParticipant, Notification, ParticipantLog, VideoCourses
@@ -17,8 +20,7 @@ from .serializers import ConversationSerializer, CourseSerializer, \
     VideoCoursesSerializer
 
 from students.models import User
-
-from django.conf import settings
+from app_api.helpers import save_base64
 
 
 class ConversationDetailView(APIView):
@@ -169,6 +171,7 @@ class TeacherStudentsList(generics.ListCreateAPIView):
     serializer_class = UserSerializer
 
     def list(self, request):
+
         users_id = \
             list(request.user.courses_created.values_list('students',
                                                           flat=True))
@@ -243,16 +246,16 @@ class VideoCoursesView(APIView):
 
         if r:
             VideoCourses.objects.filter(room_id=int(r)).delete()
-            
+
         if serializer.is_valid():
-            
+
             serializer.save()
-            
+
             return Response(serializer.data,
-                        status=status.HTTP_201_CREATED)
-        
+                            status=status.HTTP_201_CREATED)
+
         return Response(serializer.errors,
-                    status=status.HTTP_400_BAD_REQUEST)
+                        status=status.HTTP_400_BAD_REQUEST)
 
 
 class VideoParticipantView(APIView):
@@ -367,3 +370,28 @@ class ParticipantLogDetailView(APIView):
                             status=status.HTTP_201_CREATED)
         return Response(serializer.errors,
                         status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def SaveBase64ImageView(request):
+
+    result = ""
+    message = ""
+
+    if request.method == 'POST':
+        image_name = "attendee"
+
+        if request.user:
+            image_name = image_name + "_" + str(request.user.id)
+
+        image_name = image_name + "_" + \
+            localtime(now()).strftime("%y%m%d%H%M%S")
+
+        if request.data['course']:
+            image_name = image_name + "_" + request.data['course']
+
+        image_name = image_name + ".png"
+
+        result = save_base64(image_name, request.data['image_data'])
+
+    return Response({"message": message, "result": result})

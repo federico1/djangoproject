@@ -192,3 +192,27 @@ class CourseFeature(models.Model):
 
     def __str__(self):
         return '{}'.format(self.course.id)
+
+
+class Attendance(models.Model):
+    CHECK_IN = 1
+    CHECK_OUT = 2
+   
+    ATTEND_CHOICES = [
+        (CHECK_IN, 'CheckIn'),
+        (CHECK_OUT, 'CheckOut'),
+    ]
+
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='attendances')
+    course = models.ForeignKey(Course,
+                               related_name='attendees',
+                               on_delete=models.CASCADE)
+    event_type = models.IntegerField(choices=ATTEND_CHOICES, default=CHECK_IN)
+    is_approved = models.BooleanField(default=False)
+    is_bio_verified = models.BooleanField(default=False)
+    image = models.TextField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '{}'.format(self.event_type)
