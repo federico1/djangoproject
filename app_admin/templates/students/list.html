@@ -254,11 +254,15 @@
         </div>
 
         <div class="col text-right">
+          <a href="javascript:;" class="btn btn-dark btn-sm link-course-user" id="{{id}}">
+                    Courses
+            </a>
+
             <a href="javascript:;" class="btn btn-info btn-sm link-edit-user" id="{{id}}">
                     Edit
             </a>
-             <a href="javascript:;" class="btn btn-dark btn-sm link-course-user" id="{{id}}">
-                    Courses
+             <a href="javascript:;" class="btn btn-danger btn-sm link-delete-user" id="{{id}}">
+                    Delete
             </a>
         </div>
     </div>
@@ -356,9 +360,12 @@
                 $("#usersTable tbody").empty();
 
                 $(studentsList).each(function (index, item) {
-                    var source = document.getElementById("studentListItemTemplate").innerHTML;
-                    var template = Handlebars.compile(source);
-                    $("#usersTable tbody").append(template(item));
+                    if (item.is_active == 1) {
+                        var source = document.getElementById("studentListItemTemplate").innerHTML;
+                        var template = Handlebars.compile(source);
+                        $("#usersTable tbody").append(template(item));
+                    }
+
                 });
 
                 $('#usersTable').on('draw.dt', function () {
@@ -464,6 +471,29 @@
                     failure: function (errMsg) {
                         $("#userModal").modal('hide');
                     }
+                });
+
+            };
+
+            var deleteUser = function (id) {
+
+                $.ajax({
+                    type: "DELETE",
+                    url: "/api/users/" + id + "/",
+                    data: JSON.stringify({
+                        is_active: false
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (response, textStatus, xhr) {
+                        toastr.warning('User has been deleted');
+                        getStudents();
+                    },
+                    complete: function (xhr, textStatus) {},
+                    failure: function (errMsg) {}
                 });
 
             };
@@ -574,6 +604,20 @@
                     getStudentCourses();
 
                 });
+
+                $("div").on("click", ".link-delete-user", function (e) {
+                    e.stopPropagation();
+
+                    var id = $(this).attr('id');
+
+                    bootbox.confirm("Are you sure? You want to delete this user", function (r) {
+                        if (r == true) {
+                            deleteUser(id);
+                        }
+                    });
+
+                });
+
 
                 $("div").on("click", "#btnAssignCourse", function (e) {
                     e.stopPropagation();

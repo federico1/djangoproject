@@ -61,7 +61,8 @@ class UserDetailView(APIView):
 
     def delete(self, request, pk, format=None,):
         snippet = self.get_object(pk)
-        snippet.is_deleted = True
+        is_active =  request.data['is_active']
+        snippet.is_active = is_active
         snippet.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)

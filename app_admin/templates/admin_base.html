@@ -18,6 +18,7 @@
   <link href="{% static "/sb-admin/css/sb-admin-2.css" %}" rel="stylesheet">
 
   <link href="{% static "/sb-admin/vendor/datatables/dataTables.bootstrap4.min.css" %}" rel="stylesheet">
+  <link href="{% static "/sb-admin/vendor/toastr/toastr.min.css" %}" rel="stylesheet">
 
 </head>
 
@@ -99,7 +100,7 @@
                 <i class="fas fa-users fa-fw mr-2"></i> Students
               </a>
             </li>
-             <li class="nav-item">
+            <li class="nav-item">
               <a class="nav-link text-dark" href="{% url 'admin_students' %}">
                 <i class="fas fa-network-wired fa-fw mr-2"></i> Staff
               </a>
@@ -174,6 +175,8 @@
 
   <script src="{% static "/sb-admin/vendor/datatables/jquery.dataTables.min.js" %}"></script>
   <script src="{% static "/sb-admin/vendor/datatables/dataTables.bootstrap4.min.js" %}"></script>
+  <script src="{% static "/sb-admin/vendor/bootbox/bootbox.all.min.js" %}"></script>
+  <script src="{% static "/sb-admin/vendor/toastr/toastr.min.js" %}"></script>
   <script src="{% static "/sb-admin/vendor/jquery.form.min.js" %}"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
