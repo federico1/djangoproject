@@ -249,7 +249,10 @@
 <script type="text/x-handlebars-template" id='itemActionTemplate'>
 
     <div class="row">
-       
+         <div class="col student-courses" pk="{{id}}">
+           
+        </div>
+
         <div class="col text-right">
             <a href="javascript:;" class="btn btn-info btn-sm link-edit-user" id="{{id}}">
                     Edit
@@ -338,6 +341,9 @@
             var getCourses = function () {
                 return $.get('/api/courses/?format=json', {}, function (response) {
                     coursesList = response;
+
+                    getStudents();
+
                 });
             };
 
@@ -370,6 +376,28 @@
                         var element = studentsList.find(a => a.id == $(this).attr('id'));
 
                         row.child(template(element)).show();
+
+                    });
+
+                    $(".student-courses").each(function () {
+                        var id = $(this).attr('pk');
+                        id = parseInt(id);
+
+                        var courses = coursesList.filter(a => a.students.indexOf(id) >= 0);
+
+                        var _that = this;
+
+                        $(courses).each(function (index, item) {
+
+                            if (index < 2) {
+                                var bd = '<span class="badge badge-secondary">' +
+                                    courses[0]
+                                    .title + '</span>';
+                                $(_that).append(bd);
+                            }
+
+                        });
+
 
                     });
 
@@ -629,7 +657,7 @@
 
             var init = function () {
                 registerEvent();
-                getStudents();
+
                 getCourses();
             };
 
