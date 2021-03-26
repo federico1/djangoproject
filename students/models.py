@@ -13,15 +13,16 @@ class User(AbstractUser):
     person_eyes_color = models.TextField(null=True, blank=True)
     primary_id_src = models.TextField(null=True, blank=True)
     primary_id_type = models.TextField(null=True, blank=True)
-
-
-def get_unanswered_questions(self, quiz):
-    answered_questions = self.quiz_answers \
+    
+    def get_unanswered_questions(self, quiz):
+        
+        answered_questions = self.quiz_answers \
         .filter(answer__question__quiz=quiz) \
         .values_list('answer__question__pk', flat=True)
-    questions = quiz.questions.exclude(
-        pk__in=answered_questions).order_by('text')
-    return questions
+        
+        questions = quiz.questions.exclude(pk__in=answered_questions).order_by('text')
+
+        return questions
 
 
 class Tag(models.Model):
