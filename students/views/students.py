@@ -250,7 +250,7 @@ class TakenQuizListView(ListView):
     template_name = 'students/student/taken_quiz_list.html'
 
     def get_queryset(self):
-        queryset = self.request.user.student.taken_quizzes.select_related(
+        queryset = self.request.user.taken_quizzes.select_related(
             'quiz', 'quiz__tags').order_by('quiz__name')
 
         return queryset

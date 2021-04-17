@@ -471,12 +471,13 @@
             };
 
             var makeMsgItem = function (item) {
+
                 var img_div = $("<div />", { class: "img_cont_msg" });
                 var img = $("<img />", { class: "rounded-circle user_img_msg", src: 'https://via.placeholder.com/40x40.png?text=.' });
 
                 img_div.append(img);
 
-                var msg_div = $("<div />", { class: "msg_cotainer" });
+                var msg_div = $("<div />", { class: "msg_cotainer flex-grow-1 p-1" });
 
                 msg_div.html(item.content);
 
@@ -484,13 +485,13 @@
 
                 var span_sent = $("<span />", { text: item.sent.username });
 
-                var dt = moment(item.created).format('YYYY-MM-DD HH:m:s');
+                var dt = moment(item.created).format('LLL');
 
                 var span_time = $("<span />", { text: dt });
 
                 time_div.append(span_sent).append(" | ").append(span_time);
 
-                var mn_div = $("<div />", { id: item.id, class: "d-flex justify-content-start mb-5 msg-item" });
+                var mn_div = $("<div />", { id: item.id, class: "d-flex mb-5 msg-item" });
 
                 mn_div.append(img_div).append(msg_div).append(time_div);
 

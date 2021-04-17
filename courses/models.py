@@ -32,9 +32,9 @@ class Course(models.Model):
     slug = models.SlugField(max_length=200, unique=True)
     overview = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
-    students = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                      related_name='courses_joined',
-                                      blank=True)
+    students = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name="courses_joined",
+                                      through='Enrollments')
+
     quiz = models.ForeignKey(Quiz, related_name='quiz', blank=True, null=True, on_delete=models.DO_NOTHING)                                  
 
     class Meta:
@@ -42,7 +42,6 @@ class Course(models.Model):
 
     def __str__(self):
         return self.title
-
 
 class Module(models.Model):
     course = models.ForeignKey(Course,
@@ -216,3 +215,20 @@ class Attendance(models.Model):
 
     def __str__(self):
         return '{}'.format(self.event_type)
+
+
+class Enrollments(models.Model):
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course,
+                               on_delete=models.CASCADE)
+
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        auto_created = True
+        
+    def __str__(self):
+        return '{}'.format(self.event_type)
+
