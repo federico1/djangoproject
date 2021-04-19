@@ -12,7 +12,8 @@ from django.http import Http404
 from django.db.models import Count
 
 from courses.models import Subject, Course, CourseTimeLog, CourseProgress, Content, CourseFeature
-from app_api.more_serializers.course_serializers import SubjectSerializer, CourseSerializer, CourseTimeLogSerializer, CourseProgressSerializer, StudentCourseSerializer, CourseFeatureSerializer
+from app_api.more_serializers.course_serializers import SubjectSerializer, CourseSerializer, \
+     CourseTimeLogSerializer, CourseProgressSerializer, CourseFeatureSerializer, EnrollmentSerializer
 
 from students.models import User
 from django.conf import settings
@@ -122,10 +123,10 @@ class CourseProgressApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class StudentCourseApiView(APIView):
+class EnrollmentApiView(APIView):
 
     def post(self, request, format=None):
-        serializer = StudentCourseSerializer(data=request.data)
+        serializer = EnrollmentSerializer(data=request.data)
 
         if serializer.is_valid():
             serializer.save()

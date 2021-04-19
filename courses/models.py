@@ -32,7 +32,7 @@ class Course(models.Model):
     slug = models.SlugField(max_length=200, unique=True)
     overview = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
-    students = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name="courses_joined",
+    students = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="courses_joined",
                                       through='Enrollments')
 
     quiz = models.ForeignKey(Quiz, related_name='quiz', blank=True, null=True, on_delete=models.DO_NOTHING)                                  
@@ -42,6 +42,7 @@ class Course(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class Module(models.Model):
     course = models.ForeignKey(Course,
@@ -220,14 +221,16 @@ class Attendance(models.Model):
 class Enrollments(models.Model):
 
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course,
+        settings.AUTH_USER_MODEL, related_name= 'course_enrolled', on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, related_name= 'course_enrolled',
                                on_delete=models.CASCADE)
-
+    
+    # is_completed = models.BooleanField(default=False)
+    # completed_date = models.DateTimeField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        auto_created = True
+    # class Meta:
+    #     auto_created = True
         
     def __str__(self):
         return '{}'.format(self.event_type)

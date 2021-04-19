@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from courses.models import Subject, Course, CourseTimeLog, CourseProgress, CourseFeature, Attendance
+from courses.models import Subject, Course, CourseTimeLog, CourseProgress, CourseFeature, Attendance, Enrollments
 from students.models import User
 from app_api.serializers import UserSerializer
 
@@ -10,13 +10,21 @@ class SubjectSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class EnrollmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Enrollments
+        fields = '__all__'
+
+
 class CourseSerializer(serializers.ModelSerializer):
     total_modules = serializers.IntegerField()
+
+    course_enrolled = EnrollmentSerializer(many=True)
 
     class Meta:
         model = Course
         fields = ['id', 'slug', 'subject', 'title',
-                  'overview', 'total_modules', 'owner', 'students']
+                  'overview', 'total_modules', 'owner', 'course_enrolled']
 
     def to_representation(self, instance):
         self.fields['owner'] = UserSerializer(read_only=True)
@@ -36,17 +44,17 @@ class CourseProgressSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class StudentCourseSerializer(serializers.Serializer):
-    student = serializers.IntegerField(required=True)
-    course = serializers.IntegerField(required=True)
+# class StudentCourseSerializer(serializers.Serializer):
+#     student = serializers.IntegerField(required=True)
+#     course = serializers.IntegerField(required=True)
 
-    def create(self, validated_data):
-        course_id = validated_data.pop('course')
-        student_id = validated_data.pop('student')
+#     def create(self, validated_data):
+#         course_id = validated_data.pop('course')
+#         student_id = validated_data.pop('student')
 
-        Course.objects.get(pk=course_id).students.add(student_id)
+#         Course.objects.get(pk=course_id).students.add(student_id)
 
-        return {'student':student_id, 'course':course_id}
+#         return {'student':student_id, 'course':course_id}
 
 
 class CourseFeatureSerializer(serializers.ModelSerializer):
@@ -59,3 +67,5 @@ class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
         fields = '__all__'
+
+

@@ -387,17 +387,23 @@
                     });
 
                     $(".student-courses").each(function () {
+
                         var id = $(this).attr('pk');
                         id = parseInt(id);
 
-                        var courses = coursesList.filter(a => a.students.indexOf(id) >= 0);
+                        console.log(id);
+
+                        var courses = coursesList
+                            .filter(a => a.course_enrolled.filter(d => d.user == id)
+                                .length > 0);
 
                         var _that = this;
 
                         $(courses).each(function (index, item) {
 
                             if (index < 2) {
-                                var bd = '<span class="badge badge-secondary mr-2">' +
+                                var bd =
+                                    '<span class="badge badge-secondary mr-2">' +
                                     courses[0]
                                     .title + '</span>';
                                 $(_that).append(bd);
@@ -508,7 +514,7 @@
 
                 $(coursesList).each(function (index, item) {
 
-                    if (item.students.indexOf(id) >= 0) {
+                    if (item.course_enrolled.filter(d => d.user == id).length > 0) {
                         var source = document.getElementById("studentCourseItemTemplate").innerHTML;
                         var template = Handlebars.compile(source);
                         $("#tblStudentCourses tbody").append(template(item));
@@ -523,13 +529,13 @@
                 $("#courseModal button").attr('disabled', true);
 
                 var data = {
-                    student: user,
+                    user: user,
                     course: course
                 }
 
                 $.ajax({
                     type: "POST",
-                    url: "/api/student_course_assign/",
+                    url: "/api/course-enrollment/",
                     data: JSON.stringify(data),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -617,7 +623,6 @@
                     });
 
                 });
-
 
                 $("div").on("click", "#btnAssignCourse", function (e) {
                     e.stopPropagation();

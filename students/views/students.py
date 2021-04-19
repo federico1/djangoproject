@@ -27,6 +27,7 @@ from courses.models import Review
 from courses.models import Cluster
 from courses.models import CourseProgress
 from courses.models import Content as ModuleContent
+from courses.models import Enrollments
 from django.core.mail import mail_admins
 from django.contrib import messages
 from students.decorators import student_required
@@ -66,8 +67,17 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
 
         context = super(StudentCourseDetailView,
                         self).get_context_data(**kwargs)
+        
+        student = self.request.user
+
+        #print(student.course_enrolled.filter(course_id=))
 
         course = self.get_object()
+
+        if not course.course_enrolled.filter(user = student).exists():
+            print(1)
+            context['not_found'] = True
+            return context
 
         context['prev_completed'] = True
         context['module'] = None
@@ -80,8 +90,7 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
         course_details = []
         modules_list = course.modules.all().order_by('order')
 
-        student = self.request.user
-
+    
         taken_quizzes = list(
             student.taken_quizzes.values_list('quiz_id', flat=True))
 
@@ -165,6 +174,9 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
         return context
 
     def render_to_response(self, context, **response_kwargs):
+        
+        if 'not_found' in context:
+            return redirect('course_list')
 
         if context['module'] and (context['prev_completed'] == False or context['active_content'] == None):
             return redirect('student_course_detail', self.get_object().id)
@@ -217,7 +229,10 @@ class StudentEnrollCourseView(FormView):
 
     def form_valid(self, form):
         self.course = form.cleaned_data['course']
-        self.course.students.add(self.request.user)
+
+        if not Enrollments.objects.filter(course=self.course, user=self.request.user).exists():
+            enrollment = Enrollments.objects.create(course=self.course, user =self.request.user)
+
         return super(StudentEnrollCourseView, self).form_valid(form)
 
     def get_success_url(self):
