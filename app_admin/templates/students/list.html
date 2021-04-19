@@ -284,6 +284,8 @@
 {% block scripts %}
 
 <script>
+    var coursesList;
+
     Handlebars.registerHelper("get_name", function (options) {
         var r = this.username;
 
@@ -329,7 +331,7 @@
             var studentsList = [];
             var userDataTable;
 
-            var coursesList = [];
+            coursesList = [];
 
             var settings = $.extend({}, options);
 
@@ -345,9 +347,7 @@
             var getCourses = function () {
                 return $.get('/api/courses/?format=json', {}, function (response) {
                     coursesList = response;
-
                     getStudents();
-
                 });
             };
 
@@ -390,8 +390,6 @@
 
                         var id = $(this).attr('pk');
                         id = parseInt(id);
-
-                        console.log(id);
 
                         var courses = coursesList
                             .filter(a => a.course_enrolled.filter(d => d.user == id)
@@ -706,7 +704,6 @@
 
             var init = function () {
                 registerEvent();
-
                 getCourses();
             };
 
