@@ -284,7 +284,6 @@
 {% block scripts %}
 
 <script>
-    var coursesList;
 
     Handlebars.registerHelper("get_name", function (options) {
         var r = this.username;
@@ -331,7 +330,7 @@
             var studentsList = [];
             var userDataTable;
 
-            coursesList = [];
+            var coursesList = [];
 
             var settings = $.extend({}, options);
 
@@ -399,7 +398,7 @@
 
                         $(courses).each(function (index, item) {
 
-                            if (index < 2) {
+                            if (index < 3) {
                                 var bd =
                                     '<span class="badge badge-secondary mr-2">' +
                                     courses[0]
