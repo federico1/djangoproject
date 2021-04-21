@@ -1,0 +1,36 @@
+{% extends "student_base.html" %}
+{% load i18n %}
+{% block title %}
+{{ object.title }} | Certificate
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-0 px-0">
+
+    {% if certificate_valid == True %}
+    <main class="page-content shadow">
+        <div class="row">
+
+            <div class="col">
+                <iframe class="embed-responsive embed-responsive-1by1"
+                    src="{% url 'student_course_certificate_template' object.id %}"></iframe>
+            </div>
+        </div>
+    </main>
+
+    {% else %}
+    <h3 class="text-center mt-4">Course is not completed yet</h3>
+    {% endif %}
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+iframe {
+    height:700px;
+    border:none;
+    background:#fff;
+}
+</style>
+{% endblock %}

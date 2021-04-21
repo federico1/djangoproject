@@ -6,8 +6,6 @@
 {% block title %}My Courses{% endblock %}
 {% block content %}
 
-
-
 <div class="container-fluid">
 
     <div class="mt-3 d-sm-flex align-items-center justify-content-between mb-4 p-2">
@@ -23,13 +21,24 @@
                 <div class="card-header">
                     <div class="media">
                         <div class="media-left bg-secondary px-3 py-1">
-                        <i class="fa fa-book text-white"></i>
+                            <i class="fa fa-book text-white"></i>
                         </div>
                         <div class="media-body ml-3">
                             <h5 class="card-title m-0">
                                 {{ course.title }}
                             </h5>
-                            <small class="text-muted">Modules: {{course.modules.count}}</small>
+                             <small class="text-muted">Instructor: {{course.owner}}</small>
+                            <small class="text-muted"> , Modules: {{course.modules.count}}</small>
+                            <small class="text-muted"> , Status:
+
+
+                                {% for item in course.course_enrolled.all %}
+                                {% if item.user.id == request.user.id %}
+                                {% if item.is_completed %} Finished {%else%} Not Finished {%endif%}
+                                {% endif %}
+                                {% endfor %}
+
+                            </small>
                         </div>
                     </div>
                 </div>
@@ -42,9 +51,9 @@
                 <div class="card-footer bg-white">
                     <div class="row">
                         <div class="col">
-                            <p>
-                                Instructor: {{course.owner}}
-                            </p>
+                            <a href="{% url 'student_course_certificate' course.id %}" class="btn btn-secondary btn-sm">
+                                 Certificate
+                            </a>
                         </div>
 
                         <div class="col text-right">
@@ -77,15 +86,16 @@
         {% endfor %}
     </div>
 </div>
+
 {% endblock %}
 
 {% block scripts %}
 
 <style>
     .card {
-  box-shadow: 2px 2px 2px -1px rgba(113,109,109,0.75);
--webkit-box-shadow: 2px 2px 2px -1px rgba(113,109,109,0.75);
--moz-box-shadow: 2px 2px 2px -1px rgba(113,109,109,0.75);
+        box-shadow: 2px 2px 2px -1px rgba(113, 109, 109, 0.75);
+        -webkit-box-shadow: 2px 2px 2px -1px rgba(113, 109, 109, 0.75);
+        -moz-box-shadow: 2px 2px 2px -1px rgba(113, 109, 109, 0.75);
     }
 </style>
 {% endblock %}

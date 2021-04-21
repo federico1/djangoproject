@@ -14,9 +14,10 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm
 from braces.views import LoginRequiredMixin
 from django.contrib.auth import authenticate, login
+from django.template.loader import get_template
+
 from students.forms import CourseEnrollForm
 from students.forms import StudentSignupForm
-
 from students.forms import TakeQuizForm
 from courses.models import Course
 from students.models import Quiz
@@ -35,6 +36,7 @@ from students.decorators import student_required
 from courses.suggestions import update_clusters
 from students.file_utils import uploaded_file
 
+import datetime
 
 class StudentCourseListView(LoginRequiredMixin, ListView):
     model = Course
@@ -70,12 +72,9 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
         
         student = self.request.user
 
-        #print(student.course_enrolled.filter(course_id=))
-
         course = self.get_object()
 
         if not course.course_enrolled.filter(user = student).exists():
-            print(1)
             context['not_found'] = True
             return context
 
@@ -271,6 +270,61 @@ class TakenQuizListView(ListView):
         return queryset
 
 
+class CourseCertificateDetailView(LoginRequiredMixin, DetailView):
+    model = Course
+    template_name = 'students/course/certificate.html'
+
+    def get_context_data(self, **kwargs):
+
+        context = super(CourseCertificateDetailView,
+                        self).get_context_data(**kwargs)
+        
+        context['certificate_valid'] = True
+        student = self.request.user
+        course = self.get_object()
+        enrolled = course.course_enrolled.filter(user = student)
+
+        if not enrolled.exists() or enrolled.last().is_completed == False:
+            context['certificate_valid'] = False
+
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        return super(CourseCertificateDetailView, self).render_to_response(context, **response_kwargs)
+
+
+class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
+    model = Course
+    template_name = 'students/course/certificate_template.html'
+
+    def get_context_data(self, **kwargs):
+
+        context = super(CertificateTemplateDetailView,
+                        self).get_context_data(**kwargs)
+        
+        context['certificate_valid'] = True
+        student = self.request.user
+        course = self.get_object()
+        enrolled = course.course_enrolled.filter(user = student)
+
+        if not enrolled.exists() or enrolled.last().is_completed == False:
+            context['certificate_valid'] = False
+        
+        if context['certificate_valid'] == True:
+            context['student_name'] = student.first_name + ' ' + student.last_name
+            completed_date = enrolled.last().completed_date
+            context['completed_date'] = completed_date.strftime('%d/%m/%Y')
+
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        
+        if context['certificate_valid'] == False:
+            return redirect('course_list')
+
+        return super(CertificateTemplateDetailView, self).render_to_response(context, **response_kwargs)
+
+
 @login_required
 @student_required
 def take_quiz(request, pk):
@@ -442,28 +496,3 @@ def file_upload(request):
     return HttpResponse(result)
 
 
-class StudentCourseDetailView2(LoginRequiredMixin, DetailView):
-    model = Course
-    template_name = 'students/course/detail2.html'
-
-    def get_queryset(self):
-
-        qs = super(StudentCourseDetailView2, self).get_queryset()
-        qs = qs.filter(students__in=[self.request.user])
-
-        return qs
-
-    def get_context_data(self, **kwargs):
-
-        context = super(StudentCourseDetailView2,
-                        self).get_context_data(**kwargs)
-
-        course = self.get_object()
-
-        return context
-
-    def render_to_response(self, context, **response_kwargs):
-        return super(StudentCourseDetailView2, self).render_to_response(context, **response_kwargs)
-
-    def get(self, *args, **kwargs):
-        return super().get(*args, **kwargs)

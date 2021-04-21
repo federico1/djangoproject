@@ -391,7 +391,7 @@
                         id = parseInt(id);
 
                         var courses = coursesList
-                            .filter(a => a.course_enrolled.filter(d => d.user == id)
+                            .filter(a => a.course_enrolled.filter(d => d.user.id == id)
                                 .length > 0);
 
                         var _that = this;
@@ -511,7 +511,7 @@
 
                 $(coursesList).each(function (index, item) {
 
-                    if (item.course_enrolled.filter(d => d.user == id).length > 0) {
+                    if (item.course_enrolled.filter(d => d.user.id == id).length > 0) {
                         var source = document.getElementById("studentCourseItemTemplate").innerHTML;
                         var template = Handlebars.compile(source);
                         $("#tblStudentCourses tbody").append(template(item));

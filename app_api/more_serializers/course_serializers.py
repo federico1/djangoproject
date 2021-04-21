@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from courses.models import Subject, Course, CourseTimeLog, CourseProgress, CourseFeature, Attendance, Enrollments
+from courses.models import Subject, Course, CourseTimeLog, CourseProgress, \
+    CourseFeature, Attendance, Enrollments
 from students.models import User
 from app_api.serializers import UserSerializer
 
@@ -15,10 +16,13 @@ class EnrollmentSerializer(serializers.ModelSerializer):
         model = Enrollments
         fields = '__all__'
 
+    def to_representation(self, instance):
+        self.fields['user'] = UserSerializer(read_only=True)
+        return super(EnrollmentSerializer, self).to_representation(instance)
+
 
 class CourseSerializer(serializers.ModelSerializer):
     total_modules = serializers.IntegerField()
-
     course_enrolled = EnrollmentSerializer(many=True)
 
     class Meta:

@@ -65,8 +65,15 @@ class UserSerializer(serializers.ModelSerializer):
 
         return instance
 
+    def to_representation(self, instance):
+        return super(UserSerializer, self).to_representation(instance)
+
     def __init__(self, *args, **kwargs):
         super(UserSerializer, self).__init__(*args, **kwargs)
+
+        self.fields.pop('user_permissions')
+        self.fields.pop('password')
+        self.fields.pop('groups')
 
 
 class VideoCoursesSerializer(serializers.ModelSerializer):

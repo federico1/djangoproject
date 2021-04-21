@@ -13,7 +13,7 @@
 <div class="row">
   {% for course in object_list %}
   <div class="col-md-4">
-    <div class="card border-0 shadow mb-2">
+    <div class="card border-0 shadow mb-3">
       <div class="card-body">
         <h5 class="card-title" pk="{{course.id}}">{{ course.title }}</h5>
 
@@ -21,19 +21,19 @@
           Date: {{course.created|date:"M d, Y" }}
         </h6>
 
-        <div class="mt-3 p-2 d-flex flex-row">
-          <a class="badge badge-info px-3 py-1 mx-1" href="{% url "course_edit" course.id %}">Edit Basic</a>
+        <div class="mt-3 d-flex flex-row justify-content-center">
+          <a class="badge badge-info px-3 py-1" href="{% url "course_edit" course.id %}">Edit Basic</a>
 
-          <a class="badge badge-warning px-3 py-1  mx-1" href="{% url "course_module_update" course.id %}">Manage
+          <a class="badge badge-info px-3 py-1 ml-1" href="{% url "course_module_update" course.id %}">Manage
             Modules</a>
           {% if course.modules.count > 0 %}
-          <a class="badge badge-success px-3 py-1  mx-1"
+          <a class="badge badge-info px-3 py-1 ml-1"
             href="{% url "module_content_list" course.modules.first.id %}">Manage Contents</a>
           {% endif %}
         </div>
 
-        <div class="mt-1 p-2 d-flex flex-row">
-          <a class="badge badge-secondary px-3 py-1 mx-1 link-features" href="javascript:void(0);" pk="{{course.id}}">
+        <div class="mt-3 d-flex flex-row justify-content-center">
+          <a class="badge badge-info px-3 py-1 link-features" href="javascript:void(0);" pk="{{course.id}}">
             Manage Features
           </a>
 
@@ -46,6 +46,7 @@
       </div>
 
       <div class="card-footer text-center">
+        <a href="javascript:;" class="btn btn-sm btn-success link-students" pk="{{course.id}}">Students</a>
         <a href="{% url 'teacher_course_detail' course.id %}" class="btn btn-sm btn-success">Take Course</a>
       </div>
 
@@ -147,6 +148,64 @@
   </div>
 </div>
 
+<div id="studentsEnrolledModal" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Students Enrolled</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="list-group" id="studentsEnrollList">
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div id="studentProgressPanel"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% verbatim %}
+<script type="text/x-handlebars-template" id='studentEnrollItemTemplate'>
+  <a href="javascript:;" class="list-group-item list-group-item-action link-student-enrolled" id="{{id}}" item="{{stringify}}">
+  {{#get_name}}{{user}}{{/get_name}}
+  </a>
+</script>
+{% endverbatim %}
+
+{% verbatim %}
+<script type="text/x-handlebars-template" id='studentCourseProgressTemplate'>
+  <table class="table table-bordered">
+          <tr>
+          <td>
+           {{#if is_completed}}
+          <button class="btn btn-warning btn-sm" type="button" id="btnMarkInCompleteCourse" target="{{id}}">
+            Mark incomplete
+          </button>
+
+          <span>Completed</span>
+          {{else}}
+           <button class="btn btn-info btn-sm" type="button" id="btnMarkCompleteCourse" target="{{id}}">
+            Mark complete
+           </button>
+            <span> Not Finished Yet</span>
+          {{/if}}
+
+          </td><td class="text-center">
+          {{{dateFormat}}}
+          </td></tr>
+    </table>
+            
+</script>
+{% endverbatim %}
 
 {% endblock %}
 
@@ -154,9 +213,179 @@
 {% block scripts %}
 
 <script>
+  Handlebars.registerHelper('ifEquals', function (arg1, arg2, options) {
+    return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+  });
+
+  Handlebars.registerHelper("get_name", function (options) {
+
+    var r = this.user.username;
+
+    if (this.user.first_name && this.user.last_name) {
+      r = this.user.first_name + " " + this.user.last_name;
+    } else if (this.user.email) {
+      r = this.user.email;
+    }
+
+    return new Handlebars.SafeString(r);
+  });
+
+  Handlebars.registerHelper("dateFormat", function (options) {
+
+    if (this.completed_date) {
+      return new Handlebars.SafeString(moment(this.completed_date).format('LL'));
+    }
+
+    return 'Date Unavailable';
+
+
+  });
+
+  (function ($) {
+
+    $.StudentsEnrolledManager = function (options) {
+
+      var that = this;
+
+      var studentsList = [];
+
+      var settings = $.extend({}, options);
+
+      var getStudents = function () {
+
+        var id = $("#studentsEnrolledModal").attr('data-id');
+
+        $.get('/api/course-enrollment/?format=json', {
+          course: id
+        }, function (response) {
+          studentsList = response;
+          drawStudentsList();
+        });
+      };
+
+      var drawStudentsList = function () {
+
+        var activeElement = $(".link-student-enrolled.active");
+
+        $("#studentsEnrollList").empty();
+        $("#studentProgressPanel").empty();
+
+        $(studentsList).each(function (index, item) {
+
+          item.stringify = JSON.stringify(item);
+
+          var source = document.getElementById("studentEnrollItemTemplate").innerHTML;
+          var template = Handlebars.compile(source);
+          $("#studentsEnrollList").append(template(item));
+
+        });
+
+        if (activeElement.length > 0)
+          $(".link-student-enrolled#" + activeElement.attr('id')).trigger('click');
+
+      };
+
+      var updateCourseCompleteStatus = function (id, status) {
+
+        $.ajax({
+          type: "POST",
+          url: "/api/course-enrollment/" + id + "/set_completed/",
+          data: JSON.stringify({
+            status: status
+          }),
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          beforeSend: function (xhr, settings) {
+            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+          },
+          success: function (response, textStatus, xhr) {
+            getStudents();
+          },
+        });
+
+
+      };
+
+      var registerEvent = function () {
+
+        $("div").on("click", ".link-students", function (e) {
+          e.stopPropagation();
+
+          var id = $(this).attr('pk');
+
+          $("#studentsEnrolledModal").attr('data-id', id);
+
+          $("#studentsEnrolledModal").modal({
+            show: true,
+            backdrop: 'static'
+          });
+
+        });
+
+        $("div").on("click", ".link-student-enrolled", function (e) {
+          e.stopPropagation();
+
+          var item = $(this).attr('item');
+
+          $("#studentsEnrollList .link-student-enrolled").removeClass('active');
+
+          $(this).addClass('active');
+
+          var itemObject = JSON.parse(item);
+
+          var source = document.getElementById("studentCourseProgressTemplate").innerHTML;
+          var template = Handlebars.compile(source);
+          $("#studentProgressPanel").html(template(itemObject));
+
+        });
+
+        $("div").on("click", "#btnMarkCompleteCourse", function (e) {
+          e.stopPropagation();
+
+          var item = $(this).attr('target');
+
+          $("#btnMarkCompleteCourse").attr('disabled', true);
+          updateCourseCompleteStatus(item, true);
+
+        });
+
+        $("div").on("click", "#btnMarkInCompleteCourse", function (e) {
+          e.stopPropagation();
+
+          var item = $(this).attr('target');
+
+          $("#btnMarkInCompleteCourse").attr('disabled', false);
+          updateCourseCompleteStatus(item, false);
+
+        });
+
+        $('#studentsEnrolledModal').on('shown.bs.modal', function (e) {
+
+          var id = $("#studentsEnrolledModal").attr('data-id');
+
+          getStudents();
+
+        });
+
+      };
+
+      var init = function () {
+        registerEvent();
+      };
+
+      init();
+
+      return this;
+
+    };
+
+  }(jQuery));
+
   $(document).ready(function () {
 
     initTextEditor();
+
+    new $.StudentsEnrolledManager({});
 
     $(".link-copy").click(function (event) {
       event.stopPropagation();

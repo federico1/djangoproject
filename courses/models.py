@@ -225,13 +225,10 @@ class Enrollments(models.Model):
     course = models.ForeignKey(Course, related_name= 'course_enrolled',
                                on_delete=models.CASCADE)
     
-    # is_completed = models.BooleanField(default=False)
-    # completed_date = models.DateTimeField(blank=True, null=True)
+    is_completed = models.BooleanField(default=False)
+    completed_date = models.DateTimeField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
-    # class Meta:
-    #     auto_created = True
-        
     def __str__(self):
         return '{}'.format(self.event_type)
 

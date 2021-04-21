@@ -7,6 +7,9 @@ from .more_views import course_views, users_views, chat_views, attendance_views
 router = routers.DefaultRouter()
 #router.register('conversations', views.ConversationDetailView)
 
+router.register(r'courses', course_views.CourseViewset, basename="course")
+router.register(r'course-enrollment', course_views.EnrollmentViewset, "enrollment"),
+#router.register(r'^course-enrollment/{pk}/update-completed', course_views.EnrollmentViewset.set_completed, "enrollment"),
 
 urlpatterns = [
     #url(r'^', include(router.urls)),
@@ -37,19 +40,14 @@ urlpatterns = [
     path('subjects/', course_views.SubjectDetailView.as_view()),
     path('subjects/<int:pk>/', course_views.SubjectDetailView.as_view()),
 
-    path('courses/', course_views.CourseDetailView.as_view()),
-    path('courses/<int:pk>/', course_views.CourseDetailView.as_view()),
-
     path('courses_time_logs/', course_views.CourseTimeLogDetailView.as_view()),
 
-    path('course_progress/', course_views.CourseProgressApiView.as_view()),
-    path('course_progress/<int:pk>/',
-         course_views.CourseProgressApiView.as_view()),
-
+    path('add-content-progress/', course_views.AddContentProgressApiView.as_view()),
+    
     path('users/', users_views.UserDetailView.as_view()),
     path('users/<int:pk>/', users_views.UserDetailView.as_view()),
 
-    path('course-enrollment/', course_views.EnrollmentApiView.as_view()),
+ #   path('course-enrollment/', course_views.EnrollmentViewset),
     
     path('sst-cards/', users_views.SSTCardApiView.as_view()),
     
@@ -67,4 +65,5 @@ urlpatterns = [
     
     path('save-base64/', views.SaveBase64ImageView),
 
+    path('', include(router.urls)),
 ]

@@ -48,8 +48,8 @@ urlpatterns = [
          teachers.QuestionDeleteView.as_view(), name='teacher_delete_question'),
     path('uploadfile', students.file_upload, name='upload-file'),
 
-    path('course2/<int:pk>/', cache_page(60 * 15)
-         (students.StudentCourseDetailView2.as_view()), name='student_course_detail2'),
-    path('course2/<int:pk>/<int:module_id>/', cache_page(60 * 15)
-         (students.StudentCourseDetailView2.as_view()), name='student_course_detail_module2'),
+    path('course/certificate/<int:pk>/', cache_page(60 * 15)
+         (students.CourseCertificateDetailView.as_view()), name='student_course_certificate'),
+    path('course/certificate-template/<int:pk>/', cache_page(60 * 15)
+         (students.CertificateTemplateDetailView.as_view()), name='student_course_certificate_template')     
 ]
