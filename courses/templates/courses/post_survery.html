@@ -1,0 +1,468 @@
+{% extends "app_base.html" %}
+{% load staticfiles %}
+
+{% block title %} Evaluate {% endblock %}
+
+{% block content %}
+
+<div class="breadcumb-area">
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Course - Post Class Survey </li>
+        </ol>
+    </nav>
+</div>
+
+<div class="regular-page-area section-padding-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-content">
+
+                    <div class="row">
+
+                        <div class="col-12 col-lg-9 offset-lg-1">
+
+
+                            <div class="card">
+
+                                <div class="card-header">
+                                   Post Class Survey
+                                </div>
+                                <div class="card-body">
+
+                                    <form action="#" method="post" id="fmEvaluate">
+
+                                        <p>
+                                            Please identify your trade (You can select maximum 3 trades)
+                                        </p>
+
+                                        <div class="form-group p-3">
+                                            <div class="row mb-1">
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Boilermaker"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Boilermaker
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Carpenter"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Carpenter
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Carpet layer"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Carpet layer
+                                                    </label>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row mb-1">
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Dredger"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Dredger
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Electrician"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Electrician
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        value="Elevator mechanic" id="">
+                                                    <label class="form-check-label" for="">
+                                                        Elevator mechanic
+                                                    </label>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row mb-1">
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Fencer"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Fencer
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Glazier"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Glazier
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        value="Heavy equipment operator" id="">
+                                                    <label class="form-check-label" for="">
+                                                        Heavy equipment operator
+                                                    </label>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row mb-1">
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        value="Insulation installer" id="">
+                                                    <label class="form-check-label" for="">
+                                                        Insulation installer
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Ironworker"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Ironworker
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Laborer"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Laborer
+                                                    </label>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row mb-1">
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Landscaper"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Landscaper
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Linemen"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Linemen
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Mason" id="">
+                                                    <label class="form-check-label" for="">
+                                                        Mason
+                                                    </label>
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="row mb-1">
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Millright"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Millright
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Painter"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Painter
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Pile driver"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Pile driver
+                                                    </label>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Pipefitter"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Pipefitter
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Plasterer"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Plasterer
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Plumber"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Plumber
+                                                    </label>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row mb-1">
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        value="Sheet metal worker" id="">
+                                                    <label class="form-check-label" for="">
+                                                        Sheet metal worker
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Steel fixer"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Steel fixer
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="checkbox" value="Water-"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Water-
+                                                    </label>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row mb-1">
+
+                                                <div class="form-check col-md-4">
+                                                    <input class="form-check-input" type="checkbox" value="Proofer"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Proofer
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check col-md-4">
+                                                    <input class="form-check-input" type="checkbox" value="Welder"
+                                                        id="">
+                                                    <label class="form-check-label" for="">
+                                                        Welder
+                                                    </label>
+                                                </div>
+
+
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-group mb-3">
+                                            <label for="exampleInputPassword1">How many years of experience in your
+                                                trade do you currently have? * </label>
+                                            <input type="number" min="0" class="form-control form-control-sm"
+                                                id="experience_trade">
+                                        </div>
+
+                                        <div class="form-group mb-3">
+                                            <label for="exampleInputPassword1">
+                                                What are the most proficient skills which you utilize in your job site?
+                                                *
+                                            </label>
+                                            <input type="text" min="0" class="form-control form-control-sm"
+                                                id="proficient_skills">
+                                            <small class="form-text text-muted">You can add multiple skills (commma
+                                                seperated) </small>
+                                        </div>
+
+                                        <div class="form-group mb-3">
+                                            <label for="exampleInputPassword1">
+                                                What are the most desirable skills which you need to develop to gain
+                                                proficiency in your job? *
+                                            </label>
+                                            <input type="text" min="0" class="form-control form-control-sm"
+                                                id="desirable_skills">
+                                            <small class="form-text text-muted">You can add multiple skills (commma
+                                                seperated) </small>
+                                        </div>
+
+                                        <div class="form-group mb-3">
+                                            <label for="exampleInputPassword1">
+                                                Have you ever been injured at your job? If yes, what was the main cause
+                                                of your injury? *
+                                            </label>
+                                            <input type="text" min="0" class="form-control form-control-sm"
+                                                id="injured_status">
+
+                                        </div>
+
+                                        <div class="form-group mb-3">
+                                            <label for="exampleInputPassword1">
+                                                Are you required to use Personal Protected Equipment at your job? *
+                                            </label>
+                                            <input type="text" min="0" class="form-control form-control-sm"
+                                                id="use_personal_equipment">
+                                        </div>
+
+                                        <div class="form-group mb-3">
+                                            <label for="exampleInputPassword1">
+                                                Do you work at high altitudes in your job? *
+                                            </label>
+                                            <input type="text" min="0" class="form-control form-control-sm"
+                                                id="high_altitudes">
+                                        </div>
+
+                                        <div class="form-group mb-3">
+                                            <label for="exampleInputPassword1">
+                                                What are most challenging aspects of your work? *
+                                            </label>
+                                            <input type="text" min="0" class="form-control form-control-sm"
+                                                name="challenging_aspects">
+                                        </div>
+
+                                        <div class="form-group mb-3">
+                                            <label for="exampleInputPassword1">
+                                                How many professional development hours did you complete to upgrade your
+                                                job-related skills? *
+                                            </label>
+                                            <input type="number" min="0" class="form-control form-control-sm"
+                                                name="professional_development_hours">
+                                        </div>
+
+                                        <div class="form-group mb-3">
+                                            <label for="exampleInputPassword1">
+                                                What type of training are you interested to receive? *
+                                            </label>
+                                            <input type="text" min="0" class="form-control form-control-sm"
+                                                name="interested_training">
+                                        </div>
+
+                                        <div class="form-group mb-3">
+                                            <label for="exampleInputPassword1">
+                                                Are you planning to apply for a new job title? If so, what type of trade
+                                                are you interested to
+                                                upgrade? *
+                                            </label>
+                                            <input type="text" min="0" class="form-control form-control-sm"
+                                                name="planning_apply">
+                                        </div>
+
+                                        <div class="form-group mb-3">
+                                            <label for="exampleInputPassword1">
+                                                On a scale 1-7 how satisfied are you with the training you have received
+                                                so far? *
+                                            </label>
+                                            <input type="number" min="1" max="7" class="form-control form-control-sm"
+                                                name="planning_apply">
+                                        </div>
+
+                                        <div class="form-group mb-3">
+                                            <label for="exampleInputPassword1">
+                                                List 5 most practical, effective, challenging courses which you took at
+                                                New York City
+                                                Construction Training. *
+                                            </label>
+                                            <input type="text" class="form-control form-control-sm"
+                                                name="effective_courses">
+                                        </div>
+
+
+                                    </form>
+                                </div>
+                                <div class="card-footer">
+                                    <button class="btn btn-success" id="btnSubmit">Submit Response</button>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<style>
+    form label {
+        float: none;
+    }
+
+    form input {
+        float: none;
+        width: auto;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+
+        $("#fmEvaluate input[type='checkbox']").change(function () {
+
+            var checked = $("#fmEvaluate input[type='checkbox']:checked").length;
+
+
+            if (checked > 3) {
+                $(this).attr('checked', false);
+            }
+
+
+        });
+
+        $("#btnSubmit").click(function () {
+
+            var data = [];
+
+            $("#fmEvaluate input[type='checkbox']:checked").each(function () {
+                data.push(this.value);
+            });
+
+           console.log(data);
+
+
+        });
+    });
+
+   
+</script>
+{% endblock %}
