@@ -232,3 +232,16 @@ class Enrollments(models.Model):
     def __str__(self):
         return '{}'.format(self.event_type)
 
+
+class StudentCertificate(models.Model):
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name= 'certificates', on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, related_name= 'certificates',
+                               on_delete=models.CASCADE)
+    ref_number = models.CharField(max_length=200)
+    file_path = models.TextField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '{}'.format(self.event_type)

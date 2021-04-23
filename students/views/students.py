@@ -1,5 +1,9 @@
 import datetime
 import itertools
+import os
+import random
+import string
+
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
@@ -15,28 +19,30 @@ from django.contrib.auth.forms import UserCreationForm
 from braces.views import LoginRequiredMixin
 from django.contrib.auth import authenticate, login
 from django.template.loader import get_template
+from django.conf import settings
+from django.core.mail import mail_admins
+from django.contrib import messages
+
+from xhtml2pdf import pisa
 
 from students.forms import CourseEnrollForm
 from students.forms import StudentSignupForm
 from students.forms import TakeQuizForm
-from courses.models import Course
 from students.models import Quiz
-#from students.models import Student
 from students.models import TakenQuiz
 from students.models import User
+from courses.models import Course
 from courses.models import Review
 from courses.models import Cluster
 from courses.models import CourseProgress
 from courses.models import Content as ModuleContent
 from courses.models import Enrollments
-from django.core.mail import mail_admins
-from django.contrib import messages
-from students.decorators import student_required
+from courses.models import StudentCertificate
 
+from students.decorators import student_required
 from courses.suggestions import update_clusters
 from students.file_utils import uploaded_file
 
-import datetime
 
 class StudentCourseListView(LoginRequiredMixin, ListView):
     model = Course
@@ -69,12 +75,12 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
 
         context = super(StudentCourseDetailView,
                         self).get_context_data(**kwargs)
-        
+
         student = self.request.user
 
         course = self.get_object()
 
-        if not course.course_enrolled.filter(user = student).exists():
+        if not course.course_enrolled.filter(user=student).exists():
             context['not_found'] = True
             return context
 
@@ -89,7 +95,6 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
         course_details = []
         modules_list = course.modules.all().order_by('order')
 
-    
         taken_quizzes = list(
             student.taken_quizzes.values_list('quiz_id', flat=True))
 
@@ -109,11 +114,11 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
                     context['content_completed'] = False
 
             if m.quiz is not None:
-                
+
                 if m.quiz.questions.count() > 0:
-                    
+
                     t_q = student.taken_quizzes.filter(
-                    quiz_id=m.quiz.id).select_related('quiz').first()
+                        quiz_id=m.quiz.id).select_related('quiz').first()
 
                     score = 0
 
@@ -173,7 +178,7 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
         return context
 
     def render_to_response(self, context, **response_kwargs):
-        
+
         if 'not_found' in context:
             return redirect('course_list')
 
@@ -230,7 +235,8 @@ class StudentEnrollCourseView(FormView):
         self.course = form.cleaned_data['course']
 
         if not Enrollments.objects.filter(course=self.course, user=self.request.user).exists():
-            enrollment = Enrollments.objects.create(course=self.course, user =self.request.user)
+            enrollment = Enrollments.objects.create(
+                course=self.course, user=self.request.user)
 
         return super(StudentEnrollCourseView, self).form_valid(form)
 
@@ -278,11 +284,11 @@ class CourseCertificateDetailView(LoginRequiredMixin, DetailView):
 
         context = super(CourseCertificateDetailView,
                         self).get_context_data(**kwargs)
-        
+
         context['certificate_valid'] = True
         student = self.request.user
         course = self.get_object()
-        enrolled = course.course_enrolled.filter(user = student)
+        enrolled = course.course_enrolled.filter(user=student)
 
         if not enrolled.exists() or enrolled.last().is_completed == False:
             context['certificate_valid'] = False
@@ -301,24 +307,25 @@ class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
 
         context = super(CertificateTemplateDetailView,
                         self).get_context_data(**kwargs)
-        
+
         context['certificate_valid'] = True
         student = self.request.user
         course = self.get_object()
-        enrolled = course.course_enrolled.filter(user = student)
+        enrolled = course.course_enrolled.filter(user=student)
 
         if not enrolled.exists() or enrolled.last().is_completed == False:
             context['certificate_valid'] = False
-        
+
         if context['certificate_valid'] == True:
-            context['student_name'] = student.first_name + ' ' + student.last_name
+            context['student_name'] = student.first_name + \
+                ' ' + student.last_name
             completed_date = enrolled.last().completed_date
             context['completed_date'] = completed_date.strftime('%d/%m/%Y')
 
         return context
 
     def render_to_response(self, context, **response_kwargs):
-        
+
         if context['certificate_valid'] == False:
             return redirect('course_list')
 
@@ -486,6 +493,63 @@ def quick_course_enrol(request, pk):
         return redirect(rev_url)
 
 
+@login_required
+@student_required
+def download_certificate(request, pk):
+    try:
+        student = request.user
+        course = Course.objects.get(pk=pk)
+        enrolled = course.course_enrolled.filter(user=student)
+
+        if enrolled.exists() or enrolled.last().is_completed == True:
+
+            student_name = student.first_name + \
+                ' ' + student.last_name
+            completed_date = enrolled.last().completed_date.strftime('%d/%m/%Y')
+
+            letters = string.digits
+            ref_number = ''.join(random.choice(letters) for i in range(5))
+            ref_number = 'NYCCST-' + datetime.datetime.now().strftime("%Y%m%d") + \
+                "-" + ref_number
+
+            template_path = 'students/course/certificate_template.html'
+
+            context = {'certificate_valid': True,
+                       'student_name': student_name, 'completed_date': completed_date, 'object': course, 'ref_number': ref_number}
+
+            template = get_template(template_path)
+            html = template.render(context)
+
+            file_name = datetime.datetime.now().strftime("%y%m%d-%H%M%S") + "-" + \
+                str(student.id) + "-" + str(course.id) + "-certificate.pdf"
+            file_path = os.path.join(settings.MEDIA_ROOT, 'uploads', file_name)
+            result_file = open(file_path, "w+b")
+            pisa_status = pisa.CreatePDF(html, dest=result_file)
+            result_file.close()
+
+            ref_file_path = os.path.join(
+                settings.MEDIA_URL, 'uploads', file_name)
+
+            certificate_object = StudentCertificate(
+                course=course, user=student, ref_number=ref_number, file_path=ref_file_path)
+
+            certificate_object.save()
+
+            with open(file_path, 'rb') as fh:
+                response = HttpResponse(
+                    fh.read(), content_type="application/pdf")
+                response['Content-Disposition'] = 'attachment; filename="'+student.username+' certificate.pdf"'
+                return response
+                # attachment
+
+            if pisa_status.err:
+                return HttpResponse('We had some errors <pre>' + html + '</pre>')
+
+        return HttpResponse(0)
+    except Exception as ex:
+        return HttpResponse(ex)
+
+
 def file_upload(request):
 
     result = 0
@@ -494,5 +558,3 @@ def file_upload(request):
         result = uploaded_file(request.FILES['file'])
 
     return HttpResponse(result)
-
-

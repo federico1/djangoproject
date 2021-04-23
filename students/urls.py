@@ -51,5 +51,7 @@ urlpatterns = [
     path('course/certificate/<int:pk>/', cache_page(60 * 15)
          (students.CourseCertificateDetailView.as_view()), name='student_course_certificate'),
     path('course/certificate-template/<int:pk>/', cache_page(60 * 15)
-         (students.CertificateTemplateDetailView.as_view()), name='student_course_certificate_template')     
+         (students.CertificateTemplateDetailView.as_view()), name='student_course_certificate_template'),
+    path('course/<int:pk>/certificate/download',
+         students.download_certificate, name='student_download_certificate'),
 ]
