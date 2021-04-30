@@ -1,0 +1,302 @@
+{% extends "admin_base.html" %}
+{% block title %} - Evaluations {% endblock %}
+
+{% block content %}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Evaluations</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="listTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Course</th>
+                        <th>Student</th>
+                        <th>Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="detailModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Student Response</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="#" method="post" id="fmEvaluate">
+
+                    <div>
+                        <p>
+                            1) Considering your complete experience with our class, how likely are
+                            you
+                            to recommend it to your friends or colleagues?
+
+                            <span id="recommend" class="badge badge-primary"></span>
+                        </p>
+
+
+                    </div>
+
+                    <div>
+                        <p>
+                            2) On a scale of 1 to 7, 7 being the highest, how satisfied are you with
+                            the overall format (environment ) of the class?
+                            <span id="class_environment" class="badge badge-primary"></span>
+                        </p>
+
+                    </div>
+
+                    <div>
+                        <p>
+                            3) The learning event achieved the defined learning outcomes?
+                            <span id="learning_outcomes" class="badge badge-primary"></span>
+                        </p>
+
+
+                    </div>
+
+                    <div>
+                        <p>
+                            4) On a scale of 1 to 7, 7 being the highest, how would you rate the
+                            instructor for the knowledge they possess about the topic being taught?
+                            <span id="instructor_knowledge" class="badge badge-primary"></span>
+                        </p>
+                    </div>
+
+                    <div>
+                        <p>
+                            5) How helpful was the class material provided to you?
+                            <span id="helpful_material" class="badge badge-primary"></span>
+                        </p>
+
+
+                    </div>
+
+                    <div>
+                        <p>
+                            6) Is there opportunities to improve the learning event.?
+                            <span id="learning_opportunities" class="badge badge-primary"></span>
+                        </p>
+                    </div>
+
+                    <div>
+                        <p>
+                            7) On a scale of 1 to 7, 7 being the highest, how beneficial was the
+                            class
+                            for you? <span id="beneficial_class" class="badge badge-primary"></span>
+                        </p>
+                    </div>
+
+                    <div>
+                        <p>
+                            8) Do you think the class provided the right amount of theoretical and
+                            practical experience?
+                            <span id="theoretical_experience" class="badge badge-primary"></span>
+                        </p>
+
+
+                    </div>
+
+                    <div>
+                        <p>
+                            9) Do you think the class teachings will be helpful for the growth in
+                            your career?
+                            <span id="helpful_growth_career" class="badge badge-primary"></span>
+                        </p>
+                    </div>
+
+                    <div>
+                        <p>
+                            10) Please state how satisfied were you with the grade given to you?
+                            <span id="grade_given" class="badge badge-primary"></span>
+                        </p>
+
+
+                    </div>
+
+                    <div>
+                        <p>
+                            11) Please state your level of agreement for the following statements:
+                            The class was very well organized
+                            <span id="class_organized" class="badge badge-primary"></span>
+                        </p>
+
+
+                    </div>
+
+                    <div>
+                        <p>
+                            12) The instructor was very knowledgeable about the topic that was
+                            taught
+                            <span id="instructor_knowledgeable" class="badge badge-primary"></span>
+                        </p>
+
+
+                    </div>
+
+                    <div>
+                        <p>
+                            13) The instructor was very good at communication
+                            <span id="instructor_communication" class="badge badge-primary"></span>
+                        </p>
+
+
+                    </div>
+
+                    <div>
+                        <p>
+                            14) The instructor was motivating and enthusiastic
+                            <span id="instructor_motivating" class="badge badge-primary"></span>
+                        </p>
+
+
+                    </div>
+
+                    <div>
+                        <p>
+                            15) The instructor’s methods helped in understanding the topic better
+                            <span id="instructor_methods" class="badge badge-primary"></span>
+                        </p>
+
+
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{% verbatim %}
+<script type="text/x-handlebars-template" id='listItemTemplate'>
+
+    <tr id="{{id}}">
+        <td>{{id}}</td>
+        <td>
+        {{course.title}}
+        </td>
+         <td>
+        {{student.first_name}} {{student.last_name}}
+        </td>
+        <td>
+        {{#date}}{{created}}{{/date}}
+        </td>
+        <td>
+            <a href="javascript:;" class="btn btn-info btn-sm link-view" id="{{id}}">View</a>
+        </td>
+    </tr>
+</script>
+{% endverbatim %}
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    (function ($) {
+
+        Handlebars.registerHelper("date", function (options) {
+            return new Handlebars.SafeString(moment(this.created).format('LL'));
+        });
+
+        $.EvaluationsManager = function (options) {
+
+            var that = this;
+
+            var evaluationsList = [];
+            var dataTableObject;
+
+            var settings = $.extend({}, options);
+
+            var getList = function () {
+                $.get('/api/course-evaluation/?format=json', {}, function (response) {
+                    evaluationsList = response;
+                    drawList();
+                });
+            };
+
+            var drawList = function () {
+
+                if (dataTableObject) {
+                    dataTableObject.destroy();
+                }
+
+                $("#listTable tbody").empty();
+
+                $(evaluationsList).each(function (index, item) {
+                    var source = document.getElementById("listItemTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+                    $("#listTable tbody").append(template(item));
+
+                });
+
+                dataTableObject = $("#listTable").DataTable();
+
+                dataTableObject.order([
+                    [0, 'desc']
+                ]).draw();
+
+            };
+
+            var registerEvent = function () {
+
+                $("div").on("click", ".link-view", function (e) {
+                    e.stopPropagation();
+
+                    var id = $(this).attr('id');
+
+                    var dataObject = evaluationsList.find(a => a.id == id);
+
+                    if (dataObject) {
+
+                        for (var key in dataObject) {
+                            $("#fmEvaluate #" + key).html(dataObject[key]).css('min-width', 50).addClass('px-3');
+                        }
+
+                        $("#detailModal").modal({
+                            show: true,
+                            backdrop: 'static'
+                        });
+                    }
+
+
+
+                });
+
+            };
+
+            var init = function () {
+                registerEvent();
+                getList();
+            };
+
+            init();
+
+            return this;
+
+        };
+
+    }(jQuery));
+
+    $(document).ready(function () {
+        var studentManager = new $.EvaluationsManager({});
+    });
+</script>
+
+{% endblock %}

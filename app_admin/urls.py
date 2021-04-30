@@ -13,4 +13,8 @@ urlpatterns = [
     path('students',
          students.StudentsView.as_view(),
          name='admin_students'),
+    path('evaluations',
+         students.EvaluationListView.as_view(),
+         name='admin_evaluations'),
+
 ]

@@ -36,6 +36,13 @@ class CourseSerializer(serializers.ModelSerializer):
         return super(CourseSerializer, self).to_representation(instance)
 
 
+class CourseCoreSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Course
+        fields = ['id', 'slug', 'subject', 'title','overview']
+
+
 class CourseTimeLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseTimeLog
@@ -77,4 +84,9 @@ class EvaluationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Evaluation
         fields = '__all__'
+
+    def to_representation(self, instance):
+        self.fields['student'] = UserSerializer(read_only=True)
+        self.fields['course'] = CourseCoreSerializer(read_only=True)
+        return super(EvaluationSerializer, self).to_representation(instance)
 

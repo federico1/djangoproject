@@ -223,6 +223,11 @@ def UpdateHasProgress(request):
 
 class CourseEvaluationApiView(APIView):
 
+    def get(self, request, format=None):
+        snippets = Evaluation.objects.all()
+        serializer = EvaluationSerializer(snippets, many=True)
+        return Response(serializer.data)
+
     def post(self, request, format=None):
         serializer = EvaluationSerializer(data=request.data)
 
