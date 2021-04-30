@@ -1,0 +1,185 @@
+{% extends "app_base.html" %}
+{% load staticfiles %}
+
+{% block title %}
+- FAQ
+{% endblock %}
+
+{% block content %}
+
+<div class="breadcumb-area">
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">NYC CONSTRUCTION SAFETY TRAINING - FAQ</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="regular-page-area section-padding-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>
+                                How do I register?
+                            </strong>
+                        </div>
+                        <div class="card-body">
+                            To register for an account, please
+                            <a href="{% url 'student_registration' %}">
+                                <strong>click here</strong>
+                            </a>.
+                        </div>
+                    </div> <!-- end card -->
+
+                    <div class="card mt-2">
+                        <div class="card-header">
+                            <strong>
+                                What courses do you offer?
+                            </strong>
+                        </div>
+                        <div class="card-body">
+                            We offer a variety of online and in-person courses from Department of Buildings (DOB),
+                            Environmental Protection Agency (EPA), Site Safety Training (SST). This includes OSHA 10,
+                            OSHA 30, Scaffolding, EPA Lead Safe, 2 Hour Drug and Alcohol, 8 Hour Fall Prevention, 8 Hour
+                            Chapter 33, 40 Hour Site Safety Manager, and many more, please
+                            <a href="{% url 'courses_list' %}">
+                                <strong>click here</strong>
+                            </a>.
+                        </div>
+                    </div>
+                    <!-- end card -->
+
+
+                    <div class="card mt-2">
+                        <div class="card-header">
+                            <strong>
+                                How can I contact you?
+                            </strong>
+                        </div>
+                        <div class="card-body">
+                            You can call us at 914-473-6791,
+                            email us at
+                            <a href="mailto:info@educa.com" class="text-primary">info@educa.com</a>
+                            or, please
+                            <a href="{% url 'contact_detail' %}">
+                                <strong>click here</strong>
+                            </a>
+                            and leave us a message.
+                        </div>
+                    </div>
+                    <!-- end card -->
+
+                    <div class="card mt-2">
+                        <div class="card-header">
+                            <strong>
+                                What's a SST Card?
+                            </strong>
+                        </div>
+                        <div class="card-body">
+
+                            Site Safety Training (SST) Card is a card that is issued by a Department of Buildings (DOB)
+                            approved course provider to those who have completed a required amount of training.
+                            To check if you are qualified for a SST Card, please <a href="{% url 'sst_verify' %}">
+                                <strong>click here</strong>
+                            </a>.
+
+                        </div>
+                    </div>
+                    <!-- end card -->
+
+                    <div class="card mt-2">
+                        <div class="card-header">
+                            <strong>
+                                Where do I get an SST Card?
+                            </strong>
+                        </div>
+                        <div class="card-body">
+
+                            SST Cards may be issued by any NYC Department of Buildings SST course provider that meets
+                            the requirements specified in the following documentation released by the NYC DOB Card
+                            Issuance Requirements, please <a href="{% url 'student_registration' %}">
+                                <strong>click here</strong>
+                            </a>.
+
+
+                        </div>
+                    </div>
+                    <!-- end card -->
+
+                    <div class="card mt-2">
+                        <div class="card-header">
+                            <strong>
+                                Where can I get my SST Card?
+                            </strong>
+                        </div>
+                        <div class="card-body">
+
+                            If you are qualified for an SST Card visit
+                            <a href="https://construction-safety-nyc.com/">construction-safety-nyc.com</a>
+                            or, please <a href="{% url 'student_registration' %}">
+                                <strong>click here</strong>
+                            </a> to order your card now.
+                        </div>
+                    </div>
+                    <!-- end card -->
+
+                    <div class="card mt-2">
+                        <div class="card-header">
+                            <strong>
+                                Where can I register for OSHA 10 course?
+                            </strong>
+                        </div>
+                        <div class="card-body">
+
+                            You can register for Occupational Safety and Health Administration, OSHA 10 here at NYC
+                            Construction Safety Training, LLC.
+                            To view our OSHA 10 course, please <a href="{% url 'student_registration' %}">
+                                <strong>click here</strong>
+                            </a>.
+                        </div>
+                    </div>
+                    <!-- end card -->
+
+                    <div class="card mt-2">
+                        <div class="card-header">
+                            <strong>
+                                Where can I register for OSHA 30 course?
+                            </strong>
+                        </div>
+                        <div class="card-body">
+
+                            You can register for Occupational Safety and Health Administration, OSHA 30 here at NYC
+                            Construction Safety Training, LLC. To view our OSHA 30 course, please <a
+                                href="{% url 'student_registration' %}">
+                                <strong>click here</strong>
+                            </a>.
+                        </div>
+                    </div>
+                    <!-- end card -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+
+<style>
+
+</style>
+
+<script>
+    $(document).ready(function () {
+
+    });
+</script>
+{% endblock %}

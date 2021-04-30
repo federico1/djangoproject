@@ -14,3 +14,7 @@ class ContactView(generic.TemplateView):
 
 class StudentManualView(generic.TemplateView):
     template_name = "student_manual/student_manual.html"
+
+
+class FaqView(generic.TemplateView):
+    template_name = "faq/faq.html"
