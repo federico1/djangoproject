@@ -19,6 +19,7 @@ from django.conf import settings
 
 from django.utils.timezone import localtime, now
 
+
 class ExternalVideoRoomDetailView(APIView):
 
     def get_object(self, pk):

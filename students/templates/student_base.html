@@ -109,8 +109,8 @@
           <div class="small text-gray-500">{{#dateOnly}}  {{created}} {{/dateOnly}}</div>
           <span class="font-weight-bold">{{title}}</span>
       </div>
-  </a>
-</script>
+    </a>
+  </script>
   {% endverbatim %}
 
   <script src="{% static "/plugins/jquery/jquery.min.js" %}"></script>
@@ -122,6 +122,7 @@
   <script src="{% static "/plugins/moment.min.js" %}"></script>
   <script src="{% static "/plugins/handlebars.min.js" %}"></script>
   <script src="{% static "/plugins/scroll/jquery.scrollbar.min.js" %}"></script>
+  <script src="{% static "/plugins/jquery.validate.min.js" %}"></script>
 
   <script src="//media.twiliocdn.com/sdk/js/video/releases/2.4.0/twilio-video.min.js"></script>
 
@@ -129,6 +130,29 @@
   {% endblock %}
 
   <script>
+    (function ($) {
+      $.fn.serializeObject = function () {
+        var o = {};
+        var a = this.serializeArray();
+
+        $.each(a, function () {
+
+          if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+              o[this.name] = [o[this.name]];
+            }
+
+            o[this.name].push(this.value || '');
+          } else {
+            o[this.name] = this.value || '';
+          }
+        });
+
+        return o;
+      };
+
+    })(jQuery);
+
     Handlebars.registerHelper("dateOnly", function (options) {
       var data = options.fn(this);
 

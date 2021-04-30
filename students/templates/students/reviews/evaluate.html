@@ -1,0 +1,647 @@
+{% extends "student_base.html" %}
+{% load staticfiles %}
+
+{% block title %} Evaluate {% endblock %}
+
+{% block content %}
+
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-content">
+
+                <div class="row">
+
+                    <div class="col-12 col-lg-9 offset-lg-1">
+
+
+                        <div class="card">
+
+                            <div class="card-header">
+                                Evualate - {{object}}
+                            </div>
+                            <div class="card-body">
+
+                                <form action="#" method="post" id="fmEvaluate">
+
+                                    <input type="hidden" name="course" value="{{object.id}}">
+                                    <input type="hidden" name="student" value="{{student_id}}">
+
+                                    <div>
+                                        <p>
+                                            1) Considering your complete experience with our class, how likely are
+                                            you
+                                            to recommend it to your friends or colleagues?
+                                        </p>
+
+                                        <div class="form-group p-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="recommend"
+                                                    value="Very likely">
+                                                <label class="form-check-label" for="flexRadioDefault1">
+                                                    Very likely
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="recommend"
+                                                    value="Likely">
+                                                <label class="form-check-label" for="flexRadioDefault2">
+                                                    Likely
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p>
+                                            2) On a scale of 1 to 7, 7 being the highest, how satisfied are you with
+                                            the overall format (environment ) of the class?
+                                        </p>
+
+                                        <div class="form-group p-3">
+                                            <input type="number" min="1" max="7" value="1" name="class_environment"
+                                                class="form-control form-control-sm" id="">
+                                        </div>
+
+                                    </div>
+
+                                    <div>
+                                        <p>
+                                            3) The learning event achieved the defined learning outcomes?
+                                        </p>
+
+                                        <div class="form-group p-3">
+
+
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="learning_outcomes"
+                                                    value="Strongly agree">
+                                                <label class="form-check-label" for="">
+                                                    Strongly agree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="learning_outcomes"
+                                                    value="Somewhat agree">
+                                                <label class="form-check-label" for="">
+                                                    Somewhat agree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="learning_outcomes"
+                                                    value="Strongly disagree">
+                                                <label class="form-check-label" for="">
+                                                    Strongly disagree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="learning_outcomes"
+                                                    value="Somewhat disagree">
+                                                <label class="form-check-label" for="">
+                                                    Somewhat disagree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="learning_outcomes"
+                                                    value="Neutral">
+                                                <label class="form-check-label" for="">
+                                                    Neutral
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p>
+                                            4) On a scale of 1 to 7, 7 being the highest, how would you rate the
+                                            instructor for the knowledge they possess about the topic being taught?
+                                        </p>
+
+                                        <div class="form-group p-3">
+                                            <input type="number" min="1" max="7" value="1" name="instructor_knowledge"
+                                                class="form-control form-control-sm" id="">
+                                        </div>
+
+                                    </div>
+
+                                    <div>
+                                        <p>
+                                            5) How helpful was the class material provided to you?
+                                        </p>
+
+                                        <div class="form-group p-3">
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="helpful_material"
+                                                    value="Extremely helpful">
+                                                <label class="form-check-label" for="">
+                                                    Extremely helpful
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="helpful_material"
+                                                    value="Very helpful">
+                                                <label class="form-check-label" for="">
+                                                    Very helpful
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="helpful_material"
+                                                    value="Somewhat helpful">
+                                                <label class="form-check-label" for="">
+                                                    Somewhat helpful
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="helpful_material"
+                                                    value="Not so helpful">
+                                                <label class="form-check-label" for="">
+                                                    Not so helpful
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="helpful_material"
+                                                    value="Not at all helpful">
+                                                <label class="form-check-label" for="">
+                                                    Not at all helpful
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p>
+                                            6) Is there opportunities to improve the learning event.?
+                                        </p>
+
+                                        <div class="form-group p-3">
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="learning_opportunities" value=" Strongly disagree">
+                                                <label class="form-check-label" for="">
+                                                    Strongly disagree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="learning_opportunities" value="Somewhat disagree">
+                                                <label class="form-check-label" for="">
+                                                    Somewhat disagree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="learning_opportunities" value="Neutral">
+                                                <label class="form-check-label" for="">
+                                                    Neutral
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="learning_opportunities" value="Somewhat agree">
+                                                <label class="form-check-label" for="">
+                                                    Somewhat agree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="learning_opportunities" value="Strongly agree">
+                                                <label class="form-check-label" for="">
+                                                    Strongly agree
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p>
+                                            7) On a scale of 1 to 7, 7 being the highest, how beneficial was the
+                                            class
+                                            for you?
+                                        </p>
+
+                                        <div class="form-group p-3">
+                                            <input type="number" min="1" max="7" value="1" name="beneficial_class"
+                                                class="form-control form-control-sm" id="">
+                                        </div>
+
+                                    </div>
+
+                                    <div>
+                                        <p>
+                                            8) Do you think the class provided the right amount of theoretical and
+                                            practical experience?
+                                        </p>
+
+                                        <div class="form-group p-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio"
+                                                    name="theoretical_experience" value="Yes">
+                                                <label class="form-check-label" for="">
+                                                    Yes
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio"
+                                                    name="theoretical_experience" value="No">
+                                                <label class="form-check-label" for="">
+                                                    No
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p>
+                                            9) Do you think the class teachings will be helpful for the growth in
+                                            your career?
+                                        </p>
+
+                                        <div class="form-group p-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio"
+                                                    name="helpful_growth_career" value="Yes">
+                                                <label class="form-check-label" for="">
+                                                    Yes
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio"
+                                                    name="helpful_growth_career" value="No">
+                                                <label class="form-check-label" for="No">
+                                                    No
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p>
+                                            10) Please state how satisfied were you with the grade given to you?
+                                        </p>
+
+                                        <div class="form-group p-3">
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="grade_given"
+                                                    value="Very dissatisfied">
+                                                <label class="form-check-label" for="">
+                                                    Very dissatisfied
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="grade_given"
+                                                    value="Dissatisfied">
+                                                <label class="form-check-label" for="">
+                                                    Dissatisfied
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="grade_given"
+                                                    value="Neutral">
+                                                <label class="form-check-label" for="">
+                                                    Neutral
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="grade_given"
+                                                    value="Satisfied">
+                                                <label class="form-check-label" for="">
+                                                    Satisfied
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="grade_given"
+                                                    value="Very satisfied">
+                                                <label class="form-check-label" for="">
+                                                    Very satisfied
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p>
+                                            11) Please state your level of agreement for the following statements:
+                                            The class was very well organized
+
+                                        </p>
+
+                                        <div class="form-group p-3">
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="class_organized"
+                                                    value="Strongly disagree">
+                                                <label class="form-check-label" for="">
+                                                    Strongly disagree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="class_organized"
+                                                    value="Somewhat disagree">
+                                                <label class="form-check-label" for="">
+                                                    Somewhat disagree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="class_organized"
+                                                    value="Neutral">
+                                                <label class="form-check-label" for="">
+                                                    Neutral
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="class_organized"
+                                                    value="Somewhat agree">
+                                                <label class="form-check-label" for="">
+                                                    Somewhat agree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="class_organized"
+                                                    value="Strongly agree">
+                                                <label class="form-check-label" for="">
+                                                    Strongly agree
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p>
+                                            12) The instructor was very knowledgeable about the topic that was
+                                            taught
+
+                                        </p>
+
+                                        <div class="form-group p-3">
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="instructor_knowledgeable" value="Strongly disagree">
+                                                <label class="form-check-label" for="">
+                                                    Strongly disagree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="instructor_knowledgeable" value="Somewhat disagree">
+                                                <label class="form-check-label" for="">
+                                                    Somewhat disagree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="instructor_knowledgeable" value="Neutral">
+                                                <label class="form-check-label" for="">
+                                                    Neutral
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="instructor_knowledgeable" value="Somewhat agree">
+                                                <label class="form-check-label" for="">
+                                                    Somewhat agree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="instructor_knowledgeable" value="Strongly agree">
+                                                <label class="form-check-label" for="">
+                                                    Strongly agree
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p>
+                                            13) The instructor was very good at communication
+
+                                        </p>
+
+                                        <div class="form-group p-3">
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="instructor_communication" value="Strongly disagree">
+                                                <label class="form-check-label" for="">
+                                                    Strongly disagree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="instructor_communication" value="Somewhat disagree">
+                                                <label class="form-check-label" for="">
+                                                    Somewhat disagree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="instructor_communication" value="Neutral">
+                                                <label class="form-check-label" for="">
+                                                    Neutral
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="instructor_communication" value="Somewhat agree">
+                                                <label class="form-check-label" for="">
+                                                    Somewhat agree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="instructor_communication" value="Strongly agree">
+                                                <label class="form-check-label" for="">
+                                                    Strongly agree
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p>
+                                            14) The instructor was motivating and enthusiastic
+
+                                        </p>
+
+                                        <div class="form-group p-3">
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="instructor_motivating" value="Strongly disagree">
+                                                <label class="form-check-label" for="">
+                                                    Strongly disagree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="instructor_motivating" value="Somewhat disagree">
+                                                <label class="form-check-label" for="">
+                                                    Somewhat disagree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="instructor_motivating" value="Neutral">
+                                                <label class="form-check-label" for="">
+                                                    Neutral
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="instructor_motivating" value="Somewhat agree">
+                                                <label class="form-check-label" for="">
+                                                    Somewhat agree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio"
+                                                    name="instructor_motivating" value="Strongly agree">
+                                                <label class="form-check-label" for="">
+                                                    Strongly agree
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p>
+                                            15) The instructor’s methods helped in understanding the topic better
+
+                                        </p>
+
+                                        <div class="form-group p-3">
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="instructor_methods"
+                                                    value="Strongly disagree">
+                                                <label class="form-check-label" for="">
+                                                    Strongly disagree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="instructor_methods"
+                                                    value="Somewhat disagree">
+                                                <label class="form-check-label" for="">
+                                                    Somewhat disagree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="instructor_methods"
+                                                    value="Neutral">
+                                                <label class="form-check-label" for="">
+                                                    Neutral
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="instructor_methods"
+                                                    value="Somewhat agree">
+                                                <label class="form-check-label" for="">
+                                                    Somewhat agree
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="radio" name="instructor_methods"
+                                                    value="Strongly agree">
+                                                <label class="form-check-label" for="">
+                                                    Strongly agree
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-success" id="btnSubmit">Submit Response</button>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+{% endblock %}
+
+{% block scripts %}
+
+<style>
+    form label {
+        float: none;
+    }
+
+    form input {
+        float: none;
+        width: auto;
+    }
+
+    label.error {
+        float: right;
+        color: #ff6363;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+
+        toastr.options.positionClass = 'toast-bottom-center';
+
+        $("#fmEvaluate input").each(function () {
+            $(this).attr('required', true);
+        });
+
+        $("#btnSubmit").click(function () {
+
+            var valid = $("#fmEvaluate").valid();
+
+            if (!valid) {
+
+                $('html, body').animate({
+                    scrollTop: $("label.error").eq(0).offset().top - 10
+                }, 2000);
+
+                return;
+            }
+
+            var data = $("#fmEvaluate").serializeObject();
+
+            $("#fmEvaluate input").attr('disabled', true);
+            $("#btnSubmit").attr('disabled', true);
+
+            $.ajax({
+                type: "POST",
+                url: "/api/course-evaluation/",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                },
+                success: function (response) {
+
+                    if (response.id > 0) {
+                        toastr.success('Thank you! You response has been recorded');
+                    }
+
+                    setTimeout(function () {
+                        window.location.href = '/';
+                    }, 3000);
+                },
+                failure: function (errMsg) {}
+            });
+
+
+
+        });
+    });
+</script>
+{% endblock %}

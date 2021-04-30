@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from courses.models import Subject, Course, CourseTimeLog, CourseProgress, \
-    CourseFeature, Attendance, Enrollments
+    CourseFeature, Attendance, Enrollments, Evaluation
 from students.models import User
 from app_api.serializers import UserSerializer
 
@@ -72,4 +72,9 @@ class AttendanceSerializer(serializers.ModelSerializer):
         model = Attendance
         fields = '__all__'
 
+
+class EvaluationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Evaluation
+        fields = '__all__'
 

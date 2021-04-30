@@ -332,6 +332,22 @@ class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
         return super(CertificateTemplateDetailView, self).render_to_response(context, **response_kwargs)
 
 
+class EvaluateDetailView(DetailView):
+    template_name = 'students/reviews/evaluate.html'
+    model = Course
+
+    def get_context_data(self, **kwargs):
+        context = super(EvaluateDetailView,
+                        self).get_context_data(**kwargs)
+        student_id = self.request.user.id
+        if(student_id is None):
+            student_id = self.request.GET.get('student')
+        
+        context['student_id'] = student_id
+        
+        return context
+
+
 @login_required
 @student_required
 def take_quiz(request, pk):
@@ -538,7 +554,8 @@ def download_certificate(request, pk):
             with open(file_path, 'rb') as fh:
                 response = HttpResponse(
                     fh.read(), content_type="application/pdf")
-                response['Content-Disposition'] = 'attachment; filename="'+student.username+' certificate.pdf"'
+                response['Content-Disposition'] = 'attachment; filename="' + \
+                    student.username+' certificate.pdf"'
                 return response
                 # attachment
 

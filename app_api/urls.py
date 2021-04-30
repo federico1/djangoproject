@@ -63,6 +63,8 @@ urlpatterns = [
     path('attendance/<int:pk>/', attendance_views.AttendanceApiView.as_view()),
     path('approve-attendance/', attendance_views.ApproveAttendance),
     
+     path('course-evaluation/', course_views.CourseEvaluationApiView.as_view()),
+
     path('save-base64/', views.SaveBase64ImageView),
 
     path('', include(router.urls)),

@@ -35,7 +35,8 @@ class Course(models.Model):
     students = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="courses_joined",
                                       through='Enrollments')
 
-    quiz = models.ForeignKey(Quiz, related_name='quiz', blank=True, null=True, on_delete=models.DO_NOTHING)                                  
+    quiz = models.ForeignKey(Quiz, related_name='quiz',
+                             blank=True, null=True, on_delete=models.DO_NOTHING)
 
     class Meta:
         ordering = ['-created']
@@ -52,12 +53,12 @@ class Module(models.Model):
     description = models.TextField(blank=True)
     order = OrderField(blank=True, for_fields=['course'])
     quiz = models.ForeignKey(Quiz,
-                               related_name='module_quiz',
-                               blank=True, null=True,
-                               on_delete=models.SET_NULL)
+                             related_name='module_quiz',
+                             blank=True, null=True,
+                             on_delete=models.SET_NULL)
 
     class Meta:
-            ordering = ['order']
+        ordering = ['order']
 
     def __str__(self):
         return '{}. {}'.format(self.order, self.title)
@@ -68,11 +69,11 @@ class Content(models.Model):
                                related_name='contents',
                                on_delete=models.CASCADE)
     content_type = models.ForeignKey(ContentType,
-                                     limit_choices_to={'model__in':('text',
-                                                                    'video',
-                                                                    'image',
-                                                                    'file',
-                                                                    'iframe')},
+                                     limit_choices_to={'model__in': ('text',
+                                                                     'video',
+                                                                     'image',
+                                                                     'file',
+                                                                     'iframe')},
                                      on_delete=models.CASCADE)
     has_progress = models.BooleanField(default=True)
     object_id = models.PositiveIntegerField()
@@ -80,7 +81,7 @@ class Content(models.Model):
     order = OrderField(blank=True, for_fields=['module'])
 
     class Meta:
-            ordering = ['order']
+        ordering = ['order']
 
 
 class ItemBase(models.Model):
@@ -98,9 +99,9 @@ class ItemBase(models.Model):
         return self.title
 
     def render(self):
-        
+
         return render_to_string('courses/content/{}.html'.format(
-           self._meta.model_name), { 'item': self })
+            self._meta.model_name), {'item': self})
 
 
 class Text(ItemBase):
@@ -131,9 +132,11 @@ class Review(models.Model):
         (4, '4'),
         (5, '5')
     )
-    course = models.ForeignKey(Course, related_name='reviews', on_delete=models.CASCADE)
+    course = models.ForeignKey(
+        Course, related_name='reviews', on_delete=models.CASCADE)
     pub_date = models.DateTimeField(auto_now_add=True)
-    user_name = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='reviewers',  on_delete=models.CASCADE)
+    user_name = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='reviewers',  on_delete=models.CASCADE)
     comment = models.CharField(max_length=200)
     rating = models.IntegerField(choices=RATING_CHOICES)
 
@@ -148,13 +151,13 @@ class Cluster(models.Model):
 
 class CourseProgress(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                              related_name='courses_progress',
-                              on_delete=models.SET_NULL, null=True)
+                             related_name='courses_progress',
+                             on_delete=models.SET_NULL, null=True)
     created = models.DateTimeField(auto_now_add=True)
-    content = models.ForeignKey(Content, on_delete=models.CASCADE, related_name='content_progress')
+    content = models.ForeignKey(
+        Content, on_delete=models.CASCADE, related_name='content_progress')
     is_completed = models.BooleanField(default=False)
     progress = models.IntegerField(default=0)
-
 
     def __str__(self):
         return str(self.content)
@@ -162,14 +165,15 @@ class CourseProgress(models.Model):
 
 class CourseTimeLog(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                              related_name='courses_time_spent',
-                              on_delete=models.SET_NULL, null=True)
+                             related_name='courses_time_spent',
+                             on_delete=models.SET_NULL, null=True)
     last_updated = models.DateTimeField(auto_now=True)
     total_seconds = models.IntegerField(default=0)
     started_time = models.DateTimeField(auto_now_add=True)
     course = models.ForeignKey(Course,
                                related_name='time_logs',
                                on_delete=models.CASCADE)
+
     class Meta:
         db_table = "courses_time_logs"
 
@@ -187,8 +191,8 @@ class CourseFeature(models.Model):
     completion_requirements = models.TextField(blank=True, null=True)
 
     class Meta:
-            ordering = ['pk']
-            db_table = "courses_feature"
+        ordering = ['pk']
+        db_table = "courses_feature"
 
     def __str__(self):
         return '{}'.format(self.course.id)
@@ -197,7 +201,7 @@ class CourseFeature(models.Model):
 class Attendance(models.Model):
     CHECK_IN = 1
     CHECK_OUT = 2
-   
+
     ATTEND_CHOICES = [
         (CHECK_IN, 'CheckIn'),
         (CHECK_OUT, 'CheckOut'),
@@ -221,10 +225,10 @@ class Attendance(models.Model):
 class Enrollments(models.Model):
 
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, related_name= 'course_enrolled', on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, related_name= 'course_enrolled',
+        settings.AUTH_USER_MODEL, related_name='course_enrolled', on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, related_name='course_enrolled',
                                on_delete=models.CASCADE)
-    
+
     is_completed = models.BooleanField(default=False)
     completed_date = models.DateTimeField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -236,8 +240,8 @@ class Enrollments(models.Model):
 class StudentCertificate(models.Model):
 
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, related_name= 'certificates', on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, related_name= 'certificates',
+        settings.AUTH_USER_MODEL, related_name='certificates', on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, related_name='certificates',
                                on_delete=models.CASCADE)
     ref_number = models.CharField(max_length=200)
     file_path = models.TextField(null=True, blank=True)
@@ -245,3 +249,30 @@ class StudentCertificate(models.Model):
 
     def __str__(self):
         return '{}'.format(self.event_type)
+
+
+class Evaluation(models.Model):
+
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='course_evaluations', on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, related_name='student_evaluations',
+                               on_delete=models.CASCADE)
+    recommend = models.TextField(null=False, blank=False)
+    class_environment = models.TextField(null=False, blank=False)
+    learning_outcomes = models.TextField(null=False, blank=False)
+    instructor_knowledge = models.TextField(null=False, blank=False)
+    helpful_material = models.TextField(null=False, blank=False)
+    learning_opportunities = models.TextField(null=False, blank=False)
+    beneficial_class = models.TextField(null=False, blank=False)
+    theoretical_experience = models.TextField(null=False, blank=False)
+    helpful_growth_career = models.TextField(null=False, blank=False)
+    grade_given = models.TextField(null=False, blank=False)
+    class_organized = models.TextField(null=False, blank=False)
+    instructor_knowledgeable = models.TextField(null=False, blank=False)
+    instructor_communication = models.TextField(null=False, blank=False)
+    instructor_motivating = models.TextField(null=False, blank=False)
+    instructor_methods = models.TextField(null=False, blank=False)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '{}'.format(self.form_id)

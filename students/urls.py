@@ -54,4 +54,7 @@ urlpatterns = [
          (students.CertificateTemplateDetailView.as_view()), name='student_course_certificate_template'),
     path('course/<int:pk>/certificate/download',
          students.download_certificate, name='student_download_certificate'),
+    path('evaluate/<pk>',
+         students.EvaluateDetailView.as_view(),
+         name='course_evaluate'),
 ]

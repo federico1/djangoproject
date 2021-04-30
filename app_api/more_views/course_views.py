@@ -11,15 +11,18 @@ from rest_framework.decorators import api_view, action
 from django.http import Http404
 from django.db.models import Count
 
-from courses.models import Subject, Course, CourseTimeLog, CourseProgress, Content, CourseFeature, Enrollments
+from courses.models import Subject, Course, CourseTimeLog, CourseProgress, Content, CourseFeature, Enrollments, \
+    Evaluation
 
 from app_api.more_serializers.course_serializers import SubjectSerializer, CourseSerializer, \
-    CourseTimeLogSerializer, CourseProgressSerializer, CourseFeatureSerializer, EnrollmentSerializer
+    CourseTimeLogSerializer, CourseProgressSerializer, CourseFeatureSerializer, EnrollmentSerializer, \
+    EvaluationSerializer
 
 from students.models import User
 from django.conf import settings
 
 from datetime import datetime
+
 
 class SubjectDetailView(APIView):
 
@@ -127,30 +130,6 @@ class AddContentProgressApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class EnrollmentApiView(APIView):
-
-#     def get(self, request, format=None):
-
-#         course_id = request.query_params.get('course')
-
-#         snippets = Enrollments.objects
-
-#         if course_id is not None:
-#             snippets = snippets.filter(course_id = course_id)
-
-#         serializer = EnrollmentSerializer(snippets, many=True)
-
-#         return Response(serializer.data)
-
-#     def post(self, request, format=None):
-#         serializer = EnrollmentSerializer(data=request.data)
-
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 class EnrollmentViewset(viewsets.ViewSet):
 
     def get_object(self, pk):
@@ -240,3 +219,17 @@ def UpdateHasProgress(request):
         result = 1
 
     return Response({"message": message, "result": result})
+
+
+class CourseEvaluationApiView(APIView):
+
+    def post(self, request, format=None):
+        serializer = EvaluationSerializer(data=request.data)
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

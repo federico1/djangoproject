@@ -84,16 +84,6 @@ class CourseDetailView(DetailView):
         return context
 
 
-class EvaluateDetailView(generic.TemplateView):
-    template_name = 'courses/evaluate.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(EvaluateDetailView,
-                        self).get_context_data(**kwargs)
-        # context['enroll_form'] = CourseEnrollForm(
-        #                            initial={'course':self.object})
-        return context
-
 
 class PostClassSurveryDetailView(generic.TemplateView):
     template_name = 'courses/post_survery.html'
@@ -101,6 +91,8 @@ class PostClassSurveryDetailView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super(PostClassSurveryDetailView,
                         self).get_context_data(**kwargs)
+        
+        
         # context['enroll_form'] = CourseEnrollForm(
         #                            initial={'course':self.object})
         return context
