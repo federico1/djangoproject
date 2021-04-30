@@ -54,6 +54,9 @@
                             <a href="{% url 'student_course_certificate' course.id %}" class="btn btn-secondary btn-sm">
                                 View Certificate
                             </a>
+                             <a href="{% url 'course_evaluate' course.id %}" class="btn btn-warning btn-sm">
+                                Evualate Course
+                            </a>
                         </div>
 
                         <div class="col text-right">
@@ -61,15 +64,6 @@
                                 {% trans 'Continue' %} <i class="fa fa-arrow-right"></i>
                             </a>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <a href="{% url 'course_evaluate' course.id %}" class="btn btn-secondary btn-sm">
-                                Evualate Course
-                            </a>
-                        </div>
-
-                        
                     </div>
                 </div>
             </div>
