@@ -57,4 +57,7 @@ urlpatterns = [
     path('evaluate/<pk>',
          students.EvaluateDetailView.as_view(),
          name='course_evaluate'),
+    path('course/assessment/<pk>',
+         students.CourseAssessmentDetailView.as_view(),
+         name='course_assessment'),
 ]

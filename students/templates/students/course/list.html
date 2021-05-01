@@ -50,16 +50,20 @@
 
                 <div class="card-footer bg-white">
                     <div class="row">
-                        <div class="col">
+                        <div class="col-md-8">
                             <a href="{% url 'student_course_certificate' course.id %}" class="btn btn-secondary btn-sm">
                                 View Certificate
                             </a>
-                             <a href="{% url 'course_evaluate' course.id %}" class="btn btn-warning btn-sm">
+                            <a href="{% url 'course_evaluate' course.id %}" class="btn btn-warning btn-sm">
                                 Evualate Course
+                            </a>
+                            <a href="{% url 'course_assessment' course.id %}" class="btn btn-warning btn-sm">
+                                Rate Course
                             </a>
                         </div>
 
                         <div class="col text-right">
+
                             <a href="{% url 'student_course_detail' course.id %}" class="btn btn-primary">
                                 {% trans 'Continue' %} <i class="fa fa-arrow-right"></i>
                             </a>

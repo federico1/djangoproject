@@ -128,6 +128,7 @@ class MessageList(APIView):
 
     def post(self, request, format=None):
         serializer = MessageSerializer(data=request.data)
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data,

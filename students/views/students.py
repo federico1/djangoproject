@@ -348,6 +348,21 @@ class EvaluateDetailView(DetailView):
         return context
 
 
+class CourseAssessmentDetailView(DetailView):
+    template_name = 'students/reviews/assessment.html'
+    model = Course
+
+    def get_context_data(self, **kwargs):
+        context = super(CourseAssessmentDetailView,
+                        self).get_context_data(**kwargs)
+        student_id = self.request.user.id
+        if(student_id is None):
+            student_id = self.request.GET.get('student')
+        
+        context['student_id'] = student_id
+        
+        return context
+
 @login_required
 @student_required
 def take_quiz(request, pk):
