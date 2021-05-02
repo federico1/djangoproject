@@ -1,0 +1,259 @@
+{% extends "admin_base.html" %}
+{% block title %} - Assessment {% endblock %}
+
+{% block content %}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Assessment</h6>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped">
+
+            <tbody>
+                <tr title="The learning event meet my expectations">
+                    <td>
+                        The learning event meet my expectations.
+                    </td>
+                    <td>
+                        4.51
+                    </td>
+                  
+                </tr>
+
+
+                <tr title="The subject matter was well organized.">
+                    <td>
+                        The subject matter was well organized.
+                    </td>
+                    <td>
+                        4.67
+                    </td>
+                </tr>
+
+                <tr title="The materials and handouts were helpful.">
+                    <td>
+                        The materials and handouts were helpful.
+                    </td>
+                   <td>
+                        4.59
+                    </td>
+                </tr>
+
+                <tr title="The learning event achieved the defined learning outcomes.">
+                    <td>
+                        The learning event achieved the defined learning outcomes.
+                    </td>
+                     <td>
+                        4.34
+                    </td>
+                </tr>
+
+                <tr title="I liked how the facilitators presented and delivered the content.">
+                    <td>
+                        I liked how the facilitators presented and delivered the content.
+                    </td>
+                    <td>
+                        4.55
+                    </td>
+                </tr>
+
+                <tr title="The facilitators seemed knowledgeable about the subject matter.">
+                    <td>
+                        The facilitators seemed knowledgeable about the subject matter.
+                    </td>
+                    <td>
+                        4.81
+                    </td>
+                </tr>
+
+                <tr title="The facilitators conveyed a positive and respectful attitude toward the participants.">
+                    <td>
+                        The facilitators conveyed a positive and respectful attitude toward
+                        the participants.
+                    </td>
+                    <td>
+                        4.37
+                    </td>
+                </tr>
+
+                <tr title="I had the opportunity to provide feedback on how to apply my new skills on the job.">
+                    <td>
+                        I had the opportunity to provide feedback on how to apply my new
+                        skills on the job.
+                    </td>
+                    <td>
+                        4.49
+                    </td>
+                </tr>
+
+                <tr title="I was given clear direction on how to implement my action items.">
+                    <td>
+                        I was given clear direction on how to implement my action items.
+                    </td>
+                  <td>
+                        4.86
+                    </td>
+                </tr>
+
+                <tr title="I was provided with guidance and support to access training course.">
+                    <td>
+                        I was provided with guidance and support to access training course.
+                    </td>
+                     <td>
+                        4.79
+                    </td>
+                </tr>
+
+                <tr title="The learning event met my learning style.">
+                    <td>
+                        The learning event met my learning style.
+                    </td>
+                     <td>
+                        4.55
+                    </td>
+                </tr>
+
+                <tr title="The learning environment and facilities were appropriate for this event.">
+                    <td>
+                        The learning environment and facilities were appropriate for this
+                        event.
+                    </td>
+                <td>
+                        4.67
+                    </td>
+                </tr>
+
+                <tr title="I would recommend this learning event to my colleagues.">
+                    <td>
+                        I would recommend this learning event to my colleagues.
+                    </td>
+                     <td>
+                        4.78
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{% verbatim %}
+<script type="text/x-handlebars-template" id='listItemTemplate'>
+
+    <tr id="{{id}}">
+        <td>{{id}}</td>
+        <td>
+        {{course.title}}
+        </td>
+         <td>
+        {{student.first_name}} {{student.last_name}}
+        </td>
+        <td>
+        {{#date}}{{created}}{{/date}}
+        </td>
+        <td>
+            <a href="javascript:;" class="btn btn-info btn-sm link-view" id="{{id}}">View</a>
+        </td>
+    </tr>
+</script>
+{% endverbatim %}
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    (function ($) {
+
+        Handlebars.registerHelper("date", function (options) {
+            return new Handlebars.SafeString(moment(this.created).format('LL'));
+        });
+
+        $.EvaluationsManager = function (options) {
+
+            var that = this;
+
+            var evaluationsList = [];
+            var dataTableObject;
+
+            var settings = $.extend({}, options);
+
+            var getList = function () {
+                $.get('/api/course-evaluation/?format=json', {}, function (response) {
+                    evaluationsList = response;
+                    drawList();
+                });
+            };
+
+            var drawList = function () {
+
+                if (dataTableObject) {
+                    dataTableObject.destroy();
+                }
+
+                $("#listTable tbody").empty();
+
+                $(evaluationsList).each(function (index, item) {
+                    var source = document.getElementById("listItemTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+                    $("#listTable tbody").append(template(item));
+
+                });
+
+                dataTableObject = $("#listTable").DataTable();
+
+                dataTableObject.order([
+                    [0, 'desc']
+                ]).draw();
+
+            };
+
+            var registerEvent = function () {
+
+                $("div").on("click", ".link-view", function (e) {
+                    e.stopPropagation();
+
+                    var id = $(this).attr('id');
+
+                    var dataObject = evaluationsList.find(a => a.id == id);
+
+                    if (dataObject) {
+
+                        for (var key in dataObject) {
+                            $("#fmEvaluate #" + key).html(dataObject[key]).css('min-width', 50)
+                                .addClass('px-3');
+                        }
+
+                        $("#detailModal").modal({
+                            show: true,
+                            backdrop: 'static'
+                        });
+                    }
+
+
+
+                });
+
+            };
+
+            var init = function () {
+                registerEvent();
+                getList();
+            };
+
+            init();
+
+            return this;
+
+        };
+
+    }(jQuery));
+
+    $(document).ready(function () {
+        var studentManager = new $.EvaluationsManager({});
+    });
+</script>
+
+{% endblock %}

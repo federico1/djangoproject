@@ -16,3 +16,11 @@ class EvaluationListView(generic.TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super(EvaluationListView, self).get_context_data(*args, **kwargs)
         return context
+
+
+class AssessmentView(generic.TemplateView):
+    template_name = 'students/assessment.html'
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super(AssessmentView, self).get_context_data(*args, **kwargs)
+        return context

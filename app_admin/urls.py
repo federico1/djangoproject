@@ -16,5 +16,7 @@ urlpatterns = [
     path('evaluations',
          students.EvaluationListView.as_view(),
          name='admin_evaluations'),
-
+    path('assessments',
+         students.AssessmentView.as_view(),
+         name='admin_assessments'),
 ]
