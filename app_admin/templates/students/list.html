@@ -284,7 +284,6 @@
 {% block scripts %}
 
 <script>
-
     Handlebars.registerHelper("get_name", function (options) {
         var r = this.username;
 
@@ -435,7 +434,9 @@
 
             var saveUser = function () {
 
-                $("#userModal form").valid();
+                var isValid = $("#userModal form").valid();
+
+                if (!isValid) return;
 
                 var data = $("#userModal form").eq(0).serializeObject();
 
@@ -687,10 +688,8 @@
                             first_name: "required",
                             last_name: "required",
                             password: "required",
-                            cell_number: "required",
                             username: "required",
                             email: {
-                                required: true,
                                 email: true
                             }
                         }

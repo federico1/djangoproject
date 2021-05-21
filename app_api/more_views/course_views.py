@@ -12,15 +12,16 @@ from django.http import Http404
 from django.db.models import Count
 
 from courses.models import Subject, Course, CourseTimeLog, CourseProgress, Content, CourseFeature, Enrollments, \
-    Evaluation
+    Evaluation, AssessRating
 
-from app_api.more_serializers.course_serializers import SubjectSerializer, CourseSerializer, \
-    CourseTimeLogSerializer, CourseProgressSerializer, CourseFeatureSerializer, EnrollmentSerializer, \
-    EvaluationSerializer
+# from app_api.more_serializers.course_serializers import SubjectSerializer, CourseSerializer, \
+#     CourseTimeLogSerializer, CourseProgressSerializer, CourseFeatureSerializer, EnrollmentSerializer, \
+#     EvaluationSerializer, RatingSerializer
+
+from app_api.more_serializers import course_serializers
 
 from students.models import User
 from django.conf import settings
-
 from datetime import datetime
 
 
@@ -34,7 +35,7 @@ class SubjectDetailView(APIView):
 
     def get(self, request, format=None):
         snippets = Subject.objects
-        serializer = SubjectSerializer(snippets, many=True)
+        serializer = course_serializers.SubjectSerializer(snippets, many=True)
 
         return Response(serializer.data)
 
@@ -42,7 +43,7 @@ class SubjectDetailView(APIView):
 class CourseViewset(viewsets.ModelViewSet):
 
     queryset = Course.objects.all()
-    serializer_class = CourseSerializer
+    serializer_class = course_serializers.CourseSerializer
 
     def list(self, request):
 
@@ -61,7 +62,7 @@ class CourseViewset(viewsets.ModelViewSet):
 
         snippets = snippets.annotate(total_modules=Count('modules'))
 
-        serializer = CourseSerializer(snippets, many=True)
+        serializer = course_serializers.CourseSerializer(snippets, many=True)
 
         return Response(serializer.data)
 
@@ -70,7 +71,7 @@ class CourseViewset(viewsets.ModelViewSet):
 
         snippets = snippets.annotate(total_modules=Count('modules'))
 
-        serializer = CourseSerializer(snippets, many=True)
+        serializer = course_serializers.CourseSerializer(snippets, many=True)
 
         return Response(serializer.data)
 
@@ -83,12 +84,12 @@ class CourseTimeLogDetailView(APIView):
 
         snippets = CourseTimeLog.objects.filter(
             user=request.user, course_id=course_id)
-        serializer = CourseTimeLogSerializer(snippets, many=True)
+        serializer = course_serializers.CourseTimeLogSerializer(snippets, many=True)
 
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = CourseTimeLogSerializer(data=request.data)
+        serializer = course_serializers.CourseTimeLogSerializer(data=request.data)
 
         if serializer.is_valid():
 
@@ -113,7 +114,7 @@ class CourseTimeLogDetailView(APIView):
 class AddContentProgressApiView(APIView):
 
     def post(self, request, format=None):
-        serializer = CourseProgressSerializer(data=request.data)
+        serializer = course_serializers.CourseProgressSerializer(data=request.data)
         if serializer.is_valid():
             content = serializer.validated_data['content']
 
@@ -147,13 +148,13 @@ class EnrollmentViewset(viewsets.ViewSet):
         if course_id is not None:
             snippets = snippets.filter(course_id=course_id)
 
-        serializer = EnrollmentSerializer(snippets, many=True)
+        serializer = course_serializers.EnrollmentSerializer(snippets, many=True)
 
         return Response(serializer.data)
 
     def create(self, request):
 
-        serializer = EnrollmentSerializer(data=request.data)
+        serializer = course_serializers.EnrollmentSerializer(data=request.data)
 
         if serializer.is_valid():
             serializer.save()
@@ -168,7 +169,7 @@ class EnrollmentViewset(viewsets.ViewSet):
         snippet.completed_date = datetime.now()
         snippet.save()
 
-        serializer = EnrollmentSerializer(snippet)
+        serializer = course_serializers.EnrollmentSerializer(snippet)
 
         return Response(serializer.data)
 
@@ -183,11 +184,11 @@ class CourseFeatureApiView(APIView):
         if course_id:
             snippets = CourseFeature.objects.filter(course_id=course_id)
 
-        serializer = CourseFeatureSerializer(snippets, many=True)
+        serializer = course_serializers.CourseFeatureSerializer(snippets, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = CourseFeatureSerializer(data=request.data)
+        serializer = course_serializers.CourseFeatureSerializer(data=request.data)
 
         if serializer.is_valid():
 
@@ -225,11 +226,30 @@ class CourseEvaluationApiView(APIView):
 
     def get(self, request, format=None):
         snippets = Evaluation.objects.all()
-        serializer = EvaluationSerializer(snippets, many=True)
+        serializer = course_serializers.EvaluationSerializer(snippets, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = EvaluationSerializer(data=request.data)
+        serializer = course_serializers.EvaluationSerializer(data=request.data)
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CourseRatingApiView(APIView):
+
+    def get(self, request, format=None):
+        snippets = AssessRating.objects.all()
+        serializer = course_serializers.RatingSerializer(snippets, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = course_serializers.RatingSerializer(data=request.data, many=True)
 
         if serializer.is_valid():
 

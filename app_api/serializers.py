@@ -45,7 +45,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-
         password = validated_data.pop('password')
         user = User(**validated_data)
         user.set_password(password)
@@ -72,7 +71,7 @@ class UserSerializer(serializers.ModelSerializer):
         super(UserSerializer, self).__init__(*args, **kwargs)
 
         self.fields.pop('user_permissions')
-        self.fields.pop('password')
+        #self.fields.pop('password')
         self.fields.pop('groups')
 
 

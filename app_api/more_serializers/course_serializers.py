@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from courses.models import Subject, Course, CourseTimeLog, CourseProgress, \
-    CourseFeature, Attendance, Enrollments, Evaluation
+    CourseFeature, Attendance, Enrollments, Evaluation, AssessRating
 from students.models import User
 from app_api.serializers import UserSerializer
 
@@ -89,4 +89,15 @@ class EvaluationSerializer(serializers.ModelSerializer):
         self.fields['student'] = UserSerializer(read_only=True)
         self.fields['course'] = CourseCoreSerializer(read_only=True)
         return super(EvaluationSerializer, self).to_representation(instance)
+
+
+class RatingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AssessRating
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        self.fields['student'] = UserSerializer(read_only=True)
+        self.fields['course'] = CourseCoreSerializer(read_only=True)
+        return super(RatingSerializer, self).to_representation(instance)
 

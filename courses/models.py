@@ -276,3 +276,18 @@ class Evaluation(models.Model):
 
     def __str__(self):
         return '{}'.format(self.form_id)
+
+
+
+class AssessRating(models.Model):
+
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='course_ratings', on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, related_name='student_ratings',
+                               on_delete=models.CASCADE)
+    key_name = models.TextField(null=False, blank=False)
+    key_value = models.IntegerField(null=False, blank=False)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '{}'.format(self.key_name)

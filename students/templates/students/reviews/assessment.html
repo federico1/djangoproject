@@ -19,7 +19,7 @@
                         improvement
                         process. Thank You.
                     </h6>
-                    <form action="#" method="post" id="fmEvaluate">
+                    <form action="#" method="post" id="fmRating">
 
                         <input type="hidden" name="course" value="{{object.id}}">
                         <input type="hidden" name="student" value="{{student_id}}">
@@ -43,7 +43,7 @@
                             </tbody>
                         </table>
 
-                        <table class="table table-striped">
+                        <table class="table table-striped" id="tblRatings">
 
                             <tbody>
                                 <tr title="The learning event meet my expectations">
@@ -361,7 +361,7 @@
         border: 1px solid #20a041;
     }
 
-     td div.number.active {
+    td div.number.active {
 
         background: #20a041;
         border: 1px solid #20a041;
@@ -382,47 +382,73 @@
             $(this).addClass('active');
         });
 
-        $("#btnSubmit1").click(function () {
+        $("#btnSubmit").click(function () {
 
-            var valid = $("#fmEvaluate").valid();
+            var isValidData = true;
+            var formData = [];
 
-            if (!valid) {
+            $("#tblRatings tr").each(function (ix) {
 
-                $('html, body').animate({
-                    scrollTop: $("label.error").eq(0).offset().top - 10
-                }, 2000);
+                $("#btnSubmit").attr('disabled', true);
 
-                return;
-            }
+                var key_name = $(this).attr('title');
+                var key_value = 0;
 
-            var data = $("#fmEvaluate").serializeObject();
+                var numberElement = $(this).find(".number.active");
 
-            $("#fmEvaluate input").attr('disabled', true);
-            $("#btnSubmit").attr('disabled', true);
+                if (numberElement.length > 0) {
 
-            $.ajax({
-                type: "POST",
-                url: "/api/course-evaluation/",
-                data: JSON.stringify(data),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                beforeSend: function (xhr, settings) {
-                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                },
-                success: function (response) {
+                    key_value = $.trim(numberElement.text());
 
-                    if (response.id > 0) {
-                        toastr.success('Thank you! You response has been recorded');
-                    }
+                    var data = $("#fmRating").serializeObject();
 
-                    setTimeout(function () {
-                        window.location.href = '/';
-                    }, 3000);
-                },
-                failure: function (errMsg) {}
+                    data = $.extend({
+                        'key_name': key_name,
+                        'key_value': key_value
+                    }, data);
+
+                    formData.push(data);
+                    isValidData = true;
+
+                } else {
+
+                    formData = [];
+                    isValidData = false;
+                    $("#btnSubmit").attr('disabled', false);
+
+                    toastr.warning('Please rate all questions');
+
+                    $('html, body').animate({
+                        scrollTop: $("#tblRatings tr").eq(ix).offset().top
+                    }, 500);
+
+                    return false;
+                }
+
             });
 
+            if (formData.length > 0 && isValidData) {
 
+                $.ajax({
+                    type: "POST",
+                    url: "/api/course-assess-rating/",
+                    data: JSON.stringify(formData),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (response) {
+
+                        toastr.success('Thank you! You response has been recorded');
+
+                        setTimeout(function () {
+                            window.location.href = '/';
+                        }, 3000);
+                    },
+                    failure: function (errMsg) {}
+                });
+            }
 
         });
     });
