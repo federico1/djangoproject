@@ -1,5 +1,3 @@
-{% load staticfiles %}
-
 <html>
 
 <head>
@@ -51,26 +49,6 @@
 			page-break-after: avoid;
 			font-size: 16.0pt;
 			font-family: "Cambria", "serif";
-		}
-
-		p.MsoHeader,
-		li.MsoHeader,
-		div.MsoHeader {
-			mso-style-link: "Header Char";
-			margin: 0in;
-			margin-bottom: .0001pt;
-			font-size: 10.0pt;
-			font-family: "Times New Roman", "serif";
-		}
-
-		p.MsoFooter,
-		li.MsoFooter,
-		div.MsoFooter {
-			mso-style-link: "Footer Char";
-			margin: 0in;
-			margin-bottom: .0001pt;
-			font-size: 10.0pt;
-			font-family: "Times New Roman", "serif";
 		}
 
 		p.MsoCaption,
@@ -234,21 +212,10 @@
 			font-weight: bold;
 		}
 
-		span.HeaderChar {
-			mso-style-name: "Header Char";
-			mso-style-link: Header;
-		}
-
-		span.FooterChar {
-			mso-style-name: "Footer Char";
-			mso-style-link: Footer;
-		}
-
 		.MsoChpDefault {
 			font-size: 10.0pt;
 		}
 
-		/* Page Definitions */
 		@page WordSection1 {
 			size: 11.0in 8.5in;
 			margin: 1.25in 1.5in 1.25in 1.5in;
@@ -274,51 +241,63 @@
 <body lang=EN-US link=blue vlink="#954F72">
 
 	<div class=WordSection1>
-
-		<table align='center' class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 style='border-collapse:collapse;margin: 40pt auto 0 auto;'>
+		<br>
+		<table align="center" class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+			style='border-collapse:collapse;margin: 40pt auto 0 auto;'>
 			<tr style='page-break-inside:avoid;height:418.55pt'>
 				<td width=757 valign=top style='width:568.1pt;padding:0in 5.4pt 0in 5.4pt;
   height:418.55pt'>
-					<p class=Heading><span style='position:relative;z-index:251659264'>
-					<span
-							style='font-size:48.0pt'>Certificate of
-							Training </span>
-							<br>
-							Presented by
-							</p>
-					<p class=MsoNormal align=center style='text-align:center'>&nbsp;</p>
+					<p class=Heading><span style='font-size:48.0pt'>Certificate of Training </span>
+					</p>
+					<p class="Heading">
+						Presented by</p>
 					<p class=MsoNormal align=center style='margin-right:.75pt;text-align:center;
-  background:white'><b><span style='font-size:24.0pt;font-family:"Americana BT","serif"'>New
-								York City Construction Safety Training LLC</span></b></p>
+  background:white'><b><span style='font-size:24.0pt;font-family:"Americana BT","serif"'>
+								Federico Roca CHST ASP</span></b></p>
+					<p class=MsoNormal align=center style='margin-right:.75pt;text-align:center;
+  background:white'><b><span style='font-size:24.0pt;font-family:"Americana BT","serif"'></span></b><b><span
+								style='font-size:18.0pt;font-family:"Americana BT","serif"'>
+
+								Construction Outreach Trainer</span></b></p>
+
 					<p class=Heading><em><span style='font-size:18.0pt;font-family:"Cambria","serif"'>In
 								Recognition of Attendance and Achievement</span></em></p>
 					<p class=MsoNormal align=center style='margin-right:.75pt;text-align:center;
   line-height:150%;background:white'><b><span style='font-size:36.0pt;
-  line-height:150%;font-family:"Americana BT","serif";color:green'>{{student_name}}</span></b></p>
-					<h1 align=center style='text-align:center'>{{object.title}}</h1>
-					<p class=MsoNormal align=center style='text-align:center'><span
-							style='font-size:18.0pt;font-family:"Colonna MT";color:maroon'>
-							Completion Date {{completed_date}}</span></p>
-					<p class=MsoNormal align=center style='margin-right:.75pt;text-align:center;
-  background:white'><b><span style='font-size:20.0pt;font-family:"Americana BT","serif"'>&nbsp;</span></b></p>
-					<p class=MsoNormal align=center style='margin-right:.75pt;text-align:center;
-  background:white'><b><span style='font-size:20.0pt;font-family:"Americana BT","serif"'>Federico
-								Roca CHST ASP</span></b></p>
-					<p class=MsoNormal align=center style='margin-right:.75pt;text-align:center;
-  background:white'><b><span style='font-family:"Americana BT","serif"'>Construction
-								Outreach Trainer in</span></b></p>
-					<p class=MsoNormal align=center style='margin-right:.75pt;text-align:center;
-  background:white'><b><span style='font-family:"Americana BT","serif"'>accordance
+  line-height:150%;font-family:"Americana BT","serif";color:green'> {{student_name}} </span></b></p>
+
+					<h1 align=center> {{object.title}} </h1>
+					<p class=MsoNormal align=center><span style='font-size:18.0pt;font-family:"Colonna MT";
+  color:maroon'></span><span style='font-size:9.0pt;font-family:"Colonna MT";color:maroon'>Completion
+							Date {{completed_date}}</span></p>
+
+
+					<p class=MsoNormal align=right style='margin-right:.75pt;text-align:right;
+  background:white'><b><span style='font-size:20.0pt;font-family:"Americana BT","serif"'>
+							</span></b></p>
+					<p class=MsoNormal align=right style='margin-right:.75pt;text-align:right;
+  background:white;margin-top:15pt;'><b><span style='font-size:20.0pt;font-family:"Americana BT","serif"'>
+							</span></b><b><span style='font-size:16.0pt;font-family:"Americana BT","serif"'>
+								Federico Roca CHST ASP </span></b></p>
+					<p class=MsoNormal align=right style='margin-right:.75pt;text-align:right;
+  background:white'><b><span style='font-family:"Americana BT","serif"'>
+							</span></b><b><span style='font-family:"Americana BT","serif"'>
+								Construction Outreach Trainer in</span></b></p>
+					<p class=MsoNormal align=right style='margin-right:.75pt;text-align:right;
+  background:white'><b><span style='font-family:"Americana BT","serif"'>
+							</span></b><b><span style='font-family:"Americana BT","serif"'>accordance
 								with guidelines provided by OSHA</span></b></p>
-					<p class=MsoNormal align=center style='margin-right:.75pt;text-align:center;
-  background:white'><b><span style='font-family:"Americana BT","serif"'>Authorized
-								Trainer Region II Atlantic OHSA Training Ctr.# 12-00010727</span></b></p>
-					<p class=MsoNormal align=center style='text-align:center'>
-					<img width=313 height=93 id="Picture 9" src="http://127.0.0.1:8000/static/cert-files/image002.png"></p>
-					<p class=MsoNormal align=center style='text-align:center'>&nbsp;</p>
-					<p class=MsoNormal align=center style='text-align:center'>&nbsp;</p>
-					<p class=MsoNormal align=center style='margin-right:.75pt;text-align:center;
-  background:white'>&nbsp;</p>
+					<p class=MsoNormal align=right style='margin-right:.75pt;text-align:right;
+  background:white'><b><span style='font-family:"Americana BT","serif"'>
+							</span></b><b><span style='font-family:"Americana BT","serif"'>Authorized
+								Trainer Region II Atlantic OHSA Training Ctr.# 12-000107272</span></b></p>
+					<p class=MsoNormal align=right style='margin-right:.75pt;text-align:right;
+  background:white;margin-top:4pt;'>
+  <span style='font-size:6pt;font-family:"Americana BT","serif"'>
+								Certificate ID: {{ref_number}}</span>
+						
+					</p>
+
 				</td>
 			</tr>
 		</table>

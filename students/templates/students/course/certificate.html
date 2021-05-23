@@ -16,7 +16,7 @@
         </div>
         <div class="row">
 
-            <div class="col">
+            <div class="col" id="pdfFrame">
                 <iframe class="embed-responsive embed-responsive-1by1"
                     src="{% url 'student_course_certificate_template' object.id %}"></iframe>
             </div>
@@ -31,6 +31,9 @@
 {% endblock %}
 
 {% block scripts %}
+
+<script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+
 <style>
     iframe {
         height: 700px;
