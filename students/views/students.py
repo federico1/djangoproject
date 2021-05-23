@@ -322,7 +322,8 @@ class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
                 ' ' + student.last_name
             completed_date = enrolled.last().completed_date
             context['completed_date'] = completed_date.strftime('%m/%d/%Y')
-
+        
+        context['sign_image'] ='/static/cert-files/image002.png'
         return context
 
     def render_to_response(self, context, **response_kwargs):
@@ -547,8 +548,11 @@ def download_certificate(request, pk):
 
             template_path = 'students/course/certificate_template.html'
 
+            sign_image= os.path.realpath(os.path.dirname('static'))+ '\courses\static\cert-files\image002.png'
+
             context = {'certificate_valid': True,
-                       'student_name': student_name, 'completed_date': completed_date, 'object': course, 'ref_number': ref_number}
+                       'student_name': student_name, 'completed_date': completed_date, 'object': course,
+                        'ref_number': ref_number, 'sign_image':sign_image}
 
             template = get_template(template_path)
             html = template.render(context)
