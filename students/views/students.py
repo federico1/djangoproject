@@ -549,8 +549,10 @@ def download_certificate(request, pk):
             template_path = 'students/course/certificate_template.html'
 
             sign_image = os.path.realpath(os.path.dirname(
-                'static')) + '\courses\static\cert-files\image002.png'
-
+                'static')) + '\courses\static\cert-files\image003.png'
+            
+            sign_image = 'https://construction-safety-nyc.com/static/cert-files/image003.png'
+            
             context = {'certificate_valid': True,
                        'student_name': student_name, 'completed_date': completed_date, 'object': course,
                        'ref_number': ref_number, 'sign_image': sign_image}
