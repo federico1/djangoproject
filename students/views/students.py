@@ -322,8 +322,8 @@ class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
                 ' ' + student.last_name
             completed_date = enrolled.last().completed_date
             context['completed_date'] = completed_date.strftime('%m/%d/%Y')
-        
-        context['sign_image'] ='/static/cert-files/image002.png'
+
+        context['sign_image'] = '/static/cert-files/image002.png'
         return context
 
     def render_to_response(self, context, **response_kwargs):
@@ -548,11 +548,12 @@ def download_certificate(request, pk):
 
             template_path = 'students/course/certificate_template.html'
 
-            sign_image= os.path.realpath(os.path.dirname('static'))+ '\courses\static\cert-files\image002.png'
+            sign_image = os.path.realpath(os.path.dirname(
+                'static')) + '\courses\static\cert-files\image002.png'
 
             context = {'certificate_valid': True,
                        'student_name': student_name, 'completed_date': completed_date, 'object': course,
-                        'ref_number': ref_number, 'sign_image':sign_image}
+                       'ref_number': ref_number, 'sign_image': sign_image}
 
             template = get_template(template_path)
             html = template.render(context)
@@ -603,17 +604,17 @@ def link_callback(uri, rel):
     Convert HTML URIs to absolute system paths so xhtml2pdf can access those
     resources
     """
-    
+
     result = finders.find(uri)
 
     if result:
-        
+
         if not isinstance(result, (list, tuple)):
             result = [result]
         result = list(os.path.realpath(path) for path in result)
         path = result[0]
     else:
-        
+
         sUrl = settings.STATIC_URL        # Typically /static/
         sRoot = settings.STATIC_ROOT      # Typically /home/userX/project_static/
         mUrl = settings.MEDIA_URL         # Typically /media/
