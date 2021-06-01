@@ -21,7 +21,7 @@
           Date: {{course.created|date:"M d, Y" }}
         </h6>
 
-        <div class="mt-3 d-flex flex-row justify-content-center">
+        <div class="mt-3 d-flex flex-row">
           <a class="badge badge-info px-3 py-1" href="{% url "course_edit" course.id %}">Edit Basic</a>
 
           <a class="badge badge-info px-3 py-1 ml-1" href="{% url "course_module_update" course.id %}">Manage
@@ -32,18 +32,22 @@
           {% endif %}
         </div>
 
-        <div class="mt-3 d-flex flex-row justify-content-center">
+        <div class="mt-3 d-flex flex-row">
           <a class="badge badge-info px-3 py-1 link-features" href="javascript:void(0);" pk="{{course.id}}">
             Manage Features
           </a>
+          <a class="badge badge-info px-3 py-1 mx-1" href="{% url "quiz_course" course.id %}">Final Quiz</a>
 
-          <a class="badge badge-primary px-3 py-1 mx-1 link-copy" href="javascript:void(0);" pk="{{course.id}}">Make
+          <a class="badge badge-primary px-3 py-1 link-copy" href="javascript:void(0);" pk="{{course.id}}">Make
             Copy</a>
-          <a class="badge badge-primary px-3 py-1 mx-1 d-none" href="{% url "quiz_course" course.id %}">Quiz</a>
-          <a class="badge badge-danger px-3 py-1 mx-1" href="{% url "course_delete" course.id %}">Delete Course</a>
-        </div>
 
+        </div>
+        <div class="mt-3 d-flex flex-row">
+          <a class="badge badge-danger px-3 py-1 " href="{% url "course_delete" course.id %}">Delete Course</a>
+        </div>
       </div>
+
+
 
       <div class="card-footer text-center">
         <a href="javascript:;" class="btn btn-sm btn-success link-students" pk="{{course.id}}">Students</a>

@@ -381,6 +381,10 @@ def take_quiz(request, pk):
         return redirect('taken_quiz_list')
 
     total_questions = quiz.questions.count()
+
+    if total_questions <=0:
+        return redirect('taken_quiz_list')
+
     unanswered_questions = student.get_unanswered_questions(quiz)
     total_unanswered_questions = unanswered_questions.count()
 

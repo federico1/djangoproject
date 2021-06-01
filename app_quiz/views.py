@@ -17,8 +17,8 @@ def question_add(request, module_id=None):
 
     if request.GET.get('question_id') is not None:
         question_pk = request.GET.get('question_id')
-        question = get_object_or_404(Question, pk=question_pk, quiz=module.quiz)
-
+        question = get_object_or_404(
+            Question, pk=question_pk, quiz=module.quiz)
 
     if module.quiz is None:
         quiz_object = Quiz()
@@ -29,7 +29,7 @@ def question_add(request, module_id=None):
 
         module.quiz = quiz_object
         module.save()
-    
+
     question.quiz = module.quiz
 
     AnswerFormSet = inlineformset_factory(
@@ -55,16 +55,15 @@ def question_add(request, module_id=None):
                 if form_saved.pk is not None and formset.is_valid():
                     formset.save()
                     return redirect('app_add_question', module_id)
-
     else:
         form = QuestionForm(instance=question)
         formset = AnswerFormSet(instance=question)
-    
+
     questions = Question.objects.filter(quiz=module.quiz.id)
 
     return render(request, 'question_add_form.html', {
         'module': module,
-        'questions':questions,
+        'questions': questions,
         'form': form,
         'formset': formset
     })
@@ -76,7 +75,7 @@ def question_delete(request, module_id=None):
         question_pk = request.GET.get('question_id')
         Question.objects.filter(id=question_pk).delete()
         Answer.objects.filter(question=question_pk).delete()
-    
+
     return redirect('app_add_question', module_id)
 
 
@@ -86,8 +85,8 @@ def quiz_course(request, course_id=None):
 
     if request.GET.get('question_id') is not None:
         question_pk = request.GET.get('question_id')
-        question = get_object_or_404(Question, pk=question_pk, quiz=course.quiz)
-
+        question = get_object_or_404(
+            Question, pk=question_pk, quiz=course.quiz)
 
     if course.quiz is None:
         quiz_object = Quiz()
@@ -98,8 +97,12 @@ def quiz_course(request, course_id=None):
 
         course.quiz = quiz_object
         course.save()
-    
+
     question.quiz = course.quiz
+
+    extra_fields = 2
+    if request.GET.get('question_id') is not None:
+        extra_fields = 0
 
     AnswerFormSet = inlineformset_factory(
         Question,
@@ -108,7 +111,8 @@ def quiz_course(request, course_id=None):
         min_num=2,
         validate_min=True,
         max_num=10,
-        validate_max=True
+        validate_max=True,
+        extra=extra_fields
     )
 
     if request.method == 'POST':
@@ -128,12 +132,12 @@ def quiz_course(request, course_id=None):
     else:
         form = QuestionForm(instance=question)
         formset = AnswerFormSet(instance=question)
-    
+
     questions = Question.objects.filter(quiz=course.quiz.id)
 
     return render(request, 'quiz_course.html', {
         'course': course,
-        'questions':questions,
+        'questions': questions,
         'form': form,
         'formset': formset
     })
@@ -147,5 +151,5 @@ def question_delete_generic(request, question_id):
         Question.objects.filter(id=question_pk).delete()
         Answer.objects.filter(question=question_pk).delete()
         result = 1
-    
+
     return HttpResponse(result, content_type='text/plain')

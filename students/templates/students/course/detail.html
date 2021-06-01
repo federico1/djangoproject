@@ -197,15 +197,7 @@
                 </div>
                 <!-- sidebar-menu  -->
 
-                {% if content_completed == True and object.quiz is not None %}
 
-                <div class="sidebar-brand">
-
-                    <a href="{% url "student_course_detail" object.id %}?type=quiz" class="btn btn-dark">
-                        Take Quiz </a>
-                </div>
-
-                {% endif %}
 
 
             </div>
@@ -218,6 +210,11 @@
         <div class="col offset-md-3 mt-2">
 
             <main class="page-content shadow">
+
+                {% if content_completed == True and object.quiz is not None %}
+                <a href="{% url "student_course_detail" object.id %}?type=quiz" class="btn btn-dark btn-final">
+                    Take Final Quiz </a>
+                {% endif %}
 
                 <div class="row">
 
@@ -377,6 +374,8 @@
 
                         {%endif%}
 
+
+
                     </div>
 
                 </div>
@@ -459,7 +458,6 @@
         display: flex;
         flex-direction: row;
     }
-
 
     .digits h3 {
         color: #fff;
@@ -628,6 +626,12 @@
         right: 20px;
         z-index: 999;
         top: -6px;
+    }
+
+    .btn-final {
+        position: absolute;
+        bottom: 10px;
+        left: 61px;
     }
 </style>
 
