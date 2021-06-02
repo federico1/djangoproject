@@ -234,7 +234,7 @@ class Enrollments(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return '{}'.format(self.event_type)
+        return '{}'.format(self.user)
 
 
 class StudentCertificate(models.Model):
@@ -276,7 +276,6 @@ class Evaluation(models.Model):
 
     def __str__(self):
         return '{}'.format(self.form_id)
-
 
 
 class AssessRating(models.Model):

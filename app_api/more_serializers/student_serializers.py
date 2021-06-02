@@ -1,49 +1,29 @@
 from rest_framework import serializers
 from students.models import User, SSTCard
 from app_api.serializers import UserSerializer
-
+from .course_serializers import EnrollmentP2Serializer
+from .quiz_serializers import TakenQuizSerializer
 
 class SSTCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = SSTCard
-        fields = ['card_id', 'card_type', 'qr_code', 'renew_status', 'issued', 'expired']
+        fields = ['card_id', 'card_type', 'qr_code',
+                  'renew_status', 'issued', 'expired']
 
     def to_representation(self, instance):
         self.fields['student'] = UserSerializer(read_only=True)
         return super(SSTCardSerializer, self).to_representation(instance)
 
 
-# class StudentRegisterSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ('username', 'password', 'cell_number', 'email', 'first_name', 'last_name', 'address', 'image')
+class StudentHistorySerializer(serializers.ModelSerializer):
 
-#     def create(self, validated_data):
-#         password = validated_data.pop('password')
-#         user = User(**validated_data)
-#         user.set_password(password)
+    course_enrolled = EnrollmentP2Serializer(read_only=True, many=True)
+    taken_quizzes = TakenQuizSerializer(read_only=True, many=True)
 
-#         user.save()
-#         return user
+    class Meta:
+        model = User
+        fields = ('id', 'first_name', 'last_name',
+                  'username', 'email', 'course_enrolled', 'taken_quizzes')
 
-#     def update(self, instance, validated_data):
-#         instance.first_name = validated_data.get('first_name', instance.first_name)
-#         instance.last_name = validated_data.get('last_name', instance.last_name)
-#         instance.cell_number = validated_data.get('cell_number', instance.cell_number)
-#         instance.email = validated_data.get('email', instance.email)
-#         instance.address = validated_data.get('address', instance.address)
-#         instance.image = validated_data.get('image', instance.image)
-
-#         instance.save()
-
-#         return instance
-
-#     def to_representation(self, instance):
-#         return super(StudentRegisterSerializer, self).to_representation(instance)
-
-#     def __init__(self, *args, **kwargs):
-#         super(UserSerializer, self).__init__(*args, **kwargs)
-
-#         self.fields.pop('user_permissions')
-#         self.fields.pop('password')
-#         self.fields.pop('groups')
+    def to_representation(self, instance):
+        return super(StudentHistorySerializer, self).to_representation(instance)

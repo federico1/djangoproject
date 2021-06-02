@@ -89,4 +89,3 @@ class SSTCardApiView(APIView):
         serializer = SSTCardSerializer(snippets.order_by('-id'), many=True)
 
         return Response(serializer.data)
-

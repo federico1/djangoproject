@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 from django.urls import path
 from rest_framework import routers
 from . import views
-from .more_views import course_views, users_views, chat_views, attendance_views
+from .more_views import course_views, users_views, chat_views, attendance_views, student_views
 
 router = routers.DefaultRouter()
 #router.register('conversations', views.ConversationDetailView)
@@ -65,6 +65,8 @@ urlpatterns = [
     
     path('course-evaluation/', course_views.CourseEvaluationApiView.as_view()),
     path('course-assess-rating/', course_views.CourseRatingApiView.as_view()),
+
+    path('student-history/', student_views.StudentsHistoryApiView.as_view()),
 
     path('save-base64/', views.SaveBase64ImageView),
 

@@ -84,12 +84,14 @@ class CourseTimeLogDetailView(APIView):
 
         snippets = CourseTimeLog.objects.filter(
             user=request.user, course_id=course_id)
-        serializer = course_serializers.CourseTimeLogSerializer(snippets, many=True)
+        serializer = course_serializers.CourseTimeLogSerializer(
+            snippets, many=True)
 
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = course_serializers.CourseTimeLogSerializer(data=request.data)
+        serializer = course_serializers.CourseTimeLogSerializer(
+            data=request.data)
 
         if serializer.is_valid():
 
@@ -114,7 +116,8 @@ class CourseTimeLogDetailView(APIView):
 class AddContentProgressApiView(APIView):
 
     def post(self, request, format=None):
-        serializer = course_serializers.CourseProgressSerializer(data=request.data)
+        serializer = course_serializers.CourseProgressSerializer(
+            data=request.data)
         if serializer.is_valid():
             content = serializer.validated_data['content']
 
@@ -148,7 +151,8 @@ class EnrollmentViewset(viewsets.ViewSet):
         if course_id is not None:
             snippets = snippets.filter(course_id=course_id)
 
-        serializer = course_serializers.EnrollmentSerializer(snippets, many=True)
+        serializer = course_serializers.EnrollmentSerializer(
+            snippets, many=True)
 
         return Response(serializer.data)
 
@@ -184,11 +188,13 @@ class CourseFeatureApiView(APIView):
         if course_id:
             snippets = CourseFeature.objects.filter(course_id=course_id)
 
-        serializer = course_serializers.CourseFeatureSerializer(snippets, many=True)
+        serializer = course_serializers.CourseFeatureSerializer(
+            snippets, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = course_serializers.CourseFeatureSerializer(data=request.data)
+        serializer = course_serializers.CourseFeatureSerializer(
+            data=request.data)
 
         if serializer.is_valid():
 
@@ -226,7 +232,8 @@ class CourseEvaluationApiView(APIView):
 
     def get(self, request, format=None):
         snippets = Evaluation.objects.all()
-        serializer = course_serializers.EvaluationSerializer(snippets, many=True)
+        serializer = course_serializers.EvaluationSerializer(
+            snippets, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
@@ -249,7 +256,8 @@ class CourseRatingApiView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = course_serializers.RatingSerializer(data=request.data, many=True)
+        serializer = course_serializers.RatingSerializer(
+            data=request.data, many=True)
 
         if serializer.is_valid():
 

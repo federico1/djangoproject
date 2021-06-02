@@ -161,10 +161,12 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body vh-100">
         <div class="row">
           <div class="col-md-4">
-            <div class="list-group" id="studentsEnrollList">
+            <div id="studentsPanel">
+              <div class="list-group" id="studentsEnrollList">
+              </div>
             </div>
           </div>
           <div class="col-md-8">
@@ -187,25 +189,51 @@
 
 {% verbatim %}
 <script type="text/x-handlebars-template" id='studentCourseProgressTemplate'>
+
   <table class="table table-bordered">
+    <tr><td>Final Quiz</td><td>
+    
+    
+   {{#ifCond final_quiz.score '>=' 0}}
+    <span>{{final_quiz.score}}%</span>
+    {{/ifCond}}
+
+  {{#ifCond final_quiz.score '<' 0}}
+    <span>Not Taken</span>
+    {{/ifCond}}
+    </td></tr>
+  </table>
+
+  <table class="table table-bordered">
+   <thead>
+    <tr><th>Status</th><th>Action</th><th>Date</th></tr>
+   </thead>
+       <tbody>
           <tr>
+            <td>
+
+           {{#if is_completed}}
+          <span>Completed</span>
+          {{else}}
+            <span> Not Finished Yet</span>
+          {{/if}}
+
+          </td>
           <td>
            {{#if is_completed}}
           <button class="btn btn-warning btn-sm" type="button" id="btnMarkInCompleteCourse" target="{{id}}">
             Mark incomplete
           </button>
-
-          <span>Completed</span>
           {{else}}
            <button class="btn btn-info btn-sm" type="button" id="btnMarkCompleteCourse" target="{{id}}">
             Mark complete
            </button>
-            <span> Not Finished Yet</span>
           {{/if}}
 
           </td><td class="text-center">
           {{{dateFormat}}}
           </td></tr>
+       </tbody>
     </table>
             
 </script>
@@ -216,19 +244,48 @@
 
 {% block scripts %}
 
+
 <script>
   Handlebars.registerHelper('ifEquals', function (arg1, arg2, options) {
     return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
   });
 
+  Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
+
+    switch (operator) {
+      case '==':
+        return (v1 == v2) ? options.fn(this) : options.inverse(this);
+      case '===':
+        return (v1 === v2) ? options.fn(this) : options.inverse(this);
+      case '!=':
+        return (v1 != v2) ? options.fn(this) : options.inverse(this);
+      case '!==':
+        return (v1 !== v2) ? options.fn(this) : options.inverse(this);
+      case '<':
+        return (v1 < v2) ? options.fn(this) : options.inverse(this);
+      case '<=':
+        return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+      case '>':
+        return (v1 > v2) ? options.fn(this) : options.inverse(this);
+      case '>=':
+        return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+      case '&&':
+        return (v1 && v2) ? options.fn(this) : options.inverse(this);
+      case '||':
+        return (v1 || v2) ? options.fn(this) : options.inverse(this);
+      default:
+        return options.inverse(this);
+    }
+  });
+
   Handlebars.registerHelper("get_name", function (options) {
 
-    var r = this.user.username;
+    var r = this.username;
 
-    if (this.user.first_name && this.user.last_name) {
-      r = this.user.first_name + " " + this.user.last_name;
-    } else if (this.user.email) {
-      r = this.user.email;
+    if (this.first_name && this.last_name) {
+      r = this.first_name + " " + this.last_name;
+    } else if (this.email) {
+      r = this.email;
     }
 
     return new Handlebars.SafeString(r);
@@ -259,7 +316,7 @@
 
         var id = $("#studentsEnrolledModal").attr('data-id');
 
-        $.get('/api/course-enrollment/?format=json', {
+        $.get('/api/student-history/?format=json', {
           course: id
         }, function (response) {
           studentsList = response;
@@ -337,9 +394,26 @@
 
           var itemObject = JSON.parse(item);
 
+          var courseId = $("#studentsEnrolledModal").attr('data-id');
+
+          var courseTaken = itemObject.course_enrolled.find(a => a.course.id == courseId);
+
+          courseTaken.final_quiz = {
+            score: -1
+          };
+
+          var finalQuiz = itemObject.taken_quizzes.find(a => a.quiz == courseTaken.course.quiz);
+
+          if (finalQuiz) {
+            courseTaken.final_quiz = finalQuiz;
+          }
+
+          console.log(itemObject);
+          console.log(courseTaken);
+
           var source = document.getElementById("studentCourseProgressTemplate").innerHTML;
           var template = Handlebars.compile(source);
-          $("#studentProgressPanel").html(template(itemObject));
+          $("#studentProgressPanel").html(template(courseTaken));
 
         });
 
@@ -368,6 +442,17 @@
           var id = $("#studentsEnrolledModal").attr('data-id');
 
           getStudents();
+
+          $('#studentsEnrolledModal .modal-content').css({
+            'max-height': $(window).height() * 0.9,
+          });
+
+          var h = $('#studentsEnrolledModal .modal-body').height();
+
+          $('#studentsPanel').css({
+            'max-height': h + 'px',
+            'overflow': 'hidden auto'
+          });
 
         });
 
@@ -472,7 +557,6 @@
 
     });
 
-
     $('#copyModal form').ajaxForm({
 
       beforeSubmit: function () {
@@ -521,6 +605,7 @@
 
       }
     });
+
 
   });
 

@@ -21,6 +21,17 @@ class EnrollmentSerializer(serializers.ModelSerializer):
         return super(EnrollmentSerializer, self).to_representation(instance)
 
 
+class EnrollmentP2Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Enrollments
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        #self.fields['user'] = UserSerializer(read_only=True)
+        self.fields['course'] = CourseCoreSerializer(read_only=True)
+        return super(EnrollmentP2Serializer, self).to_representation(instance)
+
+
 class CourseSerializer(serializers.ModelSerializer):
     total_modules = serializers.IntegerField()
     course_enrolled = EnrollmentSerializer(many=True)
@@ -40,7 +51,7 @@ class CourseCoreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['id', 'slug', 'subject', 'title','overview']
+        fields = ['id', 'slug', 'subject', 'title', 'overview', 'quiz']
 
 
 class CourseTimeLogSerializer(serializers.ModelSerializer):
@@ -100,4 +111,3 @@ class RatingSerializer(serializers.ModelSerializer):
         self.fields['student'] = UserSerializer(read_only=True)
         self.fields['course'] = CourseCoreSerializer(read_only=True)
         return super(RatingSerializer, self).to_representation(instance)
-
