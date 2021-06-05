@@ -635,7 +635,6 @@
     }
 </style>
 
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"
     integrity="sha512-4ze/a9/4jqu+tX9dfOqJYSvyYd5M6qum/3HpCLr+/Jqf0whc37VUbkpNGHR7/8pSnCFw47T1fmIpwBV7UySh3g=="
     crossorigin="anonymous"></script>
@@ -1278,7 +1277,6 @@
 
             };
 
-
             var saveBaseImage = function () {
 
                 var imgSrc = $(".pic-output img").attr('src');
@@ -1349,7 +1347,11 @@
 
                 $("div").on("click", '#btnMarkAttendance', function (e) {
                     e.stopPropagation();
-                    $("#attendanceModal").modal('show');
+
+                    $("#btnMarkAttendance").attr('disabled', true);
+                    
+                    markAttendance(null);
+                    //$("#attendanceModal").modal('show');
                 });
 
                 $("div").on("click", '#btnTakePicture', function (e) {

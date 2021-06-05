@@ -1,5 +1,5 @@
 {% extends "teacher_base.html" %}
-
+{% load staticfiles %}
 {% block title %}View Course{% endblock %}
 
 {% block nav %}
@@ -308,38 +308,45 @@
             </div>
             <div class="modal-body">
 
-                <table class="table table-bordered">
+                <table class="table table-bordered" id="tblStudents">
                     <thead>
                         <tr>
-                            <th></th>
+                            <th>ID</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Attendance</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         {% for m in object.students.all %}
 
-                        <tr id="{{m.id}}">
+                        <tr id="{{m.id}}" data-action="{{m.id}}">
 
                             <td>{{m.id}}</td>
                             <td>
                                 {{m.first_name}} {{m.last_name}} </td>
                             <td>
-                                {{m.email}} </td>
+
+                            {% if m.email %} 
+                            {{m.email}}
+                            {%else%}
+                            {{m.username}}
+                            {%endif%}
+                                 </td>
 
                             <td class="attend">
+                            N/A
                             </td>
 
-                        </tr>
-                        <tr data-action="{{m.id}}">
-                            <td colspan="4" class="text-right">
+                              <td>
                                 <button class="btn btn-secondary btn-sm link-mark-attendance" pk="{{m.id}}">
                                     Mark Attendance</button>
                             </td>
-                        </tr>
 
+                        </tr>
+                      
                         {% endfor %}
                     </tbody>
                 </table>
@@ -372,6 +379,8 @@
 {% block scripts %}
 
 <link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet" />
+<link href="{% static "/sb-admin/vendor/datatables/dataTables.bootstrap4.min.css" %}" rel="stylesheet">
+
 
 <style>
     .sidebar-wrapper {
@@ -514,6 +523,9 @@
     crossorigin="anonymous"></script>
 
 <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
+
+  <script src="{% static "/sb-admin/vendor/datatables/jquery.dataTables.min.js" %}"></script>
+  <script src="{% static "/sb-admin/vendor/datatables/dataTables.bootstrap4.min.js" %}"></script>
 
 <script>
     $("#top-nav").hide();
@@ -844,6 +856,9 @@
                     }
 
                 });
+
+                 $("#tblStudents").DataTable();
+                 
             };
 
             var registerEvent = function () {
@@ -868,6 +883,8 @@
                 $('#studentListModal').on('shown.bs.modal', function () {
                     getTodayAttendance();
                 });
+
+               
 
             };
 
