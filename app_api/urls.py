@@ -67,6 +67,7 @@ urlpatterns = [
     path('course-assess-rating/', course_views.CourseRatingApiView.as_view()),
 
     path('student-history/', student_views.StudentsHistoryApiView.as_view()),
+    path('quiz-details/', student_views.QuizApiView.as_view()),
 
     path('save-base64/', views.SaveBase64ImageView),
 
