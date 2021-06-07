@@ -38,11 +38,16 @@
           </a>
           <a class="badge badge-info px-3 py-1 mx-1" href="{% url "quiz_course" course.id %}">Final Quiz</a>
 
-          <a class="badge badge-primary px-3 py-1 link-copy" href="javascript:void(0);" pk="{{course.id}}">Make
-            Copy</a>
+          {% if course.quiz %}
+          <a class="badge badge-info px-3 py-1 mx-1 link-quiz-summary" data-quiz="{{course.quiz.id}}"
+            href="javascript:void(0);">Quiz Summary</a>
+          {%endif%}
 
         </div>
+
         <div class="mt-3 d-flex flex-row">
+          <a class="badge badge-primary px-3 py-1 link-copy" href="javascript:void(0);" pk="{{course.id}}">Make
+            Copy</a>
           <a class="badge badge-danger px-3 py-1 " href="{% url "course_delete" course.id %}">Delete Course</a>
         </div>
       </div>
@@ -178,6 +183,33 @@
   </div>
 </div>
 
+<div id="finalQuizSummaryModal" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Quiz Summary</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body vh-100" style="overflow: hidden auto;">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Quiz</th>
+              <th>Correct Selected</th>
+              <th>Wrong Selected</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 {% verbatim %}
 <script type="text/x-handlebars-template" id='studentEnrollItemTemplate'>
@@ -282,6 +314,21 @@
 
     {{/each}}
   </ul>
+</script>
+{% endverbatim %}
+
+
+{% verbatim %}
+<script type="text/x-handlebars-template" id='quizQuestionItemTemplate'>
+
+  {{#each questions}}
+    <tr>
+    <td>{{text}}</td>
+     <td class="correct">0</td>
+      <td class="wrong">0</td>
+     <tr>
+    {{/each}}
+ 
 </script>
 {% endverbatim %}
 
@@ -429,11 +476,42 @@
 
           $(student.quiz_answers).each(function (ix, item) {
 
-            $(".answers li[data-id='" + item.answer + "']").append('<span class="badge badge-primary">Answered</span>');
+            $(".answers li[data-id='" + item.answer + "']").append(
+              '<span class="badge badge-primary">Answered</span>');
           });
 
         });
       };
+
+      var getQuizDetails2 = function () {
+
+        var id = $("#finalQuizSummaryModal").attr('data-id');
+
+        $.get('/api/quiz-details/?format=json', {
+          id: id
+        }, function (response) {
+
+          var source = document.getElementById("quizQuestionItemTemplate").innerHTML;
+          var template = Handlebars.compile(source);
+          $("#finalQuizSummaryModal tbody").html(template(response));
+
+
+          $("#finalQuizSummaryModal tbody tr").each(function () {
+
+            var x = Math.floor(Math.random() * 100) + 1;
+            var y = Math.floor(Math.random() * 100) + 1;
+
+            $(this).find(".correct").html(x);
+            $(this).find(".wrong").html(y);
+
+            if (y > x) {
+              $(this).addClass('bg-danger');
+            }
+
+          });
+        });
+      };
+
 
       var registerEvent = function () {
 
@@ -513,6 +591,23 @@
           updateCourseCompleteStatus(item, false);
 
         });
+
+        $("div").on("click", ".link-quiz-summary", function (e) {
+          e.stopPropagation();
+
+          var id = $(this).attr('data-quiz');
+
+          $("#finalQuizSummaryModal").attr('data-id', id);
+
+          $("#finalQuizSummaryModal").modal({
+            show: true,
+            backdrop: 'static'
+          });
+
+          getQuizDetails2();
+
+        });
+
 
         $('#studentsEnrolledModal').on('shown.bs.modal', function (e) {
 
