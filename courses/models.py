@@ -17,6 +17,9 @@ class Subject(models.Model):
     class Meta:
         ordering = ['title']
 
+    def get_absolute_url(self):
+        return f'/course/subject/{self.slug}'
+
     def __str__(self):
         return self.title
 
@@ -40,6 +43,9 @@ class Course(models.Model):
 
     class Meta:
         ordering = ['-created']
+
+    def get_absolute_url(self):
+        return f'/course/{self.slug}'
 
     def __str__(self):
         return self.title

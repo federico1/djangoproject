@@ -20,6 +20,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 from django.conf.urls import url
+from django.contrib.sitemaps.views import sitemap
+
+from .sitemap import StaticViewSitemap, SubjectsSitemap, CourseSitemap
+sitemaps = {
+    'static': StaticViewSitemap,
+    'subjects':SubjectsSitemap,
+    'course':CourseSitemap
+}
 
 
 urlpatterns = [
@@ -36,6 +44,7 @@ urlpatterns = [
     path('dashboard/', include('app_admin.urls')),
     url(r'api/', include('app_api.urls')),
     path('', include('app_public.urls')),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
 ]
 
 if settings.DEBUG:
