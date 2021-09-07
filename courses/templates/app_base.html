@@ -246,7 +246,7 @@
 
         function getSubjects() {
 
-            $(".courses-menu ul").css('min-width', 315);
+            $(".courses-menu ul").css('min-width', 380);
 
             $.get('/api/subjects', {}, function (response) {
                 $(response).each(function (indx, item) {
