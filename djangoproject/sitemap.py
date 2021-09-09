@@ -7,7 +7,7 @@ class StaticViewSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
-        items_list = ['about_detail', 'legal_detail', 'contact_detail', 'student_manual_detail', 'faq', 'sst_verify']
+        items_list = ['course_list','about_detail', 'legal_detail', 'contact_detail', 'student_manual_detail', 'faq', 'sst_verify']
         items_list = items_list + ['login', 'courses_list']
         return items_list
     
