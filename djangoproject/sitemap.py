@@ -3,8 +3,7 @@ from django.shortcuts import reverse
 from courses.models import Course, Subject
 
 class StaticViewSitemap(Sitemap):
-    changefreq = "weekly"
-    priority = 0.5
+    changefreq = "hourly"
 
     def items(self):
         items_list = ['course_list', 'about_detail', 'legal_detail', 'contact_detail', 'student_manual_detail', 'faq', 'sst_verify']
@@ -15,8 +14,7 @@ class StaticViewSitemap(Sitemap):
         return reverse(item)
 
 class SubjectsSitemap(Sitemap):
-    changefreq = "weekly"
-    priority = 0.5
+    changefreq = "hourly"
 
     def items(self):
         subject_list = Subject.objects.all()
@@ -24,8 +22,7 @@ class SubjectsSitemap(Sitemap):
 
 
 class CourseSitemap(Sitemap):
-    changefreq = "weekly"
-    priority = 0.5
+    changefreq = "hourly"
 
     def items(self):
         item = Course.objects.all()
