@@ -3,13 +3,21 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="{% block meta_desc %} Construction site and safety training courses to qualify you to work in the NY. NYC Construction Safety Training offers OSHA 10-Hour, 30-Hour, Supported Scaffold, Site Safety Manager, Concrete Safety, CHST, ASP, CSP, SMS and STSC training online for construction and general industry. We provide bulk discounts. {% endblock %}">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="robots" content="all">
+
     <title> Online - NYC CONSTRUCTION SAFETY TRAINING {% block title %} {% endblock %}</title>
     <link rel="icon" type="image/png" href="{% static '/images/logo5.png' %}">
     <link href="{% static '/css/base.css' %}" rel="stylesheet">
     <link href="{% static '/css/style.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static "/plugins/toastr/toastr.min.css" %}">
-
+    <link rel="canonical" href="https://construction-safety-nyc.com{{ request.path }}" />
+        
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-HBMW2QHSJ4"></script>
     <script>
@@ -77,7 +85,7 @@
                     <a class="nav-brand" href="/">
 
                         <img src="{% static '/images/logo5.png' %}" title="NYC CONSTRUCTION SAFETY TRAINING"
-                            style="height: 62px;" alt="">
+                            style="height: 62px;" alt="logo">
                         CONSTRUCTION SAFETY TRAINING
                     </a>
 
@@ -176,7 +184,7 @@
                         </p>
 
                         <div class="mt-4">
-                        <img src='{% static "/images/iacet.jpg" %}' width="300" />
+                        <img src='{% static "/images/iacet.jpg" %}' width="300" alt="iacet" />
                         </div>
                     </div>
                 </div>
