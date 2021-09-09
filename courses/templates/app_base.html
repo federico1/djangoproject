@@ -13,13 +13,15 @@
     <meta name="robots" content="all">
     <title> Online - NYC CONSTRUCTION SAFETY TRAINING {% block title %} {% endblock %}</title>
     <link rel="icon" type="image/png" href="{% static '/images/logo5.png' %}">
-
     <link href="{% static '/css/base.css' %}" rel="preload" as="style" onload="this.rel='stylesheet'">
     <noscript>
         <link rel="stylesheet" href="{% static '/css/base.css' %}"></noscript>
-
+    <link href="{% static '/css/style.css' %}" rel="preload" as="style" onload="this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="{% static '/css/style.css' %}"></noscript>
+        
     <!-- <link href="{% static '/css/base.css' %}" rel="stylesheet"> -->
-    <link href="{% static '/css/style.css' %}" rel="stylesheet">
+    <!-- <link href="{% static '/css/style.css' %}" rel="stylesheet"> -->
     <link rel="stylesheet" href="{% static "/plugins/toastr/toastr.min.css" %}">
     <link rel="canonical" href="https://construction-safety-nyc.com{{ request.path }}" />
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -524,7 +526,6 @@
 </head>
 
 <body>
-
     <!-- ##### Header Area Start ##### -->
     <header class="header-area">
         <!-- Top Header Area -->
