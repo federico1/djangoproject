@@ -13,7 +13,7 @@
     <meta name="robots" content="all">
     <title> Online - NYC CONSTRUCTION SAFETY TRAINING {% block title %} {% endblock %}</title>
     <link rel="icon" type="image/png" href="{% static '/images/logo5.png' %}">
-    <link href="{% static '/css/base.css' %}" rel="stylesheet">
+    <link href="{% static '/css/base.css' %}" rel="stylesheet" media="print" onload="this.media='all'; this.onload=null;">
     <link href="{% static '/css/style.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static "/plugins/toastr/toastr.min.css" %}">
     <link rel="canonical" href="https://construction-safety-nyc.com{{ request.path }}" />
