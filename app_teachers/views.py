@@ -15,6 +15,7 @@ from django.db.models import Count
 from django.core.cache import cache
 from django.http import HttpResponse
 from django.utils.text import slugify
+from django.core import serializers
 
 from courses.models import Subject, Course, Module, Content, CourseProgress
 from .forms import ModuleFormSet
@@ -36,7 +37,7 @@ class OwnerEditMixin(object):
 
 class OwnerCourseMixin(OwnerMixin, LoginRequiredMixin):
     model = Course
-    fields = ['subject', 'title', 'slug', 'overview']
+    fields = ['subject', 'title', 'slug', 'overview','is_free', 'price', 'discounted_price', 'owner_id']
     success_url = reverse_lazy('manage_course_list')
 
 
@@ -48,6 +49,11 @@ class OwnerCourseEditMixin(OwnerCourseMixin, OwnerEditMixin):
 
 class ManageCourseListView(OwnerCourseMixin, ListView):
     template_name = 'manage/course/list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object_json'] = serializers.serialize('json', self.object_list)
+        return context
 
 
 class CourseCreateView(PermissionRequiredMixin,

@@ -34,6 +34,10 @@ class Course(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     overview = models.TextField()
+    is_free = models.BooleanField(default=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2, default=None, null=True)
+    discounted_price = models.DecimalField(max_digits=6, decimal_places=2, default=None, null=True)
+
     created = models.DateTimeField(auto_now_add=True)
     students = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="courses_joined",
                                       through='Enrollments')

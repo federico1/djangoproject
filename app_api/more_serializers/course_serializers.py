@@ -39,7 +39,7 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ['id', 'slug', 'subject', 'title',
-                  'overview', 'total_modules', 'owner', 'course_enrolled']
+                  'overview', 'total_modules', 'owner', 'course_enrolled','price','discounted_price', 'is_free']
 
     def to_representation(self, instance):
         self.fields['owner'] = UserSerializer(read_only=True)
@@ -52,6 +52,13 @@ class CourseCoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ['id', 'slug', 'subject', 'title', 'overview', 'quiz']
+
+
+class CoursePriceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Course
+        fields = ['id', 'price', 'is_free', 'discounted_price']
 
 
 class CourseTimeLogSerializer(serializers.ModelSerializer):
