@@ -1,24 +1,16 @@
 {% extends "app_base.html" %}
 {% load staticfiles %}
-
 {% block title %}
 - FAQ
 {% endblock %}
-
 {% block content %}
-
-<div class="breadcumb-area">
-
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">NYC CONSTRUCTION SAFETY TRAINING - FAQ</li>
-        </ol>
-    </nav>
-</div>
-
-<div class="regular-page-area section-padding-50">
+<div class="home-courses">
     <div class="container">
+        <div class="row mb-4">
+            <div class="col text-center">
+                <h3>Login</h3>
+            </div>
+        </div>
         <div class="row">
             <div class="col-12">
                 <div class="page-content">
@@ -35,7 +27,6 @@
                             </a>.
                         </div>
                     </div> <!-- end card -->
-
                     <div class="card mt-2">
                         <div class="card-header">
                             <strong>
@@ -53,8 +44,6 @@
                         </div>
                     </div>
                     <!-- end card -->
-
-
                     <div class="card mt-2">
                         <div class="card-header">
                             <strong>
@@ -73,7 +62,6 @@
                         </div>
                     </div>
                     <!-- end card -->
-
                     <div class="card mt-2">
                         <div class="card-header">
                             <strong>
@@ -81,17 +69,14 @@
                             </strong>
                         </div>
                         <div class="card-body">
-
                             Site Safety Training (SST) Card is a card that is issued by a Department of Buildings (DOB)
                             approved course provider to those who have completed a required amount of training.
                             To check if you are qualified for a SST Card, please <a href="{% url 'sst_verify' %}">
                                 <strong>click here</strong>
                             </a>.
-
                         </div>
                     </div>
                     <!-- end card -->
-
                     <div class="card mt-2">
                         <div class="card-header">
                             <strong>
@@ -99,18 +84,14 @@
                             </strong>
                         </div>
                         <div class="card-body">
-
                             SST Cards may be issued by any NYC Department of Buildings SST course provider that meets
                             the requirements specified in the following documentation released by the NYC DOB Card
                             Issuance Requirements, please <a href="{% url 'student_registration' %}">
                                 <strong>click here</strong>
                             </a>.
-
-
                         </div>
                     </div>
                     <!-- end card -->
-
                     <div class="card mt-2">
                         <div class="card-header">
                             <strong>
@@ -118,7 +99,6 @@
                             </strong>
                         </div>
                         <div class="card-body">
-
                             If you are qualified for an SST Card visit
                             <a href="https://construction-safety-nyc.com/">construction-safety-nyc.com</a>
                             or, please <a href="{% url 'student_registration' %}">
@@ -127,7 +107,6 @@
                         </div>
                     </div>
                     <!-- end card -->
-
                     <div class="card mt-2">
                         <div class="card-header">
                             <strong>
@@ -135,7 +114,6 @@
                             </strong>
                         </div>
                         <div class="card-body">
-
                             You can register for Occupational Safety and Health Administration, OSHA 10 here at NYC
                             Construction Safety Training, LLC.
                             To view our OSHA 10 course, please <a href="{% url 'student_registration' %}">
@@ -144,7 +122,6 @@
                         </div>
                     </div>
                     <!-- end card -->
-
                     <div class="card mt-2">
                         <div class="card-header">
                             <strong>
@@ -152,7 +129,6 @@
                             </strong>
                         </div>
                         <div class="card-body">
-
                             You can register for Occupational Safety and Health Administration, OSHA 30 here at NYC
                             Construction Safety Training, LLC. To view our OSHA 30 course, please <a
                                 href="{% url 'student_registration' %}">
@@ -161,22 +137,15 @@
                         </div>
                     </div>
                     <!-- end card -->
-
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
 {% endblock %}
-
 {% block scripts %}
-
 <style>
-
 </style>
-
 <script>
     $(document).ready(function () {
 

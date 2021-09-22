@@ -1,5 +1,4 @@
 {% extends "app_base.html" %}
-
 {% block title %}
 {% if subject %}
 {{ subject.title }} courses
@@ -7,34 +6,45 @@
 All courses
 {% endif %}
 {% endblock %}
-
 {% block content %}
-
-<div class="container-fluid">
-
-    <div class="row">
-        <div class="col-md-3">
-            <div class="list-group mt-2">
-                <a href="{% url "courses_list" %}" class="list-group-item list-group-item-secondary">
-                 All 
-                </a>
-
-                {% for s in subjects %}
+<div class="home-courses">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col text-center">
+                <h3>Courses</h3>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <select class="form-control" id="ddlCategory">
+                    <option value="{% url "courses_list" %}">All Courses</option>
+                    {% for s in subjects %}
+                    <option  {% if subject == s %} selected {% endif %} value="{% url "course_list_subject" s.slug %}">{{ s.title }} ({{ s.total_courses }})
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-4 d-none">
+                <div class="list-group mt-2">
+                    <a href="{% url "courses_list" %}" class="list-group-item list-group-item-secondary">
+                        All
+                    </a>
+                    {% for s in subjects %}
                     <a class="list-group-item list-group-item-action {% if subject == s %} list-group-item-success {% endif %}"
                         href="{% url "course_list_subject" s.slug %}">
                         <span>{{ s.title }}</span>
                         <span class="badge badge-pill badge-primary">{{ s.total_courses }}</span>
                     </a>
-                {% endfor %}
-
-              </div>
-
-              <div class="list-group mt-2 d-none">
-                <a href="{% url "courses_list" %}" class="list-group-item list-group-item-secondary">
-                 All 
-                </a>
-
-                {% for s in instructors %}
+                    {% endfor %}
+                </div>
+                <div class="list-group mt-2 d-none">
+                    <a href="{% url "courses_list" %}" class="list-group-item list-group-item-secondary">
+                        All
+                    </a>
+                    {% for s in instructors %}
                     <a class="list-group-item list-group-item-action" href="{% url "courses_list" %}?teacher={{s.id}}">
                         <span>
                             {% if s.first_name %}
@@ -42,64 +52,76 @@ All courses
                             {%else%}
                             {{ s.username }}
                             {% endif %}
-                           
                         </span>
                         <span class="badge badge-pill badge-primary">{{ s.total_courses }}</span>
                     </a>
-                {% endfor %}
-
-              </div>
-
-        
-        </div>
-        <div class="col-md-9">
-            <main class="page-content">
-                <div class="row">
-                    {% for course in courses %}
-                    {% with subject=course.subject %}
-                    <div class="col-12 col-md-6 col-lg-6">
-                        <div class="single-popular-course mb-100 wow fadeInUp" data-wow-delay="250ms">
-
-                            <div class="course-content">
-                                <strong>
-                                    {{ course.title }}
-                                </strong>
-                                <div class="meta d-flex align-items-center">
-                                    <span><i class="fa fa-circle" aria-hidden="true"></i></span>
-                                    <a href="{% url "course_list_subject" subject.slug %}">{{ subject }}</a>
-                                </div>
-                                <p class="d-none"> Instructor:
-                                    {% if course.owner.get_full_name %}
-                                    {{ course.owner.get_full_name }}
-                                    {% else %}
-                                    {{ course.owner.username }}
-                                    {% endif %}
-                                    </p>
-                                <p> {{ course.total_modules }} Modules.</p>
-                            </div>
-
-                            <div class="seat-rating-fee d-flex justify-content-between">
-                                <div class="seat-rating h-100 d-flex align-items-center">
-
-                                </div>
-                                <div class="course-fee h-100">
-                                    <a href="{% url "course_detail" course.slug %}" class="free">View Course</a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-12">
+                <main class="page-content">
+                    <div class="row">
+                        {% for course in courses %}
+                        {% with subject=course.subject %}
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card home-course">
+                                <div class="card-body">
+                                    <a href="{% url "course_detail" course.slug %}">
+                                        <img class="card-img w-9 h-9 br-7 mb-4" src="/static/fe_v1/img/course.png"
+                                            alt="{{ course.title }}">
+                                    </a>
+                                    <h4 class="card-title">
+                                        <a href="{% url "course_detail" course.slug %}" title="{{ course.title }}"
+                                            class="text-dark">
+                                            {{ course.title |slice:"0:30"  }} ..
+                                        </a> </h4>
+                                    <h6 class="card-subtitle mb-2 text-muted small">
+                                        <a href="{% url "course_list_subject" subject.slug %}"
+                                            class="text-info">{{subject}}</a>
+                                    </h6>
+                                    <div class="buy d-flex justify-content-between align-items-center">
+                                        <div class="price text-success">
+                                            <h5 class="mt-4">
+                                                {% if course.is_free %}
+                                                Free
+                                                {%elif course.discounted_price > 0 %}
+                                                ${{course.discounted_price}} <span
+                                                    class="ml-2 text-info"><s>${{course.price}}</s></span></h5>
+                                            {% else %}
+                                            {{course.price}}
+                                            {% endif %}
+                                        </div>
+                                        {% if course.is_free%}
+                                        <a href="{% url "course_detail" course.slug %}"
+                                            class="btn btn-orange btn-sm mt-3"><i class="fa fa-list-alt"></i>
+                                            View Course
+                                        </a>
+                                        {% else %}
+                                        <a href="#" class="btn btn-orange btn-sm mt-3"><i class="fa fa-plus"></i>
+                                            Add to
+                                            Cart</a>
+                                        {% endif %}
+                                    </div>
+                                    <span class="badge badge-info">Modules ({{ course.total_modules }})</span>
                                 </div>
                             </div>
                         </div>
+                        {% endwith %}
+                        {% endfor %}
                     </div>
-                    {% endwith %}
-
-                    {% endfor %}
-                </div>
-            </main>
+                </main>
+            </div>
         </div>
     </div>
-
 </div>
-
 {% endblock %}
-
-{% block domready %}
-
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        $("#ddlCategory").change(function () {
+            var val = $(this).val();
+            window.location.href = val;
+        });
+    });
+</script>
 {% endblock %}

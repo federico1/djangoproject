@@ -1,78 +1,85 @@
 {% extends "app_base.html" %}
 {% load staticfiles %}
-
 {% block title %} {% endblock %}
-
 {% block content %}
-
 <section class="hero-area bg-img bg-overlay-2by5" style='background-image: url("{% static "/images/bg2.jpg" %}");'>
     <div class="container h-100">
         <div class="row h-100 align-items-center">
             <div class="col-12">
                 <div class="hero-content text-center">
                     <h2>BCSP EXAM-PREP COURSES</h2>
-                    <a href="{% url 'courses_list' %}" class="btn clever-btn">Browse Courses</a>
-                </div>
-            </div>
-        </div>_Prep
-    </div>
-</section>
-
-<section class="popular-courses-area section-padding-100-0"
-    style="background-image: url({% static "/images/texture.png" %});">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="section-heading">
-                    <h3>Latest Online Courses</h3>
+                    <a href="{% url 'courses_list' %}" class="btn btn-orange">Browse Courses</a>
                 </div>
             </div>
         </div>
+    </div>
+</section>
+<section class="home-courses">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col text-center">
+                <h3>Latest Online Courses</h3>
+            </div>
+        </div>
         <div class="row" id="coursesList">
-
-
         </div>
     </div>
 </section>
 {% verbatim %}
-
 <script type="text/x-handlebars-template" id='courseItemTemplate'>
-    <div class="col-12 col-md-6 col-lg-4">
-        <div class="single-popular-course mb-100 wow fadeInUp" data-wow-delay="250ms">
-
-            <div class="course-content">
-                <strong>
-                    {{title}}
-                </strong>
-                <div class="meta d-flex align-items-center">
-                    <span><i class="fa fa-circle" aria-hidden="true"></i></span>
-                    <a href="/course/subject/{{subject.slug}}">{{subject.title}}</a>
+    <div class="col-md-6 col-lg-4 mb-3">
+                    <div class="card home-course">
+                        <div class="card-body">
+                         <a href="/course/{{slug}}">
+                            <img class="card-img w-9 h-9 br-7 mb-4" src="/static/fe_v1/img/course.png" alt="{{title}}">
+                            </a>
+                            <h4 class="card-title">  <a href="/course/{{slug}}" title="{{title}}" class="text-dark">{{trim_title}}</a> </h4>
+                            <h6 class="card-subtitle mb-2 text-muted small">
+                             <a href="/course/subject/{{subject.slug}}" class="text-info">{{subject.title}}</a>
+                            </h6>
+                            <div class="buy d-flex justify-content-between align-items-center">
+                                <div class="price text-success">
+                                    <h5 class="mt-4">
+                                    {{#if is_free}}
+                                    Free
+                                    {{else if (gtz discounted_price) }}
+                                    ${{discounted_price}} <span class="ml-2 text-info"><s>${{price}}</s></span></h5>
+                                    {{else}}
+                                     ${{price}}
+                                    {{/if}}
+                                     
+                                    
+                                </div>
+                                 <p class="d-none"> Instructor: {{#ownerName}}{{owner}}{{/ownerName}}  {{owner.first_name}} {{owner.last_name}}</p>
+                               {{#if is_free}}
+                                <a href="/course/{{slug}}" class="btn btn-orange btn-sm mt-3"><i class="fa fa-list-alt"></i> 
+                                View Course
+                                </a>
+                                     {{else}}
+                                    <a href="#" class="btn btn-orange btn-sm mt-3"><i class="fa fa-plus"></i> Add to
+                                    Cart</a>
+                                    {{/if}}
+                            </div>
+                            <span class="badge badge-info">Modules ({{total_modules}})</span>
+                        </div>
+                    </div>
                 </div>
-                <p class="d-none"> Instructor: {{#ownerName}}{{owner}}{{/ownerName}}  {{owner.first_name}} {{owner.last_name}}</p>
-                <p> {{total_modules}} Modules.</p>
-            </div>
-
-            <div class="seat-rating-fee d-flex justify-content-between">
-                <div class="seat-rating h-100 d-flex align-items-center">
-                </div>
-                <div class="course-fee h-100">
-                    <a href="/course/{{slug}}" class="free">View Course</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    
  </script>
 {% endverbatim %}
 {% endblock %}
-
 {% block scripts %}
 <script>
 
+    Handlebars.registerHelper('gtz', function (value) {
+        return value > 0;
+    });
+
     Handlebars.registerHelper("ownerName", function (options) {
-        if(this.owner.first_name) {
-            return new Handlebars.SafeString(this.owner.first_name+ ' ' + this.owner.last_name); 
+        if (this.owner.first_name) {
+            return new Handlebars.SafeString(this.owner.first_name + ' ' + this.owner.last_name);
         }
-        return new Handlebars.SafeString(this.owner.username); 
+        return new Handlebars.SafeString(this.owner.username);
     });
 
     $(document).ready(function () {
@@ -85,6 +92,8 @@
             $("#coursesList").empty();
 
             $(response).each(function (index, item) {
+
+                item.trim_title = item.title.length > 25 ? item.title.substr(0, 25) : item.title;
 
                 var source = document.getElementById("courseItemTemplate").innerHTML;
                 var template = Handlebars.compile(source);

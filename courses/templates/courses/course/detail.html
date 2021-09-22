@@ -1,38 +1,28 @@
 {% extends "app_base.html" %}
 {% load staticfiles %}
-
 {% block title %}
 {{ object.title }}
 {% endblock %}
-
 {% block content %}
-
 {% with subject=object.subject %}
-
-{% comment %} <div class="single-course-intro d-flex align-items-center justify-content-center"
-    style="background-image: url({% static "/images/4hrs.png" %});">
-
-
-</div> {% endcomment %}
-
-<h1>
-    {{ object.title }}
-</h1>
-
-<div class="single-course-content section-padding-50">
-    <div class="container-fluid">
-
+<div class="home-courses course-detail">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col text-center">
+                <h3> {{ object.title }}</h3>
+            </div>
+        </div>
         <div class="row">
-            <div class="col-12 col-lg-8">
-
+            <div class="col-12 col-lg-9 ">
                 <div class="course--content">
+                   
+                    
                     <div class="clever-tabs-content">
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <ul class="nav nav-pills nav-fill " id="myTab" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" id="tab--1" data-toggle="tab" href="#tab1" role="tab"
                                     aria-controls="tab1" aria-selected="false">Description & Schedule</a>
                             </li>
-
                             <li class="nav-item">
                                 <a class="nav-link" id="tab--2" data-toggle="tab" href="#tab2" role="tab"
                                     aria-controls="tab2" aria-selected="true">Learning Outcomes</a>
@@ -45,91 +35,62 @@
                                 <a class="nav-link" id="tab--4" data-toggle="tab" href="#tab4" role="tab"
                                     aria-controls="tab4" aria-selected="true">Completion Requirements</a>
                             </li>
-
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1">
                                 <div class="clever-description">
-
-                                    <div class="about-course mb-30">
+                                    <div class="about-course mb-4">
                                         <h4>About this course</h4>
                                         <p>
                                             {{ object.overview | safe }}
-
                                         </p>
                                     </div>
-
                                     <div class="about-course mb-30">
                                         <h4>Schedule</h4>
-
                                         {{ object.features.first.schedule | safe }}
-
                                     </div>
-
-
                                 </div>
                             </div> <!-- END TAB1 -->
-
                             <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab--2">
                                 <div class="clever-curriculum">
-
-                                    <div class="about-curriculum mb-30">
-
+                                    <div class="about-course mb-4">
                                         {{ object.features.first.outcomes  | safe  }}
-
                                     </div>
-
                                 </div>
                             </div> <!-- END TAB2 -->
-
-
                             <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab--3">
                                 <div class="clever-curriculum">
-
-                                    <div class="about-curriculum mb-30">
+                                    <div class="about-course mb-30">
                                         {{ object.features.first.notes  |safe  }}
                                     </div>
-
-
                                 </div>
                             </div> <!-- END TAB3 -->
-
-
                             <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab--4">
                                 <div class="clever-curriculum">
-
-                                    <div class="about-curriculum mb-30">
+                                    <div class="about-course mb-30">
                                         {{ object.features.first.completion_requirements  |safe  }}
-
                                     </div>
-
-
                                 </div>
                             </div> <!-- END TAB4 -->
-
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-12 col-lg-4">
+            <div class="col-12 col-lg-3">
                 <div class="course-sidebar">
-
                     {% if request.user.is_authenticated %}
                     <div class="clearfix">
                         <form action="{% url "student_enroll_course" %}" method="post">
                             {{ enroll_form }}
                             {% csrf_token %}
-                            <input type="submit" class="btn btn-success mb-30" value="Take Free Class">
+                            <input type="submit" class="btn btn-orange mb-30" value="Take Free Class">
                         </form>
                     </div>
                     {% else %}
-                    <a href="{% url "student_registration" %}" class="btn clever-btn mb-30">
-                        Register to Take Free Class
-                    </a>
+                    <div class=""> <a href="{% url "student_registration" %}" class="btn btn-orange mb-4">
+                            Register to Take Free Class
+                        </a></div>
                     {% endif %}
-
-
                     <div class="sidebar-widget d-none">
                         <h5> Instructor</h5>
                         <ul class="features-list">
@@ -137,67 +98,29 @@
                                 <h6>{{ object.owner.get_full_name }}</h6>
                             </li>
                         </ul>
-
                     </div>
-
-                    <div class="sidebar-widget">
-
-                        <h5> Modules</h5>
-
-                        <ul class="features-list">
-                            <li>
-                                <h6>{{ object.modules.count }} modules</h6>
-                            </li>
-                        </ul>
-
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h5> Modules ({{ object.modules.count }}) </h5>
+                        </div>
                     </div>
-
-                    <div class="sidebar-widget">
-
-
-                        <h5>Tags</h5>
-                        <ul class="features-list">
-                            <li>
-                                <a class="badge badge-primary"
-                                    href="{% url "course_list_subject" subject.slug %}">{{ subject.title }}</a>
-                            </li>
-                        </ul>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Tags</h5>
+                            <a class="badge badge-primary"
+                                href="{% url "course_list_subject" subject.slug %}">{{ subject.title }}</a>
+                        </div>
                     </div>
-
                 </div>
             </div>
         </div>
-
     </div>
 </div>
-
-
-
 {% endwith %}
 {% endblock %}
-
 {% block scripts %}
-
 <style>
-    .single-course-intro {
-        background-position: center -233px;
-        background-repeat: no-repeat;
-        background-color: #eaeaea;
-        height: 350px;
-    }
-
-    .nav-link {
-        background: #878787 !important;
-        color: #fff !important;
-        border: 1px solid #878787 !important;
-    }
-
-    .clever-tabs-content .nav-tabs .nav-link.active {
-        background: #494949 !important;
-        color: #fff !important;
-        border: 1px solid #000;
-    }
-
+ 
     .tbl-schedule {}
 
     .tbl-schedule thead th {
@@ -212,7 +135,6 @@
         vertical-align: middle;
     }
 </style>
-
 <script>
     $(document).ready(function () {
 
@@ -222,5 +144,4 @@
 
     });
 </script>
-
 {% endblock %}

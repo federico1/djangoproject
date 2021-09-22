@@ -1,39 +1,46 @@
 {% extends "app_base.html" %}
 {% load staticfiles %}
-
 {% block title %}Log-in{% endblock %}
-
 {% block content %}
-<h1>Log-in</h1>
-
-<section class="">
+<section class="home-courses">
     <div class="container">
+        <div class="row mb-4">
+            <div class="col text-center">
+                <h3>Login</h3>
+            </div>
+        </div>
         <div class="row">
-            <div class="col-12">
-
+            <div class="col-12 text-center">
                 <div class="module">
-                    {% if form.errors %}
-                    <p>Your username and password didn't match. Please try again.</p>
-                    {% else %}
-                    <p>Please, use the following form to log-in:</p>
-                    {% endif %}
                     <div class="login-form">
                         <form action="{% url 'login' %}" method="post">
+                        {% comment %} <div class="mb-3 small">
+                                {% if form.errors %}
+                                <p>Your username and password didn't match. Please try again.</p>
+                                {% else %}
+                                <p>Please, use the following form to log-in:</p>
+                                {% endif %}
+                            </div> {% endcomment %}
+
+                           <div class="">
                             {{ form.as_p }}
+                           </div>
                             {% csrf_token %}
                             <input type="hidden" name="next" value="{{ next }}" />
-                            <p><input type="submit" value="Log-in"></p>
+                            <p><input type="submit" class="btn btn-orange" value="Log-in"></p>
+                            
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </section>
-
+<section class="">
+    <div class="container">
+    </div>
+</section>
 {% endblock %}
-
 {% block scripts %}
 <script>
     $(document).ready(function () {

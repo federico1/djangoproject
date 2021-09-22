@@ -1,60 +1,41 @@
 {% extends "app_base.html" %}
 {% load staticfiles %}
-
 {% block title %}
 - Contact
 {% endblock %}
-
 {% block content %}
-
-<div class="breadcumb-area">
-
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">NYC CONSTRUCTION SAFETY TRAINING - Contact</li>
-        </ol>
-    </nav>
-</div>
-
-<div class="regular-page-area section-padding-50">
+<div class="home-courses">
     <div class="container">
+        <div class="row mb-4">
+            <div class="col text-center">
+                <h3>Student Manual</h3>
+            </div>
+        </div>
         <div class="row">
             <div class="col-12">
-                <div class="page-content">
-
+                <div class="page-content mb-4">
                     <div class="row">
                         <div class="col" id="pdfViewer" src="{% static 'files/NYCCST Student Manual.pdf' %}">
-
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
 {% endblock %}
-
 {% block scripts %}
-
 <style>
     #pdfViewer {
         width: 100%;
         min-height: 600px;
     }
 </style>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>
-
-
-
 <script>
     $(document).ready(function () {
         var options = {
-           forceIframe:true,
+            forceIframe: true,
             pdfOpenParams: {
                 view: 'FitH',
                 page: '1'
@@ -66,8 +47,8 @@
         PDFObject.embed(src, "#pdfViewer", options);
 
         $('html, body').animate({
-        scrollTop: $("#pdfViewer").offset().top
-    }, 1000);
+            scrollTop: $("#pdfViewer").offset().top
+        }, 1000);
     });
 </script>
 {% endblock %}

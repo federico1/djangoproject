@@ -7,12 +7,12 @@
 
 {% block content %}
 
-<div class="regular-page-area section-padding-50">
+<div class="home-courses">
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <div class="page-content2">
-                    <h3 class="mb-2">Register <p>{% trans "Enter your details to create an account as" %}
+                    <h3 class="mb-4 text-center">Register <p>{% trans "Enter your details to create an account as" %}
                             {{ user_type }} </p>
                     </h3>
 
@@ -71,7 +71,7 @@
                                     <input class="form-check-input" type="checkbox" value="" required name="terms"
                                         id="termsCheck">
                                     <label class="form-check-label" for="termsCheck">
-                                        <a href="{% url 'legal_detail' %}">
+                                        <a class="text-muted" href="{% url 'legal_detail' %}">
                                             By creating an account you are agreeing to adhere to the NYCCST Terms of
                                             Service
                                         </a>
@@ -82,10 +82,8 @@
 
                         <div class="row">
                             <div class="col-md-6">
-
-                                <input type="submit" class="btn btn-primary" value="{% trans 'Create an account' %}" />
+                                <input type="submit" class="btn btn-orange" value="{% trans 'Create an account' %}" />
                             </div>
-
                             <div class="col-md-6 text-right">
                                 <div class="clear" style="padding: 30px;">{% trans "Already have an account?" %} <a
                                         href="{% url 'login' %}">{% trans 'Log in' %}</a>.</div>
