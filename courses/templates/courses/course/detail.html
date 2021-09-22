@@ -83,7 +83,7 @@
                         <form action="{% url "student_enroll_course" %}" method="post">
                             {{ enroll_form }}
                             {% csrf_token %}
-                            <input type="submit" class="btn btn-orange mb-30" value="Take Free Class">
+                            <input type="submit" class="btn btn-orange mb-4" value="Take Free Class">
                         </form>
                     </div>
                     {% else %}
