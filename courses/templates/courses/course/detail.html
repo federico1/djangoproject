@@ -15,8 +15,6 @@
         <div class="row">
             <div class="col-12 col-lg-9 ">
                 <div class="course--content">
-                   
-                    
                     <div class="clever-tabs-content">
                         <ul class="nav nav-pills nav-fill " id="myTab" role="tablist">
                             <li class="nav-item">
@@ -77,18 +75,24 @@
                 </div>
             </div>
             <div class="col-12 col-lg-3">
-                <div class="course-sidebar">
-                    {% if request.user.is_authenticated %}
+                <div class="course-sidebar course-item">
+                    <input type="hidden" name="id" value="{{object.id}}" />
+                    <input type="hidden" name="title" value="{{object.title}}" />
+                    <input type="hidden" name="subject" value="{{subject.title}}" />
+                    <input type="hidden" name="price" value="{{object.price}}" />
+                    <input type="hidden" name="discounted_price" value="{{object.discounted_price}}" />
+                    <input type="hidden" name="modules" value="{{object.modules.count}}" />
+                    {% if request.user.is_authenticated and object.is_free %}
                     <div class="clearfix">
                         <form action="{% url "student_enroll_course" %}" method="post">
                             {{ enroll_form }}
                             {% csrf_token %}
-                            <input type="submit" class="btn btn-orange mb-4" value="Take Free Class">
+                            <input type="submit" class="btn btn-orange mb-4 btn-block" value="Take Free Class">
                         </form>
                     </div>
                     {% else %}
-                    <div class=""> <a href="{% url "student_registration" %}" class="btn btn-orange mb-4">
-                            Register to Take Free Class
+                    <div class=""> <a href="javascript:;" class="btn btn-orange mb-4 btn-block link-add-cart">
+                            Add To Cart
                         </a></div>
                     {% endif %}
                     <div class="sidebar-widget d-none">
@@ -101,7 +105,15 @@
                     </div>
                     <div class="card mb-2">
                         <div class="card-body">
-                            <h5> Modules ({{ object.modules.count }}) </h5>
+                            {%if object.is_free%}
+                            <h5> Price: Free </h5>
+                            {% elif object.discounted_price > 0 %}
+                            <h5> Price: <span class="mr-2">{{object.discounted_price}}</span>
+                                <span><s>{{object.price}}</s></span> </h5>
+                            {%else%}
+                            <h5> Price: <span class="mr-2">{{object.price}}</span> </h5>
+                            {%endif%}
+                            <h5 class="mt-2"> Modules ({{ object.modules.count }}) </h5>
                         </div>
                     </div>
                     <div class="card">
@@ -120,7 +132,6 @@
 {% endblock %}
 {% block scripts %}
 <style>
- 
     .tbl-schedule {}
 
     .tbl-schedule thead th {

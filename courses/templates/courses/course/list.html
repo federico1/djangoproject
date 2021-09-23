@@ -65,14 +65,12 @@ All courses
                         {% for course in courses %}
                         {% with subject=course.subject %}
                         <div class="col-md-6 col-lg-4 mb-3 course-item">
-
                             <input type="hidden" name="id" value="{{course.id}}" />
                             <input type="hidden" name="title" value="{{course.title}}" />
                             <input type="hidden" name="subject" value="{{subject}}" />
                             <input type="hidden" name="price" value="{{course.price}}" />
                             <input type="hidden" name="discounted_price" value="{{course.discounted_price}}" />
                             <input type="hidden" name="modules" value="{{course.total_modules}}" />
-
                             <div class="card home-course">
                                 <div class="card-body">
                                     <a href="{% url "course_detail" course.slug %}">
@@ -106,12 +104,16 @@ All courses
                                             View Course
                                         </a>
                                         {% else %}
-                                        <a href="javascript:;" class="btn btn-orange btn-sm mt-3 link-add-cart"><i class="fa fa-plus"></i>
+                                        <a href="javascript:;" class="btn btn-orange btn-sm mt-3 link-add-cart"><i
+                                                class="fa fa-plus"></i>
                                             Add to
                                             Cart</a>
                                         {% endif %}
                                     </div>
                                     <span class="badge badge-info">Modules ({{ course.total_modules }})</span>
+                                </div>
+                                <div class="card-footer text-center">
+                                    <a href="{% url "course_detail" course.slug %}" class="text-info">View Details</a>
                                 </div>
                             </div>
                         </div>
