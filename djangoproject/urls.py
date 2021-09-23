@@ -44,6 +44,7 @@ urlpatterns = [
     path('dashboard/', include('app_admin.urls')),
     url(r'api/', include('app_api.urls')),
     path('', include('app_public.urls')),
+    path('', include('app_cart.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
 ]
 

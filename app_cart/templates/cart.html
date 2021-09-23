@@ -1,0 +1,386 @@
+{% extends "app_base.html" %}
+{% load staticfiles %}
+{% block title %}
+- Cart
+{% endblock %}
+{% block content %}
+<div class="home-courses cart-page">
+    <div class="container">
+        <div class="row mb-4 d-none">
+            <div class="col text-center">
+                <h3>Cart</h3>
+            </div>
+        </div>
+        <div class="no-cart row d-none">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body cart">
+                        <div class="col-sm-12 empty-cart-cls text-center">
+                            <div class="mb-2">
+                                <i class="fa fa-shopping-cart fa-5x"></i>
+                            </div>
+                            <h3><strong>Your Cart is Empty</strong></h3>
+                            <h4>Add something to make me happy :)</h4> <a href="{% url 'courses_list' %}"
+                                class="btn btn-orange m-3" data-abc="true">Browse Courses</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yes-cart row">
+            <div class="col">
+                <div class="card">
+                    <div class="row">
+                        <div class="col-md-8 cart">
+                            <div class="title">
+                                <div class="row">
+                                    <div class="col">
+                                        <h4><b>Shopping Cart</b></h4>
+                                    </div>
+                                    <div class="col align-self-center text-right text-muted count"></div>
+                                </div>
+                            </div>
+                            <div id="itemsList"></div>
+                            <div class="back-to-shop"><a href="{% url 'courses_list' %}">&leftarrow;</a><span
+                                    class="text-muted">Browse More Courses</span></div>
+                        </div>
+                        <div class="col-md-4 summary">
+                            <div>
+                                <h5><b>Summary</b></h5>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-lg-6 count2">ITEMS 0</div>
+                                <div class="col-lg-6 text-lg-right total-price">$0.00</div>
+                            </div>
+                            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                                <div class="col-lg-6">TOTAL PRICE</div>
+                                <div class="col-lg-6 text-lg-right total-price">$0.00</div>
+                            </div> <button class="btn">CHECKOUT</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{% verbatim %}
+<script type="text/x-handlebars-template" id='cartItemTemplate'>
+    <div class="row border-top border-bottom">
+            <div class="row main align-items-center">
+                <div class="col-lg-2"><img class="img-fluid" src="/static/fe_v1/img/course.png">
+                </div>
+                <div class="col-lg-5">
+                    <div class="row text-muted">{{title}}</div>
+                    <div class="row small">{{subject}}</div>
+                </div>
+                <div class="col-lg-5">${{price}} 
+                <a href="javascript:;" class="close link-remove-item" data-id='{{id}}'>&#10005;</a></div>
+            </div>
+    </div>
+ </script>
+{% endverbatim %}
+<style>
+    .cart-page .title {
+        margin-bottom: 5vh
+    }
+
+    .cart-page .card {
+        margin: auto;
+        max-width: 950px;
+        width: 90%;
+        box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        border-radius: 1rem;
+        border: transparent
+    }
+
+    @media(max-width:767px) {
+        .cart-page .card {
+            margin: 3vh auto
+        }
+    }
+
+    .cart-page .cart {
+        background-color: #fff;
+        padding: 4vh 5vh;
+        border-bottom-left-radius: 1rem;
+        border-top-left-radius: 1rem
+    }
+
+    @media(max-width:767px) {
+        .cart-page .cart {
+            padding: 4vh;
+            border-bottom-left-radius: unset;
+            border-top-right-radius: 1rem
+        }
+    }
+
+    .cart-page .summary {
+        background-color: #ddd;
+        border-top-right-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+        padding: 4vh;
+        color: rgb(65, 65, 65)
+    }
+
+    @media(max-width:767px) {
+        .cart-page .summary {
+            border-top-right-radius: unset;
+            border-bottom-left-radius: 1rem
+        }
+    }
+
+    .cart-page .summary .col-2 {
+        padding: 0
+    }
+
+    .cart-page .summary .col-10 {
+        padding: 0
+    }
+
+    .cart-page .row {
+        margin: 0
+    }
+
+    .cart-page .title b {
+        font-size: 1.5rem
+    }
+
+    .cart-page .main {
+        margin: 0;
+        padding: 2vh 0;
+        width: 100%
+    }
+
+    .cart-page .col-2,
+    .cart-page .col {
+        padding: 0 1vh
+    }
+
+    .cart-page a {
+        padding: 0 1vh
+    }
+
+    .cart-page .close {
+        margin-left: auto;
+        font-size: 0.7rem
+    }
+
+    .cart-page img {
+        width: 3.5rem
+    }
+
+    .cart-page .back-to-shop {
+        margin-top: 4.5rem
+    }
+
+    .cart-page h5 {
+        margin-top: 4vh
+    }
+
+    .cart-page hr {
+        margin-top: 1.25rem
+    }
+
+    .cart-page form {
+        padding: 2vh 0
+    }
+
+    .cart-page select {
+        border: 1px solid rgba(0, 0, 0, 0.137);
+        padding: 1.5vh 1vh;
+        margin-bottom: 4vh;
+        outline: none;
+        width: 100%;
+        background-color: rgb(247, 247, 247)
+    }
+
+    .cart-page input {
+        border: 1px solid rgba(0, 0, 0, 0.137);
+        padding: 1vh;
+        margin-bottom: 4vh;
+        outline: none;
+        width: 100%;
+        background-color: rgb(247, 247, 247)
+    }
+
+    .cart-page input:focus::-webkit-input-placeholder {
+        color: transparent
+    }
+
+    .cart-page .btn {
+        background-color: #000;
+        border-color: #000;
+        color: white;
+        width: 100%;
+        font-size: 0.7rem;
+        margin-top: 4vh;
+        padding: 1vh;
+        border-radius: 0
+    }
+
+    .cart-page .btn:focus {
+        box-shadow: none;
+        outline: none;
+        box-shadow: none;
+        color: white;
+        -webkit-box-shadow: none;
+        -webkit-user-select: none;
+        transition: none
+    }
+
+    .cart-page .btn:hover {
+        color: white
+    }
+
+    .cart-page a {
+        color: black
+    }
+
+    .cart-page a:hover {
+        color: black;
+        text-decoration: none
+    }
+
+    .cart-page #code {
+        background-image: linear-gradient(to left, rgba(255, 255, 255, 0.253), rgba(255, 255, 255, 0.185)), url("https://img.icons8.com/small/16/000000/long-arrow-right.png");
+        background-repeat: no-repeat;
+        background-position-x: 95%;
+        background-position-y: center
+    }
+</style>
+<script>
+    (function ($) {
+
+        $.CartPageManager = function (options) {
+
+            var that = this;
+
+            var keyName = '__nyc_cart__data__';
+
+            var settings = $.extend({}, options);
+
+            var drawCartData = function () {
+
+                var memoryData = getMemoryData();
+
+                var count = 0;
+                var totalPrice = parseFloat('0.00');
+                $("#itemsList").empty();
+
+                if (!('_ps_' in memoryData)) {
+                    count = 0;
+                } else {
+
+                    count = memoryData['_ps_'].length;
+
+                    $(memoryData['_ps_']).each(function (ix, item) {
+
+                        var price = item.discounted_price > 0 ? item.discounted_price : item.price;
+                        price = parseFloat(price);
+                        totalPrice = totalPrice + price;
+
+                        item.price = price;
+
+                        var source = document.getElementById("cartItemTemplate").innerHTML;
+                        var template = Handlebars.compile(source);
+
+                        $("#itemsList").append(template(item));
+
+                    });
+
+                }
+
+                $(".cart-page .count").html(count + ' items');
+                $(".cart-page .count2").html('ITEMS ' + count);
+                $(".cart-page .total-price").html('$' + parseFloat(totalPrice).toFixed(2));
+
+                $(".lbl-cart-items-count").html('(' + count + ')');
+                $(".lbl-cart-items-price").html('$' + parseFloat(totalPrice).toFixed(2));
+
+                if (count > 0) {
+                    $(".no-cart").addClass('d-none');
+                    $(".yes-cart").removeClass('d-none');
+                } else {
+                    $(".no-cart").removeClass('d-none');
+                    $(".yes-cart").addClass('d-none');
+                }
+            };
+
+            var removeCartItem = function (id) {
+
+                var memoryData = getMemoryData();
+
+                if (('_ps_' in memoryData)) {
+
+                    var dataList = memoryData['_ps_'];
+
+                    var itemIndex = dataList.findIndex(a => a.id == id);
+
+                    if (itemIndex >= 0) {
+
+                        dataList.splice(itemIndex, 1);
+
+                        memoryData['_ps_'] = dataList;
+                        localStorage.setItem(keyName, JSON.stringify(memoryData));
+
+                        drawCartData();
+
+                        console.log('cart updated.');
+                    }
+                }
+
+            };
+
+            var getMemoryData = function () {
+
+                try {
+
+                    var memoryData = localStorage.getItem(keyName);
+
+                    var parsedMemoryData = {};
+
+                    if (memoryData) {
+                        parsedMemoryData = JSON.parse(memoryData);
+                    }
+
+                    return parsedMemoryData;
+
+                } catch (error) {
+                    return {};
+                }
+
+            };
+
+            var registerEvent = function () {
+                $("div").on("click", '.link-remove-item', function (e) {
+                    e.stopPropagation();
+                    var id = $(this).attr('data-id');
+
+                    removeCartItem(id);
+
+                });
+
+            };
+
+            var init = function () {
+                registerEvent();
+                drawCartData();
+            };
+
+            init();
+
+            return this;
+
+        };
+
+
+    }(jQuery));
+
+    $(document).ready(function () {
+        var cartManager = new $.CartPageManager({});
+    });
+</script>
+{% endblock %}

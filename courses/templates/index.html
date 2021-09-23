@@ -27,7 +27,14 @@
 </section>
 {% verbatim %}
 <script type="text/x-handlebars-template" id='courseItemTemplate'>
-    <div class="col-md-6 col-lg-4 mb-3">
+    <div class="col-md-6 col-lg-4 mb-3 course-item">
+    <input type="hidden" name="id" value="{{id}}" />
+    <input type="hidden" name="title" value="{{title}}" />
+    <input type="hidden" name="subject" value="{{subject.title}}" />
+    <input type="hidden" name="price" value="{{price}}" />
+    <input type="hidden" name="discounted_price" value="{{discounted_price}}" />
+    <input type="hidden" name="modules" value="{{total_modules}}" />
+
                     <div class="card home-course">
                         <div class="card-body">
                          <a href="/course/{{slug}}">
@@ -52,11 +59,11 @@
                                 </div>
                                  <p class="d-none"> Instructor: {{#ownerName}}{{owner}}{{/ownerName}}  {{owner.first_name}} {{owner.last_name}}</p>
                                {{#if is_free}}
-                                <a href="/course/{{slug}}" class="btn btn-orange btn-sm mt-3"><i class="fa fa-list-alt"></i> 
+                                <a href="/course/{{slug}}" class="btn btn-light  btn-sm mt-3"><i class="fa fa-list-alt"></i> 
                                 View Course
                                 </a>
                                      {{else}}
-                                    <a href="#" class="btn btn-orange btn-sm mt-3"><i class="fa fa-plus"></i> Add to
+                                    <a href="javascript:;" class="btn btn-orange btn-sm mt-3 link-add-cart"><i class="fa fa-plus"></i> Add to
                                     Cart</a>
                                     {{/if}}
                             </div>
@@ -70,7 +77,6 @@
 {% endblock %}
 {% block scripts %}
 <script>
-
     Handlebars.registerHelper('gtz', function (value) {
         return value > 0;
     });

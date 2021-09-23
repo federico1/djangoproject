@@ -70,7 +70,8 @@ INSTALLED_APPS = (
     'app_chat',
     'app_api',
     'app_admin',
-    'app_public'
+    'app_public',
+    'app_cart',
 )
 
 
