@@ -108,10 +108,10 @@
                             {%if object.is_free%}
                             <h5> Price: Free </h5>
                             {% elif object.discounted_price > 0 %}
-                            <h5> Price: <span class="mr-2">{{object.discounted_price}}</span>
-                                <span><s>{{object.price}}</s></span> </h5>
+                            <h5> Price: <span class="mr-2">${{object.discounted_price}}</span>
+                                <span><s>${{object.price}}</s></span> </h5>
                             {%else%}
-                            <h5> Price: <span class="mr-2">{{object.price}}</span> </h5>
+                            <h5> Price: <span class="mr-2">${{object.price}}</span> </h5>
                             {%endif%}
                             <h5 class="mt-2"> Modules ({{ object.modules.count }}) </h5>
                         </div>
