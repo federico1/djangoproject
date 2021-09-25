@@ -197,7 +197,12 @@ class StudentRegistrationView(CreateView):
 
         cd = form.cleaned_data
 
+        print(cd['username'])
+        print(cd['password1'])
+        
         user = authenticate(username=cd['username'], password=cd['password1'])
+
+        print(user)
 
         mail_admins("A new student user is sign up",
                     "check email on myelearning")
