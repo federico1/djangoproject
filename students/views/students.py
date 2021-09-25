@@ -199,6 +199,7 @@ class StudentRegistrationView(CreateView):
 
         print(cd['username'])
         print(cd['password1'])
+        print(cd['email'])
 
         user = authenticate(username=cd['email'], password=cd['password1'])
 
