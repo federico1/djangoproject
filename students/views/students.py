@@ -60,18 +60,6 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
     model = Course
     template_name = 'students/course/detail.html'
 
-    # def get_queryset(self):
-
-    #     qs = super(StudentCourseDetailView, self).get_queryset()
-
-    #     print(qs)
-
-    #     qs = qs.filter(students__in=[self.request.user])
-
-    #     print(qs)
-
-    #     return qs
-
     def get_context_data(self, **kwargs):
 
         context = super(StudentCourseDetailView,
@@ -186,17 +174,6 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
         if context['module'] and (context['prev_completed'] == False or context['active_content'] == None):
             return redirect('student_course_detail', self.get_object().id)
 
-        # if self.request.GET.get('content') and context['active_content'] is not None:
-        #     try:
-        #         pr_r = CourseProgress.objects.update_or_create(content_id=context['active_content']['object'].id,
-        #                                                        user=self.request.user, defaults={'user': self.request.user, 'content': context['active_content']['object'], 'is_completed': True})
-
-        #         if context['active_content'] is not None and pr_r[1] == True:
-        #             context['active_content']['complete'] = True
-
-        #     except Exception as ex:
-        #         print(ex)
-
         return super(StudentCourseDetailView, self).render_to_response(context, **response_kwargs)
 
     def get(self, *args, **kwargs):
@@ -207,7 +184,8 @@ class StudentRegistrationView(CreateView):
     model = User
     template_name = 'registration/signup_form.html'
     form_class = StudentSignupForm
-    success_url = reverse_lazy('student_course_list')
+    #success_url = reverse_lazy('cart_detail')
+
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'student'
@@ -226,6 +204,10 @@ class StudentRegistrationView(CreateView):
         login(self.request, user)
 
         return result
+
+
+    def get_success_url(self):
+        return reverse_lazy('cart_detail') + '?register=success'
 
 
 class StudentEnrollCourseView(FormView):
@@ -382,7 +364,7 @@ def take_quiz(request, pk):
 
     total_questions = quiz.questions.count()
 
-    if total_questions <=0:
+    if total_questions <= 0:
         return redirect('taken_quiz_list')
 
     unanswered_questions = student.get_unanswered_questions(quiz)
@@ -554,9 +536,9 @@ def download_certificate(request, pk):
 
             sign_image = os.path.realpath(os.path.dirname(
                 'static')) + '\courses\static\cert-files\image003.png'
-            
+
             sign_image = 'https://construction-safety-nyc.com/static/cert-files/image003.png'
-            
+
             context = {'certificate_valid': True,
                        'student_name': student_name, 'completed_date': completed_date, 'object': course,
                        'ref_number': ref_number, 'sign_image': sign_image}

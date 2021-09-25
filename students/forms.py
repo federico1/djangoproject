@@ -35,12 +35,12 @@ class TeacherSignupForm(UserCreationForm):
 
 
 class StudentSignupForm(UserCreationForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+    username = forms.CharField(widget=forms.HiddenInput(), required=False)
     email = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
     first_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
     last_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
     cell_number = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
-    image = forms.CharField(widget=forms.HiddenInput())
+    image = forms.CharField(widget=forms.HiddenInput(), required=False)
     password1 = forms.CharField(label=_('Password'), widget=forms.PasswordInput(attrs={'class':'form-control'}))
     password2 = forms.CharField(label=_('Password verification'), widget=forms.PasswordInput(attrs={'class':'form-control'}))
 
@@ -52,15 +52,10 @@ class StudentSignupForm(UserCreationForm):
 
     @transaction.atomic
     def save(self, commit=True):
-
         user = super().save(commit=False)
-        
         user.is_student = True
-        
+        user.username = user.email
         user.save()
-
-        #student = Student.objects.create(user=user)
-    
         return user
 
 

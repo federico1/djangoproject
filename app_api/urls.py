@@ -1,16 +1,16 @@
 from django.conf.urls import url, include
 from django.urls import path
+
 from rest_framework import routers
+
+from .more_views import course_views, users_views, chat_views, attendance_views, student_views, cart_views
 from . import views
-from .more_views import course_views, users_views, chat_views, attendance_views, student_views
 
 router = routers.DefaultRouter()
-#router.register('conversations', views.ConversationDetailView)
 
 router.register(r'courses', course_views.CourseViewset, basename="course")
 router.register(r'course-enrollment',
                 course_views.EnrollmentViewset, "enrollment"),
-#router.register(r'^course-enrollment/{pk}/update-completed', course_views.EnrollmentViewset.set_completed, "enrollment"),
 
 urlpatterns = [
     #url(r'^', include(router.urls)),
@@ -39,10 +39,10 @@ urlpatterns = [
     path('video-courses/<int:pk>/', views.VideoCoursesView.as_view()),
     path('users/', users_views.UserDetailView.as_view()),
     path('users/<int:pk>/', users_views.UserDetailView.as_view()),
-
+    path('users/<int:pk>/', users_views.UserDetailView.as_view()),
+    path('email-exist/', users_views.EmailExist),
     #   path('course-enrollment/', course_views.EnrollmentViewset),
 
-    path('sst-cards/', users_views.SSTCardApiView.as_view()),
     path('subjects/', course_views.SubjectDetailView.as_view()),
     path('subjects/<int:pk>/', course_views.SubjectDetailView.as_view()),
     path('courses_time_logs/', course_views.CourseTimeLogDetailView.as_view()),
@@ -62,6 +62,8 @@ urlpatterns = [
     path('approve-attendance/', attendance_views.ApproveAttendance),
     path('student-history/', student_views.StudentsHistoryApiView.as_view()),
     path('quiz-details/', student_views.QuizApiView.as_view()),
+
+    path('orders/', cart_views.OrderApiView.as_view()),
 
     path('save-base64/', views.SaveBase64ImageView),
 

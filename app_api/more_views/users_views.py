@@ -1,11 +1,13 @@
 
-from django.shortcuts import get_object_or_404
-from rest_framework import generics
-from rest_framework import viewsets
-from rest_framework.authentication import BasicAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+# from django.shortcuts import get_object_or_404
+# from rest_framework import generics
+# from rest_framework import viewsets
+# from rest_framework.authentication import BasicAuthentication
+# from rest_framework.permissions import IsAuthenticated, IsAdminUser
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from rest_framework import status
 from django.http import Http404
 from django.db.models import Count
@@ -89,3 +91,18 @@ class SSTCardApiView(APIView):
         serializer = SSTCardSerializer(snippets.order_by('-id'), many=True)
 
         return Response(serializer.data)
+
+
+@api_view(['POST'])
+def EmailExist(request):
+    result = True
+
+    if request.method == 'POST':
+        email = request.POST['email']
+        count = User.objects.filter(email=email).count()
+        if count > 0:
+            result = False
+
+    return Response(result)
+
+

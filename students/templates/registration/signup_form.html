@@ -1,12 +1,9 @@
 {% extends "app_base.html" %}
 {% load i18n %}
-
 {% block title %}
 {% trans 'Sign up as' %} {{ user_type }}
 {% endblock %}
-
 {% block content %}
-
 <div class="home-courses">
     <div class="container">
         <div class="row">
@@ -15,48 +12,37 @@
                     <h3 class="mb-4 text-center">Register <p>{% trans "Enter your details to create an account as" %}
                             {{ user_type }} </p>
                     </h3>
-
-                    <form class="form-horizontal" role="form" action="." method="post">
-
+                    <form class="form-horizontal" role="form" action="." id="fmRegister" method="post">
                         {{ form.errors }}
-
                         {% csrf_token %}
-
                         {% for hidden in form.hidden_fields %}
                         {{ hidden }}
                         {% endfor %}
-
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="row">
                                     {% for field in form.visible_fields  %}
-
                                     <div class="col-md-6 mb-2">
                                         <div class="form-group">
                                             <label style="float: none;" class="control-label"
                                                 for="id_{{ field.name }}">{{ field.label }}</label>
-
                                             {{ field }}
                                             <!-- <p class="help-text">{{ field.help_text }} </p> -->
                                             {% if field.errors %}<small class="form-text text-danger">{{ field.label }}:
                                                 {{ field.errors|striptags }}</small>{% endif %}
-
                                         </div>
                                     </div>
-
                                     {% endfor %}
                                 </div>
                             </div>
                             <div class="col-md-4 text-center mt-3">
                                 <img src="https://via.placeholder.com/200x200.png?text=.." id="prevImage" alt="image"
                                     style="max-height: 200px;" class="img-thumbnail">
-
                                 <p class="mt-2">
                                     <a href="javascript:;" id="btnAddImage" class="btn btn-primary btn-sm"
                                         role="button">
                                         Upload Image
                                     </a>
-
                                     <a href="javascript:;" id="btnRemoveImage" class="btn btn-danger btn-sm"
                                         role="button">
                                         Remove
@@ -64,7 +50,6 @@
                                 </p>
                             </div>
                         </div>
-
                         <div class="row my-2">
                             <div class="col">
                                 <div class="form-check">
@@ -79,10 +64,10 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-6">
-                                <input type="submit" class="btn btn-orange" value="{% trans 'Create an account' %}" />
+                                <input type="button" id="btnSubmit" class="btn btn-orange"
+                                    value="{% trans 'Create an account' %}" />
                             </div>
                             <div class="col-md-6 text-right">
                                 <div class="clear" style="padding: 30px;">{% trans "Already have an account?" %} <a
@@ -90,24 +75,49 @@
                             </div>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <div class="d-none">
     <form id="fmFile" action="{% url 'upload-file' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="file" name="file" id="fu"><br>
     </form>
 </div>
-
 {% endblock %}
-
 {% block scripts %}
+<style>
+    label.error {
+        color: #e13b3b;
+        font-size: 13px;
+    }
 
+    .errorlist {
+        margin-bottom: 10px;
+    }
+
+    .errorlist li {
+        text-transform: capitalize;
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    .errorlist li ul {
+        list-style: none;
+        margin-left: 4px;
+        color: #f05151;
+        display: inline-block;
+
+    }
+
+    .errorlist li ul li {
+        text-transform: initial;
+        font-weight: normal;
+        font-size: 14px;
+    }
+</style>
 <script>
     $(document).ready(function () {
 
@@ -122,6 +132,14 @@
 
         $("#btnAddImage").click(function () {
             $("#fu").trigger('click');
+        });
+
+        $("#btnSubmit").click(function () {
+            var isValid = $("#fmRegister").valid();
+
+            if (isValid) {
+                $("#fmRegister").submit();
+            }
         });
 
         $("#fu").change(function () {
@@ -149,7 +167,50 @@
             complete: function (xhr) {}
         });
 
+        $.validator.setDefaults({
+            ignore: [],
+        });
+
+        $("#fmRegister").validate({
+            rules: {
+                first_name: {
+                    required: true,
+                },
+                last_name: {
+                    required: true,
+                },
+                email: {
+                    required: true,
+                    email: true,
+                    remote: {
+                        url: "/api/email-exist/",
+                        type: "post",
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        },
+                    }
+                },
+                password1: {
+                    required: true,
+                },
+                password2: {
+                    required: true,
+                    equalTo: '#id_password1',
+                },
+                cell_number: {
+                    required: true
+                },
+                terms: {
+                    required: true
+                }
+            },
+            messages: {
+                email: {
+                    remote: "Email address already in use. Please use other email."
+                }
+            }
+        });
+
     });
 </script>
-
 {% endblock %}

@@ -1,0 +1,259 @@
+{% extends "app_base.html" %}
+{% load staticfiles %}
+{% block title %}
+- Checkout
+{% endblock %}
+{% block content %}
+<div class="home-courses cart-page">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col text-center">
+                <h3>Confirm & Checkout</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 offset-md-3 mb-4">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted">Your cart</span>
+                    <span class="badge badge-secondary badge-pill count" id="">0</span>
+                </h4>
+                <ul class="list-group mb-3" id="itemsList">
+                    <li class="list-group-item d-flex justify-content-between bg-light">
+                        <span>Total (USD)</span>
+                        <strong class="total-price">$0</strong>
+                    </li>
+                </ul>
+                <div id="paypal-button-container" class="mt-3">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{% verbatim %}
+<script type="text/x-handlebars-template" id='cartItemTemplate'>
+    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                        <div>
+                            <h6 class="my-0">{{title}}</h6>
+                            <small class="text-muted">{{subject}}</small>
+                        </div>
+                        <span class="text-muted">${{price}}</span>
+    </li>
+   
+ </script>
+{% endverbatim %}
+<script
+    src="https://www.paypal.com/sdk/js?client-id=AfCYO-690TOTak5bLJ9lxaw-a7nY-8SBFID1X7a6Cmoyw2X4j79OMSm7ZDp_6oj218W5YKF19qqgWW0Y&currency=USD&disable-funding=credit,card">
+</script>
+<script>
+    (function ($) {
+
+        $.CartPageManager = function (options) {
+
+            var that = this;
+
+            var _totalPrice;
+
+            var keyName = '__nyc_cart__data__';
+
+            var settings = $.extend({}, options);
+
+            var drawCartData = function () {
+
+                var memoryData = getMemoryData();
+
+                var count = 0;
+                var totalPrice = parseFloat('0.00');
+
+                if (!('_ps_' in memoryData)) {
+                    count = 0;
+                } else {
+
+                    count = memoryData['_ps_'].length;
+
+                    $(memoryData['_ps_']).each(function (ix, item) {
+
+                        var price = item.discounted_price > 0 ? item.discounted_price : item.price;
+                        price = parseFloat(price);
+                        totalPrice = totalPrice + price;
+
+                        item.price = price;
+
+                        var source = document.getElementById("cartItemTemplate").innerHTML;
+                        var template = Handlebars.compile(source);
+
+                        $("#itemsList").prepend(template(item));
+
+                    });
+
+                }
+
+                $(".cart-page .count").html(count);
+                $(".cart-page .total-price").html('$' + parseFloat(totalPrice).toFixed(2));
+
+                _totalPrice = parseFloat(totalPrice).toFixed(2);
+
+                if (count <= 0) {
+                    window.location.href = '/';
+                }
+
+                setPaypal();
+            };
+
+            var getMemoryData = function () {
+
+                try {
+
+                    var memoryData = localStorage.getItem(keyName);
+
+                    var parsedMemoryData = {};
+
+                    if (memoryData) {
+                        parsedMemoryData = JSON.parse(memoryData);
+                    }
+
+                    return parsedMemoryData;
+
+                } catch (error) {
+                    return {};
+                }
+
+            };
+
+            var setPaypal = function () {
+
+                paypal.Buttons({
+                    funding: {
+                        disallowed: [paypal.FUNDING.CREDIT]
+                    },
+                    style: {
+                        label: 'checkout',
+                    },
+                    createOrder: function (data, actions) {
+
+                        if (_totalPrice <= 0) return false;
+
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: {
+                                    value: _totalPrice
+                                },
+                            }]
+                        });
+                    },
+                    onApprove: function (data, actions) {
+                        // This function captures the funds from the transaction.
+                        return actions.order.capture().then(function (details) {
+                            if (data.orderID) {
+
+                                var payment = {
+                                    orderID: data.orderID,
+                                    details: details,
+                                    data: data
+                                };
+
+                                postOrder(payment);
+                            }
+                        });
+                    }
+                }).render('#paypal-button-container');
+
+
+            };
+
+            var postOrder = function (paymentData) {
+                var items = [];
+                var payments = [];
+
+                var memoryData = getMemoryData();
+
+                $(memoryData['_ps_']).each(function (ix, item) {
+
+                    var price = item.discounted_price > 0 ? item.discounted_price : item.price;
+                    price = parseFloat(price);
+
+                    var item = {
+                        course: item.id,
+                        price: price,
+                        sub_total: price,
+                        qty: item.qty,
+                    };
+
+                    items.push(item);
+
+                });
+
+                payments.push({
+                    gateway: 'paypal',
+                    info: JSON.stringify(paymentData),
+                    total_price: _totalPrice,
+                    amount_paid: _totalPrice,
+                });
+
+                var orderObject = {
+                    ref_id: paymentData.orderID,
+                    user: '{{request.user.id}}',
+                    total_amount: 1.00,
+                    items: items,
+                    payments: payments
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/orders/",
+                    data: JSON.stringify(orderObject),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (response) {
+
+                        if (response && response.ref_id) {
+                            localStorage.removeItem(keyName);
+                            window.location.href = '/order/' + response.ref_id + '/';
+                        } else {
+                            swal({
+                                    title: "Order failed to complete",
+                                    text: "Please refresh the page and try again.",
+                                    icon: "warning",
+                                    buttons: {
+
+                                        catch: {
+                                            text: "Ok",
+                                            value: "catch",
+                                        },
+
+                                    },
+                                })
+                                .then((value) => {
+                                    window.location.reload()
+                                });
+                        }
+                    },
+                    failure: function (errMsg) {}
+                });
+            };
+
+            var registerEvent = function () {};
+
+            var init = function () {
+                registerEvent();
+                drawCartData();
+            };
+
+            init();
+
+            return this;
+
+        };
+
+
+    }(jQuery));
+
+    $(document).ready(function () {
+        var cartManager = new $.CartPageManager({});
+    });
+</script>
+{% endblock %}

@@ -56,7 +56,12 @@
                             <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
                                 <div class="col-lg-6">TOTAL PRICE</div>
                                 <div class="col-lg-6 text-lg-right total-price">$0.00</div>
-                            </div> <button class="btn">CHECKOUT</button>
+                            </div>
+                            {%if request.user.is_authenticated%}
+                            <a href="{% url 'checkout_detail' %}" class="btn">CHECKOUT</a>
+                            {%else%}
+                            <button class="btn link-auth">CHECKOUT</button>
+                            {%endif%}
                         </div>
                     </div>
                 </div>
@@ -354,20 +359,67 @@
 
             };
 
+            var loadMessage = function () {
+                var urlParts = window.location.href.split('?');
+
+                if (urlParts.length > 1 && urlParts[1] == 'register=success') {
+                    swal({
+                        title: "Registered!",
+                        text: "You have been registered successfully.",
+                        icon: "success",
+                        button: "OK",
+                    });
+
+                    window.location.href = '#';
+                }
+            };
+
             var registerEvent = function () {
                 $("div").on("click", '.link-remove-item', function (e) {
                     e.stopPropagation();
                     var id = $(this).attr('data-id');
 
                     removeCartItem(id);
-
                 });
+
+                $("div").on("click", '.link-auth', function (e) {
+                    e.stopPropagation();
+                    swal("You need to login as verified user to proceed.", {
+                            buttons: {
+                                catch: {
+                                    text: "Already have an account? Login",
+                                    value: "catch",
+                                    className:'btn-primary'
+                                },
+                                defeat:  {
+                                    text: "New User? Register",
+                                    value: "try",
+                                },
+                            },
+                        })
+                        .then((value) => {
+                            switch (value) {
+
+                                case "catch":
+                                    window.location.href = '{% url "login" %}';
+                                    break;
+
+                                case "try":
+                                    window.location.href = '{% url "student_registration" %}';
+                                    break;
+                             
+                            }
+                        })
+                });
+
+
 
             };
 
             var init = function () {
                 registerEvent();
                 drawCartData();
+                loadMessage();
             };
 
             init();
