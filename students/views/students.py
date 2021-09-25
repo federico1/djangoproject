@@ -197,9 +197,7 @@ class StudentRegistrationView(CreateView):
 
         cd = form.cleaned_data
 
-        print(cd['username'])
-        print(cd['password1'])
-        print(cd['email'])
+        print(cd)
 
         user = authenticate(username=cd['email'], password=cd['password1'])
 

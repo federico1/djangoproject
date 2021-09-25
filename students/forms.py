@@ -55,9 +55,7 @@ class StudentSignupForm(UserCreationForm):
         user = super().save(commit=False)
         user.is_student = True
         user.username = user.email
-        user.set_password(user.password)
         user.save()
-        
         return user
 
 

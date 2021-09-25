@@ -549,7 +549,7 @@
             </div>
             {% if request.user.is_authenticated  %}
             <div class="offcanvas__top__hover">
-                <span>Welcome, {{ request.user }} <i class="arrow_carrot-down"></i></span>
+                <span>Welcome, {{ request.user.first_name }} <i class="arrow_carrot-down"></i></span>
                 <ul>
                     <li>
                         {% if request.user.is_teacher == True %}
@@ -617,7 +617,7 @@
                             </div>
                             {% if request.user.is_authenticated  %}
                             <div class="header__top__hover">
-                                <span>Welcome, {{ request.user }} <i class="arrow_carrot-down"></i></span>
+                                <span>Welcome, {{ request.user.first_name }} <i class="arrow_carrot-down"></i></span>
                                 <ul>
                                     <li>
                                         {% if request.user.is_teacher == True %}
