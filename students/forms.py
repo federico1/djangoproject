@@ -57,6 +57,7 @@ class StudentSignupForm(UserCreationForm):
         user.username = user.email
         user.set_password(user.password)
         user.save()
+        
         return user
 
 
