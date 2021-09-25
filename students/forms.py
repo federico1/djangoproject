@@ -52,10 +52,11 @@ class StudentSignupForm(UserCreationForm):
 
     @transaction.atomic
     def save(self, commit=True):
+        cleaned_data = super(StudentSignupForm, self).clean()
         user = super().save(commit=False)
         user.is_student = True
         user.username = user.email
-        user.set_password('123')
+        user.set_password(cleaned_data['password1'])
         user.save()
         return user
 
