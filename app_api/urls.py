@@ -64,6 +64,10 @@ urlpatterns = [
     path('quiz-details/', student_views.QuizApiView.as_view()),
 
     path('orders/', cart_views.OrderApiView.as_view()),
+    path('packages/', cart_views.PackageApiView.as_view()),
+    path('packages/<int:pk>/', cart_views.PackageApiView.as_view()),
+    path('package-courses/', cart_views.PackageCourseApiView.as_view()),
+    path('package-courses/<int:pk>/', cart_views.PackageCourseApiView.as_view()),
 
     path('save-base64/', views.SaveBase64ImageView),
 

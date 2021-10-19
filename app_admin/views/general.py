@@ -1,7 +1,14 @@
 from django.shortcuts import render
 from django.views import generic
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 
-class HomeView(generic.TemplateView):
+
+class SuperuserRequiredMixin(UserPassesTestMixin, LoginRequiredMixin):
+    def test_func(self):
+        return self.request.user.is_superuser
+
+
+class HomeView(SuperuserRequiredMixin, generic.TemplateView):
     template_name = 'admin_home.html'
     
     def get_context_data(self, *args, **kwargs):

@@ -23,6 +23,7 @@ from django.conf.urls import url
 from django.contrib.sitemaps.views import sitemap
 
 from .sitemap import StaticViewSitemap, SubjectsSitemap, CourseSitemap
+
 sitemaps = {
     'static': StaticViewSitemap,
     'subjects':SubjectsSitemap,

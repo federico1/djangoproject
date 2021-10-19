@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import general, students
+from .views import general, students, packages
 # from views.students import StudentsView
 # from django.conf import settings
 
@@ -19,4 +19,7 @@ urlpatterns = [
     path('assessments',
          students.AssessmentView.as_view(),
          name='admin_assessments'),
+    path('packages',
+         packages.IndexView.as_view(),
+         name='admin_packages'),
 ]

@@ -66,3 +66,32 @@ class Payment(models.Model):
 
     def __str__(self):
         return self.order
+
+
+class Package(models.Model):
+    name = models.CharField(max_length=200)
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    sort_order = models.IntegerField(default=1)
+    created = models.DateTimeField(auto_now_add=True)
+    is_deleted = models.BooleanField(default=0)
+
+    class Meta:
+        ordering = ['sort_order']
+
+    def __str__(self):
+        return self.name
+
+
+class PackageCourse(models.Model):
+    course = models.ForeignKey(Course,
+                               related_name='package_courses',
+                               on_delete=models.CASCADE)
+    package = models.ForeignKey(Package,
+                               related_name='courses',
+                               on_delete=models.CASCADE)
+   
+    class Meta:
+        ordering = ['package']
+
+    def __str__(self):
+        return '{}. {}'.format(self.course, self.package)

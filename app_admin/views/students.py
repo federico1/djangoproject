@@ -1,8 +1,14 @@
 from django.shortcuts import render
 from django.views import generic
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 
 
-class StudentsView(generic.TemplateView):
+class SuperuserRequiredMixin(UserPassesTestMixin, LoginRequiredMixin):
+    def test_func(self):
+        return self.request.user.is_superuser
+
+
+class StudentsView(SuperuserRequiredMixin, generic.TemplateView):
     template_name = 'students/list.html'
     
     def get_context_data(self, *args, **kwargs):
@@ -10,7 +16,7 @@ class StudentsView(generic.TemplateView):
         return context
 
 
-class EvaluationListView(generic.TemplateView):
+class EvaluationListView(SuperuserRequiredMixin, generic.TemplateView):
     template_name = 'students/evaluation_list.html'
     
     def get_context_data(self, *args, **kwargs):
@@ -18,7 +24,7 @@ class EvaluationListView(generic.TemplateView):
         return context
 
 
-class AssessmentView(generic.TemplateView):
+class AssessmentView(SuperuserRequiredMixin, generic.TemplateView):
     template_name = 'students/assessment.html'
     
     def get_context_data(self, *args, **kwargs):

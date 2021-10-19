@@ -14,10 +14,6 @@ from django.db.models import Count
 from courses.models import Subject, Course, CourseTimeLog, CourseProgress, Content, CourseFeature, Enrollments, \
     Evaluation, AssessRating
 
-# from app_api.more_serializers.course_serializers import SubjectSerializer, CourseSerializer, \
-#     CourseTimeLogSerializer, CourseProgressSerializer, CourseFeatureSerializer, EnrollmentSerializer, \
-#     EvaluationSerializer, RatingSerializer
-
 from app_api.more_serializers import course_serializers
 
 from students.models import User
