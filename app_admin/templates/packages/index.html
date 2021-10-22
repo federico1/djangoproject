@@ -134,7 +134,7 @@
     <div class="col-md-6 mb-1">
         <ul class="list-group">
         <li class="list-group-item d-flex justify-content-between align-items-center plan-sound" id="{{id}}">
-            {{course_object.title}}
+            {{course.title}}
             <a href="javascript:;" class="badge badge-danger badge-pill link-remove-course" data-id="{{id}}">
                 Remove</a>
         </li>
@@ -303,7 +303,7 @@
                     var source = document.getElementById("courseItemTemplate").innerHTML;
                     var template = Handlebars.compile(source);
 
-                    item.course_object = coursesList.find(a=>a.id == item.course);
+                    //item.course_object = coursesList.find(a=>a.id == item.course);
 
                     $("#coursesList").append(template(item));
                 });
@@ -420,6 +420,13 @@
 
                     var course_id = $("select[name='course_id']").val();
                     var package_id = $("#coursesModal").attr('data-id');
+
+                    var courseCount = packageCourses.filter(a=>a.course.id == course_id).length;
+
+                    if(courseCount>0){
+                        toastr.warning('Course already added');
+                        return;
+                    }
 
                     var data = {
                         course: course_id, package: package_id

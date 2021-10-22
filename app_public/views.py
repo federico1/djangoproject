@@ -18,3 +18,7 @@ class StudentManualView(generic.TemplateView):
 
 class FaqView(generic.TemplateView):
     template_name = "faq/faq.html"
+
+
+class PackagesView(generic.TemplateView):
+    template_name = "packages/packages.html"

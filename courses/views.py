@@ -84,7 +84,6 @@ class CourseDetailView(DetailView):
         return context
 
 
-
 class PostClassSurveryDetailView(generic.TemplateView):
     template_name = 'courses/post_survery.html'
 

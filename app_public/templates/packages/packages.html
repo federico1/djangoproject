@@ -1,0 +1,115 @@
+{% extends 'app_base.html' %}
+{% load staticfiles %}
+{% block title %} - Packages {% endblock %}
+{% block content %}
+<div class="home-courses cart-page pricing">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col text-center">
+                <h3>Packages</h3>
+            </div>
+        </div>
+        <div class="row" id="packagesList">
+
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+{% block scripts %}
+{% verbatim %}
+<script type="text/x-handlebars-template" id='packageItemTemplate'>
+    <div class="col-md-6">
+        <div class="card border-0 mb-4 shadow">
+            <div class="card-header bg-info">
+                <div class="row">
+                    <div class="col">
+                        <h4 class="my-0 font-weight-normal text-white">{{name}}</h4>
+                    </div>
+                    <div class="col">
+                        <h4 class="my-0 text-right text-white">${{price}}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <h3 class="text-center">Courses</h3>
+                <div class="text-center mb-2">
+                    <ul class="list-unstyled">
+                        {{#each courses}}
+                        <li>{{course.title}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+
+            </div>
+            <div class="card-footer text-center">
+                <a href="/package-buy/{{id}}/" class="btn btn-primary">Buy Now</a>
+            </div>
+        </div>
+    </div>
+ </script>
+{% endverbatim %}
+
+
+<script
+    src="https://www.paypal.com/sdk/js?client-id=AfCYO-690TOTak5bLJ9lxaw-a7nY-8SBFID1X7a6Cmoyw2X4j79OMSm7ZDp_6oj218W5YKF19qqgWW0Y&currency=USD&disable-funding=credit,card">
+    </script>
+<script>
+    (function ($) {
+
+        $.PackageManager = function (options) {
+
+            var that = this;
+            var packagesList = [];
+
+            var settings = $.extend({}, options);
+
+            var getList = function () {
+                var parms = {
+                    format: 'json',
+                    is_deleted:false
+                };
+
+                $.get('/api/packages/', parms, function (response) {
+                    packagesList = response;
+                    drawList();
+                });
+            };
+
+            var drawList = function () {
+
+                $(packagesList).each(function (index, item) {
+
+                    if (item.courses.length > 0) {
+                        var source = document.getElementById("packageItemTemplate").innerHTML;
+                        var template = Handlebars.compile(source);
+                        $("#packagesList").append(template(item));
+
+                    }
+
+                });
+
+            };
+
+
+            var registerEvent = function () { };
+
+            var init = function () {
+                registerEvent();
+                getList();
+            };
+
+            init();
+
+            return this;
+
+        };
+
+
+    }(jQuery));
+
+    $(document).ready(function () {
+        var packageManager = new $.PackageManager({});
+    });
+</script>
+{% endblock %}

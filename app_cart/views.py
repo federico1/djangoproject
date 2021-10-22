@@ -16,3 +16,13 @@ class OrderView(generic.TemplateView):
         context = super(OrderView, self).get_context_data(**kwargs)
         context['ref'] = self.kwargs['slug']
         return context
+
+
+class PackageCartView(generic.TemplateView):
+    template_name = "package_cart.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(PackageCartView, self).get_context_data(**kwargs)
+        context['id'] = self.kwargs['slug']
+        return context
+

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import LegalView, AboutView, ContactView, StudentManualView, FaqView
+from .views import LegalView, AboutView, ContactView, StudentManualView, FaqView, PackagesView
 from .more_views.views_sst import SSTVerifyView
 
 urlpatterns = [
@@ -18,8 +18,10 @@ urlpatterns = [
     path('sst-verify/',
          SSTVerifyView.as_view(),
          name='sst_verify'),
-
     path('faq/',
          FaqView.as_view(),
          name='faq'),
+    path('packages/',
+         PackagesView.as_view(),
+         name='packages'),
 ]

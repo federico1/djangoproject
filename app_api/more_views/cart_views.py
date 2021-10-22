@@ -45,10 +45,14 @@ class PackageApiView(APIView):
     def get(self, request, format=None):
 
         snippets = Package.objects
-        # ref_id = request.GET.get('ref')
+        is_deleted = request.GET.get('is_deleted')
+        id = request.GET.get('id')
+        
+        if is_deleted is not None:
+            snippets = snippets.filter(is_deleted = bool(is_deleted))
 
-        # if ref_id is not None:
-        #     snippets = snippets.filter(ref_id = ref_id)
+        if id is not None:
+            snippets = snippets.filter(pk=id)
 
         serializer = PackageSerializer(snippets, many=True)
         return Response(serializer.data)
@@ -85,8 +89,12 @@ class PackageCourseApiView(APIView):
 
     def get(self, request, format=None):
         snippets = PackageCourse.objects
-        if request.GET['package_id']:
-            snippets = snippets.filter(package_id=request.GET['package_id'])
+        
+        package_id = request.GET.get('package_id')
+
+        if package_id:
+            snippets = snippets.filter(package_id=package_id)
+
         serializer = PackageCourseSerializer(snippets, many=True)
         return Response(serializer.data)
 
