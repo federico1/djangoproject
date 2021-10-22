@@ -46,13 +46,11 @@ class PackageApiView(APIView):
 
         snippets = Package.objects
         is_deleted = request.GET.get('is_deleted')
-
         id = request.GET.get('id')
-        
-        print(bool(is_deleted))
-        
+
         if is_deleted is not None:
-            snippets = snippets.filter(is_deleted = bool(is_deleted))
+            is_deleted = True if is_deleted=="true" else False
+            snippets = snippets.filter(is_deleted = is_deleted)
 
         if id is not None:
             snippets = snippets.filter(pk=id)
