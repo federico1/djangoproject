@@ -384,6 +384,7 @@ def take_quiz(request, pk):
         if form.is_valid():
             with transaction.atomic():
                 student_answer = form.save(commit=False)
+                print(student)
                 student_answer.student = student
                 student_answer.save()
                 unanswered_questions = student.get_unanswered_questions(quiz)
