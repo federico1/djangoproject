@@ -15,17 +15,7 @@
         </div>
     </div>
 </section>
-<section class="home-courses">
-    <div class="container">
-        <div class="row mb-4">
-            <div class="col text-center">
-                <h3>Latest Online Courses</h3>
-            </div>
-        </div>
-        <div class="row" id="coursesList">
-        </div>
-    </div>
-</section>
+
 {% verbatim %}
 <script type="text/x-handlebars-template" id='courseItemTemplate'>
     <div class="col-md-6 col-lg-4 mb-3 course-item">
@@ -93,7 +83,7 @@
     });
 
     $(document).ready(function () {
-        getLatestCourses();
+        //getLatestCourses();
     });
 
     function getLatestCourses() {
