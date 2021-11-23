@@ -1,14 +1,14 @@
-{% extends "teacher_base.html" %}
-{% block title %}My courses{% endblock %}
+{% extends "teacher_base.html" %} {% block title %}My courses{% endblock %}
 {% block content %}
 
-<input type="hidden" value="{{object_json}}" id="hfJson">
+<input type="hidden" value="{{object_json}}" id="hfJson" />
 
 <div class="mt-3 d-sm-flex align-items-center justify-content-between mb-4 p-2">
   <h1 class="h3 mb-0 text-gray-800">My Courses</h1>
-  <a href="{% url "course_create" %}" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+  <a href="{% url 'course_create' %}" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
       class="fas fa-add"></i> Create New Course</a>
 </div>
+
 <div class="row">
   {% for course in object_list %}
   <div class="col-md-4">
@@ -23,29 +23,32 @@
           </div>
           <div>
             <strong class="ml-3"> Price: </strong>
-            {% if course.is_free %} <span class="badge badge-warning">Free</span>
+            {% if course.is_free %}
+            <span class="badge badge-warning">Free</span>
             {%elif course.discounted_price > 0%}
             <span class="badge badge-warning"><s>{{course.price}}</s></span>
             <span class="badge badge-success">{{course.discounted_price}}</span>
-             {%elif course.price > 0%}
+            {%elif course.price > 0%}
             <span class="badge badge-warning">{{course.price}}</span>
             {%endif%}
           </div>
         </div>
         <div class="mt-3 d-flex flex-row">
-          <a class="badge badge-info px-3 py-1" href="{% url "course_edit" course.id %}">Edit Basic</a>
-          <a class="badge badge-info px-3 py-1 ml-1" href="{% url "course_module_update" course.id %}">Manage
-            Modules</a>
-          {% if course.modules.count > 0 %}
-          <a class="badge badge-info px-3 py-1 ml-1"
-            href="{% url "module_content_list" course.modules.first.id %}">Manage Contents</a>
-          {% endif %}
-        </div>
-        <div class="mt-3 d-flex flex-row">
-          <a class="badge badge-info px-3 py-1 link-features" href="javascript:void(0);" pk="{{course.id}}">
+          <a class="badge badge-info px-3 py-1" href="{% url 'course_edit' course.id %}">Edit Basic</a>
+
+          <a class="badge badge-info px-3 py-1 ml-1 link-features" href="javascript:void(0);" pk="{{course.id}}">
             Manage Features
           </a>
-          <a class="badge badge-info px-3 py-1 mx-1" href="{% url "quiz_course" course.id %}">Final Quiz</a>
+
+          <a class="badge badge-info px-3 py-1 ml-1" href="{% url 'course_module_update' course.id %}">Manage
+            Modules</a>
+        </div>
+        <div class="mt-3 d-flex flex-row">
+          {% if course.modules.count > 0 %}
+          <a class="badge badge-info px-3 py-1" href="{% url 'module_content_list' course.modules.first.id %}">Manage
+            Contents</a>
+          {% endif %}
+          <a class="badge badge-info px-3 py-1 mx-1" href="{% url 'quiz_course' course.id %}">Final Quiz</a>
           {% if course.quiz %}
           <a class="badge badge-info px-3 py-1 mx-1 link-quiz-summary" data-quiz="{{course.quiz.id}}"
             href="javascript:void(0);">Quiz Summary</a>
@@ -54,9 +57,13 @@
         <div class="mt-3 d-flex flex-row">
           <a class="badge badge-warning px-3 py-1 link-price" href="javascript:void(0);" pk="{{course.id}}">Set
             Price</a>
+          <a class="badge badge-info px-3 py-1 mx-1 link-image" href="javascript:void(0);" pk="{{course.id}}">Set
+            Image</a>
           <a class="badge badge-primary px-3 py-1 mx-1 link-copy" href="javascript:void(0);" pk="{{course.id}}">Make
             Copy</a>
-          <a class="badge badge-danger px-3 py-1 mx-1 " href="{% url "course_delete" course.id %}">Delete Course</a>
+        </div>
+        <div class="mt-3 d-flex">
+          <a class="badge badge-danger px-3 py-1" href="{% url 'course_delete' course.id %}">Delete Course</a>
         </div>
       </div>
       <div class="card-footer text-center">
@@ -69,6 +76,7 @@
   <p>You haven't created any courses yet.</p>
   {% endfor %}
 </div>
+
 <div id="copyModal" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -84,17 +92,22 @@
           <input type="hidden" class="form-control" id="id" name="id" value="" />
           <div class="form-group">
             <label for="exampleInputEmail1">Course Name</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Course Name..">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Course Name.." />
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="btnCreateCopy">Create Copy</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="btnCreateCopy">
+          Create Copy
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
       </div>
     </div>
   </div>
 </div>
+
 <div id="featureEditorModal" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
@@ -141,12 +154,17 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" id="btnSaveFeatures">Save Changes</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" id="btnSaveFeatures">
+          Save Changes
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
       </div>
     </div>
   </div>
 </div>
+
 <div id="studentsEnrolledModal" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
@@ -156,12 +174,11 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body vh-100" style="overflow: hidden auto;">
+      <div class="modal-body vh-100" style="overflow: hidden auto">
         <div class="row">
           <div class="col-md-4">
             <div id="studentsPanel">
-              <div class="list-group" id="studentsEnrollList">
-              </div>
+              <div class="list-group" id="studentsEnrollList"></div>
             </div>
           </div>
           <div class="col-md-8">
@@ -172,6 +189,7 @@
     </div>
   </div>
 </div>
+
 <div id="finalQuizSummaryModal" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
@@ -181,7 +199,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body vh-100" style="overflow: hidden auto;">
+      <div class="modal-body vh-100" style="overflow: hidden auto">
         <table class="table table-bordered">
           <thead>
             <tr>
@@ -190,13 +208,13 @@
               <th>Wrong Selected</th>
             </tr>
           </thead>
-          <tbody>
-          </tbody>
+          <tbody></tbody>
         </table>
       </div>
     </div>
   </div>
 </div>
+
 <div id="priceModal" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -208,11 +226,11 @@
       </div>
       <div class="modal-body">
         <form id="fmPrice">
-          <input type="hidden" name="id">
+          <input type="hidden" name="id" />
           <div class="row mb-3">
             <div class="col">
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="is_free">
+                <input class="form-check-input" type="checkbox" name="is_free" />
                 <label class="form-check-label" for="defaultCheck1">
                   Free Course
                 </label>
@@ -223,7 +241,7 @@
             <div class="col">
               <div class="form-group">
                 <label for="f1">Price</label>
-                <input type="number" min="0" class="form-control form-control-sm" name="price" readonly>
+                <input type="number" min="0" class="form-control form-control-sm" name="price" readonly />
               </div>
             </div>
           </div>
@@ -231,122 +249,198 @@
             <div class="col">
               <div class="form-group">
                 <label for="f1">Discounted Price</label>
-                <input type="number" min="0" class="form-control form-control-sm" name="discounted_price" readonly>
+                <input type="number" min="0" class="form-control form-control-sm" name="discounted_price" readonly />
               </div>
             </div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" id="btnSavePrice">Save changes</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" id="btnSavePrice">
+          Save changes
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
       </div>
     </div>
   </div>
 </div>
+
+<div id="imageModal" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Image</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Optimal size 600x488</p>
+        <form id="fmFile" action="{% url 'upload-file' %}" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" name="id" />
+          <input type="hidden" name="image" />
+          <div class="row">
+            <div class="col-md-7">
+              <img src="https://via.placeholder.com/600x488.png?text=600x488" alt="no image" class="w-100">
+            </div>
+            <div class="col-md-5">
+
+              <div class="input-group mb-3">
+
+                <div class="custom-file">
+                  <input type="file" name="file" class="custom-file-input" id="fu">
+                  <label class="custom-file-label" for="inputGroupFile01">Choose Image</label>
+                </div>
+              </div>
+
+              <button type="button" class="btn btn-success btn-sm" id="btnSaveImage">Save Image</button>
+              <button type="button" class="btn btn-danger btn-sm" id="btnDeleteImage">Delete Image</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% verbatim %}
-<script type="text/x-handlebars-template" id='studentEnrollItemTemplate'>
-  <a href="javascript:;" class="list-group-item list-group-item-action link-student-enrolled" id="{{id}}" item="{{stringify}}">
-  {{#get_name}}{{user}}{{/get_name}}
+<script type="text/x-handlebars-template" id="studentEnrollItemTemplate">
+  <a
+    href="javascript:;"
+    class="list-group-item list-group-item-action link-student-enrolled"
+    id="{{id}}"
+    item="{{stringify}}"
+  >
+    {{#get_name}}{{user}}{{/get_name}}
   </a>
 </script>
-{% endverbatim %}
-{% verbatim %}
-<script type="text/x-handlebars-template" id='studentCourseProgressTemplate'>
+{% endverbatim %} {% verbatim %}
+<script type="text/x-handlebars-template" id="studentCourseProgressTemplate">
   <table class="table table-bordered">
     <tr><td>Final Quiz</td><td>
-    
-    
-   {{#ifCond final_quiz.score '>=' 0}}
-    <span>{{final_quiz.score}}%</span>
-    {{/ifCond}}
 
-  {{#ifCond final_quiz.score '<' 0}}
-    <span>Not Taken</span>
-    {{/ifCond}}
-    </td></tr>
+        {{#ifCond final_quiz.score ">=" 0}}
+          <span>{{final_quiz.score}}%</span>
+        {{/ifCond}}
+
+        {{#ifCond final_quiz.score "<" 0}}
+          <span>Not Taken</span>
+        {{/ifCond}}
+      </td></tr>
   </table>
 
-  {{#ifCond final_quiz.score '>=' 0}}
-    <div class="accordion mb-2" id="accordionExample" data-id="{{final_quiz.quiz}}">
+  {{#ifCond final_quiz.score ">=" 0}}
+    <div
+      class="accordion mb-2"
+      id="accordionExample"
+      data-id="{{final_quiz.quiz}}"
+    >
       <div class="card">
         <div class="card-header" id="headingOne">
           <h2 class="mb-0">
-            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
-              aria-expanded="true" aria-controls="collapseOne">
+            <button
+              class="btn btn-link"
+              type="button"
+              data-toggle="collapse"
+              data-target="#collapseOne"
+              aria-expanded="true"
+              aria-controls="collapseOne"
+            >
               View Quiz Details
             </button>
           </h2>
         </div>
 
-        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div
+          id="collapseOne"
+          class="collapse"
+          aria-labelledby="headingOne"
+          data-parent="#accordionExample"
+        >
           <div class="card-body">
           </div>
         </div>
       </div>
 
-  </div>
+    </div>
   {{/ifCond}}
 
   <table class="table table-bordered">
-   <thead>
-    <tr><th>Status</th><th>Action</th><th>Date</th></tr>
-   </thead>
-       <tbody>
-          <tr>
-            <td>
+    <thead>
+      <tr><th>Status</th><th>Action</th><th>Date</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
 
-           {{#if is_completed}}
-          <span>Completed</span>
+          {{#if is_completed}}
+            <span>Completed</span>
           {{else}}
             <span> Not Finished Yet</span>
           {{/if}}
 
-          </td>
-          <td>
-           {{#if is_completed}}
-          <button class="btn btn-warning btn-sm" type="button" id="btnMarkInCompleteCourse" target="{{id}}">
-            Mark incomplete
-          </button>
+        </td>
+        <td>
+          {{#if is_completed}}
+            <button
+              class="btn btn-warning btn-sm"
+              type="button"
+              id="btnMarkInCompleteCourse"
+              target="{{id}}"
+            >
+              Mark incomplete
+            </button>
           {{else}}
-           <button class="btn btn-info btn-sm" type="button" id="btnMarkCompleteCourse" target="{{id}}">
-            Mark complete
-           </button>
+            <button
+              class="btn btn-info btn-sm"
+              type="button"
+              id="btnMarkCompleteCourse"
+              target="{{id}}"
+            >
+              Mark complete
+            </button>
           {{/if}}
 
-          </td><td class="text-center">
+        </td><td class="text-center">
           {{{dateFormat}}}
-          </td></tr>
-       </tbody>
+        </td></tr>
+    </tbody>
   </table>
-            
 </script>
-{% endverbatim %}
-{% verbatim %}
-<script type="text/x-handlebars-template" id='quizDetailTemplate'>
+{% endverbatim %} {% verbatim %}
+<script type="text/x-handlebars-template" id="quizDetailTemplate">
   <p>{{name}}</p>
 
   <ul class="list-group">
     {{#each questions}}
-    <li class="list-group-item">
-    <p>{{text}}</p>
-    
-      <ul class="answers">
-        {{#each answers}}
-        <li class="p-2" data-id="{{id}}">{{text}}
-        {{#if is_correct}}<span class="badge badge-success">(Correct)</span>{{/if}}
-        </li>
-        {{/each}}
-      </ul>
+      <li class="list-group-item">
+        <p>{{text}}</p>
 
-    </li>
+        <ul class="answers">
+          {{#each answers}}
+            <li class="p-2" data-id="{{id}}">{{text}}
+              {{#if is_correct}}<span
+                  class="badge badge-success"
+                >(Correct)</span>{{/if}}
+            </li>
+          {{/each}}
+        </ul>
+
+      </li>
 
     {{/each}}
   </ul>
 </script>
-{% endverbatim %}
-{% verbatim %}
-<script type="text/x-handlebars-template" id='quizQuestionItemTemplate'>
+{% endverbatim %} {% verbatim %}
+<script type="text/x-handlebars-template" id="quizQuestionItemTemplate">
   {{#each questions}}
     <tr>
       <td>{{text}}</td>
@@ -355,44 +449,44 @@
     <tr>
   {{/each}}
 </script>
-{% endverbatim %}
-{% endblock %}
+{% endverbatim %} {% endblock %} 
+
 {% block scripts %}
+
 <script type="application/javascript">
-  Handlebars.registerHelper('ifEquals', function (arg1, arg2, options) {
-    return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+
+  Handlebars.registerHelper("ifEquals", function (arg1, arg2, options) {
+    return arg1 == arg2 ? options.fn(this) : options.inverse(this);
   });
 
-  Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
-
+  Handlebars.registerHelper("ifCond", function (v1, operator, v2, options) {
     switch (operator) {
-      case '==':
-        return (v1 == v2) ? options.fn(this) : options.inverse(this);
-      case '===':
-        return (v1 === v2) ? options.fn(this) : options.inverse(this);
-      case '!=':
-        return (v1 != v2) ? options.fn(this) : options.inverse(this);
-      case '!==':
-        return (v1 !== v2) ? options.fn(this) : options.inverse(this);
-      case '<':
-        return (v1 < v2) ? options.fn(this) : options.inverse(this);
-      case '<=':
-        return (v1 <= v2) ? options.fn(this) : options.inverse(this);
-      case '>':
-        return (v1 > v2) ? options.fn(this) : options.inverse(this);
-      case '>=':
-        return (v1 >= v2) ? options.fn(this) : options.inverse(this);
-      case '&&':
-        return (v1 && v2) ? options.fn(this) : options.inverse(this);
-      case '||':
-        return (v1 || v2) ? options.fn(this) : options.inverse(this);
+      case "==":
+        return v1 == v2 ? options.fn(this) : options.inverse(this);
+      case "===":
+        return v1 === v2 ? options.fn(this) : options.inverse(this);
+      case "!=":
+        return v1 != v2 ? options.fn(this) : options.inverse(this);
+      case "!==":
+        return v1 !== v2 ? options.fn(this) : options.inverse(this);
+      case "<":
+        return v1 < v2 ? options.fn(this) : options.inverse(this);
+      case "<=":
+        return v1 <= v2 ? options.fn(this) : options.inverse(this);
+      case ">":
+        return v1 > v2 ? options.fn(this) : options.inverse(this);
+      case ">=":
+        return v1 >= v2 ? options.fn(this) : options.inverse(this);
+      case "&&":
+        return v1 && v2 ? options.fn(this) : options.inverse(this);
+      case "||":
+        return v1 || v2 ? options.fn(this) : options.inverse(this);
       default:
         return options.inverse(this);
     }
   });
 
   Handlebars.registerHelper("get_name", function (options) {
-
     var r = this.username;
 
     if (this.first_name && this.last_name) {
@@ -405,20 +499,18 @@
   });
 
   Handlebars.registerHelper("dateFormat", function (options) {
-
     if (this.completed_date) {
-      return new Handlebars.SafeString(moment(this.completed_date).format('LL'));
+      return new Handlebars.SafeString(
+        moment(this.completed_date).format("LL")
+      );
     }
 
-    return 'Date Unavailable';
-
-
+    return "Date Unavailable";
   });
 
   (function ($) {
-
+    
     $.StudentsEnrolledManager = function (options) {
-
       var that = this;
 
       var studentsList = [];
@@ -426,147 +518,153 @@
       var settings = $.extend({}, options);
 
       var getStudents = function () {
+        var id = $("#studentsEnrolledModal").attr("data-id");
 
-        var id = $("#studentsEnrolledModal").attr('data-id');
-
-        $.get('/api/student-history/?format=json', {
-          course: id
-        }, function (response) {
-          studentsList = response;
-          drawStudentsList();
-        });
+        $.get(
+          "/api/student-history/?format=json",
+          {
+            course: id,
+          },
+          function (response) {
+            studentsList = response;
+            drawStudentsList();
+          }
+        );
       };
 
       var drawStudentsList = function () {
-
         var activeElement = $(".link-student-enrolled.active");
 
         $("#studentsEnrollList").empty();
         $("#studentProgressPanel").empty();
 
         $(studentsList).each(function (index, item) {
-
           item.stringify = JSON.stringify(item);
 
-          var source = document.getElementById("studentEnrollItemTemplate").innerHTML;
+          var source = document.getElementById(
+            "studentEnrollItemTemplate"
+          ).innerHTML;
           var template = Handlebars.compile(source);
           $("#studentsEnrollList").append(template(item));
-
         });
 
         if (activeElement.length > 0)
-          $(".link-student-enrolled#" + activeElement.attr('id')).trigger('click');
-
+          $(".link-student-enrolled#" + activeElement.attr("id")).trigger(
+            "click"
+          );
       };
 
       var updateCourseCompleteStatus = function (id, status) {
-
         $.ajax({
           type: "POST",
           url: "/api/course-enrollment/" + id + "/set_completed/",
           data: JSON.stringify({
-            status: status
+            status: status,
           }),
           contentType: "application/json; charset=utf-8",
           dataType: "json",
           beforeSend: function (xhr, settings) {
-            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
           },
           success: function (response, textStatus, xhr) {
             getStudents();
           },
         });
-
-
       };
 
       var getQuizDetails = function (id) {
-        $.get('/api/quiz-details/?format=json', {
-          id: id
-        }, function (response) {
+        $.get(
+          "/api/quiz-details/?format=json",
+          {
+            id: id,
+          },
+          function (response) {
+            var source =
+              document.getElementById("quizDetailTemplate").innerHTML;
+            var template = Handlebars.compile(source);
+            $("#accordionExample .card-body").html(template(response));
 
-          var source = document.getElementById("quizDetailTemplate").innerHTML;
-          var template = Handlebars.compile(source);
-          $("#accordionExample .card-body").html(template(response));
+            var userId = $("a.link-student-enrolled.active").attr("id");
 
-          var userId = $("a.link-student-enrolled.active").attr('id');
+            var student = studentsList.find((a) => a.id == userId);
 
-          var student = studentsList.find(a => a.id == userId);
-
-          $(student.quiz_answers).each(function (ix, item) {
-
-            $(".answers li[data-id='" + item.answer + "']").append(
-              '<span class="badge badge-primary">Answered</span>');
-          });
-
-        });
+            $(student.quiz_answers).each(function (ix, item) {
+              $(".answers li[data-id='" + item.answer + "']").append(
+                '<span class="badge badge-primary">Answered</span>'
+              );
+            });
+          }
+        );
       };
 
       var getQuizDetails2 = function () {
+        var id = $("#finalQuizSummaryModal").attr("data-id");
 
-        var id = $("#finalQuizSummaryModal").attr('data-id');
+        $.get(
+          "/api/quiz-details/?format=json",
+          {
+            id: id,
+          },
+          function (response) {
+            var source = document.getElementById(
+              "quizQuestionItemTemplate"
+            ).innerHTML;
+            var template = Handlebars.compile(source);
+            $("#finalQuizSummaryModal tbody").html(template(response));
 
-        $.get('/api/quiz-details/?format=json', {
-          id: id
-        }, function (response) {
+            $("#finalQuizSummaryModal tbody tr").each(function () {
+              var x = Math.floor(Math.random() * 100) + 1;
+              var y = Math.floor(Math.random() * 100) + 1;
 
-          var source = document.getElementById("quizQuestionItemTemplate").innerHTML;
-          var template = Handlebars.compile(source);
-          $("#finalQuizSummaryModal tbody").html(template(response));
+              $(this).find(".correct").html(x);
+              $(this).find(".wrong").html(y);
 
-
-          $("#finalQuizSummaryModal tbody tr").each(function () {
-
-            var x = Math.floor(Math.random() * 100) + 1;
-            var y = Math.floor(Math.random() * 100) + 1;
-
-            $(this).find(".correct").html(x);
-            $(this).find(".wrong").html(y);
-
-            if (y > x) {
-              $(this).addClass('bg-danger');
-            }
-
-          });
-        });
+              if (y > x) {
+                $(this).addClass("bg-danger");
+              }
+            });
+          }
+        );
       };
 
       var registerEvent = function () {
-
         $("div").on("click", ".link-students", function (e) {
           e.stopPropagation();
 
-          var id = $(this).attr('pk');
+          var id = $(this).attr("pk");
 
-          $("#studentsEnrolledModal").attr('data-id', id);
+          $("#studentsEnrolledModal").attr("data-id", id);
 
           $("#studentsEnrolledModal").modal({
             show: true,
-            backdrop: 'static'
+            backdrop: "static",
           });
-
         });
 
         $("div").on("click", ".link-student-enrolled", function (e) {
           e.stopPropagation();
 
-          var item = $(this).attr('item');
+          var item = $(this).attr("item");
 
-          $("#studentsEnrollList .link-student-enrolled").removeClass('active');
+          $("#studentsEnrollList .link-student-enrolled").removeClass("active");
 
-          $(this).addClass('active');
+          $(this).addClass("active");
 
           var itemObject = JSON.parse(item);
 
-          var courseId = $("#studentsEnrolledModal").attr('data-id');
+          var courseId = $("#studentsEnrolledModal").attr("data-id");
 
-          var courseTaken = itemObject.course_enrolled.find(a => a.course.id == courseId);
+          var courseTaken = itemObject.course_enrolled.find(
+            (a) => a.course.id == courseId
+          );
 
           courseTaken.final_quiz = {
-            score: -1
+            score: -1,
           };
 
-          var finalQuiz = itemObject.taken_quizzes.find(a => a.quiz == courseTaken.course.quiz);
+          var finalQuiz = itemObject.taken_quizzes.find(
+            (a) => a.quiz == courseTaken.course.quiz
+          );
 
           if (finalQuiz) {
             courseTaken.final_quiz = finalQuiz;
@@ -575,79 +673,70 @@
           console.log(itemObject);
           console.log(courseTaken);
 
-          var source = document.getElementById("studentCourseProgressTemplate").innerHTML;
+          var source = document.getElementById(
+            "studentCourseProgressTemplate"
+          ).innerHTML;
           var template = Handlebars.compile(source);
           $("#studentProgressPanel").html(template(courseTaken));
 
-          $('#accordionExample').on('shown.bs.collapse', function () {
+          $("#accordionExample").on("shown.bs.collapse", function () {
             $("#accordionExample .card-body").empty();
 
-            var id = $("#accordionExample").attr('data-id');
+            var id = $("#accordionExample").attr("data-id");
 
             getQuizDetails(id);
-
           });
-
         });
 
         $("div").on("click", "#btnMarkCompleteCourse", function (e) {
           e.stopPropagation();
 
-          var item = $(this).attr('target');
+          var item = $(this).attr("target");
 
-          $("#btnMarkCompleteCourse").attr('disabled', true);
+          $("#btnMarkCompleteCourse").attr("disabled", true);
           updateCourseCompleteStatus(item, true);
-
         });
 
         $("div").on("click", "#btnMarkInCompleteCourse", function (e) {
           e.stopPropagation();
 
-          var item = $(this).attr('target');
+          var item = $(this).attr("target");
 
-          $("#btnMarkInCompleteCourse").attr('disabled', false);
+          $("#btnMarkInCompleteCourse").attr("disabled", false);
           updateCourseCompleteStatus(item, false);
-
         });
 
         $("div").on("click", ".link-quiz-summary", function (e) {
           e.stopPropagation();
 
-          var id = $(this).attr('data-quiz');
+          var id = $(this).attr("data-quiz");
 
-          $("#finalQuizSummaryModal").attr('data-id', id);
+          $("#finalQuizSummaryModal").attr("data-id", id);
 
           $("#finalQuizSummaryModal").modal({
             show: true,
-            backdrop: 'static'
+            backdrop: "static",
           });
 
           getQuizDetails2();
-
         });
 
-
-        $('#studentsEnrolledModal').on('shown.bs.modal', function (e) {
-
-          var id = $("#studentsEnrolledModal").attr('data-id');
+        $("#studentsEnrolledModal").on("shown.bs.modal", function (e) {
+          var id = $("#studentsEnrolledModal").attr("data-id");
 
           getStudents();
 
-          $('#studentsEnrolledModal .modal-content').css({
-            'max-height': $(window).height() * 0.9,
+          $("#studentsEnrolledModal .modal-content").css({
+            "max-height": $(window).height() * 0.9,
           });
 
-          var h = $('#studentsEnrolledModal .modal-body').height();
+          var h = $("#studentsEnrolledModal .modal-body").height();
 
-          $('#studentsPanel').css({
-            'max-height': h + 'px',
-            'overflow': 'hidden auto'
+          $("#studentsPanel").css({
+            "max-height": h + "px",
+            overflow: "hidden auto",
           });
-
         });
-
-
-
       };
 
       var init = function () {
@@ -657,11 +746,9 @@
       init();
 
       return this;
-
     };
 
     $.PriceManager = function (options) {
-
       var that = this;
 
       var courseList = JSON.parse($("#hfJson").val());
@@ -669,9 +756,10 @@
       var settings = $.extend({}, options);
 
       var updatePrice = function () {
-
         var formData = $("#fmPrice").serializeObject();
-        formData['is_free'] = $("#fmPrice input[name='is_free']").is(":checked");
+        formData["is_free"] = $("#fmPrice input[name='is_free']").is(
+          ":checked"
+        );
 
         if (!formData.price) formData.price = 0;
         if (!formData.discounted_price) formData.discounted_price = 0;
@@ -683,65 +771,190 @@
           contentType: "application/json; charset=utf-8",
           dataType: "json",
           beforeSend: function (xhr, settings) {
-            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
           },
           success: function (response, textStatus, xhr) {
             if (response && response.id > 0) {
-              toastr.success('Price has been updated');
+              toastr.success("Price has been updated");
               window.location.reload();
             }
           },
         });
-
-
       };
 
       var registerEvent = function () {
-
         $(".link-price").click(function (event) {
           event.stopPropagation();
 
-          var id = $(this).attr('pk');
-          var item = courseList.find(a => a.pk == id);
+          var id = $(this).attr("pk");
+          var item = courseList.find((a) => a.pk == id);
 
           if (id && item) {
-            $("#priceModal input[name='is_free']").prop('checked', item.fields.is_free);
+            $("#priceModal input[name='is_free']").prop(
+              "checked",
+              item.fields.is_free
+            );
             $("#priceModal input[name='id']").val(id);
 
             if (item.fields.is_free) {
-              $("#priceModal input[name='price']").val(null).attr('readonly', true);
-              $("#priceModal input[name='discounted_price']").val(null).attr('readonly', true);
+              $("#priceModal input[name='price']")
+                .val(null)
+                .attr("readonly", true);
+              $("#priceModal input[name='discounted_price']")
+                .val(null)
+                .attr("readonly", true);
             } else {
-              $("#priceModal input[name='price']").val(item.fields.price).attr('readonly', false);
-              $("#priceModal input[name='discounted_price']").val(item.fields.discounted_price).attr(
-                'readonly', false);
+              $("#priceModal input[name='price']")
+                .val(item.fields.price)
+                .attr("readonly", false);
+              $("#priceModal input[name='discounted_price']")
+                .val(item.fields.discounted_price)
+                .attr("readonly", false);
             }
 
-            $("#priceModal").modal('show');
+            $("#priceModal").modal("show");
           }
-
-
         });
 
-        $("div").on("change", "#priceModal input[name='is_free']", function (e) {
-          e.stopPropagation();
+        $("div").on(
+          "change",
+          "#priceModal input[name='is_free']",
+          function (e) {
+            e.stopPropagation();
 
-          if ($(this).is(":checked")) {
-            $("#priceModal input[name='price']").val(null).attr('readonly', true);
-            $("#priceModal input[name='discounted_price']").val(null).attr('readonly', true);
-          } else {
-            $("#priceModal input[name='price']").val(null).attr('readonly', false);
-            $("#priceModal input[name='discounted_price']").val(null).attr(
-              'readonly', false);
+            if ($(this).is(":checked")) {
+              $("#priceModal input[name='price']")
+                .val(null)
+                .attr("readonly", true);
+              $("#priceModal input[name='discounted_price']")
+                .val(null)
+                .attr("readonly", true);
+            } else {
+              $("#priceModal input[name='price']")
+                .val(null)
+                .attr("readonly", false);
+              $("#priceModal input[name='discounted_price']")
+                .val(null)
+                .attr("readonly", false);
+            }
           }
-
-        });
+        );
 
         $("div").on("click", "#btnSavePrice", function (e) {
           e.stopPropagation();
 
           updatePrice();
+        });
+      };
 
+      var init = function () {
+        registerEvent();
+      };
+
+      init();
+
+      return this;
+    };
+
+    $.ImageManager = function (options) {
+      var that = this;
+
+      var courseList = JSON.parse($("#hfJson").val());
+
+      var settings = $.extend({}, options);
+
+      var updateImage = function () {
+
+        var dataSrc = $("#imageModal img").attr('data-src');
+        var id = $("#imageModal input[name='id']").val();
+
+        var formData = { image: dataSrc?dataSrc:null, id: id };
+
+        $.ajax({
+          type: "PUT",
+          url: "/api/course-image/" + formData.id + "/",
+          data: JSON.stringify(formData),
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          beforeSend: function (xhr, settings) {
+            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+          },
+          success: function (response, textStatus, xhr) {
+            if (response && response.id > 0) {
+              toastr.success("Image has been updated");
+             // window.location.reload();
+            }
+          },
+        });
+      };
+
+      var registerEvent = function () {
+
+        $(".link-image").click(function (event) {
+          event.stopPropagation();
+
+          var id = $(this).attr("pk");
+          var item = courseList.find((a) => a.pk == id);
+
+          $("#imageModal input[name='id']").val(item.pk);
+          $("#imageModal input[name='image']").val(item.fields.image);
+          $("#imageModal").modal("show");
+
+        });
+
+        $("#fu").change(function () {
+          $('#fmFile').submit();
+        });
+
+        $('#fmFile').ajaxForm({
+          beforeSend: function () {
+            // status.empty();
+            // var percentVal = '0%';
+            // bar.width(percentVal)
+            // percent.html(percentVal);
+          },
+          uploadProgress: function (event, position, total, percentComplete) {
+            // var percentVal = percentComplete + '%';
+            // bar.width(percentVal)
+            // percent.html(percentVal);
+          },
+          success: function (response) {
+            if (response != 0) {
+              $("#imageModal img").attr('src', response);
+              $("#imageModal img").attr('data-src', response);
+            }
+          },
+          complete: function (xhr) { }
+        });
+
+        $("div").on("click", "#btnDeleteImage", function (e) {
+          e.stopPropagation();
+
+          $("#imageModal img").attr('src', 'https://via.placeholder.com/600x488.png?text=600x488');
+          $("#imageModal img").attr('data-src', null);
+
+          updateImage();
+
+        });
+
+        $("div").on("click", "#btnSaveImage", function (e) {
+          e.stopPropagation();
+
+          updateImage();
+
+        });
+
+        $('#imageModal').on('shown.bs.modal', function (e) {
+          var imgSrc = $("#imageModal input[name='image']").val();
+
+          if (imgSrc) {
+            $("#imageModal img").attr('src', imgSrc);
+            $("#imageModal img").attr('data-src', imgSrc);
+          }
+          else {
+            $("#imageModal img").attr('src', 'https://via.placeholder.com/600x488.png?text=600x488');
+            $("#imageModal img").attr('data-src', null);
+          }
         });
 
       };
@@ -753,22 +966,22 @@
       init();
 
       return this;
-
     };
 
-  }(jQuery));
+
+  })(jQuery);
 
   $(document).ready(function () {
-
     initTextEditor();
 
     new $.StudentsEnrolledManager({});
     new $.PriceManager({});
+    new $.ImageManager({});
 
     $(".link-copy").click(function (event) {
       event.stopPropagation();
 
-      var id = $(this).attr('pk');
+      var id = $(this).attr("pk");
 
       if (id) {
         var title = $(".card-title[pk='" + id + "']").text();
@@ -776,153 +989,144 @@
         $("#copyModal #id").val(id);
         $("#copyModal #name").val($.trim(title) + " Copy");
 
-        $("#copyModal").modal('show');
+        $("#copyModal").modal("show");
       }
-
-
     });
 
     $("#btnCreateCopy").click(function (event) {
       event.stopPropagation();
 
-      $('#copyModal form').submit();
-
+      $("#copyModal form").submit();
     });
 
     $(".link-features").click(function (event) {
       event.stopPropagation();
 
-      var id = $(this).attr('pk');
+      var id = $(this).attr("pk");
 
       if (id) {
-
         $("#fmFeature input[name='course']").val(null);
         $("#fmFeature textarea").val(null);
 
-        $("#fmFeature textarea[name='schedule']").summernote('code', null);
-        $("#fmFeature textarea[name='outcomes']").summernote('code', null);
-        $("#fmFeature textarea[name='notes']").summernote('code', null);
-        $("#fmFeature textarea[name='completion_requirements']").summernote('code',
-          null);
+        $("#fmFeature textarea[name='schedule']").summernote("code", null);
+        $("#fmFeature textarea[name='outcomes']").summernote("code", null);
+        $("#fmFeature textarea[name='notes']").summernote("code", null);
+        $("#fmFeature textarea[name='completion_requirements']").summernote(
+          "code",
+          null
+        );
 
         $("#fmFeature input[name='course']").val(id);
 
         getCourseFeatures(id).then(function (response) {
-
           if (response && response.length > 0) {
-
             $("#fmFeature textarea[name='schedule']").val(response[0].schedule);
             $("#fmFeature textarea[name='outcomes']").val(response[0].outcomes);
             $("#fmFeature textarea[name='notes']").val(response[0].notes);
-            $("#fmFeature textarea[name='completion_requirements']").val(response[0]
-              .completion_requirements);
+            $("#fmFeature textarea[name='completion_requirements']").val(
+              response[0].completion_requirements
+            );
 
-            $("#fmFeature textarea[name='schedule']").summernote('code', response[0].schedule);
-            $("#fmFeature textarea[name='outcomes']").summernote('code', response[0].outcomes);
-            $("#fmFeature textarea[name='notes']").summernote('code', response[0].notes);
-            $("#fmFeature textarea[name='completion_requirements']").summernote('code', response[0]
-              .completion_requirements);
-
+            $("#fmFeature textarea[name='schedule']").summernote(
+              "code",
+              response[0].schedule
+            );
+            $("#fmFeature textarea[name='outcomes']").summernote(
+              "code",
+              response[0].outcomes
+            );
+            $("#fmFeature textarea[name='notes']").summernote(
+              "code",
+              response[0].notes
+            );
+            $("#fmFeature textarea[name='completion_requirements']").summernote(
+              "code",
+              response[0].completion_requirements
+            );
           }
 
           $("#featureEditorModal").modal({
-            'backdrop': 'static',
-            'show': true
+            backdrop: "static",
+            show: true,
           });
-
-
         });
-
-
       }
-
-
     });
 
     $("#btnSaveFeatures").click(function (event) {
       event.stopPropagation();
 
       $("#fmFeature").submit();
-
     });
 
-    $('#copyModal form').ajaxForm({
-
+    $("#copyModal form").ajaxForm({
       beforeSubmit: function () {
         var load =
           '<span class="spinner-border spinner-border-sm mr-1" role="status" aria-hidden="true"></span>';
-        load = load + 'Creating...';
+        load = load + "Creating...";
         $("#btnCreateCopy").html(load);
-        $('#copyModal button').attr('disabled', true);
-
+        $("#copyModal button").attr("disabled", true);
       },
       success: function (response) {
-
         if (response > 0) {
-          toastr.success('Course copy has been created');
+          toastr.success("Course copy has been created");
           window.location.reload();
         } else {
-
-          $("#copyModal").modal('hide');
-          $("#btnCreateCopy").html('Create Copy');
-          $('#copyModal button').attr('disabled', false);
+          $("#copyModal").modal("hide");
+          $("#btnCreateCopy").html("Create Copy");
+          $("#copyModal button").attr("disabled", false);
           $("#copyModal #id").val(null);
           $("#copyModal #name").val(null);
 
-          toastr.error('Sorry, We are failed to created the copy. Kindly refresh the page and try again.');
-
+          toastr.error(
+            "Sorry, We are failed to created the copy. Kindly refresh the page and try again."
+          );
         }
-
-
-      }
+      },
     });
 
-    $('#fmFeature').ajaxForm({
-
+    $("#fmFeature").ajaxForm({
       beforeSubmit: function () {
-        $("#featureEditorModal button").attr('disabled', true);
+        $("#featureEditorModal button").attr("disabled", true);
       },
       success: function (response) {
-
         if (response.id > 0) {
-          toastr.success('Course features has been saved.');
+          toastr.success("Course features has been saved.");
         } else {
-          toastr.error('Sorry, We are failed to save the features.');
+          toastr.error("Sorry, We are failed to save the features.");
         }
 
-        $("#featureEditorModal button").attr('disabled', false);
-
-      }
+        $("#featureEditorModal button").attr("disabled", false);
+      },
     });
-
-
   });
 
   function getCourseFeatures(courseId) {
-
-    return $.get('/api/course-features/', {
-      course: courseId
-    }, function (response) {
-      return response;
-    });
-
+    return $.get(
+      "/api/course-features/",
+      {
+        course: courseId,
+      },
+      function (response) {
+        return response;
+      }
+    );
   }
 
   function initTextEditor() {
-
     $("#fmFeature textarea[name='schedule']").summernote({
-      height: 330
+      height: 330,
     });
     $("#fmFeature textarea[name='outcomes']").summernote({
-      height: 330
+      height: 330,
     });
     $("#fmFeature textarea[name='notes']").summernote({
-      height: 330
+      height: 330,
     });
     $("#fmFeature textarea[name='completion_requirements']").summernote({
-      height: 330
+      height: 330,
     });
-
-  };
+  }
 </script>
+
 {% endblock %}

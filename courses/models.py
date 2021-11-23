@@ -34,6 +34,7 @@ class Course(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     overview = models.TextField()
+    image = models.TextField(default=None, null=True)
     is_free = models.BooleanField(default=True)
     price = models.DecimalField(max_digits=6, decimal_places=2, default=None, null=True)
     discounted_price = models.DecimalField(max_digits=6, decimal_places=2, default=None, null=True)

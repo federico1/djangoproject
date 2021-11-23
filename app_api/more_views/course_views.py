@@ -225,17 +225,23 @@ class CoursePriceApiView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    # def post(self, request, format=None):
-    #     serializer = course_serializers.CoursePriceSerializer(
-    #         data=request.data)
 
-    #     if serializer.is_valid():
+class CourseImageApiView(APIView):
 
-    #         serializer.save()
+    def get_object(self, pk):
+        try:
+            return Course.objects.get(pk=pk)
+        except Course.DoesNotExist:
+            raise Http404
 
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = course_serializers.CourseImageSerializer(snippet, data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'POST'])

@@ -73,6 +73,14 @@ class CourseProgressSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CourseImageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Course
+        fields = ['id', 'image',]
+
+
+
 # class StudentCourseSerializer(serializers.Serializer):
 #     student = serializers.IntegerField(required=True)
 #     course = serializers.IntegerField(required=True)

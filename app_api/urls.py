@@ -53,6 +53,7 @@ urlpatterns = [
     path('course-evaluation/', course_views.CourseEvaluationApiView.as_view()),
     path('course-assess-rating/', course_views.CourseRatingApiView.as_view()),
     path('course-price/<int:pk>/', course_views.CoursePriceApiView.as_view()),
+    path('course-image/<int:pk>/', course_views.CourseImageApiView.as_view()),
 
     path('external-video-room/', chat_views.ExternalVideoRoomDetailView.as_view()),
     path('external-video-room/<int:pk>/',
