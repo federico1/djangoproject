@@ -11,11 +11,13 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.urls import reverse_lazy
 import os
 import configparser
 #from django.urls import reverse
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(os.path.join(__file__, os.pardir))))
+BASE_DIR = os.path.dirname(os.path.dirname(
+    os.path.abspath(os.path.join(__file__, os.pardir))))
 
 config = configparser.ConfigParser()
 
@@ -28,7 +30,6 @@ SECRET_KEY = 'xmo&z@u0(dfbq!w(dl_0a^f(s9ukugs%id3)i(ei=$oxg%ir80'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True
-
 
 
 DEBUG = True
@@ -50,9 +51,12 @@ DATABASES = {
 }
 
 
-ALLOWED_HOSTS = ['nyc-cst.com','18.191.255.165','127.0.0.1', '18.219.91.250', 'nullstrings.com', 'construction-safety-nyc.com', '192.168.0.100']
+ALLOWED_HOSTS = [
+    'nyc-cst.com', '18.191.255.165', '127.0.0.1',
+    '18.219.91.250', 'nullstrings.com', 'construction-safety-nyc.com',
+    '192.168.0.100', 'pdhsafety.com']
 
-#'18.221.173.7','127.0.0.1:8000'
+# '18.221.173.7','127.0.0.1:8000'
 
 # Application definition
 
@@ -85,11 +89,11 @@ MIDDLEWARE = [
     'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    #'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    #'courses.middleware.SubdomainCourseMiddleware',
+    # 'courses.middleware.SubdomainCourseMiddleware',
 ]
 
 ROOT_URLCONF = 'djangoproject.urls'
@@ -135,7 +139,6 @@ STATIC_URL = '/static/'
 #from django.core.urlresolvers import reverse_lazy
 #LOGIN_REDIRECT_URL = reverse_lazy('student_course_list')
 #from django.core.urlresolvers import reverse
-from django.urls import reverse_lazy
 LOGIN_REDIRECT_URL = reverse_lazy('course_list')
 AUTH_USER_MODEL = "students.User"
 
@@ -160,7 +163,7 @@ CACHES = {
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        #'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.IsAuthenticated',
         'rest_framework.permissions.AllowAny',
     ]
 }
