@@ -51,18 +51,13 @@ DATABASES = {
 }
 
 
-ALLOWED_HOSTS = [
-    'nyc-cst.com', '18.191.255.165', '127.0.0.1',
-    '18.219.91.250', 'nullstrings.com', 'construction-safety-nyc.com',
-    '192.168.0.100', 'pdhsafety.com']
+ALLOWED_HOSTS = ['127.0.0.1', '18.219.91.250', 'pdhsafety.com']
 
 # '18.221.173.7','127.0.0.1:8000'
 
 # Application definition
 
-INSTALLED_APPS = (
-    'courses',
-    'app_teachers',
+INSTALLED_APPS = ( 
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -70,6 +65,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
+    'courses',
+    'app_teachers',
     'rest_framework',
     'students',
     'embed_video',
@@ -79,8 +76,8 @@ INSTALLED_APPS = (
     'app_admin',
     'app_public',
     'app_cart',
+    'app_students'
 )
-
 
 MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -135,6 +132,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'djangoproject/static'),
+)
+
+#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
+
 
 #from django.core.urlresolvers import reverse_lazy
 #LOGIN_REDIRECT_URL = reverse_lazy('student_course_list')
@@ -142,12 +146,10 @@ STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = reverse_lazy('course_list')
 AUTH_USER_MODEL = "students.User"
 
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
-STATIC_URL = '/static/'
-STATIC_ROOT = "/opt/bitnami/apps/django/django_projects/static"
+LOGOUT_REDIRECT_URL = '/'
 
 CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 60 * 15  # 15 minutes

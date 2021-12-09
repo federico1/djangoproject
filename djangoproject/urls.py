@@ -26,8 +26,8 @@ from .sitemap import StaticViewSitemap, SubjectsSitemap, CourseSitemap
 
 sitemaps = {
     'static': StaticViewSitemap,
-    'subjects':SubjectsSitemap,
-    'course':CourseSitemap
+    'subjects': SubjectsSitemap,
+    'course': CourseSitemap
 }
 
 
@@ -38,7 +38,7 @@ urlpatterns = [
     path('course/', include('courses.urls')),
     path('courses', CourseListView.as_view(), name='courses_list'),
     path('', IndexView.as_view(), name='course_list'),
-    path('students/', include('students.urls')),
+    #path('students/', include('students.urls')),
     path('teachers/', include('app_teachers.urls')),
     path('quiz/', include('app_quiz.urls')),
     path('communicate/', include('app_chat.urls')),
@@ -51,4 +51,4 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
-document_root=settings.MEDIA_ROOT)
+                          document_root=settings.MEDIA_ROOT)

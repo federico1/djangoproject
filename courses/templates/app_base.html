@@ -2,766 +2,361 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="description"
-        content="{% block meta_desc %} Construction site and safety training courses to qualify you to work in the NY. NYC Construction Safety Training offers OSHA 10-Hour, 30-Hour, Supported Scaffold, Site Safety Manager, Concrete Safety, CHST, ASP, CSP, SMS and STSC training online for construction and general industry. We provide bulk discounts. {% endblock %}">
-    <meta name="author" content="">
-    <meta name="keywords" content="">
-    <meta name="robots" content="all">
-    <title> Online - NYC CONSTRUCTION SAFETY TRAINING {% block title %} {% endblock %}</title>
-    <link rel="icon" type="image/png" href="{% static '/images/logo5.png' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
-        rel="stylesheet">
-    <link href="{% static '/fe_v1/css/bootstrap.min.css' %}" rel="stylesheet" media="print"
-        onload="this.media='all'; this.onload=null;">
-    <link href="{% static '/fe_v1/css/font-awesome.min.css' %}" rel="stylesheet" media="print"
-        onload="this.media='all'; this.onload=null;">
-    <link href="{% static '/fe_v1/css/elegant-icons.css' %}" rel="stylesheet" media="print"
-        onload="this.media='all'; this.onload=null;">
-    <link href="{% static '/fe_v1/css/slicknav.min.css' %}" rel="stylesheet" media="print"
-        onload="this.media='all'; this.onload=null;">
-    <link href="{% static '/fe_v1/css/style.css' %}" rel="stylesheet" media="print"
-        onload="this.media='all'; this.onload=null;">
-    {% comment %}
-    <link rel="stylesheet" href="{% static '/plugins/toastr/toastr.min.css' %}" media="print"
-        onload="this.media='all'; this.onload=null;"> {% endcomment %}
-    <link rel="canonical" href="https://construction-safety-nyc.com{{ request.path }}" />
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-190250545-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
 
-        gtag('config', 'UA-190250545-1');
-    </script>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HBMW2QHSJ4"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
+        <meta name="description"
+            content="{% block meta_desc %} Construction site and safety training courses to qualify you to work in the NY. CONSTRUCTION SAFETY TRAINING offers OSHA 10-Hour, 30-Hour, Supported Scaffold, Site Safety Manager, Concrete Safety, CHST, ASP, CSP, SMS and STSC training online for construction and general industry. We provide bulk discounts. {% endblock %}">
+        <meta name="author" content="">
+        <meta name="keywords" content="">
+        <meta name="robots" content="all">
 
-        gtag('config', 'G-HBMW2QHSJ4');
-    </script>
-    <style>
-        .top-bar {
-            padding: .5rem 0;
-            background: #eee;
-        }
+        <title> Online - CONSTRUCTION SAFETY TRAINING {% block title %} {% endblock %}</title>
 
-        .top-bar a {
-            color: #666666;
-        }
+        <link rel="icon" type="image/png" href="{% static '/images/logo5.png' %}">
 
-        .site-navbar {
-            margin-bottom: 0px;
-            z-index: 1999;
-            position: relative;
-            width: 100%;
-            padding: 1rem;
-        }
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
 
-        @media (max-width: 991.98px) {
-            .site-navbar {
-                padding-top: 3rem;
-                padding-bottom: 3rem;
+        <!-- bootstrap.min css -->
+        <link rel="stylesheet" href="{% static 'edutim/vendors/bootstrap/bootstrap.css' %}">
+
+        <!-- Iconfont Css -->
+        <link rel="stylesheet" href="{% static 'edutim/vendors/fontawesome/css/all.css' %}">
+
+        <!-- animate.css -->
+        <link rel="stylesheet" href="{% static 'edutim/vendors/animate-css/animate.css' %}">
+
+        <!-- Main Stylesheet -->
+        <link rel="stylesheet" href="{% static 'edutim/css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'edutim/css/responsive.css' %}">
+
+
+        <link rel="canonical" href="https://pdhsafety.com{{ request.path }}" />
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-190250545-1"></script>
+
+        <script>
+            window.dataLayer = window.dataLayer || [];
+
+            function gtag() {
+                dataLayer.push(arguments);
             }
-        }
+            gtag('js', new Date());
 
-        .site-navbar .toggle-button {
-            position: absolute;
-            right: 0px;
-        }
+            gtag('config', 'UA-190250545-1');
+        </script>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-HBMW2QHSJ4"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
 
-        .site-navbar .site-logo {
-            position: absolute;
-            font-size: 2rem;
-            text-transform: uppercase;
-            font-weight: 900;
-            line-height: 0;
-            margin: 0;
-            padding: 0;
-            z-index: 3;
-        }
-
-        @media (max-width: 991.98px) {
-            .site-navbar .site-logo {
-                float: left;
-                position: relative;
+            function gtag() {
+                dataLayer.push(arguments);
             }
-        }
-
-        .site-navbar .site-navigation.border-bottom {
-            border-bottom: 1px solid white !important;
-        }
-
-        .site-navbar .site-navigation .site-menu {
-            margin-bottom: 0;
-        }
-
-        .site-navbar .site-navigation .site-menu .active {
-            color: #007bff !important;
-        }
-
-        .site-navbar .site-navigation .site-menu a {
-            text-decoration: none !important;
-            display: inline-block;
-        }
-
-        .site-navbar .site-navigation .site-menu>li {
-            display: inline-block;
-        }
-
-        .site-navbar .site-navigation .site-menu>li>a {
-            margin-left: 15px;
-            margin-right: 15px;
-            padding: 20px 0px;
-            color: #000 !important;
-            display: inline-block;
-            text-decoration: none !important;
-        }
-
-        .site-navbar .site-navigation .site-menu>li>a:hover {
-            color: #007bff;
-        }
-
-        .site-navbar .site-navigation .site-menu .has-children {
-            position: relative;
-        }
-
-        .site-navbar .site-navigation .site-menu .has-children>a {
-            position: relative;
-            padding-right: 20px;
-        }
-
-        .site-navbar .site-navigation .site-menu .has-children>a:before {
-            position: absolute;
-            content: "\e313";
-            font-size: 16px;
-            top: 50%;
-            right: 0;
-            -webkit-transform: translateY(-50%);
-            -ms-transform: translateY(-50%);
-            transform: translateY(-50%);
-            font-family: 'icomoon';
-        }
-
-        .site-navbar .site-navigation .site-menu .has-children .dropdown {
-            visibility: hidden;
-            opacity: 0;
-            top: 100%;
-            position: absolute;
-            text-align: left;
-            border-top: 2px solid #007bff;
-            -webkit-box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.1);
-            box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.1);
-            padding: 0px 0;
-            margin-top: 20px;
-            margin-left: 0px;
-            background: #fff;
-            -webkit-transition: 0.2s 0s;
-            -o-transition: 0.2s 0s;
-            transition: 0.2s 0s;
-        }
-
-        .site-navbar .site-navigation .site-menu .has-children .dropdown.arrow-top {
-            position: absolute;
-        }
-
-        .site-navbar .site-navigation .site-menu .has-children .dropdown.arrow-top:before {
-            display: none;
-            bottom: 100%;
-            left: 20%;
-            border: solid transparent;
-            content: " ";
-            height: 0;
-            width: 0;
-            position: absolute;
-            pointer-events: none;
-        }
-
-        .site-navbar .site-navigation .site-menu .has-children .dropdown.arrow-top:before {
-            border-color: rgba(136, 183, 213, 0);
-            border-bottom-color: #fff;
-            border-width: 10px;
-            margin-left: -10px;
-        }
-
-        .site-navbar .site-navigation .site-menu .has-children .dropdown a {
-            text-transform: none;
-            letter-spacing: normal;
-            -webkit-transition: 0s all;
-            -o-transition: 0s all;
-            transition: 0s all;
-            color: #000 !important;
-        }
-
-        .site-navbar .site-navigation .site-menu .has-children .dropdown a.active {
-            color: #007bff !important;
-            background: #f8f9fa;
-        }
-
-        .site-navbar .site-navigation .site-menu .has-children .dropdown>li {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            min-width: 200px;
-        }
-
-        .site-navbar .site-navigation .site-menu .has-children .dropdown>li>a {
-            padding: 9px 20px;
-            display: block;
-        }
-
-        .site-navbar .site-navigation .site-menu .has-children .dropdown>li>a:hover {
-            background: #f8f9fa;
-            color: #ced4da;
-        }
-
-        .site-navbar .site-navigation .site-menu .has-children .dropdown>li.has-children>a:before {
-            content: "\e315";
-            right: 20px;
-        }
-
-        .site-navbar .site-navigation .site-menu .has-children .dropdown>li.has-children>.dropdown,
-        .site-navbar .site-navigation .site-menu .has-children .dropdown>li.has-children>ul {
-            left: 100%;
-            top: 0;
-        }
-
-        .site-navbar .site-navigation .site-menu .has-children .dropdown>li.has-children:hover>a,
-        .site-navbar .site-navigation .site-menu .has-children .dropdown>li.has-children:active>a,
-        .site-navbar .site-navigation .site-menu .has-children .dropdown>li.has-children:focus>a {
-            background: #f8f9fa;
-            color: #ced4da;
-        }
-
-        .site-navbar .site-navigation .site-menu .has-children:hover>a,
-        .site-navbar .site-navigation .site-menu .has-children:focus>a,
-        .site-navbar .site-navigation .site-menu .has-children:active>a {
-            color: #007bff;
-        }
-
-        .site-navbar .site-navigation .site-menu .has-children:hover,
-        .site-navbar .site-navigation .site-menu .has-children:focus,
-        .site-navbar .site-navigation .site-menu .has-children:active {
-            cursor: pointer;
-        }
-
-        .site-navbar .site-navigation .site-menu .has-children:hover>.dropdown,
-        .site-navbar .site-navigation .site-menu .has-children:focus>.dropdown,
-        .site-navbar .site-navigation .site-menu .has-children:active>.dropdown {
-            -webkit-transition-delay: 0s;
-            -o-transition-delay: 0s;
-            transition-delay: 0s;
-            margin-top: 0px;
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .site-mobile-menu {
-            width: 300px;
-            position: fixed;
-            right: 0;
-            z-index: 2000;
-            padding-top: 20px;
-            background: #fff;
-            height: calc(100vh);
-            -webkit-transform: translateX(110%);
-            -ms-transform: translateX(110%);
-            transform: translateX(110%);
-            -webkit-box-shadow: -10px 0 20px -10px rgba(0, 0, 0, 0.1);
-            box-shadow: -10px 0 20px -10px rgba(0, 0, 0, 0.1);
-            -webkit-transition: .3s all ease-in-out;
-            -o-transition: .3s all ease-in-out;
-            transition: .3s all ease-in-out;
-        }
-
-        .offcanvas-menu .site-mobile-menu {
-            -webkit-transform: translateX(0%);
-            -ms-transform: translateX(0%);
-            transform: translateX(0%);
-        }
-
-        .site-mobile-menu .site-mobile-menu-header {
-            width: 100%;
-            float: left;
-            padding-left: 20px;
-            padding-right: 20px;
-        }
-
-        .site-mobile-menu .site-mobile-menu-header .site-mobile-menu-close {
-            float: right;
-            margin-top: 8px;
-        }
-
-        .site-mobile-menu .site-mobile-menu-header .site-mobile-menu-close span {
-            font-size: 30px;
-            display: inline-block;
-            padding-left: 10px;
-            padding-right: 0px;
-            line-height: 1;
-            cursor: pointer;
-            -webkit-transition: .3s all ease;
-            -o-transition: .3s all ease;
-            transition: .3s all ease;
-        }
-
-        .site-mobile-menu .site-mobile-menu-header .site-mobile-menu-close span:hover {
-            color: #ced4da;
-        }
-
-        .site-mobile-menu .site-mobile-menu-header .site-mobile-menu-logo {
-            float: left;
-            margin-top: 10px;
-            margin-left: 0px;
-        }
-
-        .site-mobile-menu .site-mobile-menu-header .site-mobile-menu-logo a {
-            display: inline-block;
-            text-transform: uppercase;
-        }
-
-        .site-mobile-menu .site-mobile-menu-header .site-mobile-menu-logo a img {
-            max-width: 70px;
-        }
-
-        .site-mobile-menu .site-mobile-menu-header .site-mobile-menu-logo a:hover {
-            text-decoration: none;
-        }
-
-        .site-mobile-menu .site-mobile-menu-body {
-            overflow-y: scroll;
-            -webkit-overflow-scrolling: touch;
-            position: relative;
-            padding: 0 20px 20px 20px;
-            height: calc(100vh - 52px);
-            padding-bottom: 150px;
-        }
-
-        .site-mobile-menu .site-nav-wrap {
-            padding: 0;
-            margin: 0;
-            list-style: none;
-            position: relative;
-        }
-
-        .site-mobile-menu .site-nav-wrap a {
-            padding: 10px 20px;
-            display: block;
-            position: relative;
-            color: #212529;
-        }
-
-        .site-mobile-menu .site-nav-wrap a:hover {
-            color: #007bff;
-        }
-
-        .site-mobile-menu .site-nav-wrap li {
-            position: relative;
-            display: block;
-        }
-
-        .site-mobile-menu .site-nav-wrap li .nav-link.active {
-            color: #007bff;
-        }
-
-        .site-mobile-menu .site-nav-wrap .arrow-collapse {
-            position: absolute;
-            right: 0px;
-            top: 10px;
-            z-index: 20;
-            width: 36px;
-            height: 36px;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 50%;
-        }
-
-        .site-mobile-menu .site-nav-wrap .arrow-collapse:hover {
-            background: #f8f9fa;
-        }
-
-        .site-mobile-menu .site-nav-wrap .arrow-collapse:before {
-            font-size: 12px;
-            z-index: 20;
-            font-family: "icomoon";
-            content: "\f078";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            -webkit-transform: translate(-50%, -50%) rotate(-180deg);
-            -ms-transform: translate(-50%, -50%) rotate(-180deg);
-            transform: translate(-50%, -50%) rotate(-180deg);
-            -webkit-transition: .3s all ease;
-            -o-transition: .3s all ease;
-            transition: .3s all ease;
-        }
-
-        .site-mobile-menu .site-nav-wrap .arrow-collapse.collapsed:before {
-            -webkit-transform: translate(-50%, -50%);
-            -ms-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
-        }
-
-        .site-mobile-menu .site-nav-wrap>li {
-            display: block;
-            position: relative;
-            float: left;
-            width: 100%;
-        }
-
-        .site-mobile-menu .site-nav-wrap>li>a {
-            padding-left: 20px;
-            font-size: 20px;
-        }
-
-        .site-mobile-menu .site-nav-wrap>li>ul {
-            padding: 0;
-            margin: 0;
-            list-style: none;
-        }
-
-        .site-mobile-menu .site-nav-wrap>li>ul>li {
-            display: block;
-        }
-
-        .site-mobile-menu .site-nav-wrap>li>ul>li>a {
-            padding-left: 40px;
-            font-size: 16px;
-        }
-
-        .site-mobile-menu .site-nav-wrap>li>ul>li>ul {
-            padding: 0;
-            margin: 0;
-        }
-
-        .site-mobile-menu .site-nav-wrap>li>ul>li>ul>li {
-            display: block;
-        }
-
-        .site-mobile-menu .site-nav-wrap>li>ul>li>ul>li>a {
-            font-size: 16px;
-            padding-left: 60px;
-        }
-
-        .site-mobile-menu .site-nav-wrap[data-class="social"] {
-            float: left;
-            width: 100%;
-            margin-top: 30px;
-            padding-bottom: 5em;
-        }
-
-        .site-mobile-menu .site-nav-wrap[data-class="social"]>li {
-            width: auto;
-        }
-
-        .site-mobile-menu .site-nav-wrap[data-class="social"]>li:first-child a {
-            padding-left: 15px !important;
-        }
-
-        .sticky-wrapper {
-            position: relative;
-            z-index: 100;
-            width: 100%;
-        }
-
-        .sticky-wrapper .site-navbar {
-            -webkit-transition: .3s all ease;
-            -o-transition: .3s all ease;
-            transition: .3s all ease;
-        }
-
-        .sticky-wrapper .site-navbar {
-            background: #fff;
-        }
-
-        .sticky-wrapper .site-navbar .site-logo a {
-            color: #fff;
-        }
-
-        .sticky-wrapper .site-navbar ul li a {
-            color: rgba(255, 255, 255, 0.7) !important;
-        }
-
-        .sticky-wrapper .site-navbar ul li a.active {
-            color: #fff !important;
-        }
-
-        .sticky-wrapper.is-sticky .site-navbar {
-            background: #fff;
-            -webkit-box-shadow: 4px 0 20px -5px rgba(0, 0, 0, 0.2);
-            box-shadow: 4px 0 20px -5px rgba(0, 0, 0, 0.2);
-        }
-
-        .sticky-wrapper.is-sticky .site-navbar .site-logo a {
-            color: #007bff;
-        }
-
-        .sticky-wrapper.is-sticky .site-navbar ul li a {
-            color: #000 !important;
-        }
-
-        .sticky-wrapper.is-sticky .site-navbar ul li a.active {
-            color: #007bff !important;
-        }
-
-        .sticky-wrapper .shrink {
-            padding-top: 0px !important;
-            padding-bottom: 0px !important;
-        }
-
-        @media (max-width: 991.98px) {
-            .sticky-wrapper .shrink {
-                padding-top: 30px !important;
-                padding-bottom: 30px !important;
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Page Preloder -->
-    <div id="preloder">
-        <div class="loader"></div>
-    </div>
-    <!-- Offcanvas Menu Begin -->
-    <div class="offcanvas-menu-overlay"></div>
-    <div class="offcanvas-menu-wrapper">
-        <div class="offcanvas__option">
-            <div class="offcanvas__links">
-                {% if request.user.is_authenticated  %}
-                {%else%}
-                <a href="{% url 'login' %}">Sign in</a>
-                <a href="{% url 'student_registration' %}">Register</a>
-                {%endif%}
-            </div>
-            {% if request.user.is_authenticated  %}
-            <div class="offcanvas__top__hover">
-                <span>Welcome, {{ request.user.first_name }} <i class="arrow_carrot-down"></i></span>
-                <ul>
-                    <li>
-                        {% if request.user.is_teacher == True %}
-                        <a href="{% url 'teacher_dashboard' %}" class="text-white">Teacher Dashboard</a>
-                        {% endif %}
-                        {% if request.user.is_student == True %}
-                        <a href="{% url  'student_course_list' %}" class="text-white">Student Dashboard</a>
-                        {% endif %}
-                        {% if request.user.is_superuser == True %}
-                        <a href="{% url  'admin_dashboard' %}" class="text-white">Admin Dashboard</a>
-                        {% endif %}
-                    </li>
-                    <li><a href="{% url 'logout' %}"  class="text-white mt-2">Sign Out</a></li>
-                </ul>
-            </div>
-            {%endif%}
-        </div>
-        <div class="offcanvas__nav__option">
-            <a href="{% url 'cart_detail'%}" class="text-dark"><i class="icon_cart"></i> <span class="lbl-cart-items-count">(0)</span></a>
-            <div class="price lbl-cart-items-price">$0.00</div>
-        </div>
-        <div id="mobile-menu-wrap"></div>
-        <div class="offcanvas__text">
-            <p>
-                <a href="#" class="text-dark"><span>Phone:</span> 914-473-6791</a>
-            </p>
-            <p>
-                <a href="#" class="text-dark"><span>Email:</span> nyccst@construction-safety-nyc.com</a>
-            </p>
-        </div>
-    </div>
-    <!-- Offcanvas Menu End -->
-    <!-- Header Section Begin -->
-    <header class="header">
-        <div class="header__top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 col-md-7">
-                        <div class="header__top__left">
-                            <p><a href="#" class="text-white"><span>Phone:</span> 914-473-6791</a>
-                                <a href="#" class="text-white"><span>Email:</span>
-                                    nyccst@construction-safety-nyc.com</a>
-                            </p>
+            gtag('js', new Date());
+
+            gtag('config', 'G-HBMW2QHSJ4');
+        </script>
+
+    </head>
+
+    <body id="top-header">
+
+        <header>
+            <div class="header-top">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-6">
+                            <ul class="header-contact">
+                                <li>
+                                    <span>Call :</span>
+                                    +914-473-6791
+                                </li>
+                                <li>
+                                    <span>Email :</span>
+                                    nyccst@construction-safety-nyc.com
+                                </li>
+                            </ul>
                         </div>
-                    </div>
-                    <div class="col-lg-6 col-md-5">
-                        <div class="header__top__right">
-                            <div class="header__top__links">
-                                <a href="{% url 'cart_detail'%}"><i class="icon_cart"></i> <span class='lbl-cart-items-count'>(0)</span>
-                                <span class='lbl-cart-items-price'>$0.00</span></a>
-                                {% if request.user.is_authenticated  %}
-                                {% if request.user.is_teacher == True %}
-                                <a href="{% url 'teacher_dashboard' %}" class="text-orange">Teacher Dashboard</a>
-                                {% endif %}
-                                {% if request.user.is_student == True %}
-                                <a href="{% url  'student_course_list' %}" class="text-orange">Student Dashboard</a>
-                                {% endif %}
-                                {% if request.user.is_superuser == True %}
-                                <a href="{% url  'admin_dashboard' %}" class="text-orange">Admin Dashboard</a>
-                                {% endif %}
-                                {% else %}
-                                <a href="{% url 'login' %}">Sign in</a>
-                                <a href="{% url 'student_registration' %}">Register</a>
-                                {% endif %}
+                        <div class="col-lg-6 col-md-6">
+                            <div class="header-right float-right">
+                                <div class="header-socials">
+                                    <ul>
+                                        <li>
+                                            {% if request.user.is_authenticated  %}
+                                            <a href="#">Welcome, {{ request.user.first_name }}</a>
+                                            {% else %}
+                                            <a href="{% url 'student_registration' %}">Register</a>
+                                            {%endif%}
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="header-btn">
+
+                                    {% if request.user.is_authenticated  %}
+
+                                    {% if request.user.is_teacher == True %}
+                                    <a href="{% url 'teacher_dashboard' %}" class="btn btn-main btn-small">Teacher
+                                        Dashboard</a>
+                                    {% endif %}
+                                    {% if request.user.is_student == True %}
+                                    <a href="{% url  'student_course_list' %}" class="btn btn-main btn-small">Student
+                                        Dashboard</a>
+                                    {% endif %}
+                                    {% if request.user.is_superuser == True %}
+                                    <a href="{% url  'admin_dashboard' %}" class="btn btn-main btn-small">Admin
+                                        Dashboard</a>
+                                    {% endif %}
+                                    <a href="{% url 'logout' %}" class="btn btn-main btn-small">
+                                        <i
+                                            class="fa fa-sign-out-alt "></i>
+                                    </a>
+                                    {%else%}
+                                    <a href="{% url 'login' %}" class="btn btn-main btn-small"><i
+                                            class="fa fa-user mr-2"></i>Login
+                                        </a>
+                                    {%endif%}
+
+                                </div>
                             </div>
-                            {% if request.user.is_authenticated  %}
-                            <div class="header__top__hover">
-                                <span>Welcome, {{ request.user.first_name }} <i class="arrow_carrot-down"></i></span>
-                                <ul>
-                                    <li>
-                                        {% if request.user.is_teacher == True %}
-                                        <a href="{% url 'teacher_dashboard' %}">Teacher Dashboard</a>
-                                        {% endif %}
-                                        {% if request.user.is_student == True %}
-                                        <a href="{% url  'student_course_list' %}">Student Dashboard</a>
-                                        {% endif %}
-                                        {% if request.user.is_superuser == True %}
-                                        <a href="{% url  'admin_dashboard' %}">Admin Dashboard</a>
-                                        {% endif %}
-                                    </li>
-                                    <li><a href="{% url 'logout' %}">Sign Out</a></li>
-                                </ul>
-                            </div>
-                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 col-md-3">
-                    <div class="header__logo">
-                        <a href="/"><img src="{% static '/fe_v1/img/logo5.png' %}" alt="" width="62">
-                            CONSTRUCTION SAFETY TRAINING
+
+            <!-- Main Menu Start -->
+
+            <div class="site-navigation main_menu " id="mainmenu-area">
+                <nav class="navbar navbar-expand-lg">
+                    <div class="container">
+                        <a class="navbar-brand" href="index.html">
+                            <img src="{% static 'edutim/images/logo-dark.png' %}" alt="Edutim" class="img-fluid">
                         </a>
-                    </div>
-                </div>
-                <div class="col-lg-8 col-md-9">
-                    <nav class="header__menu mobile-menu">
-                        <ul>
-                            <li class="active"><a href="/">Home</a></li>
-                            <li class="courses-menu"><a href="#">Courses</a>
-                                <ul class="dropdown">
-                                    <li><a href="{% url 'courses_list' %}">All Courses</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="/contact">Contact</a></li>
-                            <li><a href="/packages">Packages</a></li>
-                            <li><a href="/sst-verify/">Training Verification </a></li>
-                            <li><a href="{%url 'cart_detail'%}">My Cart </a></li>
-                        </ul>
-                    </nav>
-                </div>
+
+                        <!-- Toggler -->
+
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenu"
+                            aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="fa fa-bars"></span>
+                        </button>
+
+                        <!-- Collapse -->
+                        <div class="collapse navbar-collapse" id="navbarMenu">
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/">
+                                        Home
+                                    </a>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbar3" role="button"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Courses<i class="fa fa-angle-down"></i>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbar3">
+                                        <a class="dropdown-item " href="course-grid.html">
+                                            Course Style 1
+                                        </a>
+                                        <a class="dropdown-item " href="course-grid-2.html">
+                                            Course Style 2
+                                        </a>
+
+                                        <a class="dropdown-item " href="course-grid-3.html">
+                                            Course Style 3
+                                        </a>
+                                        <a class="dropdown-item " href="course-grid-4.html">
+                                            Course Style 4
+                                        </a>
+                                        <a class="dropdown-item " href="course-grid-5.html">
+                                            Course Filter
+                                        </a>
+                                        <a class="dropdown-item " href="course-grid-6.html">
+                                            Course List
+                                        </a>
+                                        <a class="dropdown-item " href="course-single.html">
+                                            Course Details Style 1
+                                        </a>
+                                        <a class="dropdown-item " href="course-single2.html">
+                                            Course Details Style Tab
+                                        </a>
+                                        <a class="dropdown-item " href="course-single3.html">
+                                            Course Details Style Tab2
+                                        </a>
+                                        <a class="dropdown-item " href="course-single4.html">
+                                            Course Details Classic
+                                        </a>
+                                    </div>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/packages">
+                                        Packages
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/sst-verify/">
+                                        Training Verification
+                                    </a>
+                                </li>
+
+                                <li class="nav-item ">
+                                    <a href="/contact" class="nav-link">
+                                        Contact
+                                    </a>
+                                </li>
+
+                            </ul>
+
+                            <ul class="header-contact-right d-none d-lg-block">
+                                <li> <a href="#" class="header-cart"><i class="fa fa-shopping-cart"></i></a></li>
+                                <li><a href="#" class="header-search search_toggle"> <i class="fa fa fa-search"></i></a>
+                                </li>
+                            </ul>
+
+                        </div> <!-- / .navbar-collapse -->
+                    </div> <!-- / .container -->
+                </nav>
             </div>
-            <div class="canvas__open"><i class="fa fa-bars"></i></div>
+        </header>
+
+        <!--search overlay start-->
+        <div class="search-wrap">
+            <div class="overlay">
+                <form action="" class="search-form">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-10 col-9">
+                                <h3>Search Your keyword</h3>
+                                <input type="text" class="form-control" placeholder="Search..." />
+                            </div>
+                            <div class="col-md-2 col-3 text-right">
+                                <div class="search_toggle toggle-wrap d-inline-block">
+                                    <img class="search-close" src="{% static 'edutim/images/close.png' %}"
+                                        srcset="% static 'edutim/images/close@2x.png 2x' %}" alt="" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-    </header>
-    
-    <!-- Header Section End -->
-    <div id="content">
+        <!--search overlay end-->
+
         {% block content %}
         {% endblock %}
-    </div>
 
-    <footer class="footer-area">
-        <div class="top-footer-area">
+        <section class="footer pt-120">
             <div class="container">
                 <div class="row">
-                    <div class="col-12">
-                        <div class="mt-4">
-                            <img src='{% static "/images/iacet.jpg" %}' width="300" alt="iacet" />
+                    <div class="col-lg-4 mr-auto col-sm-6 col-md-6">
+                        <div class="widget footer-widget mb-5 mb-lg-0">
+                            <h5 class="widget-title">About Us</h5>
+                            <p class="mt-3">Veniam Sequi molestias aut necessitatibus optio magni at natus accusamus.Lorem ipsum dolor sit amet, consectetur adipisicin gelit, sed do eiusmod tempor incididunt .</p>
+                            <ul class="list-inline footer-socials">
+                                <li class="list-inline-item"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                <li class="list-inline-item"> <a href="#"><i class="fab fa-twitter"></i></a></li>
+                                <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin"></i></a></li>
+                                <li class="list-inline-item"><a href="#"><i class="fab fa-pinterest"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-2 col-sm-6 col-md-6">
+                        <div class="footer-widget mb-5 mb-lg-0">
+                            <h5 class="widget-title">Company</h5>
+                            <ul class="list-unstyled footer-links">
+                                <li><a href="#">About us</a></li>
+                                <li><a href="#">Contact us</a></li>
+                                <li><a href="#">Projects</a></li>
+                                <li><a href="#">Terms & Condition</a></li>
+                                <li><a href="#">Privacy policy</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-sm-6 col-md-6">
+                        <div class="footer-widget mb-5 mb-lg-0">
+                            <h5 class="widget-title">Courses</h5>
+                            <ul class="list-unstyled footer-links">
+                                <li><a href="#">SEO Business</a></li>
+                                <li><a href="#">Digital Marketing</a></li>
+                                <li><a href="#">Graphic Design</a></li>
+                                <li><a href="#">Site Development</a></li>
+                                <li><a href="#">Social Marketing</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-md-6">
+                        <div class="footer-widget footer-contact mb-5 mb-lg-0">
+                            <h5 class="widget-title">Contact </h5>
+                            
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-headphone"></i>
+                                    <div>
+                                        <strong>Phone number</strong>
+                                        (68) 345 5902
+                                    </div>
+                                    
+                                </li>
+                                <li> <i class="bi bi-envelop"></i>
+                                    <div>
+                                        <strong>Email Address</strong>
+                                        info@yourdomain.com
+                                    </div>
+                                </li>
+                                <li><i class="bi bi-location-pointer"></i>
+                                    <div>
+                                        <strong>Office Address</strong>
+                                        Moon Street Light Avenue
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="bottom-footer-area d-flex justify-content-center">
-            <a href="{% url 'about_detail' %}">About</a>
-            <a href="#">Support</a>
-            <a href="{% url 'legal_detail' %}">Legal</a>
-            <a href="{% url 'student_manual_detail' %}">Student Manual</a>
-            <a href="{% url 'faq' %}">FAQ</a>
-            <a href="{% url 'packages' %}">Packages</a>
-            <a href="/sitemap.xml">Sitemap</a>
-        </div>
-        <div>
-            <p><a href="#" class="text-white">
-                    Copyright © 2021 All rights reserved | NYC Construction Safety Training, LLC
-                </a>
-            </p>
-        </div>
-    </footer>
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Select Option</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <a href="{% url 'student_registration' %}" class="btn btn-lg btn-primary">Register as Student</a>
-                    <a href="{% url 'teacher_registration' %}" class="btn btn-lg btn-info">Register as Teacher</a>
+        
+            <div class="footer-btm">
+                <div class="container">
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-lg-6">
+                            <div class="footer-logo">
+                                <img src="{% static 'edutim/images/logo-white.png' %}" alt="Edutim" class="img-fluid">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="copyright text-lg-center">
+                                <p>@ Copyright reserved to Edutim.Proudly Crafted by <a href="https://themeturn.com">Dreambuzz</a> </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </section>
+
+        <div class="fixed-btm-top">
+            <a href="#top-header" class="js-scroll-trigger scroll-to-top"><i class="fa fa-angle-up"></i></a>
         </div>
-    </div>
 
-    <script src="{% static "/fe_v1/js/jquery-3.3.1.min.js" %}"></script>
-    <script src="{% static "/fe_v1/js/bootstrap.min.js" %}"></script>
-    <script src="{% static "/fe_v1/js/jquery.slicknav.js" %}"></script>
 
-    <script src="{% static "/fe_v1/plugins/handlebars.min.js" %}"></script>
-    <script src="{% static "/fe_v1/plugins/jquery.form.min.js" %}"></script>
-    <script src="{% static "/fe_v1/plugins/sweetalert.min.js" %}"></script>
-    <script src="{% static "/fe_v1/plugins/jquery.validate.min.js" %}"></script>
-    
-     <script src="{% static "/fe_v1/js/main.js" %}"></script>
-     <script src="{% static "/fe_v1/js/cart.js" %}"></script>
+        <!-- Main jQuery -->
+        <script src="{% static 'edutim/vendors/jquery/jquery.js' %}"></script>
+        <!-- Bootstrap 4.5 -->
+        <script src="{% static 'edutim/vendors/bootstrap/bootstrap.js' %}"></script>
+        <script src="{% static 'edutim/js/script.js' %}"></script>
 
-    {% comment %} <script src="{% static "/plugins/jquery/jquery-ui.min.js" %}"></script>
-    <script src="{% static "/pickadate/jquery.datetimepicker.full.min.js" %}"></script>
-    <script src="{% static "/plugins/toastr/toastr.min.js" %}"></script>
-    <script src="{% static "/plugins/jquery.sticky.js" %}"></script> {% endcomment %}
-    
-    <script src="//media.twiliocdn.com/sdk/js/video/releases/2.4.0/twilio-video.min.js"></script>
-    
-    {% block scripts %}
-    {% endblock %}
-    <script>
-        $(document).ready(function () {
-            getSubjects();
-        });
+        {% block scripts %}
+        {% endblock %}
 
-        function getSubjects() {
+    </body>
 
-            //$(".courses-menu ul").css('min-width', 380);
 
-            $.get('/api/subjects', {}, function (response) {
-                $(response).each(function (indx, item) {
-                    var href = '/course/subject/' + item.slug;
-                    $(".courses-menu ul").append('<li><a href="' + href + '"">' + item.title +
-                        '</a></li>');
-                });
-
-            });
-        }
-    </script>
-</body>
 
 </html>
