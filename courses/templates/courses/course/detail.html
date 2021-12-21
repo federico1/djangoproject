@@ -189,7 +189,14 @@
                                         <span>
                                             <i class="fa fa-user"></i>Instructor :</span>
                                         <a href="#" class="d-inline-block">
-                                            {{ object.owner }}
+
+                                            {% if object.owner.first_name %}
+                                                {{ object.owner.first_name }}
+                                                {{ object.owner.last_name }}
+                                            {% else %}
+                                                {{ object.owner }}
+                                            {% endif %}
+
                                         </a>
                                     </div>
                                 </li>
@@ -301,8 +308,7 @@
                             } else if (xhr.status == 226) {
                                 $(".link-free-enroll").hide();
                                 Swal.fire({icon: 'warning', title: 'Note!', text: 'You have been already enrolled in this course!'});
-                            }
-                            else if (xhr.status == 203) {
+                            } else if (xhr.status == 203) {
                                 $(".link-free-enroll").hide();
                                 Swal.fire({icon: 'error', title: 'Note!', text: 'You are not allowed to take this class.'});
                             }
@@ -317,9 +323,9 @@
                         e.stopPropagation();
                         Swal.fire({title: 'You are not logged in. ', showDenyButton: true, confirmButtonText: 'Log in', denyButtonText: 'Create a new account'}).then((result) => {
                             if (result.isConfirmed) {
-                                window.location.href = "{% url 'login' %}?next=      {{ request.path }}";
+                                window.location.href = "{% url 'login' %}?next=       {{ request.path }}";
                             } else if (result.isDenied) {
-                                window.location.href = "{% url 'student_registration' %}?next=      {{ request.path }}";
+                                window.location.href = "{% url 'student_registration' %}?next=       {{ request.path }}";
                             }
                         });
                     });
