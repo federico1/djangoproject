@@ -43,8 +43,7 @@ ALLOWED_HOSTS = ['127.0.0.1', '18.219.91.250', 'pdhsafety.com']
 
 # Application definition
 
-INSTALLED_APPS = ( 
-    
+INSTALLED_APPS = (   
     'courses',
     'app_teachers',
     'rest_framework',

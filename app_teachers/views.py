@@ -25,7 +25,11 @@ from students.models import User, Quiz
 
 class OwnerMixin(object):
     def get_queryset(self):
+        
         qs = super(OwnerMixin, self).get_queryset()
+
+        if self.request.GET['q']:
+            qs = qs.filter(title__contains=self.request.GET['q'])
         return qs.filter(owner=self.request.user)
 
 
