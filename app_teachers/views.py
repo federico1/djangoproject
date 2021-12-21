@@ -28,7 +28,7 @@ class OwnerMixin(object):
         
         qs = super(OwnerMixin, self).get_queryset()
 
-        if self.request.GET['q']:
+        if 'q' in self.request.GET:
             qs = qs.filter(title__contains=self.request.GET['q'])
         return qs.filter(owner=self.request.user)
 
