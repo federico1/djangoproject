@@ -31,20 +31,29 @@ class Course(models.Model):
     subject = models.ForeignKey(Subject,
                                 related_name='courses',
                                 on_delete=models.CASCADE)
+    students = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                      related_name="courses_joined",
+                                      through='Enrollments')
+    quiz = models.ForeignKey(Quiz,
+                             related_name='quiz',
+                             blank=True, null=True,
+                             on_delete=models.DO_NOTHING)
+
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
-    overview = models.TextField()
+    mark_type = models.CharField(max_length=200, default=None, null=True)
+    overview = models.TextField(default=None, null=True)
     image = models.TextField(default=None, null=True)
+    video = models.TextField(default=None, null=True)
     is_free = models.BooleanField(default=True)
-    price = models.DecimalField(max_digits=6, decimal_places=2, default=None, null=True)
-    discounted_price = models.DecimalField(max_digits=6, decimal_places=2, default=None, null=True)
+    is_approved = models.BooleanField(default=True)
+    is_deleted = models.BooleanField(default=False)
+    price = models.DecimalField(max_digits=6,
+                                decimal_places=2, default=None, null=True)
+    discounted_price = models.DecimalField(max_digits=6,
+                                           decimal_places=2, default=None, null=True)
 
     created = models.DateTimeField(auto_now_add=True)
-    students = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="courses_joined",
-                                      through='Enrollments')
-
-    quiz = models.ForeignKey(Quiz, related_name='quiz',
-                             blank=True, null=True, on_delete=models.DO_NOTHING)
 
     class Meta:
         ordering = ['-created']
@@ -200,6 +209,10 @@ class CourseFeature(models.Model):
     outcomes = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
     completion_requirements = models.TextField(blank=True, null=True)
+    skill_level = models.TextField(blank=True, null=True)
+    duration = models.TextField(blank=True, null=True)
+    language = models.TextField(blank=True, null=True)
+    certificate_status = models.TextField(blank=True, null=True)
 
     class Meta:
         ordering = ['pk']

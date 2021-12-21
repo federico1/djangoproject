@@ -1,75 +1,114 @@
 {% extends "app_base.html" %}
 {% load staticfiles %}
-{% block title %}
-- Contact
+{% block title %} Contact | pdhsafety.com
 {% endblock %}
 {% block content %}
-<div class="home-courses">
-    <div class="container">
-        <div class="row mb-4">
-            <div class="col text-center">
-                <h3>Contact Us</h3>
+
+    <section class="page-header">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="page-header-content">
+                        <h1>Contact Us</h1>
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item">
+                                <a href="/">Home</a>
+                            </li>
+                            <li class="list-inline-item">/</li>
+                            <li class="list-inline-item">
+                                Contact
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="page-content">
+    </section>
+
+    <section class="contact-info section-padding">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-lg-6">
+                    <div class="section-heading center-heading">
+                        <span class="subheading">Have any query?</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-4">
                     <div class="row">
-                        <div class="col-12 col-lg-6">
-                            <div class="contact-form mt-0">
-                                <form action="#" method="post">
-                                    <div class="row">
-                                        <div class="col-12 col-lg-6">
+                        <div class="col-lg-12 col-md-6">
+                            <div class="contact-item">
+                                <p>Email Us</p>
+                                <h4>nyccst@construction-safety-nyc.com</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-6">
+                            <div class="contact-item">
+                                <p>Make a Call</p>
+                                <h4>+914-473-6791</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-6">
+                            <div class="contact-item">
+                                <p>Corporate Office</p>
+                                <h4>189 Valentine Ln Yonkers, New York 10705
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-8">
+                    <form class="contact__form form-row " method="POST" action="mail.php" id="contactForm">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="alert alert-success contact__msg" style="display: none" role="alert">
+                                    Your message was sent successfully.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <input type="text" id="name" name="name" class="form-control" placeholder="Your Name"></div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <input type="text" name="email" id="email" class="form-control" placeholder="Email Address"></div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <input type="text" name="subject" id="subject" class="form-control" placeholder="Subject"></div>
+                                        </div>
+
+                                        <div class="col-lg-12">
                                             <div class="form-group">
-                                                <input type="text" class="form-control" id="text" placeholder="Name">
+                                                <textarea id="message" name="message" cols="30" rows="6" class="form-control" placeholder="Your Message"></textarea>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-lg-6">
-                                            <div class="form-group">
-                                                <input type="email" class="form-control" id="email" placeholder="Email">
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <textarea name="message" class="form-control" id="message" cols="30"
-                                                    rows="10" placeholder="Message"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <button type="button" class="btn btn-orange w-100">Post A Comment</button>
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <div class="mt-4 text-right">
+                                            <button class="btn btn-main" type="submit">Send Message
+                                                <i class="fa fa-angle-right ml-2"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                         </div>
-                        <div class="col-12 col-lg-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Contact Info</h4>
-                                </div>
-                                <div class="card-body">
-                                    <h6 class="mb-3"><i class="fa fa-phone mr-2" aria-hidden="true"></i> +914-473-6791</h6>
-                                    <h6 class="mb-3"><i class="fa fa-envelope mr-2" aria-hidden="true"></i>
-                                        <a class="text-dark" href="mailto:nyccst@construction-safety-nyc.com">
-                                            nyccst@construction-safety-nyc.com
-                                        </a></h6>
-
-                                         <h6><i class=" fa fa-map-pin" aria-hidden="true"></i> 189 Valentine Ln Yonkers, New York 10705</h6>
-                                </div>
-                            </div>
-                            
-                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{% endblock %}
-{% block scripts %}
-<script>
-    $(document).ready(function () {
+                </section>
 
-    });
-</script>
-{% endblock %}
+
+            {% endblock %}
+            {% block scripts %}
+                <script>
+                    $(document).ready(function () {});
+                </script>
+            {% endblock %}

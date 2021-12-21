@@ -1,10 +1,12 @@
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 
 from app_api.more_serializers.student_serializers import StudentHistorySerializer
 from app_api.more_serializers.quiz_serializers import QuizSerializer
 from students.models import User, Quiz
+from courses.models import Enrollments
 
 
 class StudentsHistoryApiView(APIView):
@@ -39,3 +41,4 @@ class QuizApiView(APIView):
         serializer = QuizSerializer(snippets)
 
         return Response(serializer.data)
+

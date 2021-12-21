@@ -1,395 +1,162 @@
 {% extends "app_base.html" %}
+{% load staticfiles %}
+{% load course_tags %}
+
 {% block title %}
-{% if subject %}
-{{ subject.title }} courses
-{% else %}
-All courses
-{% endif %}
+    {% if subject %}
+        Top
+        {{ subject.title }}
+        courses Online | pdhsafety.com
+    {% endif %}
 {% endblock %}
+
+{% block meta_desc %}
+    {% if subject %}Learn
+        {{ subject.title }}
+        from top-rated instructors. Find the best online
+        {{ subject.title }}
+        classes and get certificate today. We provides bulk discounts. Learn Now!
+    {% endif %}
+{% endblock %}
+
 {% block content %}
-<div class="home-courses">
-    <div class="container">
-        <div class="row mb-4">
-            <div class="col text-center">
-                <h3>Courses</h3>
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-5">
-                <select class="form-control" id="ddlCategory">
-                    <option value="{% url "courses_list" %}">All Courses</option>
-                    {% for s in subjects %}
-                    <option {% if subject == s %} selected {% endif %} value="{% url "course_list_subject" s.slug %}">
-                        {{ s.title }} ({{ s.total_courses }})
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-md-4 d-none">
-                <div class="list-group mt-2">
-                    <a href="{% url "courses_list" %}" class="list-group-item list-group-item-secondary">
-                        All
-                    </a>
-                    {% for s in subjects %}
-                    <a class="list-group-item list-group-item-action {% if subject == s %} list-group-item-success {% endif %}"
-                        href="{% url "course_list_subject" s.slug %}">
-                        <span>{{ s.title }}</span>
-                        <span class="badge badge-pill badge-primary">{{ s.total_courses }}</span>
-                    </a>
-                    {% endfor %}
-                </div>
-                <div class="list-group mt-2 d-none">
-                    <a href="{% url "courses_list" %}" class="list-group-item list-group-item-secondary">
-                        All
-                    </a>
-                    {% for s in instructors %}
-                    <a class="list-group-item list-group-item-action" href="{% url "courses_list" %}?teacher={{s.id}}">
-                        <span>
-                            {% if s.first_name %}
-                            {{s.first_name}} {{s.last_name}}
-                            {%else%}
-                            {{ s.username }}
-                            {% endif %}
-                        </span>
-                        <span class="badge badge-pill badge-primary">{{ s.total_courses }}</span>
-                    </a>
-                    {% endfor %}
+
+    <section class="section-padding course">
+        <div class="course-top-wrap">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <p>Showing
+                            {{ courses.count }}
+                            results</p>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="topbar-search">
+                            <form method="get" action="#">
+                                <select class="form-control" id="ddlCategory">
+                                    <option value="{% url 'courses_list' %}">Choose Category</option>
+                                    {% for s in subjects %}
+                                        <option {% if subject == s %} selected {% endif %} value="{% url 'course_list_subject' s.slug %}">
+                                            {{ s.title }}
+                                            ({{ s.total_courses }})
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-12">
-                <main class="page-content">
-                    <div class="row">
+        </div>
 
 
+        <div class="container">
+            <div class="row">
 
-                        {% for course in courses %}
-                        {% with subject=course.subject %}
-                        <div class="col-md-6 col-lg-4 mb-3 course-item">
-                            <input type="hidden" name="id" value="{{course.id}}" />
-                            <input type="hidden" name="title" value="{{course.title}}" />
-                            <input type="hidden" name="subject" value="{{subject}}" />
-                            <input type="hidden" name="price" value="{{course.price}}" />
-                            <input type="hidden" name="discounted_price" value="{{course.discounted_price}}" />
-                            <input type="hidden" name="modules" value="{{course.total_modules}}" />
+                {% for course in courses %}
+                    {% with subject=course.subject %}
+                    <div class="col-lg-4 col-md-6 course-item">
+                        
+                        <input type="hidden" name="id" value="{{ course.id }}"/>
+                        <input type="hidden" name="title" value="{{ course.title }}"/>
+                        <input type="hidden" name="subject" value="{{ subject }}"/>
+                        <input type="hidden" name="price" value="{{ course.price }}"/>
+                        <input type="hidden" name="discounted_price" value="{{ course.discounted_price }}"/>
+                        <input type="hidden" name="modules" value="{{ course.total_modules }}"/>
 
 
-                            <div class="single-courses-box mb-30">
-                                <div class="courses-image">
-                                    <a href="{% url 'course_detail' course.slug %}" class="d-block">
+                        <div class="course-block">
+                            <div class="course-img">
+                                <a href="{% url 'course_detail' course.slug %}">
+                                    {% if course.image %}
+                                        <img src="{{ course.image }}" alt="image" class="img-fluid"/>
+                                    {% else %}
+                                        <img src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg" alt="image" class="img-fluid"/>
+                                    {% endif %}
+                                </a>
+                                {% if course.features.first.skill_level %}
+                                    <span class="course-label">{{ course.features.first.skill_level }}</span>
+                                {% endif %}
 
-                                        {% if course.image %}
-                                        <img src="{{course.image}}" alt="image">
-                                        {% else %}
-                                        <img src="https://via.placeholder.com/600x488.png?text={{course.title}}" alt="image">
-                                        {%endif%}
-
-                                    </a>
-                                    <div class="courses-tag">
-
-                                        {% if course.is_free%}
-                                        <a href="{% url 'course_detail' course.slug %}" class="d-block">
-                                            View Course
-                                        </a>
-                                        {% else %}
-                                        <a href="javascript:;" class="d-block link-add-cart"><i class="fa fa-plus"></i>
-                                            Add to
-                                            Cart</a>
-
-                                        {%endif%}
-                                    </div>
-                                </div>
-                                <div class="courses-content">
-                                    <div class="course-author d-flex1 align-items-center d-none">
-                                        <img src="https://templates.envytheme.com/raque/default/assets/img/user1.jpg"
-                                            class="rounded-circle mr-2" alt="image">
-                                        <span>Steven Smith</span>
-                                    </div>
-                                    <h3><a href="{% url 'course_detail' course.slug %}" class="d-inline-block">
-                                            {{ course.title |slice:"0:22"  }} ..
-                                        </a></h3>
-                                    <div class="courses-rating">
-
-                                        <div class="rating-total">
-                                            <a href="{% url 'course_list_subject' subject.slug %}"
-                                                class="text-info">{{subject}}</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="courses-box-footer">
-                                    <ul>
-                                        <li class="students-number">
-                                            <i class="bx bx-user"></i> {{ course.total_modules }} Modules
-                                        </li>
-                                        <li class="courses-lesson">
-                                            <i class="bx bx-book-open"></i>
-                                            {% if not course.is_free and course.discounted_price > 0 %}
-                                            <s>${{course.price}}</s>
-                                            {% endif %}
-                                        </li>
-                                        <li class="courses-price">
-                                            {% if course.is_free %}
-                                            Free
-                                            {%elif course.discounted_price > 0 %}
-                                            ${{course.discounted_price}}
-                                            {% else %}
-                                            ${{course.price}}
-                                            {% endif %}
-                                        </li>
-                                    </ul>
-                                </div>
                             </div>
 
-
-                            <div class="card home-course d-none">
-                                <div class="card-body">
-                                    <a href="{% url "course_detail" course.slug %}">
-                                        <img class="card-img w-9 h-9 br-7 mb-4" src="/static/fe_v1/img/course.png"
-                                            alt="{{ course.title }}">
-                                    </a>
-                                    <h4 class="card-title">
-                                        <a href="{% url "course_detail" course.slug %}" title="{{ course.title }}"
-                                            class="text-dark">
-                                            {{ course.title |slice:"0:30"  }} ..
-                                        </a>
-                                    </h4>
-                                    <h6 class="card-subtitle mb-2 text-muted small">
-                                        <a href="{% url "course_list_subject" subject.slug %}"
-                                            class="text-info">{{subject}}</a>
-                                    </h6>
-                                    <div class="buy d-flex justify-content-between align-items-center">
-                                        <div class="price text-success">
-                                            <h5 class="mt-4">
-                                                {% if course.is_free %}
-                                                Free
-                                                {%elif course.discounted_price > 0 %}
-                                                ${{course.discounted_price}} <span
-                                                    class="ml-2 text-info"><s>${{course.price}}</s></span></h5>
-                                            {% else %}
-                                            {{course.price}}
-                                            {% endif %}
-                                        </div>
-                                        {% if course.is_free%}
-                                        <a href="{% url "course_detail" course.slug %}"
-                                            class="btn btn-light  btn-sm mt-3"><i class="fa fa-list-alt"></i>
-                                            View Course
-                                        </a>
-                                        {% else %}
-                                        <a href="javascript:;" class="btn btn-orange btn-sm mt-3 link-add-cart"><i
-                                                class="fa fa-plus"></i>
-                                            Add to
-                                            Cart</a>
-                                        {% endif %}
-                                    </div>
-                                    <span class="badge badge-info">Modules ({{ course.total_modules }})</span>
+                            <div class="course-content">
+                                <div class="course-price ">
+                                    {% if course.is_free %}
+                                        Free Course
+                                    {% elif course.discounted_price > 0 %}
+                                        ${{ course.discounted_price }}
+                                        <span class="del">${{ course.price }}</span>
+                                    {% else %}
+                                        ${{ course.price }}
+                                    {% endif %}
                                 </div>
-                                <div class="card-footer text-center">
-                                    <a href="{% url "course_detail" course.slug %}" class="text-info">View Details</a>
+
+                                <h4>
+                                    <a href="{% url 'course_detail' course.slug %}">
+                                        {{ course.title }}
+                                    </a>
+                                </h4>
+                                <div class="rating">
+                                    <a href="#">
+                                        <i class="fa fa-star"></i>
+                                    </a>
+                                    <a href="#">
+                                        <i class="fa fa-star"></i>
+                                    </a>
+                                    <a href="#">
+                                        <i class="fa fa-star"></i>
+                                    </a>
+                                    <a href="#">
+                                        <i class="fa fa-star"></i>
+                                    </a>
+                                    <a href="#">
+                                        <i class="fa fa-star"></i>
+                                    </a>
+                                    <span>(5.00)</span>
+                                </div>
+                                <p>{{ subject }}</p>
+
+                                <div class="course-footer d-lg-flex align-items-center justify-content-between">
+                                    <div class="course-meta">
+                                        {% if course.features.first.duration %}
+                                            <span class="course-student">
+                                                <i class="bi bi-group"></i>
+                                                {{ course.features.first.duration }}</span>
+                                        {% endif %}
+                                        <span class="course-duration">
+                                            <i class="bi bi-badge3"></i>
+                                            {{ course.total_modules }}
+                                            Modules</span>
+                                    </div>
+
+                                    <div class="buy-btn">
+                                        <a href="{% url 'course_detail' course.slug %}" class="btn btn-main-2 btn-small">Details</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        {% endwith %}
-                        {% endfor %}
+
+
                     </div>
-                </main>
+                    {% endwith %}
+                {% endfor %}
             </div>
         </div>
-    </div>
-</div>
+
+    </section>
+
+
 {% endblock %}
+
 {% block scripts %}
-
-<style>
-    .single-courses-box {
-        background-color: #fff;
-        -webkit-box-shadow: 0 8px 16px 0 rgba(146, 184, 255, 0.2);
-        box-shadow: 0 8px 16px 0 rgba(146, 184, 255, 0.2);
-        border-radius: 5px 5px 0 0;
-        -webkit-transition: 0.5s;
-        transition: 0.5s;
-    }
-
-    .single-courses-box .courses-image {
-        border-radius: 5px 5px 0 0;
-        position: relative;
-    }
-
-    .single-courses-box .courses-image a img {
-        border-radius: 5px 5px 0 0;
-        width: 100%;
-    }
-
-    .single-courses-box .courses-image .courses-tag {
-        position: absolute;
-        right: 25px;
-        bottom: 0;
-        background-color: #fff;
-        border-radius: 5px 5px 0 0;
-        -webkit-transition: 0.5s;
-        transition: 0.5s;
-        padding-left: 15px;
-        padding-right: 15px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-    }
-
-    .single-courses-box .courses-image .courses-tag a {
-        color: #0eb582;
-        font-weight: 500;
-    }
-
-    .single-courses-box .courses-content {
-        padding: 25px 25px 20px;
-    }
-
-    .single-courses-box .courses-content .course-author {
-        margin-bottom: 13px;
-    }
-
-    .single-courses-box .courses-content .course-author img {
-        width: 37px;
-        height: 37px;
-        margin-right: 8px;
-    }
-
-    .single-courses-box .courses-content .course-author span {
-        color: #252525;
-        font-size: 14.5px;
-        font-weight: 500;
-    }
-
-    .single-courses-box .courses-content h3 {
-        margin-bottom: 12px;
-        line-height: 1.5;
-        font-size: 22px;
-        font-weight: 600;
-    }
-
-    .single-courses-box .courses-content .courses-rating .review-stars-rated {
-        color: #f2b827;
-        display: inline-block;
-    }
-
-    .single-courses-box .courses-content .courses-rating .review-stars-rated i {
-        color: #f2b827;
-        font-size: 16px;
-        margin-right: -2px;
-    }
-
-    .single-courses-box .courses-content .courses-rating .rating-total {
-        display: inline-block;
-        position: relative;
-        top: -2px;
-        font-size: 13px;
-    }
-
-    .single-courses-box .courses-box-footer {
-        border-top: 1px solid #e2f4ff;
-        padding: 20px 25px;
-    }
-
-    .single-courses-box .courses-box-footer ul {
-        list-style-type: none;
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        padding-left: 0;
-        -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        align-items: center;
-        margin-bottom: 0;
-        margin-left: -7px;
-        margin-right: -7px;
-    }
-
-    .single-courses-box .courses-box-footer ul li {
-        color: #727695;
-        font-size: 15px;
-        padding-left: 7px;
-        padding-right: 7px;
-    }
-
-    .single-courses-box .courses-box-footer ul li i {
-        color: #252525;
-        position: relative;
-        top: 1px;
-    }
-
-    .single-courses-box .courses-box-footer ul li i.bx-book-open {
-        top: 1.3px;
-    }
-
-    .single-courses-box .courses-box-footer ul .students-number {
-        -webkit-box-flex: 0;
-        -ms-flex: 0 0 37%;
-        flex: 0 0 37%;
-        max-width: 37%;
-    }
-
-    .single-courses-box .courses-box-footer ul .courses-lesson {
-        -webkit-box-flex: 0;
-        -ms-flex: 0 0 34%;
-        flex: 0 0 34%;
-        max-width: 34%;
-    }
-
-    .single-courses-box .courses-box-footer ul .courses-price {
-        -webkit-box-flex: 0;
-        -ms-flex: 0 0 29%;
-        flex: 0 0 29%;
-        max-width: 29%;
-        text-align: right;
-        color: #ff1949;
-        font-size: 18px;
-        font-weight: 500;
-    }
-
-    .single-courses-box .courses-box-footer ul .courses-price span {
-        color: #81868a;
-        text-decoration: line-through;
-        font-size: 14px;
-        font-weight: 400;
-    }
-
-    .single-courses-box.without-box-shadow {
-        -webkit-box-shadow: unset;
-        box-shadow: unset;
-    }
-
-    .single-courses-box.without-box-shadow .courses-content {
-        padding: 25px 0 18px;
-    }
-
-    .single-courses-box.without-box-shadow .courses-box-footer {
-        padding: 18px 0 0;
-    }
-
-    .single-courses-box:hover,
-    .single-courses-box:focus {
-        -webkit-transform: translateY(-10px);
-        transform: translateY(-10px);
-    }
-
-    .single-courses-box:hover .courses-image .courses-tag,
-    .single-courses-box:focus .courses-image .courses-tag {
-        background-color: #0eb582;
-    }
-
-    .single-courses-box:hover .courses-image .courses-tag a,
-    .single-courses-box:focus .courses-image .courses-tag a {
-        color: #fff;
-    }
-</style>
-<script>
-    $(document).ready(function () {
-        $("#ddlCategory").change(function () {
-            var val = $(this).val();
-            window.location.href = val;
+    <script>
+        $(document).ready(function () {
+            $("#ddlCategory").change(function () {
+                var val = $(this).val();
+                window.location.href = val;
+            });
         });
-    });
-</script>
+    </script>
 {% endblock %}

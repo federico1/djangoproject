@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from app_chat.models import Conversation, Message, ConversationMember, VideoRoom, VideoParticipant, Notification, ParticipantLog, VideoCourses
+from app_chat.models import Conversation, Message, ConversationMember, VideoRoom,\
+     VideoParticipant, Notification, ParticipantLog, VideoCourses
 from courses.models import Course
 from students.models import User
 

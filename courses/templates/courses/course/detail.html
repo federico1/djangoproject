@@ -1,158 +1,353 @@
-{% extends "app_base.html" %}
+{% extends 'app_base.html' %}
 {% load staticfiles %}
-{% block title %}
-{{ object.title }}
+{% load course_tags %}
+
+{% block title %}Enroll Online
+    {{ object.title }}
+    Course | pdhsafety.com
 {% endblock %}
+
+{% block meta_desc %}Learn
+    {{ object.subject }}
+    from top-rated instructors. Find the best online
+    {{ object.subject }}
+    classes and get certificate today. We provides bulk discounts. Learn Now!
+{% endblock %}
+
+{% block meta_keywords %}
+    {{ object.subject }},
+    {{ object.title }}
+{% endblock %}
+
 {% block content %}
-{% with subject=object.subject %}
-<div class="home-courses course-detail">
-    <div class="container">
-        <div class="row mb-4">
-            <div class="col text-center">
-                <h3> {{ object.title }}</h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12 col-lg-9 ">
-                <div class="course--content">
-                    <div class="clever-tabs-content">
-                        <ul class="nav nav-pills nav-fill " id="myTab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="tab--1" data-toggle="tab" href="#tab1" role="tab"
-                                    aria-controls="tab1" aria-selected="false">Description & Schedule</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="tab--2" data-toggle="tab" href="#tab2" role="tab"
-                                    aria-controls="tab2" aria-selected="true">Learning Outcomes</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="tab--3" data-toggle="tab" href="#tab3" role="tab"
-                                    aria-controls="tab3" aria-selected="true">Course Notes</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="tab--4" data-toggle="tab" href="#tab4" role="tab"
-                                    aria-controls="tab4" aria-selected="true">Completion Requirements</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1">
-                                <div class="clever-description">
-                                    <div class="about-course mb-4">
-                                        <h4>About this course</h4>
-                                        <p>
-                                            {{ object.overview | safe }}
-                                        </p>
-                                    </div>
-                                    <div class="about-course mb-30">
-                                        <h4>Schedule</h4>
-                                        {{ object.features.first.schedule | safe }}
+    {% with subject=object.subject %}
+
+    <section class="page-wrapper edutim-course-single course-single-style-3">
+        <div class="course-single-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="course-single-header white-text">
+                            <span class="subheading">{{ subject }}</span>
+                            <h3 class="single-course-title">{{ object.title }}</h3>
+                            <p>{{ object.overview |slice:"0:185" }}</p>
+                            <div class="d-flex align-items-center ">
+                                <div class="single-top-meta">
+                                    <i class="fa fa-book"></i>
+                                    <span>
+                                        {{ object.modules.count }}
+                                        Modules
+                                    </span>
+                                </div>
+
+                                <div class="single-top-meta">
+                                    <div class="rating">
+                                        <a href="#">
+                                            <i class="fa fa-star"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-star"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-star"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-star"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-star"></i>
+                                        </a>
+                                        <span>5.00</span>
                                     </div>
                                 </div>
-                            </div> <!-- END TAB1 -->
-                            <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab--2">
-                                <div class="clever-curriculum">
-                                    <div class="about-course mb-4">
-                                        {{ object.features.first.outcomes  | safe  }}
-                                    </div>
-                                </div>
-                            </div> <!-- END TAB2 -->
-                            <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab--3">
-                                <div class="clever-curriculum">
-                                    <div class="about-course mb-30">
-                                        {{ object.features.first.notes  |safe  }}
-                                    </div>
-                                </div>
-                            </div> <!-- END TAB3 -->
-                            <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab--4">
-                                <div class="clever-curriculum">
-                                    <div class="about-course mb-30">
-                                        {{ object.features.first.completion_requirements  |safe  }}
-                                    </div>
-                                </div>
-                            </div> <!-- END TAB4 -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-lg-3">
-                <div class="course-sidebar course-item">
-                    <input type="hidden" name="id" value="{{object.id}}" />
-                    <input type="hidden" name="title" value="{{object.title}}" />
-                    <input type="hidden" name="subject" value="{{subject.title}}" />
-                    <input type="hidden" name="price" value="{{object.price}}" />
-                    <input type="hidden" name="discounted_price" value="{{object.discounted_price}}" />
-                    <input type="hidden" name="modules" value="{{object.modules.count}}" />
-                    {% if request.user.is_authenticated and object.is_free %}
-                    <div class="clearfix">
-                        <form action="{% url "student_enroll_course" %}" method="post">
-                            {{ enroll_form }}
-                            {% csrf_token %}
-                            <input type="submit" class="btn btn-orange mb-4 btn-block" value="Take Free Class">
-                        </form>
-                    </div>
-                    {% else %}
-                    <div class=""> <a href="javascript:;" class="btn btn-orange mb-4 btn-block link-add-cart">
-                            Add To Cart
-                        </a></div>
-                    {% endif %}
-                    <div class="sidebar-widget d-none">
-                        <h5> Instructor</h5>
-                        <ul class="features-list">
-                            <li>
-                                <h6>{{ object.owner.get_full_name }}</h6>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card mb-2">
-                        <div class="card-body">
-                            {%if object.is_free%}
-                            <h5> Price: Free </h5>
-                            {% elif object.discounted_price > 0 %}
-                            <h5> Price: <span class="mr-2">${{object.discounted_price}}</span>
-                                <span><s>${{object.price}}</s></span> </h5>
-                            {%else%}
-                            <h5> Price: <span class="mr-2">${{object.price}}</span> </h5>
-                            {%endif%}
-                            <h5 class="mt-2"> Modules ({{ object.modules.count }}) </h5>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Tags</h5>
-                            <a class="badge badge-primary"
-                                href="{% url "course_list_subject" subject.slug %}">{{ subject.title }}</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-{% endwith %}
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <nav class="course-single-tabs">
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Overview</a>
+                            <a class="nav-item nav-link" id="nav-topics-tab" data-toggle="tab" href="#nav-topics" role="tab" aria-controls="nav-profile" aria-selected="false">
+                                Learning Outcomes
+                            </a>
+                            <a class="nav-item nav-link" id="nav-instructor-tab" data-toggle="tab" href="#nav-instructor" role="tab" aria-controls="nav-contact" aria-selected="false">
+                                Completion Requirements
+                            </a>
+                            <a class="nav-item nav-link" id="nav-feedback-tab" data-toggle="tab" href="#nav-feedback" role="tab" aria-controls="nav-contact" aria-selected="false">Schedule</a>
+                        </div>
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <div class="single-course-details ">
+                                <h4 class="course-title">Description</h4>
+                                <p>
+                                    {{ object.overview }}
+                                </p>
+
+                                {% if object.features.first.notes %}
+                                    <div class="course-widget bg-light p-3 mt-5">
+                                        <h4 class="course-title">Course Notes:</h4>
+                                        <div>
+                                            {{ object.features.first.notes | safe }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+
+                            </div>
+                        </div>
+                        <div
+                            class="tab-pane fade" id="nav-topics" role="tabpanel" aria-labelledby="nav-topics-tab">
+                            <!--  Course Topics -->
+                            <div class="edutim-single-course-segment  edutim-course-topics-wrap">
+
+                                <div class="edutim-course-topics-contents">
+                                    <div class="edutim-course-topic ">
+                                        {{ object.features.first.outcomes  |safe }}
+                                    </div>
+                                </div>
+                            </div>
+                            <!--  COurse Topics End -->
+                        </div>
+                        <div class="tab-pane fade" id="nav-instructor" role="tabpanel" aria-labelledby="nav-instructor-tab">
+                            {{ object.features.first.completion_requirements  |safe }}
+                        </div>
+                        <div class="tab-pane fade" id="nav-feedback" role="tabpanel" aria-labelledby="nav-feedback-tab">
+                            <div class="course-widget">
+                                {{ object.features.first.schedule | safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="course-sidebar">
+                        <div class="course-single-thumb">
+                            {% if object.image %}
+                                <img src="{{ object.image }}" alt="" class="img-fluid w-100"/>
+                            {% else %}
+                                <img src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg" alt="" class="img-fluid w-100"/>
+                            {% endif %}
+                            <div class="course-price-wrapper">
+                                <div class="course-price">
+
+                                    {% if object.is_free %}
+                                        <h4>
+                                            <span>
+                                                Price: Free</span>
+                                        </h4>
+                                    {% elif object.discounted_price > 0 %}
+
+                                        <h4>Price:
+                                            <span>${{ object.discounted_price }}</span>
+                                            <del class="text-muted">${{ object.price }}</del>
+                                        </h4>
+
+                                    {% else %}
+                                        <h4>
+                                            Price:
+                                            <span>${{ object.price }}</span>
+                                        </h4>
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div class="buy-btn">
+
+                                    {% if object.is_free %}
+                                        {% if request.user.is_authenticated %}
+                                            <a href="javascript:;" class="btn btn-main btn-block link-free-enroll">
+                                                Take Free Course
+                                            </a>
+                                        {% else %}
+                                            <a href="javascript:;" class="btn btn-main btn-block link-free-auth">
+                                                Enroll Free Course
+                                            </a>
+                                        {% endif %}
+
+                                    {% else %}
+
+                                        <a href="javascript:;" class="btn btn-main btn-block link-add-cart">
+                                            Add To Cart
+                                        </a>
+
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-widget course-details-info">
+                            <h4 class="course-title">This Course Includes</h4>
+                            <ul>
+                                <li>
+                                    <div class="">
+                                        <span>
+                                            <i class="fa fa-user"></i>Instructor :</span>
+                                        <a href="#" class="d-inline-block">
+                                            {{ object.owner }}
+                                        </a>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="">
+                                        <span>
+                                            <i class="fa fa-book"></i>Modules :</span>
+                                        {{ object.modules.count }}
+                                    </div>
+                                </li>
+
+                                {% if object.features.first.duration %}
+                                    <li>
+                                        <div class="">
+                                            <span>
+                                                <i class="fa fa-clock"></i>Duration :
+                                            </span>
+                                            {{ object.features.first.duration }}
+                                        </div>
+                                    </li>
+                                {% endif %}
+
+                                {% if object.features.first.certificate_status %}
+                                    <li>
+                                        <div class="">
+                                            <span>
+                                                <i class="fa fa-certificate"></i>Certificate :
+                                            </span>
+                                            {{ object.features.first.certificate_status }}
+                                        </div>
+                                    </li>
+                                {% endif %}
+
+                                {% if object.features.first.language %}
+                                    <li>
+                                        <div class="">
+                                            <span>
+                                                <i class="fa fa-language"></i>Language :
+                                            </span>
+                                            {{ object.features.first.language }}
+                                        </div>
+                                    </li>
+                                {% endif %}
+
+                                {% if object.features.first.skill_level %}
+                                    <li>
+                                        <div class="">
+                                            <span>
+                                                <i class="fa fa-fill-drip"></i>Skill Level :
+                                            </span>
+                                            {{ object.features.first.skill_level }}
+                                        </div>
+                                    </li>
+                                {% endif %}
+
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% endwith %}
 {% endblock %}
+
+
 {% block scripts %}
-<style>
-    .tbl-schedule {}
+    <script>
+        (function ($) {
 
-    .tbl-schedule thead th {
-        vertical-align: top;
-        border: 1px solid #4093a8;
-        border-bottom: 2px solid #2c525c;
-        text-align: center;
-    }
+            $.CourseDetailPage = function (options) {
 
-    .tbl-schedule td {
-        border: 1px solid #e1f9ff;
-        vertical-align: middle;
-    }
-</style>
-<script>
-    $(document).ready(function () {
+                var settings = $.extend({}, options);
 
-        $(".link-enroll").click(function () {
+                var loadMessage = function () {
 
+                    var urlParts = window.location.href.indexOf('#register=success');
+
+                    if (urlParts >= 0) {
+                        Swal.fire('Account Created!', 'You have successfully created a new account.', 'success');
+                    }
+
+                    history.pushState("", document.title, window.location.pathname + window.location.search);
+
+                };
+
+                var enrollCourse = function () { // ShowLoadingModal("Please wait", "Processing request");
+
+                    var formData = {
+                        course: '{{ object.id }}'
+                    };
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/course-enrollment/",
+                        data: JSON.stringify(formData),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                        },
+                        success: function (response, textStatus, xhr) {
+                            if (xhr.status == 201) {
+                                Toast.fire({icon: 'success', title: 'You have successfully enrolled to this course'});
+
+                            } else if (xhr.status == 226) {
+                                $(".link-free-enroll").hide();
+                                Swal.fire({icon: 'warning', title: 'Note!', text: 'You have been already enrolled in this course!'});
+                            }
+                            else if (xhr.status == 203) {
+                                $(".link-free-enroll").hide();
+                                Swal.fire({icon: 'error', title: 'Note!', text: 'You are not allowed to take this class.'});
+                            }
+                        }
+                    });
+
+                };
+
+                var registerEvent = function () {
+
+                    $("div").on("click", '.link-free-auth', function (e) {
+                        e.stopPropagation();
+                        Swal.fire({title: 'You are not logged in. ', showDenyButton: true, confirmButtonText: 'Log in', denyButtonText: 'Create a new account'}).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "{% url 'login' %}?next=      {{ request.path }}";
+                            } else if (result.isDenied) {
+                                window.location.href = "{% url 'student_registration' %}?next=      {{ request.path }}";
+                            }
+                        });
+                    });
+
+                    $("div").on("click", '.link-free-enroll', function (e) {
+                        e.stopPropagation();
+
+                        enrollCourse();
+                    });
+
+
+                };
+
+                var init = function () {
+                    registerEvent();
+                    loadMessage();
+                };
+
+                init();
+
+                return this;
+
+            };
+
+        }(jQuery));
+
+        $(document).ready(function () {
+            var pl = new $.CourseDetailPage({});
         });
-
-    });
-</script>
+    </script>
 {% endblock %}

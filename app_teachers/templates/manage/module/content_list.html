@@ -2,417 +2,613 @@
 {% load course %}
 
 {% block title %}
-Module {{ module.order|add:1 }}: {{ module.title }}
+    {{ module.title }}
+    -
+    {{ module.course }}
 {% endblock %}
 
 {% block content %}
 
-{% with course=module.course %}
+    {% with course=module.course %}
 
-<div class="row my-2">
+    <section class="section-padding popular-course-slider bg-feature pt-5 pb-0">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-lg-7">
+                    <div class="section-heading center-heading">
 
-    <div class="col-md-8">
-        <h1 class="h3 mb-0 text-gray-800">
-            Course "{{ course.title }}"
-        </h1>
-    </div>
+                        <a href="{% url 'manage_course_list' %}" class="subheading">
+                            <i class="fa fa-arrow-alt-circle-left"></i>
+                            Back to
+                            {{ module.course }}
+                        </a>
 
-    <div class="col-md-4 text-right">
+                        <h3>
+                            Manage Module -
+                            {{ module.title }}
+                        </h3>
 
-        <a href="javascript:void(0);" class="d-sm-inline-block btn btn-sm btn-info shadow-sm link-copy-module"
-            pk="{{module.id}}">
-            <i class="fa fa-clone"></i> Copy Module </a>
-
-        <a href="{% url "manage_course_list" %}" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fa fa-mail-reply"></i> Back To Courses</a>
-    </div>
-
-</div>
-
-
-<div>
-    <div class="row">
-
-        <div class="col-md-3">
-            <nav id="sidebar" class="sidebar-wrapper">
-                <div class="sidebar-content">
-                    <div class="sidebar-brand">
-                        <a href="#"> Modules </a>
+                        <p>
+                            <a href="javascript:void(0);" class="d-sm-inline-block btn btn-sm btn-info shadow-sm link-copy-module" pk="{{ module.id }}">
+                                <i class="fa fa-clone"></i>
+                                Copy Module
+                            </a>
+                        </p>
                     </div>
-                    <!-- sidebar-search  -->
-                    <div class="sidebar-menu">
-                        <ul>
-
-                            {% for m in course.modules.all %}
-                            <li data-id="{{ m.id }}">
-                                <a {% if m == module %}class="pin" {% endif %}
-                                    href="{% url "module_content_list" m.id %}">
-                                    <span>
-                                        Module <span class="order">{{ m.order|add:1 }}</span>
-                                    </span>
-                                    <br>
-                                    {{ m.title }}
-                                </a>
-                            </li>
-                            {% empty %}
-                            <li>No modules yet.</li>
-                            {% endfor %}
-
-                            <li class="not">
-                                <a href="{% url "course_module_update" course.id %}">Edit modules</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- sidebar-menu  -->
                 </div>
-                <!-- sidebar-content  -->
-            </nav>
-
-
+            </div>
         </div>
+    </section>
 
-        <div class="col-md-9">
-            <div class="module">
+    <section class="section-padding popular-course-slider pt-5" id="sectionSecond">
+        <div class="container-fluid">
+            <div class="row">
 
-                <!-- <h5>Module contents:</h5> -->
+                <div class="col-md-4">
+                    <nav id="sidebar" class="sidebar-wrapper shadow p-3">
+                        <div class="sidebar-content">
+                            <div class="sidebar-brand mb-2">
+                                <h5>
+                                    Modules
+                                </h5>
+                            </div>
+                            <!-- sidebar-search  -->
+                            <div class="sidebar-menu">
+                                <ul class="list-group">
 
-                <div class="row">
-                    <div class="col-md-12 not p-0">
-                        <h4>Module {{ module.order|add:1 }}: {{ module.title }}</h4>
-                    </div>
+                                    {% for m in course.modules.all %}
+                                        <li class="list-group-item" data-id="{{ m.id }}">
+                                            <a {% if m == module %} class="text-success font-weight-bold pin" {% else %} class="text-dark" {% endif %} href="{% url 'module_content_list' m.id %}">
+                                                <span>
+                                                    Module
+                                                    <span class="order">{{ m.order|add:1 }}</span>
+                                                </span>
+                                                <br/>
+                                                {{ m.title }}
+                                            </a>
+                                        </li>
+                                        {% empty %}
+                                        <li>No modules yet.</li>
+                                    {% endfor %}
+
+                                    <li class="not mt-3">
+                                        <a class="font-weight-bold text-success" href="{% url 'course_module_update' course.id %}">Edit modules</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- sidebar-menu  -->
+                        </div>
+                        <!-- sidebar-content  -->
+                    </nav>
+
+
                 </div>
-                <div class="row" id="module-contents">
 
-                    {% for content in module.contents.all %}
-                    <div class="col-md-8 mb-1 border p-1 bg-white" data-id="{{ content.id }}">
-                        {% with item=content.item %}
-                        <p>{{ item }} ({{ item|model_name }})</p>
-                        <div class="d-flex flex-row">
-                            <div class="mr-3">
-                                <a class="btn btn-sm btn-info"
-                                    href="{% url 'module_content_update' module.id item|model_name item.id %}">
-                                    Edit
-                                </a>
-                            </div>
-                            <div>
-                                <form action="{% url 'module_content_delete' content.id %}" method="post">
-                                    <input class="btn btn-sm btn-danger" type="submit" value="Delete">
-                                    {% csrf_token %}
-                                </form>
-                            </div>
+                <div class="col-md-8">
+                    <div
+                        class="module bg-light p-3 shadow">
 
-                            <div class="ml-1 p-1">
-                                <div class="form-check">
-                                    <input class="form-check-input chk-progress" value="{{content.id}}" type="checkbox"
-                                        {% if content.has_progress == True %} checked {%endif%}>
-                                    <label class="form-check-label" for="flexCheckDefault{{content.id}}">
-                                        Progress Enable!
-                                    </label>
+                        <!-- <h5>Module contents:</h5> -->
+
+                        <div class="row">
+                            <div class="col-md-12 not">
+                                <h4>Module
+                                    {{ module.order|add:1 }}:
+                                    {{ module.title }}</h4>
+                            </div>
+                        </div>
+                        <div class="row" id="module-contents">
+
+                            {% for content in module.contents.all %}
+                                <div class="col-md-12" data-id="{{ content.id }}">
+                                    {% with item=content.item %}
+                                    <div class="my-3 p-3 bg-white shadow">
+                                        <p>{{ item }}
+                                            ({{ item|model_name }})</p>
+                                        <div class="d-flex flex-row">
+                                            <div class="mr-3">
+                                                <a class="btn btn-info" href="{% url 'module_content_update' module.id item|model_name item.id %}">
+                                                    Edit
+                                                </a>
+                                            </div>
+                                            <div>
+                                                <form action="{% url 'module_content_delete' content.id %}" method="post">
+                                                    <input class="btn btn-sm btn-danger" type="submit" value="Delete"/>
+                                                    {% csrf_token %}
+                                                </form>
+                                            </div>
+
+                                            <div class="ml-3 p-1">
+                                                <div class="form-check">
+                                                    <input class="form-check-input chk-progress" value="{{ content.id }}" type="checkbox" {% if content.has_progress == True %} checked {% endif %}/>
+                                                    <label class="form-check-label" for="flexCheckDefault{{ content.id }}">
+                                                        Progress Enable!
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endwith %}
                                 </div>
+                                {% empty %}
+                                <div class="col">This module has no contents yet.</div>
+                            {% endfor %}
+                        </div>
+                        <div class="row mt-3 mb-3">
+                            <div class="col">
+                                <div>
+                                    <h5>Add new content:</h5>
+
+                                    <a class="badge badge-primary" href="{% url "module_content_create" module.id "text" %}">Text</a>
+                                    <a class="badge badge-primary" href="{% url "module_content_create" module.id "image" %}">Image</a>
+                                    <a class="badge badge-primary" href="{% url "module_content_create" module.id "video" %}">Video</a>
+                                    <a class="badge badge-primary" href="{% url "module_content_create" module.id "file" %}">File</a>
+                                    <a class="badge badge-primary" href="{% url "module_content_create" module.id "iframe" %}">IFrame</a>
+                                    <!-- <a class="badge badge-primary" href="{% url "app_add_question" module.id %}">Add Questions</a> -->
+                                </div>
+
+                                <h5 class="mt-4 mb-2">Quiz:</h5>
+                                {% if module.quiz is not None %}
+
+                                    <a class="badge badge-success" href="/teachers/quiz/?id={{ module.quiz.id }}&q={{ module.quiz }}">
+                                        {{ module.quiz }}
+                                    </a>
+
+                                    <a class="badge badge-success" href="/quiz/quiz-questions/{{ module.quiz.id }}/">
+                                        View Questions
+                                    </a>
+
+                                    <a class="badge badge-primary link-final-quiz" data-quiz="{{module.quiz.id}}" href="javascript:;">
+                                        Change Quiz
+                                    </a>
+
+                                {% else %}
+                                    <a class="badge badge-primary link-final-quiz" href="javascript:;">Add Quiz</a>
+                                {% endif %}
+
+
                             </div>
                         </div>
-                        {% endwith %}
-                    </div>
-                    {% empty %}
-                    <div class="col">This module has no contents yet.</div>
-                    {% endfor %}
-                </div>
-                <div class="row mt-3 mb-3">
-                    <div class="col p-2">
-                        <h5>Add new content:</h5>
-
-                        <a class="badge badge-primary"
-                            href="{% url "module_content_create" module.id "text" %}">Text</a>
-                        <a class="badge badge-primary"
-                            href="{% url "module_content_create" module.id "image" %}">Image</a>
-                        <a class="badge badge-primary"
-                            href="{% url "module_content_create" module.id "video" %}">Video</a>
-                        <a class="badge badge-primary"
-                            href="{% url "module_content_create" module.id "file" %}">File</a>
-                        <a class="badge badge-primary"
-                            href="{% url "module_content_create" module.id "iframe" %}">IFrame</a>
-                        <a class="badge badge-primary" href="{% url "app_add_question" module.id %}">Add Questions</a>
 
                     </div>
                 </div>
-
             </div>
         </div>
-    </div>
-</div>
+    </section>
 
-{% endwith %}
+    {% endwith %}
 
 
-<div id="copyModal" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Copy Module <small> {{module.title}} </small> </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
+    <div id="copyModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Copy Module
+                        <small>
+                            {{ module.title }}
+                        </small>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
 
-                <form method="post" action="{% url 'module_copy' %}">
+                    <form method="post" action="{% url 'module_copy' %}">
 
-                    {% csrf_token %}
+                        {% csrf_token %}
 
-                    <input type="hidden" id="txtModule" name="id">
+                        <input type="hidden" id="txtModule" name="id"/>
 
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Select Course</label>
-                        <select class="form-control" id="ddlCourse" name="course">
-                            <option value="">Choose</option>
-                        </select>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Select Course</label>
+                            <select class="form-control" id="ddlCourse" name="course">
+                                <option value="">Choose</option>
+                            </select>
 
-                    </div>
-
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Name</label>
-                        <input type="text" class="form-control" id="txtName" value="{{module.title}}" name="name">
-                    </div>
-
-                    <div class="text-center spin">
-                        <div class="spinner-border" role="status">
-                            <span class="sr-only">Copying...</span>
                         </div>
-                    </div>
 
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnStartCopy">Start Copy</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Name</label>
+                            <input type="text" class="form-control" id="txtName" value="{{ module.title }}" name="name"/></div>
+
+                        <div class="text-center spin">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Copying...</span>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnStartCopy">Start Copy</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <div id="quizesModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Select Final Quiz</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="fmFinalQuiz" action="#" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" class="form-control" name="id" value=""/>
+
+                        <div class="form-group">
+                            <label for="formControlVideoURL">Select Quiz</label>
+                            <select name="quiz_id" id="" class="form-control">
+                                <option value="">No Quiz Selected</option>
+                                {% for quiz in request.user.quizzes.all %}
+                                    <option value="{{ quiz.id }}" data-name='{{ quiz.name }}'>
+                                        {{ quiz.name }}
+                                        - ({{ quiz.questions.count }}
+                                        Questions)
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="quizActions"></div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="btnSaveFinalQuiz">
+                        Save Changes
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 
 {% block scripts %}
 
-<script>
-    $(document).ready(function () {
-        onLoadPage();
-        new $.CopyModuleManager({});
-    });
+    <script>
 
-    function onLoadPage() {
+        (function ($) {
 
-        $(".container input, select, textarea").addClass('form-control');
+            $.FinalQuizManager = function (options) {
+                var that = this;
 
-        $(".container textarea").css('height', 70);
+                var settings = $.extend({}, options);
 
-        $('.sidebar-menu ul').sortable({
-            cancel: '.not',
-            stop: function (event, ui) {
+                var initForm = function () {
 
-                modules_order = {};
+                    $("#fmFinalQuiz").ajaxForm({
+                        url: "/api/update-module-quiz/",
+                        beforeSubmit: function () {
+                            ShowLoadingModal("Please wait", "updating module");
+                            $("#quizesModal button").attr("disabled", true);
+                        },
+                        success: function (response) {
 
-                $('.sidebar-menu ul li').each(function (ix) {
-                    var _id = $(this).attr('data-id');
+                            $("#quizesModal button").attr("disabled", false);
+                            $("#quizesModal").modal('hide');
 
-                    if (_id) {
-                        console.log(_id);
-                        modules_order[_id] = ix;
-                    }
-                });
+                            Swal.close();
 
+                            var id = $("#quizesModal input[name='id']").val();
 
-                $.ajax({
-                    type: 'POST',
-                    url: '{% url "module_order" %}',
-                    contentType: 'application/json; charset=utf-8',
-                    dataType: 'json',
-                    data: JSON.stringify(modules_order),
-                    success: function (r) {
-                        toastr.success('Modules order has been updated', 'Success')
-                    }
-                });
-
-            }
-        });
-
-        $('#module-contents').sortable({
-            cancel: '.col-md-12.not',
-            stop: function (event, ui) {
-
-                contents_order = {};
-
-                $('#module-contents').children().each(function () {
-                    if ($(this).data('id'))
-                        contents_order[$(this).data('id')] = $(this).index();
-                });
-
-                $.ajax({
-                    type: 'POST',
-                    url: '{% url "content_order" %}',
-                    contentType: 'application/json; charset=utf-8',
-                    dataType: 'json',
-                    data: JSON.stringify(contents_order),
-                    success: function (r) {
-                        toastr.success('Content order has been updated', 'Success')
-                    }
-                });
-
-            }
-        });
-
-        $(".chk-progress").change(function () {
-            var val = $(this).val();
-            var checked = $(this).is(":checked");
-
-            var data = {
-                id: val,
-                progress: checked == true ? 'True' : 'False'
-            };
-
-            $.ajax({
-                type: "POST",
-                url: "/api/enable-content-progress/",
-                data: data,
-                beforeSend: function (xhr, settings) {
-                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                },
-                success: function (response) {
-
-                    if (response.result > 0) {
-                        toastr.success('Content progress status updated..');
-                    }
-
-                },
-                failure: function (errMsg) {}
-            });
+                            if (response > 0) {
+                                Toast.fire({icon: 'success', title: 'Quiz has been assigned.'});
+                                window.location.reload();
+                                
+                            } else {
+                                Toast.fire({icon: 'error', title: 'Sorry, We are failed to save the quiz.'});
+                            }
 
 
-        });
+                        }
+                    });
+                };
 
-    };
+                var registerEvent = function () {
 
-    (function ($) {
+                    $(".link-final-quiz").click(function (event) {
+                        event.stopPropagation();
 
-        $.CopyModuleManager = function (options) {
+                        var id = '{{module.id}}';
+                        var quiz_id = $(this).attr("data-quiz");
 
-            var that = this;
+                        $("#quizesModal input[name='id']").val(id);
 
-            var courseList;
+                        if (quiz_id) {
+                            $("#quizesModal select[name='quiz_id']").val(quiz_id);
+                        }
 
-            var settings = $.extend({}, options);
-
-            var getCourses = function () {
-                $.get('/api/teacher-courses/?format=json', {}, function (response) {
-                    courseList = response;
-                    fillCourseDropdown();
-                });
-            };
-
-            var fillCourseDropdown = function () {
-                $("#copyModal #ddlCourse").empty();
-                $("#copyModal #ddlCourse").append('<option value="">Choose</option>');
-
-                $(courseList).each(function (index, item) {
-                    var opt = $("<option />", {
-                        value: item.id,
-                        text: item.title
+                        $("#quizesModal").modal("show");
                     });
 
-                    $("#copyModal #ddlCourse").append(opt);
-                });
+                    $("#quizesModal").on("change", "select[name='quiz_id']", function (event) {
+
+                        event.stopPropagation();
+
+                        var val = $(this).val();
+                        var text = $(this).find("option:selected").attr('data-name');
+
+                        $("#quizesModal #quizActions").empty();
+
+                        if (val) {
+
+                            var link = $("<a />", {
+                                href: '/teachers/quiz/?id=' + val + "&q=" + text,
+                                class: 'bage badge-info py-2 px-3 mr-2',
+                                text: 'View Quiz'
+                            });
+
+                            var link2 = $("<a />", {
+                                href: '/quiz/quiz-questions/' + val + '/',
+                                class: 'bage badge-info py-2 px-3',
+                                text: 'View Questions',
+                                target: '_blank'
+                            });
+
+                            $("#quizesModal #quizActions").html(link).append(link2);
+                        }
+
+                    });
+
+                    $("#quizesModal").on("click", "#btnSaveFinalQuiz", function (event) {
+
+                        event.stopPropagation();
+
+                        $("#fmFinalQuiz").submit();
+
+                    });
+
+
+                    $("#quizesModal").on("shown.bs.modal", function (e) {
+                        $("#quizesModal #quizActions").empty();
+                        $("select[name='quiz_id']").trigger('change');
+                    });
+                };
+
+                var init = function () {
+                    registerEvent();
+                    initForm();
+                };
+
+                init();
+
+                return this;
             };
 
-            var initForm = function () {
 
-                $('#copyModal form').ajaxForm({
+        })(jQuery);
 
-                    beforeSubmit: function () {
-                        $('#copyModal .spin').removeClass('d-none');
-                        $("#copyModal button, input, select").attr('disabled', true);
+
+        $(document).ready(function () {
+            onLoadPage();
+            new $.CopyModuleManager({});
+            new $.FinalQuizManager();
+        });
+
+        function onLoadPage() {
+
+            $(".container input, select, textarea").addClass('form-control');
+
+            $(".container textarea").css('height', 70);
+
+            $('.sidebar-menu ul').sortable({
+                cancel: '.not',
+                stop: function (event, ui) {
+
+                    modules_order = {};
+
+                    $('.sidebar-menu ul li').each(function (ix) {
+                        var _id = $(this).attr('data-id');
+
+                        if (_id) {
+                            console.log(_id);
+                            modules_order[_id] = ix;
+                        }
+                    });
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% url "module_order" %}',
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        data: JSON.stringify(modules_order),
+                        success: function (r) {
+                            Swal.fire('Updated!', 'Modules order has been updated', 'success');
+                        }
+                    });
+
+                }
+            });
+
+            $('#module-contents').sortable({
+                cancel: '.col-md-12.not',
+                stop: function (event, ui) {
+
+                    contents_order = {};
+
+                    $('#module-contents').children().each(function () {
+                        if ($(this).data('id')) {
+                            contents_order[$(this).data('id')] = $(this).index();
+                        }
+                    });
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% url "content_order" %}',
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        data: JSON.stringify(contents_order),
+                        success: function (r) {
+                            Swal.fire('Updated!', 'Content order has been updated', 'success');
+                        }
+                    });
+
+                }
+            });
+
+            $(".chk-progress").change(function () {
+
+                var val = $(this).val();
+                var checked = $(this).is(":checked");
+
+                var data = {
+                    id: val,
+                    progress: checked == true ? 'True' : 'False'
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/enable-content-progress/",
+                    data: data,
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
                     },
                     success: function (response) {
 
-                        $('#copyModal').modal('hide');
-
-                        if (response > 0) {
-                            toastr.success('Module has been copied.');
-                        } else {
-
-                            toastr.error(
-                                'Sorry, We are failed to created the copy. Kindly refresh the page and try again.'
-                            );
-
-                            setTimeout(function () {
-                                window.location.reload();
-                            }, 1000);
+                        if (response.result > 0) {
+                            Swal.fire('Updated!', 'Content progress status has been updated', 'success');
                         }
-                    }
+
+                    },
+                    failure: function (errMsg) {}
                 });
 
-            };
 
-            var registerEvent = function () {
+            });
 
-                $("div").on("click", ".link-copy-module", function (e) {
-                    e.stopPropagation();
-
-                    var id = $(this).attr('pk');
-
-                    if (id) {
-
-                        $("#copyModal #txtModule").val(id);
-
-                        $("#copyModal").modal({
-                            backdrop: 'static',
-                            show: true
-                        });
-                    }
-
-
-                });
-
-                $("div").on("click", "#btnStartCopy", function (e) {
-                    e.stopPropagation();
-
-                    var course = $("#copyModal #ddlCourse").val()
-
-                    if (course) {
-
-                        $('#copyModal form').submit();
-
-                    } else {
-                        toastr.danger('Please select the course');
-                    }
-
-                });
-
-                $('#copyModal').on('hidden.bs.modal', function (e) {
-                    $('#copyModal .spin').addClass('d-none');
-                    $("#copyModal button, input, select").attr('disabled', false);
-                });
-
-                $('#copyModal').on('shown.bs.modal', function (e) {
-                    $('#copyModal .spin').addClass('d-none');
-                    $("#copyModal button, input, select").attr('disabled', false);
-                });
-
-            };
-
-            var init = function () {
-                registerEvent();
-                getCourses();
-                initForm();
-            };
-
-            init();
-
-            return this;
+            $('html, body').animate({
+                scrollTop: $("#sidebar").offset().top
+            }, 1000);
 
         };
 
+        (function ($) {
 
-    }(jQuery));
-</script>
+            $.CopyModuleManager = function (options) {
+
+                var that = this;
+
+                var courseList;
+
+                var settings = $.extend({}, options);
+
+                var getCourses = function () {
+                    $.get('/api/teacher-courses/?format=json', {}, function (response) {
+                        courseList = response;
+                        fillCourseDropdown();
+                    });
+                };
+
+                var fillCourseDropdown = function () {
+                    $("#copyModal #ddlCourse").empty();
+                    $("#copyModal #ddlCourse").append('<option value="">Choose</option>');
+
+                    $(courseList).each(function (index, item) {
+                        var opt = $("<option />", {
+                            value: item.id,
+                            text: item.title
+                        });
+
+                        $("#copyModal #ddlCourse").append(opt);
+                    });
+                };
+
+                var initForm = function () {
+
+                    $('#copyModal form').ajaxForm({
+
+                        beforeSubmit: function () {
+                            $('#copyModal .spin').removeClass('d-none');
+                            $("#copyModal button, input, select").attr('disabled', true);
+                        },
+                        success: function (response) {
+
+                            $('#copyModal').modal('hide');
+
+                            if (response > 0) {
+                                Swal.fire("Module has been copied.");
+
+                            } else {
+
+                                Swal.fire('Sorry, We are failed to created the copy. Kindly refresh the page and try again.');
+
+                                setTimeout(function () {
+                                    window.location.reload();
+                                }, 1000);
+                            }
+                        }
+                    });
+
+                };
+
+                var registerEvent = function () {
+
+                    $("div").on("click", ".link-copy-module", function (e) {
+                        e.stopPropagation();
+
+                        var id = $(this).attr('pk');
+
+                        if (id) {
+
+                            $("#copyModal #txtModule").val(id);
+                            $("#copyModal").modal({backdrop: 'static', show: true});
+                        }
+
+
+                    });
+
+                    $("div").on("click", "#btnStartCopy", function (e) {
+                        e.stopPropagation();
+
+                        var course = $("#copyModal #ddlCourse").val();
+
+                        if (course) {
+
+                            $('#copyModal form').submit();
+
+                        } else {
+                            Toast.fire({icon: 'warning', title: 'Please select the course'});
+                        }
+
+                    });
+
+                    $('#copyModal').on('hidden.bs.modal', function (e) {
+                        $('#copyModal .spin').addClass('d-none');
+                        $("#copyModal button, input, select").attr('disabled', false);
+                    });
+
+                    $('#copyModal').on('shown.bs.modal', function (e) {
+                        $('#copyModal .spin').addClass('d-none');
+                        $("#copyModal button, input, select").attr('disabled', false);
+                    });
+
+                };
+
+                var init = function () {
+                    registerEvent();
+                    getCourses();
+                    initForm();
+                };
+
+                init();
+
+                return this;
+
+            };
+
+
+        }(jQuery));
+    </script>
 
 {% endblock %}

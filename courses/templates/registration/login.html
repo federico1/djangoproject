@@ -1,80 +1,83 @@
 {% extends 'app_base.html' %}
 {% load staticfiles %}
-{% block title %}Log in{% endblock %}
+{% block title %}
+    Log in | pdhsafety.com
+{% endblock %}
 {% block content %}
 
-<section class="page-header">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="page-header-content">
-                    <h1>Login</h1>
-                    <ul class="list-inline mb-0">
-                        <li class="list-inline-item">
-                            <a href="/">Home</a>
-                        </li>
-                        <li class="list-inline-item">/</li>
-                        <li class="list-inline-item">
-                            Login
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<main class="site-main page-wrapper woocommerce single single-product">
-    <section class="space-3">
+    <section class="page-header">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6 offset-md-3">
-                    <div class="woocommerce-notices-wrapper"></div>
-                  
-                    <form class="woocommerce-form woocommerce-form-login login" action="{% url 'login' %}" method="post">
-                        
-                        {% csrf_token %}
-
-                        <div class="mb-3 small">
-                            {% if form.errors %}
-                            <p class="text-danger">Your username and password didn't match. Please try again.</p>
-                            {% endif %}
-                        </div>
-
-                        <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                            <label for="username">Username or email address&nbsp;<span class="required">*</span></label>
-                            {{ form.username }}
-                        </p>
-                        <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                            <label for="password">Password&nbsp;<span class="required">*</span></label>
-                            {{ form.password }}
-                        </p> 
-                        <p class="form-row">
-                            
-                            <button type="submit" class="woocommerce-button button woocommerce-form-login__submit" name="login" value="Log in">Log in</button>
-                            <!-- <label class="woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme">
-                                <input class="woocommerce-form__input woocommerce-form__input-checkbox" name="rememberme" type="checkbox" id="rememberme" value="forever"> <span>Remember me</span>
-                            </label> -->
-                        </p>
-                        <!-- <p class="woocommerce-LostPassword lost_password">
-                            <a href="#">Lost your password?</a>
-                        </p> -->
-                    </form>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="page-header-content">
+                        <h1>Login</h1>
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item">
+                                <a href="/">Home</a>
+                            </li>
+                            <li class="list-inline-item">/</li>
+                            <li class="list-inline-item">
+                                Login
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-             
             </div>
         </div>
     </section>
-    <!--shop category end-->
-</main>
+
+    <main class="site-main page-wrapper woocommerce single single-product">
+        <section class="space-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <div class="woocommerce-notices-wrapper"></div>
+
+                        <form class="woocommerce-form woocommerce-form-login login" action="{% url 'login' %}?next={{next}}" method="post">
+
+                            {% csrf_token %}
+
+                            <div class="mb-3 small">
+                                {% if form.errors %}
+                                    <p class="text-danger">Your username and password didn't match. Please try again.</p>
+                                {% endif %}
+                            </div>
+
+                            <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                                <label for="username">Username or email address&nbsp;<span class="required">*</span>
+                                </label>
+                                {{ form.username }}
+                            </p>
+                            <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                                <label for="password">Password&nbsp;<span class="required">*</span>
+                                </label>
+                                {{ form.password }}
+                            </p>
+                            <p class="form-row">
+
+                                <button type="submit" class="woocommerce-button button woocommerce-form-login__submit" name="login" value="Log in">Log in</button>
+                                <!-- <label class="woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme">
+                                                                <input class="woocommerce-form__input woocommerce-form__input-checkbox" name="rememberme" type="checkbox" id="rememberme" value="forever"> <span>Remember me</span>
+                                                            </label> -->
+                            </p>
+                            <p class="woocommerce-LostPassword lost_password">
+                                <a href="{% url 'password_reset' %}">Lost your password?</a>
+                            </p>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <!--shop category end-->
+    </main>
 
 
 {% endblock %}
-
 {% block scripts %}
-<script>
-    $(document).ready(function () {
-        $("form.login input").addClass('woocommerce-Input woocommerce-Input--text input-text form-control');
-    });
-</script>
+    <script>
+        $(document).ready(function () {
+            $("form.login input").addClass('woocommerce-Input woocommerce-Input--text input-text form-control');
+        });
+    </script>
 {% endblock %}

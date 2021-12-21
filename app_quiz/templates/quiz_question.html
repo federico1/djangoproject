@@ -1,0 +1,260 @@
+{% extends "teacher_base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title %}
+    {% trans 'Manager Question - ' %}
+    {{ quiz.name }}
+{% endblock %}
+
+{% block content %}
+
+    <section class="section-padding course-grid pt-5">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-lg-7">
+                    <div class="section-heading center-heading">
+
+                        <a href="/teachers/quiz/" class="subheading">
+                            <i class="fa fa-arrow-alt-circle-left"></i>
+                            View Quizzes
+                        </a>
+
+                        <h3>Questions -
+                            {{ quiz.name }}</h3>
+                        <p>
+                            <a href="{% url 'quiz_question_manager' quiz.id %}" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm link-add-new">
+                                <i class="fas fa-add"></i>
+                                Create New Question</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 ">
+
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="card border-light">
+                                <div class="card-header bg-secondary text-white py-1 font-weight-bold">
+                                    Add/Update Question
+                                </div>
+                                <div class="card-body">
+
+                                    <p class="text-info">
+                                        {% trans 'Your question must have at least 2 answers. Select at least one correct answer.' %}
+                                    </p>
+
+                                    <div class="row">
+                                        <form method="post" class="" id="fmQues" novalidate>
+
+                                            {% csrf_token %}
+
+                                            {{ formset.management_form }}
+
+                                            <div class="col-md-12">
+                                                {{ form.as_p }}
+                                            </div>
+
+                                            <div class="col-md-12 {% if formset.errors %} danger {% endif %}">
+
+                                                {% for error in formset.non_form_errors %}
+                                                    <div class="text-danger">{{ error }}</div>
+                                                {% endfor %}
+
+                                                <div class="question row">
+                                                    {% for form in formset %}
+
+                                                        <div class="col-md-6">
+                                                            <div class="card mb-2 border-light">
+
+                                                                <div class="card-header py-1 font-weight-bold">
+                                                                    ({{ forloop.counter }}) - Answer
+                                                                </div>
+
+                                                                <div class="card-body">
+                                                                    <div>
+                                                                        {% for hidden in form.hidden_fields %}
+                                                                            {{ hidden }}
+                                                                        {% endfor %}
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            {{ form.text }}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <div class="checkbox">
+                                                                                <span class="text-muted ">Correct answer?
+                                                                                    {{ form.is_correct }}
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+
+
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer">
+                                    <button class="btn btn-primary" type="submit" id="btnSaveQues">{% trans 'Save Question' %}</button>
+                                    <a class="btn btn-secondary" href="{% url 'quiz_question_manager' quiz.id %}">
+                                        Add New Question
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="card border-light">
+                                <div class="card-header bg-secondary text-white py-1 font-weight-bold">
+                                    Added Questions
+                                </div>
+                                <div class="card-body">
+                                    <div>
+                                        {% for item in questions %}
+
+                                            <div class="mb-3">
+
+                                                <div id="accordion-{{ item.id }}">
+                                                    <div class="card">
+                                                        <div class="card-header py-1 font-weight-bold" id="headingOne">
+                                                            <h5 class="mb-0">
+                                                                <a class="btn btn-link" data-toggle="collapse" data-target="#collapseOne-{{ item.id }}" aria-expanded="true" aria-controls="collapseOne-{{ item.id }}">
+                                                                    {{ item }}
+                                                                </a>
+                                                            </h5>
+                                                        </div>
+
+                                                        <div id="collapseOne-{{ item.id }}" class="collapse" aria-labelledby="headingOne-{{ item.id }}" data-parent="#accordion-{{ item.id }}">
+                                                            <div class="card-body">
+                                                                <ul class="list-group">
+                                                                    {% for answer in item.answers.all %}
+                                                                        <li class="list-group-item">
+                                                                            {{ answer }}
+
+                                                                            {% if answer.is_correct == True %}
+                                                                                <span class="badge badge-success pull-right">Correct Answer</span>
+                                                                            {% endif %}
+
+                                                                        </li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="card-footer">
+                                                            <div>
+                                                                <div class="buttons" pk="{{ item.id }}">
+                                                                    <a href="{% url 'quiz_question_manager' quiz.id %}?question_id={{ item.id }}" class="btn btn-info btn-sm">Edit</a>
+                                                                    <button class="btn btn-info btn-sm" pk="{{ item.id }}">Delete</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+
+                                            </div>
+
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container-fluid mt-3"></div>
+
+    <div id="dialog-confirm" title="Delete Question?"></div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <!-- <link href="{% static "/plugins/jquery/jquery-ui.css" %}" rel="stylesheet"> -->
+
+    <style>
+
+        #fmQues input[type='text'] {
+            height: 39px;
+        }
+
+        .buttons {
+            padding: 5px;
+        }
+
+        .errorlist li {
+            color: #d31919;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#fmQues input[type='text']").addClass('form-control form-control-sm bg-white');
+
+            $(".row").addClass('mb-2');
+
+            $("#btnSaveQues").click(function () {
+                $("#fmQues").submit();
+            });
+
+            $('html, body').animate({
+                scrollTop: $("#fmQues").offset().top -200
+            }, 1000);
+
+            $("div.buttons").on("click", ".btn", function (e) {
+                e.preventDefault();
+
+                if ($(this).text() == 'Edit') {
+                    window.location = $(this).attr('href');
+                } else if ($(this).text() == 'Delete') {
+                    var id = $(this).attr('pk');
+                    deleteQuestion(id);
+                }
+
+            });
+        });
+
+        function deleteQuestion(id) {
+
+            Swal.fire({
+                title: 'Are you sure? You want to delete this question!',
+                showDenyButton: true,
+                showCancelButton: true,
+                showConfirmButton: false,
+                denyButtonText: `Delete`
+            }).then((result) => { /* Read more about isConfirmed, isDenied below */
+                if (result.isDenied) {
+
+                    ShowLoadingModal("Please wait", "deleting question");
+
+                    var url = "{% url 'question_delete' 0 %}".replace("0", id);
+
+                    $.get(url, function (response) {
+                        window.location.reload();
+                    });
+                }
+            });
+
+
+        }
+    </script>
+{% endblock %}

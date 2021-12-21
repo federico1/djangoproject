@@ -1,5 +1,5 @@
 from django.urls import path, include, re_path
-from .views import  question_add, question_delete, quiz_course, question_delete_generic
+from .views import  question_add, question_delete, quiz_course, question_delete_generic, quiz_questions
 from django.views.decorators.cache import cache_page
 
 
@@ -12,4 +12,6 @@ urlpatterns = [
          quiz_course, name='quiz_course'),
     path(r'question-delete/<int:question_id>/',
          question_delete_generic, name='question_delete'),
+    path(r'quiz-questions/<int:quiz_id>/',
+         quiz_questions, name='quiz_question_manager'),
 ]

@@ -1,23 +1,20 @@
-
-# from django.shortcuts import get_object_or_404
-# from rest_framework import generics
-# from rest_framework import viewsets
-# from rest_framework.authentication import BasicAuthentication
-# from rest_framework.permissions import IsAuthenticated, IsAdminUser
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from django.http import Http404
 from django.db.models import Count
+from django.conf import settings
+from datetime import datetime
+from cryptography.fernet import Fernet
+
+import json
 
 from app_api.serializers import UserSerializer
 from app_api.permissions import IsTeacherUser
 from app_api.more_serializers.student_serializers import SSTCardSerializer
 
 from students.models import User, SSTCard
-from django.conf import settings
 
 
 class UserDetailView(APIView):
@@ -52,7 +49,7 @@ class UserDetailView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request, format=None):
-       
+
         serializer = UserSerializer(data=request.data)
         print(serializer)
         if serializer.is_valid():
@@ -64,7 +61,7 @@ class UserDetailView(APIView):
 
     def delete(self, request, pk, format=None,):
         snippet = self.get_object(pk)
-        is_active =  request.data['is_active']
+        is_active = request.data['is_active']
         snippet.is_active = is_active
         snippet.save()
 
@@ -82,7 +79,7 @@ class SSTCardApiView(APIView):
     def get(self, request, format=None):
 
         snippets = SSTCard.objects.all()
-        
+
         card_number = self.request.query_params.get('card_number', None)
 
         if card_number is not None:
@@ -104,5 +101,3 @@ def EmailExist(request):
             result = False
 
     return Response(result)
-
-

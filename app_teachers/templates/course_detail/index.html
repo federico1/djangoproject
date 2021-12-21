@@ -1,376 +1,391 @@
-{% extends "teacher_base.html" %}
+{% extends 'teacher_base.html' %}
 {% load staticfiles %}
-{% block title %}View Course{% endblock %}
+{% block title %}View Course
+{% endblock %}
 
 {% block nav %}
 
-<nav class="navbar navbar-expand-md navbar-bark bg-dark" id="secNav">
+    <nav class="navbar navbar-expand-md navbar-bark bg-dark" id="secNav">
 
-    <a class="navbar-brand mb-0 h1 text-white" href="#"> {{ object.title }}</a>
+        <a class="navbar-brand mb-0 h1 text-white" href="#">
+            {{ object.title }}</a>
 
-    <div class="navbar-collapse">
-        <ul class="navbar-nav ml-auto">
+        <div class="navbar-collapse">
+            <ul class="navbar-nav ml-auto">
 
-            <li class="nav-item">
-                <a class="nav-link text-white btn btn-sm btn-info" id="btnExternalVideo" href="#">
-                    External Video Meet
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white btn btn-sm btn-info" id="btnExternalVideo" href="#">
+                        External Video Meet
+                    </a>
+                </li>
 
-            <li class="nav-item">
-                <a class="nav-link text-white link-students" href="javascript:;">
-                    Students
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white link-students" href="javascript:;">
+                        Students
+                    </a>
+                </li>
 
-            <li class="nav-item">
-                <a class="nav-link text-white " href="{%url 'teacher_dashboard'%}">
-                    Dashboard
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white " href="{% url 'teacher_dashboard' %}">
+                        Dashboard
+                    </a>
+                </li>
 
-            <li class="nav-item dropdown ml-3">
-                <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#">
-                    <i class="fa fa-lg fa-cog text-white"></i> {{request.user}}
-                </a>
-                <div class="dropdown-menu dropdown-menu-right ">
-                    <a class="dropdown-item" href="{%url 'teacher_dashboard'%}">Dashboard</a>
-                    {% if request.user.is_authenticated %}
-                    <a class="dropdown-item" href="{% url "logout" %}">Sign out</a>
-                    {%endif%}
-                </div>
-            </li>
-        </ul>
+                <li class="nav-item dropdown ml-3">
+                    <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#">
+                        <i class="fa fa-lg fa-cog text-white"></i>
+                        {{ request.user }}
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right ">
+                        <a class="dropdown-item" href="{% url 'teacher_dashboard' %}">Dashboard</a>
+                        {% if request.user.is_authenticated %}
+                            <a class="dropdown-item" href="{% url "logout" %}">Sign out</a>
+                        {% endif %}
+                    </div>
+                </li>
+            </ul>
 
-    </div>
+        </div>
 
-</nav>
+    </nav>
 
 {% endblock %}
 
 {% block content %}
 
-<div class="container-fluid py-0 px-0" id="fixContainer">
-    <div class="row">
+    <div class="container-fluid py-0 px-0" id="fixContainer">
+        <div class="row">
 
-        <div class="col-md-3">
+            <div class="col-md-3">
 
-            <nav id="sidebar" class="sidebar-wrapper shadow">
+                <nav id="sidebar" class="sidebar-wrapper shadow">
 
-                <div class="scrollbar-inner">
-                    <div class="sidebar-content">
-                        <div class="sidebar-brand">
+                    <div class="scrollbar-inner">
+                        <div class="sidebar-content">
+                            <div class="sidebar-brand">
 
-                            <div class="d-flex justify-content-center">
-                                <a href="{% url "teacher_course_detail" object.id %}"> Course
-                                    Materials
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- sidebar-search  -->
-                        <div class="sidebar-menu">
-                            <ul>
-
-                                {% for m in object.modules.all %}
-
-                                <li data-id="{{ m.id }}" class="sidebar-dropdown">
-
-                                    <a href="javascript:;" class="{% if m == module %} active {% endif %}">
-                                        {{ m.title }}
+                                <div class="d-flex justify-content-center">
+                                    <a href="{% url "teacher_course_detail" object.id %}">
+                                        Course
+                                                                                                                    Materials
                                     </a>
+                                </div>
+                            </div>
 
-                                    <div class="sidebar-submenu">
-                                        <ul>
-                                            {% for content in m.contents.all %}
+                            <!-- sidebar-search  -->
+                            <div class="sidebar-menu">
+                                <ul>
+
+                                    {% for m in object.modules.all %}
+
+                                        <li data-id="{{ m.id }}" class="sidebar-dropdown">
+
+                                            <a href="javascript:;" class="{% if m == module %} active {% endif %}">
+                                                {{ m.title }}
+                                            </a>
+
+                                            <div class="sidebar-submenu">
+                                                <ul>
+                                                    {% for content in m.contents.all %}
+                                                        {% with item=content.item %}
+
+                                                        <li class="content-item" data-progress="{{ content.has_progress }}">
+
+                                                            <a class="content-{{ content.id }}" href="{% url 'teacher_course_detail_module' object.id m.id %}?content={{ content.id }}">
+
+                                                                <i title="{{ content.content_type }}" class="fa {{ content.content_type }}"></i>
+                                                                {{ item.title }}
+
+                                                            </a>
+
+
+                                                        </li>
+
+                                                        {% endwith %}
+
+                                                    {% endfor %}
+
+                                                    {% if m.quiz != None %}
+
+                                                        <li class="content-item" data-progress="True">
+                                                            <a class="complete" href="{% url 'teacher_course_detail_module' object.id m.id %}?content={{ m.quiz_id }}&type=quiz">
+                                                                <i class="fa fa-question-circle-o"></i>
+                                                                Quiz
+                                                            </a>
+                                                        </li>
+
+
+                                                    {% endif %}
+
+
+                                                </ul>
+                                            </div>
+                                        </li>
+
+                                        {% empty %}
+                                        <li class="menu__item">No modules yet.</li>
+
+                                    {% endfor %}
+
+
+                                </ul>
+                            </div>
+                            <!-- sidebar-menu  -->
+
+
+                        </div>
+                        <!-- sidebar-content  -->
+                    </div>
+                </nav>
+
+            </div>
+
+            <div class="col-md-9">
+
+                <main class="page-content ">
+
+                    <div class="row">
+
+                        {% if module == None %}
+
+                            {% if request.GET.type == 'quiz' and object.quiz is not None %}
+                                <div class="col-md-12 mb-30">
+                                    Quiz
+                                </div>
+                            {% else %}
+                                <div class="col-md-12 mb-30">
+                                    <div class="about-course p-2">
+                                        {{ object.overview|safe }}
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                        {% endif %}
+                        <!-- if module == None -->
+
+
+                        {% if module != None %}
+
+                            {% for content in module.contents.all %}
+
+                                {% if request.GET.content  == content.id|stringformat:"s" and request.GET.type != 'quiz' %}
+
+                                    <div class="col-md-12">
+
+                                        <div class="about-course">
+
                                             {% with item=content.item %}
 
-                                            <li class="content-item" data-progress="{{ content.has_progress }}">
+                                            <div class="card">
 
-                                                <a class="content-{{content.id}}"
-                                                    href="{% url 'teacher_course_detail_module' object.id m.id %}?content={{content.id}}">
-
-                                                    <i title="{{ content.content_type }}"
-                                                        class="fa {{ content.content_type }}"></i>
+                                                <div class="card-header">
                                                     {{ item.title }}
+                                                </div>
 
-                                                </a>
-
-
-                                            </li>
+                                                <div class="card-body">
+                                                    <div id="contentSection" data-id="{{ content.id }}" data-type="{{ content.content_type }}" data-completed="{{ active_content.complete }}">
+                                                        {{ item.render }}
+                                                    </div>
+                                                </div>
+                                            </div>
 
                                             {% endwith %}
 
+                                        </div>
+                                    </div>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                            {% if request.GET.type == 'quiz' %}
+
+                                <div class="col-md-12">
+
+                                    <div class="card">
+
+                                        <div class="card-header">
+                                            {{ quiz }}
+                                        </div>
+
+                                        <div class="card-body">
+                                            {% for taken_quiz in quiz.taken_quizzes.all %}
+                                                {{ take_quiz }}
                                             {% endfor %}
 
-                                            {% if m.quiz != None %}
-
-                                            <li class="content-item" data-progress="True">
-                                                <a class="complete"
-                                                    href="{% url 'teacher_course_detail_module' object.id m.id %}?content={{m.quiz_id}}&type=quiz">
-                                                    <i class="fa fa-question-circle-o"></i>
-                                                    Quiz </a>
-                                            </li>
-
-
-                                            {% endif %}
-
-
-                                        </ul>
+                                        </div>
                                     </div>
-                                </li>
 
-                                {% empty %}
-                                <li class="menu__item">No modules yet.</li>
+                                </div>
+                            {% endif %}
+                            <!-- if content = quiz -->
 
-                                {% endfor %}
-
-
-                            </ul>
-                        </div>
-                        <!-- sidebar-menu  -->
-
-
+                        {% endif %}
+                        <!-- if module != None -->
 
                     </div>
-                    <!-- sidebar-content  -->
-                </div>
-            </nav>
 
+                </main>
+
+            </div>
         </div>
 
-        <div class="col-md-9">
+    </div>
 
-            <main class="page-content ">
+    <div id="externalVideoMeetModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        External Video Sources
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
 
-                <div class="row">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Link</th>
+                                        <th>Date</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
 
-                    {% if module == None %}
-
-                    {% if request.GET.type == 'quiz' and object.quiz is not None %}
-                    <div class="col-md-12 mb-30">
-                        Quiz
-                    </div>
-                    {% else %}
-                    <div class="col-md-12 mb-30">
-                        <div class="about-course p-2">
-                            {{object.overview|safe}}
+                                <tbody></tbody>
+                            </table>
                         </div>
-                    </div>
-                    {%endif%}
+                        <div class="col-md-5">
 
-                    {%endif%}
-                    <!-- if module == None -->
+                            <div class="card p-2">
+                                <form>
 
+                                    <input type="hidden" class="form-control" name="course" value="{{ object.id }}"/>
 
-                    {% if module != None %}
-
-                    {% for content in module.contents.all %}
-
-                    {% if request.GET.content  == content.id|stringformat:"s" and request.GET.type != 'quiz' %}
-
-                    <div class="col-md-12">
-
-                        <div class="about-course">
-
-                            {% with item=content.item %}
-
-                            <div class="card">
-
-                                <div class="card-header">
-                                    {{ item.title }}
-                                </div>
-
-                                <div class="card-body">
-                                    <div id="contentSection" data-id="{{content.id}}"
-                                        data-type="{{content.content_type}}"
-                                        data-completed="{{active_content.complete}}">
-                                        {{ item.render }}
+                                    <div class="form-group">
+                                        <label for="title">Title</label>
+                                        <input type="text" class="form-control" name="title"/>
                                     </div>
-                                </div>
-                            </div>
 
-                            {% endwith %}
+                                    <div class="form-group">
+                                        <label for="url">Source URL
+                                            <small>
+                                                (Zoom etc)</small>
+                                            *</label>
+                                        <input type="text" class="form-control" name="url"/>
+                                    </div>
+
+                                </form>
+                            </div>
 
                         </div>
                     </div>
 
-                    {% endif %}
-
-                    {% endfor %}
-
-                    {% if request.GET.type == 'quiz' %}
-
-                    <div class="col-md-12">
-
-                        <div class="card">
-
-                            <div class="card-header">
-                                {{quiz}}
-                            </div>
-
-                            <div class="card-body">
-                                {% for taken_quiz in quiz.taken_quizzes.all %}
-                                {{take_quiz}}
-                                {% endfor %}
-
-                            </div>
-                        </div>
-
-                    </div>
-                    {% endif %}
-                    <!-- if content = quiz -->
-
-                    {% endif %}
-                    <!-- if module != None -->
 
                 </div>
 
-            </main>
-
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnSaveExternalVideo">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
     </div>
 
-</div>
+    <div id="studentListModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Student Enrolled
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
 
-<div id="externalVideoMeetModal" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    External Video Sources
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
+                    <table class="table table-bordered" id="tblStudents">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Attendance</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
 
-                <div class="row">
-                    <div class="col-md-7">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Title</th>
-                                    <th>Link</th>
-                                    <th>Date</th>
-                                    <th></th>
+                        <tbody>
+                            {% for m in object.students.all %}
+
+                                <tr id="{{ m.id }}" data-action="{{ m.id }}">
+
+                                    <td>{{ m.id }}</td>
+                                    <td>
+                                        {{ m.first_name }}
+                                        {{ m.last_name }}
+                                    </td>
+                                    <td>
+
+                                        {% if m.email %}
+                                            {{ m.email }}
+                                        {% else %}
+                                            {{ m.username }}
+                                        {% endif %}
+                                    </td>
+
+                                    <td class="attend">
+                                        N/A
+                                    </td>
+
+                                    <td>
+                                        <button class="btn btn-secondary btn-sm link-mark-attendance" pk="{{ m.id }}">
+                                            Mark Attendance</button>
+                                    </td>
+
                                 </tr>
-                            </thead>
 
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                    <div class="col-md-5">
+                            {% endfor %}
+                        </tbody>
+                    </table>
 
-                        <div class="card p-2">
-                            <form>
 
-                                <input type="hidden" class="form-control" name="course" value="{{object.id}}" />
-
-                                <div class="form-group">
-                                    <label for="title">Title</label>
-                                    <input type="text" class="form-control" name="title" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="url">Source URL <small> (Zoom etc)</small> *</label>
-                                    <input type="text" class="form-control" name="url" />
-                                </div>
-
-                            </form>
-                        </div>
-
-                    </div>
                 </div>
 
-
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnSaveExternalVideo">Save changes</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
-</div>
 
-<div id="studentListModal" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    Student Enrolled
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-
-                <table class="table table-bordered" id="tblStudents">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Attendance</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {% for m in object.students.all %}
-
-                        <tr id="{{m.id}}" data-action="{{m.id}}">
-
-                            <td>{{m.id}}</td>
-                            <td>
-                                {{m.first_name}} {{m.last_name}} </td>
-                            <td>
-
-                            {% if m.email %} 
-                            {{m.email}}
-                            {%else%}
-                            {{m.username}}
-                            {%endif%}
-                                 </td>
-
-                            <td class="attend">
-                            N/A
-                            </td>
-
-                              <td>
-                                <button class="btn btn-secondary btn-sm link-mark-attendance" pk="{{m.id}}">
-                                    Mark Attendance</button>
-                            </td>
-
-                        </tr>
-                      
-                        {% endfor %}
-                    </tbody>
-                </table>
-
-
-            </div>
-
-        </div>
-    </div>
-</div>
-
-{% verbatim %}
-<script type="text/x-handlebars-template" id='externalVideoItemTemplate'>
-    <tr>
-        <td> {{title}} </td>
-        <td><a href="{{url}}" target="_blank"> URL </a> </td>
-        <td>  {{#dateOnly}}{{created}}{{/dateOnly}}  </td>
-        <td>
-        <button type="button" class="btn btn-sm btn-danger link-external-video-delete" pk="{{id}}">
-        <i class="fa fa-close"></i>
-        </button>  </td>
-   </tr>
-</script>
-{% endverbatim %}
+    {% verbatim %}
+        <script type="text/x-handlebars-template" id='externalVideoItemTemplate'>
+            <tr>
+                <td>
+                    {{ title }}
+                </td>
+                <td>
+                    <a href="{{ url }}" target="_blank">
+                        URL
+                    </a>
+                </td>
+                <td>
+                    {{#dateOnly}}
+                        {{ created }}
+                    {{/dateOnly}}
+                </td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-danger link-external-video-delete" pk="{{ id }}">
+                        <i class="fa fa-close"></i>
+                    </button>
+                </td>
+            </tr>
+        </script>
+    {% endverbatim %}
 
 
 {% endblock %}
@@ -378,526 +393,512 @@
 
 {% block scripts %}
 
-<link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet" />
-<link href="{% static "/sb-admin/vendor/datatables/dataTables.bootstrap4.min.css" %}" rel="stylesheet">
+    <link
+    href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet"/>
+    <!-- <link href="{% static '/sb-admin/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet"> -->
 
 
-<style>
-    .sidebar-wrapper {
-        border-radius: 0;
-        min-width: auto;
-        left: 1px;
-        top: 51px;
-        background: #fff;
-        border: 1px solid #dddddd;
-        border-radius: 2px;
-        border-bottom: 3px solid #438aad;
-        transition: all 200ms ease 0s;
-    }
+    <style>
+        .sidebar-wrapper {
+            border-radius: 0;
+            min-width: auto;
+            left: 1px;
+            top: 51px;
+            background: #fff;
+            border: 1px solid #dddddd;
+            border-radius: 2px;
+            border-bottom: 3px solid #438aad;
+            transition: all 200ms ease 0s;
+        }
 
-    .sidebar-wrapper .sidebar-brand {
-        margin-bottom: 2px;
-        border-radius: 0px;
-        background: #0f8aad;
-        border: 1px solid #1e7dac;
-    }
+        .sidebar-wrapper .sidebar-brand {
+            margin-bottom: 2px;
+            border-radius: 0;
+            background: #0f8aad;
+            border: 1px solid #1e7dac;
+        }
 
-    .sidebar-wrapper .sidebar-brand a {
-        color: #fff;
-    }
+        .sidebar-wrapper .sidebar-brand a {
+            color: #fff;
+        }
 
-    .sidebar-wrapper .sidebar-brand a:hover {
-        color: #fff;
-        background: none;
-    }
+        .sidebar-wrapper .sidebar-brand a:hover {
+            color: #fff;
+            background: none;
+        }
 
-    .sidebar-content {
-        max-height: 100%;
-        height: 100%;
-    }
+        .sidebar-content {
+            max-height: 100%;
+            height: 100%;
+        }
 
-    .scrollbar-inner {
-        height: 100%;
-        max-height: 100%;
-    }
+        .scrollbar-inner {
+            height: 100%;
+            max-height: 100%;
+        }
 
-    .sidebar-wrapper .sidebar-menu {
-        padding: 5px;
-        padding-right: 10px;
-    }
+        .sidebar-wrapper .sidebar-menu {
+            padding: 5px 10px 5px 5px;
+        }
 
-    .sidebar-wrapper .sidebar-submenu li {
-        padding-left: 5px !important;
-    }
+        .sidebar-wrapper .sidebar-submenu li {
+            padding-left: 5px !important;
+        }
 
-    .sidebar-wrapper .sidebar-menu ul li a {
-        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
-        border-radius: 6px;
-        background: rgb(13 110 253 / .12);
-        color: #008cff;
-        margin-bottom: 6px;
-    }
+        .sidebar-wrapper .sidebar-menu ul li a {
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
+            border-radius: 6px;
+            background: rgb(13 110 253 / 0.12);
+            color: #008cff;
+            margin-bottom: 6px;
+        }
 
-    .sidebar-wrapper .sidebar-menu ul li.active {
-        background: #fff;
-    }
+        .sidebar-wrapper .sidebar-menu ul li.active {
+            background: #fff;
+        }
 
-    .sidebar-wrapper .sidebar-menu ul li a.active {
-        background: #e2edff;
-    }
+        .sidebar-wrapper .sidebar-menu ul li a.active {
+            background: #e2edff;
+        }
 
-    .sidebar-wrapper .sidebar-menu ul li.active>a {
-        color: #fff;
-        background: #747474;
-    }
+        .sidebar-wrapper .sidebar-menu ul li.active > a {
+            color: #fff;
+            background: #747474;
+        }
 
-    .sidebar-wrapper .sidebar-menu ul li a:hover {
-        background: #747474;
-        color: #fff;
-    }
+        .sidebar-wrapper .sidebar-menu ul li a:hover {
+            background: #747474;
+            color: #fff;
+        }
 
-    .sidebar-wrapper .sidebar-menu .sidebar-submenu a {
-        background: #fff;
-        color: #000;
-        box-shadow: none;
-        border: 0;
-        border-radius: 0;
-    }
+        .sidebar-wrapper .sidebar-menu .sidebar-submenu a {
+            background: #fff;
+            color: #000;
+            box-shadow: none;
+            border: 0;
+            border-radius: 0;
+        }
 
-    .sidebar-wrapper .sidebar-menu .sidebar-submenu a:hover {
-        background: #fff;
-        color: #008cff;
-    }
+        .sidebar-wrapper .sidebar-menu .sidebar-submenu a:hover {
+            background: #fff;
+            color: #008cff;
+        }
 
-    .sidebar-wrapper .sidebar-menu ul li a i {
-        float: left;
-        margin-right: 7px !important;
-        background: #fff;
-        border: none;
-        color: #000;
-    }
+        .sidebar-wrapper .sidebar-menu ul li a i {
+            float: left;
+            margin-right: 7px !important;
+            background: #fff;
+            border: none;
+            color: #000;
+        }
 
-    .sidebar-wrapper .sidebar-menu ul li a.pin i {
-        background: #e7e7e7;
-        color: #000;
-    }
+        .sidebar-wrapper .sidebar-menu ul li a.pin i {
+            background: #e7e7e7;
+            color: #000;
+        }
 
-    .sidebar-wrapper .sidebar-menu ul li a.complete {
-        border-bottom: 1px solid #f3f3f3;
-    }
+        .sidebar-wrapper .sidebar-menu ul li a.complete {
+            border-bottom: 1px solid #f3f3f3;
+        }
 
-    .sidebar-wrapper .sidebar-menu ul li a.pin {
-        background: #e7e7e7;
-        color: #353434
-    }
+        .sidebar-wrapper .sidebar-menu ul li a.pin {
+            background: #e7e7e7;
+            color: #353434;
+        }
 
-    .scrollbar-inner>.scroll-element.scroll-y {
-        right: -3px;
-    }
+        .scrollbar-inner > .scroll-element.scroll-y {
+            right: -3px;
+        }
 
-    .dropdown-menu.rooms {
-        min-width: 25rem;
-    }
+        .dropdown-menu.rooms {
+            min-width: 25rem;
+        }
 
-    .btn-hide {
-        position: absolute;
-        right: -37px;
-        bottom: 0px;
-        z-index: 9999;
-        border-radius: 0;
-    }
+        .btn-hide {
+            position: absolute;
+            right: -37px;
+            bottom: 0;
+            z-index: 9999;
+            border-radius: 0;
+        }
 
-    .btn-show {
-        border-radius: 0;
-        z-index: 9;
-    }
+        .btn-show {
+            border-radius: 0;
+            z-index: 9;
+        }
 
-    .sidebar-wrapper .sidebar-menu ul li a i.frame:before {
-        content: "\f2dc";
-    }
-</style>
+        .sidebar-wrapper .sidebar-menu ul li a i.frame:before {
+            content: "\f2dc";
+        }
+    </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"
-    integrity="sha512-4ze/a9/4jqu+tX9dfOqJYSvyYd5M6qum/3HpCLr+/Jqf0whc37VUbkpNGHR7/8pSnCFw47T1fmIpwBV7UySh3g=="
-    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js" integrity="sha512-4ze/a9/4jqu+tX9dfOqJYSvyYd5M6qum/3HpCLr+/Jqf0whc37VUbkpNGHR7/8pSnCFw47T1fmIpwBV7UySh3g==" crossorigin="anonymous"></script>
 
-<script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
+    <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
 
-  <script src="{% static "/sb-admin/vendor/datatables/jquery.dataTables.min.js" %}"></script>
-  <script src="{% static "/sb-admin/vendor/datatables/dataTables.bootstrap4.min.js" %}"></script>
+    <!-- <script src="{% static "/sb-admin/vendor/datatables/jquery.dataTables.min.js" %}"></script>
+    <script src="{% static "/sb-admin/vendor/datatables/dataTables.bootstrap4.min.js" %}"></script> -->
 
-<script>
-    $("#top-nav").hide();
+    <script>
+        $("#top-nav").hide();
 
-    $('iframe').on("load", function () {
-        addAudioTop();
-    });
-
-    $(document).ready(function () {
-
-        $("#fixContainer").css({
-            'max-height': $(window).height() - $("#secNav").height() - 20,
-            'height': $(window).height() - $("#secNav").height() - 20
+        $('iframe').on("load", function () {
+            addAudioTop();
         });
 
-        $("#sidebar").css({
-            'max-height': $(window).height() - $("#secNav").height() - 30,
-            'height': $(window).height() - $("#secNav").height() - 30,
-        });
+        $(document).ready(function () {
 
-        $(".page-content").css({
-            'max-height': $(window).height() - $("#secNav").height() - 30,
-            'height': $(window).height() - $("#secNav").height() - 30,
-            'overflow': 'hidden',
-            'padding': 10
-        });
+            $("#fixContainer").css({
+                'max-height': $(window).height() - $("#secNav").height() - 20,
+                'height': $(window).height() - $("#secNav").height() - 20
+            });
 
-        $(".sidebar-dropdown > a").click(function () {
+            $("#sidebar").css({
+                'max-height': $(window).height() - $("#secNav").height() - 30,
+                'height': $(window).height() - $("#secNav").height() - 30
+            });
 
-            $(".sidebar-submenu").slideUp(200);
+            $(".page-content").css({
+                'max-height': $(window).height() - $("#secNav").height() - 30,
+                'height': $(window).height() - $("#secNav").height() - 30,
+                'overflow': 'hidden',
+                'padding': 10
+            });
 
-            if ($(this).parent().hasClass("active")) {
-                $(".sidebar-dropdown").removeClass("active");
-                $(this).parent().removeClass("active");
-            } else {
-                $(".sidebar-dropdown").removeClass("active");
-                $(this).next(".sidebar-submenu").slideDown(200);
-                $(this).parent().addClass("active");
-            }
+            $(".sidebar-dropdown > a").click(function () {
 
-        });
+                $(".sidebar-submenu").slideUp(200);
 
-        $(".sidebar-dropdown > a.active").trigger('click');
-
-        var videoManager = new $.VideoManager({});
-        var externalVideoManager = new $.ExternalVideoManager({});
-        var studentManager = new $.StudentManager({});
-
-    });
-
-
-    (function ($) {
-
-        $.VideoManager = function (options) {
-
-            var that = this;
-            var player;
-
-            var settings = $.extend({}, options);
-
-            var registerEvent = function () {
-
-                if ($("#myVideo").length > 0) {
-
-                    player = videojs('myVideo', {
-                        controls: true,
-                        autoplay: false,
-                        preload: 'auto',
-                        fluid: true
-                    });
-
-                    player.ready(function () {
-
-                        var duration_time = Math.floor(this.duration());
-
-                        this.on("ended", function () {
-                            $("#myVideo").attr('completed', 'true');
-                            checkCourseProgress();
-                        });
-
-                    });
-
-                }
-            };
-
-            var init = function () {
-                registerEvent();
-            };
-
-            init();
-
-            return this;
-
-        };
-
-
-        $.ExternalVideoManager = function (options) {
-
-            var that = this;
-
-            var videoList = [];
-
-            var settings = $.extend({}, options);
-
-            var getVideos = function () {
-
-                var data = {
-                    course: '{{object.id}}'
-                };
-
-                $.get('/api/external-video-room/?format=json', data, function (
-                    response) {
-                    videoList = response;
-                    drawList();
-                });
-
-            };
-
-            var addNewVideo = function () {
-
-                var formData = $("#externalVideoMeetModal form").eq(0)
-                    .serializeObject();
-
-                if (!formData.url) {
-                    toastr.error('Please provide the video meet URL');
-                    return;
+                if ($(this).parent().hasClass("active")) {
+                    $(".sidebar-dropdown").removeClass("active");
+                    $(this).parent().removeClass("active");
+                } else {
+                    $(".sidebar-dropdown").removeClass("active");
+                    $(this).next(".sidebar-submenu").slideDown(200);
+                    $(this).parent().addClass("active");
                 }
 
-                $.ajax({
-                    type: "POST",
-                    url: "/api/external-video-room/",
-                    data: JSON.stringify(formData),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    beforeSend: function (xhr, settings) {
-                        xhr.setRequestHeader("X-CSRFToken",
-                            '{{ csrf_token }}');
-                    },
-                    success: function (response) {
-                        toastr.success('Video source is added.');
-                        $("#externalVideoMeetModal form input[type='text']")
-                            .val(null);
-                        getVideos();
-                    },
-                    failure: function (errMsg) {}
-                });
-            };
+            });
 
-            var deleteVideo = function (id) {
-                $.ajax({
-                    type: "DELETE",
-                    url: "/api/external-video-room/" + id + "/",
-                    data: {},
-                    contentType: 'application/json',
-                    beforeSend: function (xhr, settings) {
-                        xhr.setRequestHeader("X-CSRFToken",
-                            '{{ csrf_token }}');
-                    },
-                    success: function (response) {
-                        toastr.warning('Member is removed.');
-                        getVideos();
-                    },
-                    failure: function (errMsg) {}
-                });
-            };
+            $(".sidebar-dropdown > a.active").trigger('click');
 
-            var drawList = function () {
-                $("#externalVideoMeetModal table tbody").empty();
+            var videoManager = new $.VideoManager({});
+            var externalVideoManager = new $.ExternalVideoManager({});
+            var studentManager = new $.StudentManager({});
 
-                $(videoList).each(function (index, item) {
-
-                    if (item.is_deleted != true) {
-                        var source = document.getElementById(
-                                "externalVideoItemTemplate")
-                            .innerHTML;
-                        var template = Handlebars.compile(source);
-                        $("#externalVideoMeetModal table tbody").append(
-                            template(item));
-                    }
-
-                });
-            };
-
-            var registerEvent = function () {
-
-                $("div").on("click", '#btnExternalVideo', function (e) {
-                    e.stopPropagation();
-                    $("#externalVideoMeetModal").modal('show');
-                });
-
-                $("div").on("click", '#btnSaveExternalVideo', function (e) {
-                    e.stopPropagation();
-                    addNewVideo();
-                });
-
-                $("div").on("click", '.link-external-video-delete', function (e) {
-                    e.stopPropagation();
-                    var id = $(this).attr('pk');
-                    deleteVideo(id);
-                });
+        });
 
 
-            };
+        (function ($) {
 
-            var init = function () {
-                registerEvent();
-                getVideos();
-            };
+            $.VideoManager = function (options) {
 
-            init();
+                var that = this;
+                var player;
 
-            return this;
+                var settings = $.extend({}, options);
 
-        };
+                var registerEvent = function () {
 
+                    if ($("#myVideo").length > 0) {
 
-        $.StudentManager = function (options) {
-
-            var that = this;
-            var attendesList = [];
-
-            var settings = $.extend({}, options);
-
-            var getTodayAttendance = function () {
-                $.get('/api/attendance/', {
-                    today: true,
-                    course: '{{object.id}}'
-                }, function (response) {
-                    attendesList = response;
-                    drawTodayAttendance();
-                });
-            };
-
-            var markAttendance = function (student) {
-
-                var formData = {
-                    course: '{{ object.id }}',
-                    student: student,
-                    is_approved: 'True',
-                    event_type: 1
-                };
-
-                $.ajax({
-                    type: "POST",
-                    url: "/api/attendance/",
-                    data: JSON.stringify(formData),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    beforeSend: function (xhr, settings) {
-                        xhr.setRequestHeader("X-CSRFToken",
-                            '{{ csrf_token }}');
-                    },
-                    success: function (response) {
-                        toastr.success('Attanace is marked.');
-                        getTodayAttendance();
-                    },
-                    failure: function (errMsg) {}
-                });
-
-            };
-
-            var approveAttendance = function (status, id) {
-
-                var formData = {
-                    id: id,
-                    is_approved: status,
-                };
-
-                $.ajax({
-                    type: "POST",
-                    url: "/api/approve-attendance/",
-                    data: JSON.stringify(formData),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    beforeSend: function (xhr, settings) {
-                        xhr.setRequestHeader("X-CSRFToken",
-                            '{{ csrf_token }}');
-                    },
-                    success: function (response) {
-                        toastr.success('Attanace is approved.');
-                        getTodayAttendance();
-                    },
-                    failure: function (errMsg) {}
-                });
-
-            };
-
-            var drawTodayAttendance = function () {
-
-                $(attendesList).each(function (index, item) {
-
-                    if (item.is_approved) {
-
-                        $("tr[data-action='" + item.student + "'] .link-mark-attendance").remove();
-                        $("tr[data-action='" + item.student + "'] .link-approve-attendance")
-                            .remove();
-                    } else {
-
-                        var button = $("<button />", {
-                            pk: item.id,
-                            class: 'btn btn-sm btn-warning link-approve-attendance',
-                            text: 'Approve Attendance'
+                        player = videojs('myVideo', {
+                            controls: true,
+                            autoplay: false,
+                            preload: 'auto',
+                            fluid: true
                         });
 
-                        $(".link-mark-attendance[pk='" + item.student + "']").replaceWith(button);
+                        player.ready(function () {
+
+                            var duration_time = Math.floor(this.duration());
+
+                            this.on("ended", function () {
+                                $("#myVideo").attr('completed', 'true');
+                                checkCourseProgress();
+                            });
+
+                        });
+
                     }
+                };
 
-                    var date = moment(item.created).format('MMMM Do YYYY, h:mm:ss a');
+                var init = function () {
+                    registerEvent();
+                };
 
-                    var linkImage = $("<a />", {
-                        href: item.image,
-                        target: '_blank',
-                        class:'ml-2'
+                init();
+
+                return this;
+
+            };
+
+
+            $.ExternalVideoManager = function (options) {
+
+                var that = this;
+
+                var videoList = [];
+
+                var settings = $.extend({}, options);
+
+                var getVideos = function () {
+
+                    var data = {
+                        course: '{{ object.id }}'
+                    };
+
+                    $.get('/api/external-video-room/?format=json', data, function (response) {
+                        videoList = response;
+                        drawList();
                     });
 
-                    var img = $("<img />", {
-                        src: item.image,
-                        alt: 'Image',
-                        width: 50
-                    });
+                };
 
-                    linkImage.html(img);
+                var addNewVideo = function () {
 
-                    $("#studentListModal tr#" + item.student + " td.attend").html(date);
+                    var formData = $("#externalVideoMeetModal form").eq(0).serializeObject();
 
-                    if (item.image) {
-                        $("#studentListModal tr#" + item.student + " td.attend").append(linkImage);
+                    if (! formData.url) {
+                        toastr.error('Please provide the video meet URL');
+                        return;
                     }
 
-                });
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/external-video-room/",
+                        data: JSON.stringify(formData),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        },
+                        success: function (response) {
+                            toastr.success('Video source is added.');
+                            $("#externalVideoMeetModal form input[type='text']").val(null);
+                            getVideos();
+                        },
+                        failure: function (errMsg) {}
+                    });
+                };
 
-                 $("#tblStudents").DataTable();
-                 
+                var deleteVideo = function (id) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: "/api/external-video-room/" + id + "/",
+                        data: {},
+                        contentType: 'application/json',
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        },
+                        success: function (response) {
+                            toastr.warning('Member is removed.');
+                            getVideos();
+                        },
+                        failure: function (errMsg) {}
+                    });
+                };
+
+                var drawList = function () {
+                    $("#externalVideoMeetModal table tbody").empty();
+
+                    $(videoList).each(function (index, item) {
+
+                        if (item.is_deleted != true) {
+                            var source = document.getElementById("externalVideoItemTemplate").innerHTML;
+                            var template = Handlebars.compile(source);
+                            $("#externalVideoMeetModal table tbody").append(template(item));
+                        }
+
+                    });
+                };
+
+                var registerEvent = function () {
+
+                    $("div").on("click", '#btnExternalVideo', function (e) {
+                        e.stopPropagation();
+                        $("#externalVideoMeetModal").modal('show');
+                    });
+
+                    $("div").on("click", '#btnSaveExternalVideo', function (e) {
+                        e.stopPropagation();
+                        addNewVideo();
+                    });
+
+                    $("div").on("click", '.link-external-video-delete', function (e) {
+                        e.stopPropagation();
+                        var id = $(this).attr('pk');
+                        deleteVideo(id);
+                    });
+
+
+                };
+
+                var init = function () {
+                    registerEvent();
+                    getVideos();
+                };
+
+                init();
+
+                return this;
+
             };
 
-            var registerEvent = function () {
 
-                $("div").on("click", '.link-students', function (e) {
-                    e.stopPropagation();
-                    $("#studentListModal").modal('show');
-                });
+            $.StudentManager = function (options) {
 
-                $("div").on("click", '.link-mark-attendance', function (e) {
-                    e.stopPropagation();
-                    var student = $(this).attr('pk');
-                    markAttendance(student);
-                });
+                var that = this;
+                var attendesList = [];
 
-                $("div").on("click", '.link-approve-attendance', function (e) {
-                    e.stopPropagation();
-                    var id = $(this).attr('pk');
-                    approveAttendance(true, id);
-                });
+                var settings = $.extend({}, options);
 
-                $('#studentListModal').on('shown.bs.modal', function () {
-                    getTodayAttendance();
-                });
+                var getTodayAttendance = function () {
+                    $.get('/api/attendance/', {
+                        today: true,
+                        course: '{{ object.id }}'
+                    }, function (response) {
+                        attendesList = response;
+                        drawTodayAttendance();
+                    });
+                };
 
-               
+                var markAttendance = function (student) {
+
+                    var formData = {
+                        course: '{{ object.id }}',
+                        student: student,
+                        is_approved: 'True',
+                        event_type: 1
+                    };
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/attendance/",
+                        data: JSON.stringify(formData),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        },
+                        success: function (response) {
+                            toastr.success('Attanace is marked.');
+                            getTodayAttendance();
+                        },
+                        failure: function (errMsg) {}
+                    });
+
+                };
+
+                var approveAttendance = function (status, id) {
+
+                    var formData = {
+                        id: id,
+                        is_approved: status
+                    };
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/approve-attendance/",
+                        data: JSON.stringify(formData),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        },
+                        success: function (response) {
+                            toastr.success('Attanace is approved.');
+                            getTodayAttendance();
+                        },
+                        failure: function (errMsg) {}
+                    });
+
+                };
+
+                var drawTodayAttendance = function () {
+
+                    $(attendesList).each(function (index, item) {
+
+                        if (item.is_approved) {
+
+                            $("tr[data-action='" + item.student + "'] .link-mark-attendance").remove();
+                            $("tr[data-action='" + item.student + "'] .link-approve-attendance").remove();
+                        } else {
+
+                            var button = $("<button />", {
+                                pk: item.id,
+                                class: 'btn btn-sm btn-warning link-approve-attendance',
+                                text: 'Approve Attendance'
+                            });
+
+                            $(".link-mark-attendance[pk='" + item.student + "']").replaceWith(button);
+                        }
+
+                        var date = moment(item.created).format('MMMM Do YYYY, h:mm:ss a');
+
+                        var linkImage = $("<a />", {
+                            href: item.image,
+                            target: '_blank',
+                            class: 'ml-2'
+                        });
+
+                        var img = $("<img />", {
+                            src: item.image,
+                            alt: 'Image',
+                            width: 50
+                        });
+
+                        linkImage.html(img);
+
+                        $("#studentListModal tr#" + item.student + " td.attend").html(date);
+
+                        if (item.image) {
+                            $("#studentListModal tr#" + item.student + " td.attend").append(linkImage);
+                        }
+
+                    });
+
+                    $("#tblStudents").DataTable();
+
+                };
+
+                var registerEvent = function () {
+
+                    $("div").on("click", '.link-students', function (e) {
+                        e.stopPropagation();
+                        $("#studentListModal").modal('show');
+                    });
+
+                    $("div").on("click", '.link-mark-attendance', function (e) {
+                        e.stopPropagation();
+                        var student = $(this).attr('pk');
+                        markAttendance(student);
+                    });
+
+                    $("div").on("click", '.link-approve-attendance', function (e) {
+                        e.stopPropagation();
+                        var id = $(this).attr('pk');
+                        approveAttendance(true, id);
+                    });
+
+                    $('#studentListModal').on('shown.bs.modal', function () {
+                        getTodayAttendance();
+                    });
+
+
+                };
+
+                var init = function () {
+                    registerEvent();
+                };
+
+                init();
+
+                return this;
 
             };
 
-            var init = function () {
-                registerEvent();
-            };
-
-            init();
-
-            return this;
-
-        };
-
-    }(jQuery));
-</script>
+        }(jQuery));
+    </script>
 {% endblock %}

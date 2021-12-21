@@ -10,15 +10,15 @@ from rest_framework.decorators import api_view, action
 
 from django.http import Http404
 from django.db.models import Count
+from datetime import datetime
+from django.conf import settings
 
-from courses.models import Subject, Course, CourseTimeLog, CourseProgress, Content, CourseFeature, Enrollments, \
-    Evaluation, AssessRating
-
-from app_api.more_serializers import course_serializers
+from courses.models import Subject, Course, CourseTimeLog, CourseProgress, Content, CourseFeature, \
+    Enrollments, Evaluation, AssessRating
 
 from students.models import User
-from django.conf import settings
-from datetime import datetime
+
+from app_api.more_serializers import course_serializers
 
 
 class SubjectDetailView(APIView):
@@ -153,14 +153,23 @@ class EnrollmentViewset(viewsets.ViewSet):
         return Response(serializer.data)
 
     def create(self, request):
+        data = request.data
+        data['user'] = self.request.user.id
 
-        serializer = course_serializers.EnrollmentSerializer(data=request.data)
+        serializer = course_serializers.EnrollmentSerializer(data=data)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        if request.user.is_authenticated and request.user.is_student == True and serializer.is_valid():
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            if not Enrollments.objects.filter(course=request.data['course'], user=self.request.user).exists():
+               
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.data, status=status.HTTP_226_IM_USED)
+        
+        serializer.is_valid()
+
+        return Response(serializer.errors, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
     @action(detail=True, methods=['post'])
     def set_completed(self, request, pk=None):
@@ -177,12 +186,12 @@ class EnrollmentViewset(viewsets.ViewSet):
 class CourseFeatureApiView(APIView):
 
     def get(self, request, format=None):
-        snippets = CourseFeature.objects.all()
+        snippets = CourseFeature.objects
 
         course_id = request.query_params.get('course')
 
         if course_id:
-            snippets = CourseFeature.objects.filter(course_id=course_id)
+            snippets = snippets.filter(course_id=course_id)
 
         serializer = course_serializers.CourseFeatureSerializer(
             snippets, many=True)
@@ -218,8 +227,9 @@ class CoursePriceApiView(APIView):
 
     def put(self, request, pk, format=None):
         snippet = self.get_object(pk)
-        serializer = course_serializers.CoursePriceSerializer(snippet, data=request.data)
-        
+        serializer = course_serializers.CoursePriceSerializer(
+            snippet, data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -236,12 +246,46 @@ class CourseImageApiView(APIView):
 
     def put(self, request, pk, format=None):
         snippet = self.get_object(pk)
-        serializer = course_serializers.CourseImageSerializer(snippet, data=request.data)
-        
+        serializer = course_serializers.CourseImageSerializer(
+            snippet, data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CourseVideoApiView(APIView):
+
+    def get_object(self, pk):
+        try:
+            return Course.objects.get(pk=pk)
+        except Course.DoesNotExist:
+            raise Http404
+
+    def post(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        snippet.video = request.POST['video']
+        snippet.save()
+        result = 1
+        return Response(result)
+
+
+class UpdateQuizApiView(APIView):
+
+    def get_object(self, pk):
+        try:
+            return Course.objects.get(pk=pk)
+        except Course.DoesNotExist:
+            raise Http404
+
+    def post(self, request, format=None):
+        pk = request.POST['id']
+        snippet = self.get_object(pk)
+        snippet.quiz_id = request.POST['quiz_id']
+        snippet.save()
+        result = 1
+        return Response(result)
 
 
 @api_view(['GET', 'POST'])

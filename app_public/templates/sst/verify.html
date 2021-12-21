@@ -1,275 +1,309 @@
 {% extends "app_base.html" %}
 {% load staticfiles %}
 {% block title %}
-- Certificate Verification
+    Certificate Verification | pdhsafety.com
 {% endblock %}
 {% block content %}
-<div class="home-courses">
-    <div class="container">
-        <div class="row mb-4">
-            <div class="col text-center">
-                <h3>Card Verification</h3>
+
+    <section class="page-header">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="page-header-content">
+                        <h1>Card Verification</h1>
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item">
+                                <a href="/">Home</a>
+                            </li>
+                            <li class="list-inline-item">/</li>
+                            <li class="list-inline-item">
+                                Card Verification
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="page-content">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="card my-4">
-                                <div class="card-body">
-                                    <form id="fm">
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="clearfix">
-                                                    <label for="exampleInputEmail1">Certificate Number</label>
-                                                    <input type="text" class="form-control" id="txtCardNumber"
-                                                        name="card_number" />
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="mt-4 p-1">
-                                                    <button type="button" class="btn btn-orange" id="btnVerify">Submit
-                                                        Verify</button>
-                                                    <button type="button" class="btn btn-secondary"
-                                                        id="btnClear">Clear</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="text-right">
-                                            <div class="spinner-border text-primary d-none" role="status">
-                                                <span class="sr-only">Loading...</span>
-                                            </div>
-                                        </div>
-                                    </form>
+    </section>
+
+    <main class="site-main page-wrapper woocommerce single single-product">
+        <section class="space-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <div class="woocommerce-notices-wrapper"></div>
+
+                        <form class="woocommerce-form woocommerce-form-login login" id="fm" action="#" method="post">
+
+                            {% csrf_token %}
+
+                            <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                                <label for="username">Certificate Number<span class="required">*</span>
+                                </label>
+
+                                <input type="text" class="form-control" id="txtCardNumber" name="card_number"/>
+                            </p>
+
+                            <p class="form-row">
+
+                                <button type="button" id="btnVerify" class="woocommerce-button button woocommerce-form-login__submit">
+                                    Verify
+                                </button>
+
+                                <button type="button" id="btnClear" class="ml-3 btn btn-secondary">
+                                    Clear
+                                </button>
+
+                            </p>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <!--shop category end-->
+    </main>
+
+
+    {% verbatim %}
+        <script type="text/x-handlebars-template" id='detailItemTemplate'>
+            <div class="row">
+
+                <div class="col-md-4">
+                    <div class="card1">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center text-center">
+
+                                {{#if student.image}}
+                                    <img src="{{ student.image }}" width="150"/>
+                                {{ else }}
+                                    <img src="https://via.placeholder.com/150" width="150"/>
+                                {{/if}}
+
+                                <div class="mt-3">
+                                    <h5>{{ student.first_name }}
+                                        {{ student.last_name }}
+                                    </h5>
+                                    <p class="text-secondary mb-1">ID:
+                                        {{ card_id }}</p>
+                                    <p class="text-muted font-size-sm">
+                                        {{ card_type }}
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card" id="sstDetails"></div>
+
                 </div>
+
+                <div class="col-md-8">
+
+                    <div class="card1 mb-3">
+                        <div class="card-body">
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Full Name</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ student.first_name }}
+                                    {{ student.last_name }}
+                                </div>
+                            </div>
+                            <hr/>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Card ID</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ card_id }}
+                                </div>
+                            </div>
+                            <hr/>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Card Type</h6>
+                                </div>
+                                <div class="col-sm-8 text-secondary">
+                                    {{ card_type }}
+                                </div>
+                            </div>
+                            <hr/>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Issued</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ issued }}
+                                </div>
+                            </div>
+                            <hr/>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Expired</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ expired }}
+                                </div>
+                            </div>
+                            <hr/>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Status</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ renew_status }}
+                                </div>
+                            </div>
+                            <hr/>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Email</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ student.email }}
+                                </div>
+                            </div>
+                            <hr/>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Phone</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ student.cell_number }}
+                                </div>
+                            </div>
+                            <hr/>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">INFO</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    Height:
+                                    {{ student.person_height }}
+                                    , Eyes:
+                                    {{ student.person_eyes_color }}
+                                </div>
+                            </div>
+                            <hr/>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Address</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ student.address }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
-        </div>
-    </div>
-</div>
-{% verbatim %}
-<script type="text/x-handlebars-template" id='detailItemTemplate'>
-    <div class="row">
+        </script>
+    {% endverbatim %}
 
-    <div class="col-md-4">
-        <div class="card1">
-            <div class="card-body">
-                <div class="d-flex flex-column align-items-center text-center">
-
-                    {{#if student.image}}
-                    <img src="{{student.image}}" width="150">
-                    {{else}}
-                    <img src="https://via.placeholder.com/150" width="150">
-                    {{/if}}
-
-                    <div class="mt-3">
-                        <h5>{{student.first_name}} {{student.last_name}} </h5>
-                        <p class="text-secondary mb-1">ID: {{card_id}}</p>
-                        <p class="text-muted font-size-sm">
-                            {{card_type}}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="col-md-8">
-
-        <div class="card1 mb-3">
-            <div class="card-body">
-
-                <div class="row">
-                    <div class="col-sm-3">
-                        <h6 class="mb-0">Full Name</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary"> {{student.first_name}} {{student.last_name}}</div>
-                </div>
-                <hr>
-
-                <div class="row">
-                    <div class="col-sm-3">
-                        <h6 class="mb-0">Card ID</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary"> {{card_id}} </div>
-                </div>
-                <hr>
-
-                <div class="row">
-                    <div class="col-sm-3">
-                        <h6 class="mb-0">Card Type</h6>
-                    </div>
-                    <div class="col-sm-8 text-secondary"> {{card_type}} </div>
-                </div>
-                <hr>
-
-                <div class="row">
-                    <div class="col-sm-3">
-                        <h6 class="mb-0">Issued</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary"> {{issued}} </div>
-                </div>
-                <hr>
-
-                <div class="row">
-                    <div class="col-sm-3">
-                        <h6 class="mb-0">Expired</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary"> {{expired}} </div>
-                </div>
-                <hr>
-
-                <div class="row">
-                    <div class="col-sm-3">
-                        <h6 class="mb-0">Status</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary"> {{renew_status}} </div>
-                </div>
-                <hr>
-
-                <div class="row">
-                    <div class="col-sm-3">
-                        <h6 class="mb-0">Email</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary"> {{student.email}} </div>
-                </div>
-                <hr>
-
-                <div class="row">
-                    <div class="col-sm-3">
-                        <h6 class="mb-0">Phone</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary"> {{student.cell_number}} </div>
-                </div>
-                <hr>
-
-                <div class="row">
-                    <div class="col-sm-3">
-                        <h6 class="mb-0">INFO</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary"> Height: {{student.person_height}} , Eyes: {{student.person_eyes_color}} </div>
-                </div>
-                <hr>
-                
-                <div class="row">
-                    <div class="col-sm-3">
-                        <h6 class="mb-0">Address</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary"> {{student.address}} </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-</div>
-
-
-</script>
-{% endverbatim %}
 {% endblock %}
+
 {% block scripts %}
-<script>
-    (function ($) {
+    <script>
+        (function ($) {
 
-        $.SSTVerifyPage = function (options) {
+            $.SSTVerifyPage = function (options) {
 
-            var that = this;
+                var that = this;
 
-            var settings = $.extend({}, options);
+                var settings = $.extend({}, options);
 
-            var getNumber = function (cardNumber) {
+                var getNumber = function (cardNumber) {
 
-                var cNum = $("#txtCardNumber").val();
+                    var cNum = $("#txtCardNumber").val();
 
-                $("#fm .alert").remove();
-
-                if (cNum) {
-
-                    $("#fm .spinner-border").removeClass('d-none');
-                    $("#fm input").attr('disabled', true);
-                    $("#fm button").attr('disabled', true);
-
-                    $.get('/api/sst-cards/?format=json', {
-                        card_number: cNum
-                    }, function (response) {
-                        onGetNumberResponse(response);
-                    });
-                } else {
-                    toastr.warning('Please provide the number');
-                }
-            };
-
-            var onGetNumberResponse = function (response) {
-
-                $("#fm .spinner-border").addClass('d-none');
-                $("#fm input").attr('disabled', false);
-                $("#fm button").attr('disabled', false);
-
-                $("#fm .alert").remove();
-
-                $("#sstDetails").empty();
-
-                if (response.length > 0) {
-                    var item = response[0];
-
-                    var source = document.getElementById("detailItemTemplate").innerHTML;
-                    var template = Handlebars.compile(source);
-                    $("#sstDetails").html(template(item));
-
-                } else {
-                    var alert = $("<div />", {
-                        class: 'alert alert-primary mt-3'
-                    }).html('Card number is not valid.');
-
-                    $("#fm").append(alert);
-                }
-            };
-
-            var registerEvent = function () {
-
-                $("div").on("click", '#btnVerify', function (e) {
-                    e.stopPropagation();
-
-
-                    getNumber();
-
-                });
-
-
-                $("div").on("click", '#btnClear', function (e) {
-                    e.stopPropagation();
-                    $("#txtCardNumber").val(null);
                     $("#fm .alert").remove();
+
+                    if (cNum) {
+
+                        ShowLoadingModal("Getting info", "");
+
+                        $("#fm input").attr('disabled', true);
+                        $("#fm button").attr('disabled', true);
+
+                        $.get('/api/sst-cards/?format=json', {
+                            card_number: cNum
+                        }, function (response) {
+                            onGetNumberResponse(response);
+                        });
+
+                    } else {
+                        Swal.fire("Please provide the certificate number");
+                    }
+                };
+
+                var onGetNumberResponse = function (response) {
+
+                    $("#fm .spinner-border").addClass('d-none');
+                    $("#fm input").attr('disabled', false);
+                    $("#fm button").attr('disabled', false);
+
+                    $("#fm .alert").remove();
+
                     $("#sstDetails").empty();
-                });
+
+                    if (response.length > 0) {
+                        var item = response[0];
+
+                        var source = document.getElementById("detailItemTemplate").innerHTML;
+                        var template = Handlebars.compile(source);
+                        $("#sstDetails").html(template(item));
+
+                    } else {
+                        var alert = $("<div />", {class: 'alert alert-primary mt-3'}).html('Card number is not valid.');
+
+                        $("#fm").append(alert);
+                    }
+                };
+
+                var registerEvent = function () {
+
+                    $("div").on("click", '#btnVerify', function (e) {
+                        e.stopPropagation();
+                        getNumber();
+                    });
+
+                    $("div").on("click", '#btnClear', function (e) {
+                        e.stopPropagation();
+                        $("#txtCardNumber").val(null);
+                        $("#fm .alert").remove();
+                        $("#sstDetails").empty();
+                    });
 
 
+                };
 
+                var init = function () {
+                    registerEvent();
+                };
+
+                init();
+
+                return this;
 
             };
 
-            var init = function () {
-                registerEvent();
-            };
+        }(jQuery));
 
-            init();
-
-            return this;
-
-        };
-
-
-    }(jQuery));
-
-    $(document).ready(function () {
-        var messagesPage = new $.SSTVerifyPage({});
-    });
-</script>
+        $(document).ready(function () {
+            var messagesPage = new $.SSTVerifyPage({});
+        });
+    </script>
 {% endblock %}

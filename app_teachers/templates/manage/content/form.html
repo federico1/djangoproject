@@ -1,77 +1,107 @@
 {% extends "teacher_base.html" %}
 
 {% block title %}
-{% if object %}
-Edit content "{{ object.title }}"
-{% else %}
-Add a new content
-{% endif %}
+    {% if object %}
+        Edit content
+        {{ object.title }}
+    {% else %}
+        Add a new content
+    {% endif %}
 {% endblock %}
 
 {% block content %}
 
-<div class="mt-3 d-sm-flex align-items-center justify-content-between mb-4 p-2">
-    <h1 class="h3 mb-0 text-gray-800">
-        {% if object %}
-        Edit content "{{ object.title }}"
-        {% else %}
-        Add a new content
-        {% endif %}
-    </h1>
-    <a href="{% url "module_content_list" request.resolver_match.kwargs.module_id %}"
-        class="d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-add"></i> Back To Module</a>
-</div>
+    <section class="section-padding popular-course-slider bg-feature pt-5">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-lg-7">
+                    <div class="section-heading center-heading">
 
+                        <a href="{% url 'module_content_list' request.resolver_match.kwargs.module_id %}" class="subheading">
+                            <i class="fa fa-arrow-alt-circle-left"></i>
+                            Back To Module
+                        </a>
 
-<div class="container">
- 
-        
-         <form action="" method="post" enctype="multipart/form-data">
+                        <h3>
+                            {% if object %}
+                                Edit content "{{ object.title }}"
+                            {% else %}
+                                Add a new content
+                            {% endif %}
+                        </h3>
 
-            {% csrf_token %}
-
-            <div class="row">
-                {% for field in form.visible_fields  %}
-
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label style="float: none;" class="control-label"
-                        for="id_{{ field.name }}">{{ field.label }}</label>
-
-                    {{ field }}
-                    <!-- <p class="help-text">{{ field.help_text }} </p> -->
-                    {% if field.errors %}<small class="form-text text-danger">{{ field.label }}:
-                        {{ field.errors|striptags }}</small>{% endif %}
-
+                    </div>
                 </div>
             </div>
 
-            {% endfor %}
 
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="feature-3">
+                        <div class="container">
+                            <div class="row no-gutters">
+                                <div class="col-md-8 offset-md-2">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <form action="" method="post" enctype="multipart/form-data">
+
+                                                {% csrf_token %}
+
+                                                <div class="row">
+                                                    {% for field in form.visible_fields %}
+
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label style="float: none;" class="control-label" for="id_{{ field.name }}">{{ field.label }}</label>
+
+                                                                {{ field }}
+                                                                <!-- <p class="help-text">{{ field.help_text }} </p> -->
+                                                                {% if field.errors %}
+                                                                    <small class="form-text text-danger">{{ field.label }}:
+                                                                        {{ field.errors|striptags }}</small>
+                                                                {% endif %}
+
+                                                            </div>
+                                                        </div>
+
+                                                    {% endfor %}
+
+                                                </div>
+
+
+                                                <p>
+                                                    <button type="submit" class="btn btn-info mb-3" value="">Save Content</button>
+                                                </p>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </div>
-            
-             
-             <p><button type="submit" class="btn btn-info mb-3" value="">Save Content</button></p>
-         </form>
+        </div>
+    </section>
 
-  
-</div>
 {% endblock %}
 
 
 {% block scripts %}
 
-<script>
-    $(document).ready(function () {
-        $(".container input, select, textarea").addClass('form-control');
-        $(".container textarea").css('height', 70);
+    <script>
 
-        if($("#id_content").length > 0) {
-           // $("#id_content").closest(".col-md-4").eq(0).removeClass('col-md-4').addClass('col-md-9')
+        $(document).ready(function () {
+            $(".container input, select, textarea").addClass('form-control');
+            $(".container textarea").css('height', 70);
 
-          // $("#id_content").summernote();
-        }
+            if ($("#id_content").length > 0) {}
 
-    });
-</script>
+        });
+
+
+        $('html, body').animate({
+            scrollTop: $(".card").offset().top - 200
+        }, 1000);
+    </script>
 {% endblock %}

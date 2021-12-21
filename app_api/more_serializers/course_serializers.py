@@ -6,9 +6,15 @@ from app_api.serializers import UserSerializer
 
 
 class SubjectSerializer(serializers.ModelSerializer):
+    
+    course_count = serializers.SerializerMethodField()
+
     class Meta:
         model = Subject
-        fields = '__all__'
+        fields = ['id', 'title', 'slug', 'course_count']
+    
+    def get_course_count(self, obj):
+        return obj.courses.count()
 
 
 class EnrollmentSerializer(serializers.ModelSerializer):
@@ -27,7 +33,6 @@ class EnrollmentP2Serializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def to_representation(self, instance):
-        #self.fields['user'] = UserSerializer(read_only=True)
         self.fields['course'] = CourseCoreSerializer(read_only=True)
         return super(EnrollmentP2Serializer, self).to_representation(instance)
 

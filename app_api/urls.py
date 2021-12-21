@@ -3,7 +3,9 @@ from django.urls import path
 
 from rest_framework import routers
 
-from .more_views import course_views, users_views, chat_views, attendance_views, student_views, cart_views
+from .more_views import course_views, users_views, chat_views, attendance_views, \
+    student_views, cart_views, quiz_views, tag_views, course_module_views
+
 from . import views
 
 router = routers.DefaultRouter()
@@ -41,7 +43,6 @@ urlpatterns = [
     path('users/<int:pk>/', users_views.UserDetailView.as_view()),
     path('users/<int:pk>/', users_views.UserDetailView.as_view()),
     path('email-exist/', users_views.EmailExist),
-    #   path('course-enrollment/', course_views.EnrollmentViewset),
 
     path('subjects/', course_views.SubjectDetailView.as_view()),
     path('subjects/<int:pk>/', course_views.SubjectDetailView.as_view()),
@@ -54,6 +55,8 @@ urlpatterns = [
     path('course-assess-rating/', course_views.CourseRatingApiView.as_view()),
     path('course-price/<int:pk>/', course_views.CoursePriceApiView.as_view()),
     path('course-image/<int:pk>/', course_views.CourseImageApiView.as_view()),
+    path('course-video/<int:pk>/', course_views.CourseVideoApiView.as_view()),
+    path('update-course-quiz/', course_views.UpdateQuizApiView.as_view()),
 
     path('external-video-room/', chat_views.ExternalVideoRoomDetailView.as_view()),
     path('external-video-room/<int:pk>/',
@@ -61,6 +64,7 @@ urlpatterns = [
     path('attendance/', attendance_views.AttendanceApiView.as_view()),
     path('attendance/<int:pk>/', attendance_views.AttendanceApiView.as_view()),
     path('approve-attendance/', attendance_views.ApproveAttendance),
+
     path('student-history/', student_views.StudentsHistoryApiView.as_view()),
     path('quiz-details/', student_views.QuizApiView.as_view()),
 
@@ -69,6 +73,12 @@ urlpatterns = [
     path('packages/<int:pk>/', cart_views.PackageApiView.as_view()),
     path('package-courses/', cart_views.PackageCourseApiView.as_view()),
     path('package-courses/<int:pk>/', cart_views.PackageCourseApiView.as_view()),
+
+    path('quiz/', quiz_views.QuizApiView.as_view()),
+
+    path('tags/', tag_views.TagApiView.as_view()),
+
+     path('update-module-quiz/', course_module_views.UpdateQuizApiView.as_view()),
 
     path('save-base64/', views.SaveBase64ImageView),
 

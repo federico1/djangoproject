@@ -1,74 +1,94 @@
 {% extends "app_base.html" %}
 {% load staticfiles %}
-{% block title %}
-- About Us
+
+{% block title %} About Us | pdhsafety.com
 {% endblock %}
 
 {% block content %}
-<div class="home-courses">
-    <div class="container">
-        <div class="row mb-4">
-            <div class="col text-center">
-                <h3>About Us</h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="page-content">
-                    <h3> Mission Statement </h3>
-                    <p>
-                        NYC Construction Safety Training School aims to offer quality training that is relevant and
-                        useful for the construction industry and other labor industries. These efforts include offering
-                        training courses that are useful and/or necessary to achieve success and career outcomes in the
-                        construction workforce and other industries where course material may be useful and applicable,
-                        annual reviews of training materials for accuracy and relevance, and development of quality
-                        staff and instructors.
-                    </p>
-                    <p><strong>NYC Construction Safety Training Mission Statement</strong></p>
-                    <p>
-                        NYC Construction Training, LLC is an educational organization dedicated to supporting
-                        construction
-                        safety management education and career advancement through delivery of quality training that is useful and relevant for today’s construction industries.
-</p>
-                    <p><strong>
-                            NYC Construction Safety Training Vision
-                        </strong></p>
-                    <p>
-                       NYC Construction Training, LLC will ensure that ongoing trainings will become available to meet the changing needs of the construction industry. 
 
-                    </p>
-                    <p><strong>
-                            NYC Construction Safety Training Values
-                        </strong></p>
-                    <p> <small>
-                            <strong>
-                                Quality & Relevancy:
-                            </strong>
-                        </small>
-                        We understand that quality training is vital for successful learning outcomes and we
-                        are dedicated to ensuring that our training materials are up to date in terms of information and
-                        delivery.
-                    </p>
-                    <p>
-                        <small>
-                            <strong>
-                                Workforce Excellence:
-                            </strong>
-                        </small>
-                        We strive to ensure that participants who are trained through our program are enriched
-                        with useful knowledge and learn valuable skills that are applicable to their current site of
-                        employment and/or career advancement.
-                    </p>
+    <section class="page-header">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="page-header-content">
+                        <h1>About Us</h1>
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item">
+                                <a href="/">Home</a>
+                            </li>
+                            <li class="list-inline-item">/</li>
+                            <li class="list-inline-item">
+                                About
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </section>
+
+    <main class="site-main page-wrapper woocommerce single single-product">
+        <section class="space-3">
+            <div class="container">
+                <div class="row" id="packagesList">
+                    <div class="col">
+                        <div class="page-content">
+                            <h3>
+                                Mission Statement
+                            </h3>
+                            <p>
+                                NYC Construction Safety Training School aims to offer quality training that is relevant and useful for the construction industry and other labor industries. These efforts include offering training courses that are useful and/or necessary to achieve success
+                                                            and career outcomes in the construction workforce and other industries where course material may be useful and applicable, annual reviews of training materials for accuracy and relevance, and development of quality staff and
+                                                            instructors.
+                            </p>
+                            <p>
+                                <strong>NYC Construction Safety Training Mission Statement</strong>
+                            </p>
+                            <p>
+                                NYC Construction Training, LLC is an educational organization dedicated to supporting construction safety management education and career advancement through delivery of quality training that is useful and relevant for today’s construction industries.
+                            </p>
+                            <p>
+                                <strong>
+                                    NYC Construction Safety Training Vision
+                                </strong>
+                            </p>
+                            <p>
+                                NYC Construction Training, LLC will ensure that ongoing trainings will become available to meet the changing needs of the construction industry.
+
+                            </p>
+                            <p>
+                                <strong>
+                                    NYC Construction Safety Training Values
+                                </strong>
+                            </p>
+                            <p>
+                                <small>
+                                    <strong>
+                                        Quality & Relevancy:
+                                    </strong>
+                                </small>
+                                We understand that quality training is vital for successful learning outcomes and we are dedicated to ensuring that our training materials are up to date in terms of information and delivery.
+                            </p>
+                            <p>
+                                <small>
+                                    <strong>
+                                        Workforce Excellence:
+                                    </strong>
+                                </small>
+                                We strive to ensure that participants who are trained through our program are enriched with useful knowledge and learn valuable skills that are applicable to their current site of employment
+                                                            and/or career advancement.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--shop category end-->
+    </main>
+
 {% endblock %}
 {% block scripts %}
-<script>
-    $(document).ready(function () {
-
-    });
-</script>
+    <script>
+        $(document).ready(function () {});
+    </script>
 {% endblock %}

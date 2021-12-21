@@ -1,33 +1,25 @@
 from django.views import generic
-from django.urls import reverse_lazy
-from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, \
-                                      DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin, \
-                                       PermissionRequiredMixin
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateResponseMixin, View
-from django.forms.models import modelform_factory
-from django.apps import apps
-from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
-from django.db.models import Count, Q
-from .models import Subject, Course, Module, Content
-from .forms import ModuleFormSet
+from django.db.models import Count
+from .models import Subject, Course
 from students.forms import CourseEnrollForm
 from django.core.cache import cache
 
-from students.models import User
 
-class HomePage(generic.TemplateView):
-    template_name = "home.html"
+# class HomePage(generic.TemplateView):
+#     template_name = "home.html"
 
 
 class IndexView(TemplateResponseMixin, View):
     template_name = 'index.html'
 
     def get(self, request):
-        return self.render_to_response({})
+        courses = Course.objects.filter(is_deleted=False, mark_type='popular')
+        return self.render_to_response({
+            'courses':courses
+        })
 
 
 class CourseListView(TemplateResponseMixin, View):
@@ -63,13 +55,13 @@ class CourseListView(TemplateResponseMixin, View):
         if request.GET.get('teacher') is not None:
             courses = all_courses.filter(owner=int(request.GET.get('teacher')))
 
-        instructors = User.objects.annotate(
-                           total_courses=Count('courses_created')).filter(total_courses__gt=0)
+        # instructors = User.objects.annotate(
+        #                    total_courses=Count('courses_created')).filter(total_courses__gt=0)
             
         return self.render_to_response({'subjects': subjects,
                                         'subject': subject,
                                         'courses': courses,
-                                        'instructors':instructors})
+                                        'instructors':None})
 
 
 class CourseDetailView(DetailView):

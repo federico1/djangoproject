@@ -1,249 +1,147 @@
-{% extends "app_base.html" %}
-{% load staticfiles %}
-{% block title %} - Buy Package {% endblock %}
-{% block content %}
-<div class="home-courses cart-page">
+{% extends "app_base.html" %} {% load staticfiles %} {% block title %} | Buy Package {% endblock %} {% block content %}
+
+<section class="page-header">
     <div class="container">
-        <div class="yes-cart row">
-            <div class="col">
-                <div class="card">
-                    <div class="row">
-                        <div class="col-md-8 cart">
-                            <div class="title">
-                                <div class="row">
-                                    <div class="col">
-                                        <h4><b>Shopping Cart</b></h4>
-                                    </div>
-                                    <div class="col align-self-center text-right text-muted count"></div>
-                                </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="page-header-content">
+                    <h1>Shopping Cart</h1>
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="list-inline-item">/</li>
+                        <li class="list-inline-item">
+                            Shopping Cart
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<main class="site-main woocommerce single single-product page-wrapper">
+    <!--shop category start-->
+    <section class="space-3">
+        <div class="container sm-center">
+            <div class="row">
+                <div class="col-lg-8">
+                    <article id="post-6" class="post-6 page type-page status-publish hentry">
+                        <!-- .entry-header -->
+                        <div class="entry-content">
+                            <div class="woocommerce">
+                                <div class="woocommerce-notices-wrapper"></div>
+                                <form class="woocommerce-cart-form" action="" method="">
+                                    <table class="shop_table shop_table_responsive cart woocommerce-cart-form__contents" id="itemsList" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th class="product-thumbnail">&nbsp;</th>
+                                                <th class="product-name">Course</th>
+                                                <th class="product-quantity">Quantity</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+
+                                            <tr>
+                                                <td colspan="6" class="actions">
+
+                                                    <div class="back-to-shop mt-3">
+                                                        <a class="font-weight-bold" href="{% url 'packages' %}">
+                                                            <i class="fa fa-box-open"></i> Browse More Packages
+                                                        </a>
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </form>
                             </div>
-                            <div id="itemsList"></div>
-                            <div class="back-to-shop"><a href="{% url 'packages' %}">&leftarrow;</a><span
-                                    class="text-muted">Browse More Packages</span></div>
                         </div>
-                        <div class="col-md-4 summary">
-                            <div>
-                                <h5><b>Summary</b></h5>
+                        <!-- .entry-content -->
+                    </article>
+                </div>
+                <div class="col-lg-4">
+                    <div class="cart-collaterals">
+                        <div class="cart_totals ">
+                            <h2>Cart totals</h2>
+                            <table cellspacing="0" class="shop_table shop_table_responsive">
+                                <tbody>
+                                    <tr class="cart-subtotal">
+                                        <th>Subtotal</th>
+                                        <td data-title="Subtotal">
+                                            <span class="woocommerce-Price-amount amount total-price">
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr class="order-total">
+                                        <th>Total</th>
+                                        <td data-title="Total"><strong>
+                                                <span class="woocommerce-Price-amount amount total-price">
+                                                </span></strong>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="wc-proceed-to-checkout">
+                                {%if request.user.is_authenticated%}
+                                <div id="paypal-button-container" class="mt-3">
+                                </div>
+                                {%else%}
+
+                                <a href="javascript:;" class="checkout-button button alt wc-forward link-auth">
+                                    Pay Now
+                                </a> {%endif%}
                             </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-lg-6 count2">ITEMS 1</div>
-                                <div class="col-lg-6 text-lg-right total-price">$0.00</div>
-                            </div>
-                            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
-                                <div class="col-lg-6">TOTAL PRICE</div>
-                                <div class="col-lg-6 text-lg-right total-price">$0.00</div>
-                            </div>
-                            {%if request.user.is_authenticated%}
-                            <div id="paypal-button-container" class="mt-3">
-                            </div>
-                            {%else%}
-                            <button class="btn link-auth">Pay Now</button>
-                            {%endif%}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-{% endblock %}
+    </section>
+    <!--shop category end-->
+</main>
 
-{% block scripts %}
-{% verbatim %}
+
+{% endblock %} {% block scripts %} {% verbatim %}
 
 <script type="text/x-handlebars-template" id='cartItemTemplate'>
-    <div class="row border-top border-bottom">
-            <div class="row main align-items-center">
-                <div class="col-lg-2"><img class="img-fluid" src="/static/fe_v1/img/course.png">
-                </div>
-                <div class="col-lg-10">
-                    <div class="row text-muted">{{course.title}}</div>
-                  
-                </div>
-               
+
+    <tr class="woocommerce-cart-form__cart-item cart_item">
+
+        <td class="product-thumbnail">
+            <a href="#"><img width="100" height="100" src="/static/edutim/images/course.png" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt=""></a>
+        </td>
+
+        <td class="product-name" data-title="Product">
+            <a href="#">{{course.title}}</a>
+        </td>
+
+
+
+        <td class="product-quantity" data-title="Quantity">
+            <div class="quantity">
+                1
             </div>
-    </div>
- </script>
+        </td>
+
+
+    </tr>
+
+
+</script>
 {% endverbatim %}
 
-<style>
-    .cart-page .title {
-        margin-bottom: 5vh
-    }
-
-    .cart-page .card {
-        margin: auto;
-        max-width: 950px;
-        width: 90%;
-        box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        border-radius: 1rem;
-        border: transparent
-    }
-
-    @media(max-width:767px) {
-        .cart-page .card {
-            margin: 3vh auto
-        }
-    }
-
-    .cart-page .cart {
-        background-color: #fff;
-        padding: 4vh 5vh;
-        border-bottom-left-radius: 1rem;
-        border-top-left-radius: 1rem
-    }
-
-    @media(max-width:767px) {
-        .cart-page .cart {
-            padding: 4vh;
-            border-bottom-left-radius: unset;
-            border-top-right-radius: 1rem
-        }
-    }
-
-    .cart-page .summary {
-        background-color: #ddd;
-        border-top-right-radius: 1rem;
-        border-bottom-right-radius: 1rem;
-        padding: 4vh;
-        color: rgb(65, 65, 65)
-    }
-
-    @media(max-width:767px) {
-        .cart-page .summary {
-            border-top-right-radius: unset;
-            border-bottom-left-radius: 1rem
-        }
-    }
-
-    .cart-page .summary .col-2 {
-        padding: 0
-    }
-
-    .cart-page .summary .col-10 {
-        padding: 0
-    }
-
-    .cart-page .row {
-        margin: 0
-    }
-
-    .cart-page .title b {
-        font-size: 1.5rem
-    }
-
-    .cart-page .main {
-        margin: 0;
-        padding: 2vh 0;
-        width: 100%
-    }
-
-    .cart-page .col-2,
-    .cart-page .col {
-        padding: 0 1vh
-    }
-
-    .cart-page a {
-        padding: 0 1vh
-    }
-
-    .cart-page .close {
-        margin-left: auto;
-        font-size: 0.7rem
-    }
-
-    .cart-page img {
-        width: 3.5rem
-    }
-
-    .cart-page .back-to-shop {
-        margin-top: 4.5rem
-    }
-
-    .cart-page h5 {
-        margin-top: 4vh
-    }
-
-    .cart-page hr {
-        margin-top: 1.25rem
-    }
-
-    .cart-page form {
-        padding: 2vh 0
-    }
-
-    .cart-page select {
-        border: 1px solid rgba(0, 0, 0, 0.137);
-        padding: 1.5vh 1vh;
-        margin-bottom: 4vh;
-        outline: none;
-        width: 100%;
-        background-color: rgb(247, 247, 247)
-    }
-
-    .cart-page input {
-        border: 1px solid rgba(0, 0, 0, 0.137);
-        padding: 1vh;
-        margin-bottom: 4vh;
-        outline: none;
-        width: 100%;
-        background-color: rgb(247, 247, 247)
-    }
-
-    .cart-page input:focus::-webkit-input-placeholder {
-        color: transparent
-    }
-
-    .cart-page .btn {
-        background-color: #000;
-        border-color: #000;
-        color: white;
-        width: 100%;
-        font-size: 0.7rem;
-        margin-top: 4vh;
-        padding: 1vh;
-        border-radius: 0
-    }
-
-    .cart-page .btn:focus {
-        box-shadow: none;
-        outline: none;
-        box-shadow: none;
-        color: white;
-        -webkit-box-shadow: none;
-        -webkit-user-select: none;
-        transition: none
-    }
-
-    .cart-page .btn:hover {
-        color: white
-    }
-
-    .cart-page a {
-        color: black
-    }
-
-    .cart-page a:hover {
-        color: black;
-        text-decoration: none
-    }
-
-    .cart-page #code {
-        background-image: linear-gradient(to left, rgba(255, 255, 255, 0.253), rgba(255, 255, 255, 0.185)), url("https://img.icons8.com/small/16/000000/long-arrow-right.png");
-        background-repeat: no-repeat;
-        background-position-x: 95%;
-        background-position-y: center
-    }
-</style>
-<script
-    src="https://www.paypal.com/sdk/js?client-id=AfCYO-690TOTak5bLJ9lxaw-a7nY-8SBFID1X7a6Cmoyw2X4j79OMSm7ZDp_6oj218W5YKF19qqgWW0Y&currency=USD&disable-funding=credit,card">
-    </script>
+<script src="https://www.paypal.com/sdk/js?client-id=AfCYO-690TOTak5bLJ9lxaw-a7nY-8SBFID1X7a6Cmoyw2X4j79OMSm7ZDp_6oj218W5YKF19qqgWW0Y&currency=USD&disable-funding=credit,card">
+</script>
 
 <script>
-    (function ($) {
+    (function($) {
 
-        $.PackageCartManager = function (options) {
+        $.PackageCartManager = function(options) {
 
             var that = this;
             var packagesList = [];
@@ -255,30 +153,39 @@
 
             var settings = $.extend({}, options);
 
-            var getList = function () {
+            var getList = function() {
+
+                ShowLoadingModal("Please wait", "loading");
+
+                var id = '{{id}}';
+
                 var parms = {
                     format: 'json',
-                    id: '{{id}}'
+                    id: id
                 };
 
-                $.get('/api/packages/', parms, function (response) {
+                $.get('/api/packages/', parms, function(response) {
                     packagesList = response;
                     drawList();
                 });
             };
 
-            var drawList = function () {
+            var drawList = function() {
+
+                if (packagesList.length <= 0) {
+                    window.location.href = '/';
+                }
 
                 $(".total-price").html('$' + packagesList[0].price);
 
                 totalPrice = packagesList[0].price;
 
-                $(packagesList[0].courses).each(function (ix, item) {
+                $(packagesList[0].courses).each(function(ix, item) {
 
                     var source = document.getElementById("cartItemTemplate").innerHTML;
                     var template = Handlebars.compile(source);
 
-                    $("#itemsList").append(template(item));
+                    $("#itemsList tbody").prepend(template(item));
 
                     var item = {
                         course: item.course.id,
@@ -293,9 +200,11 @@
 
                 setPaypal();
 
+                Swal.close();
+
             };
 
-            var setPaypal = function () {
+            var setPaypal = function() {
 
                 paypal.Buttons({
                     funding: {
@@ -304,7 +213,7 @@
                     style: {
                         label: 'checkout',
                     },
-                    createOrder: function (data, actions) {
+                    createOrder: function(data, actions) {
 
                         if (totalPrice <= 0) return false;
 
@@ -316,9 +225,9 @@
                             }]
                         });
                     },
-                    onApprove: function (data, actions) {
+                    onApprove: function(data, actions) {
                         // This function captures the funds from the transaction.
-                        return actions.order.capture().then(function (details) {
+                        return actions.order.capture().then(function(details) {
                             if (data.orderID) {
 
                                 var payment = {
@@ -336,7 +245,7 @@
 
             };
 
-            var postOrder = function (paymentData) {
+            var postOrder = function(paymentData) {
 
                 var payments = [];
 
@@ -361,70 +270,61 @@
                     data: JSON.stringify(orderObject),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
-                    beforeSend: function (xhr, settings) {
+                    beforeSend: function(xhr, settings) {
                         xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
                     },
-                    success: function (response) {
+                    success: function(response) {
 
                         if (response && response.ref_id) {
                             window.location.href = '/order/' + response.ref_id + '/';
                         } else {
                             swal({
-                                title: "Order failed to complete",
-                                text: "Please refresh the page and try again.",
-                                icon: "warning",
-                                buttons: {
+                                    title: "Order failed to complete",
+                                    text: "Please refresh the page and try again.",
+                                    icon: "warning",
+                                    buttons: {
 
-                                    catch: {
-                                        text: "Ok",
-                                        value: "catch",
+                                        catch: {
+                                            text: "Ok",
+                                            value: "catch",
+                                        },
+
                                     },
-
-                                },
-                            })
+                                })
                                 .then((value) => {
                                     window.location.reload()
                                 });
                         }
                     },
-                    failure: function (errMsg) { }
+                    failure: function(errMsg) {}
                 });
             };
 
-            var registerEvent = function () {
+            var registerEvent = function() {
 
-                $("div").on("click", '.link-auth', function (e) {
+                $("div").on("click", '.link-auth', function(e) {
                     e.stopPropagation();
-                    swal("You need to login as verified user to proceed.", {
-                        buttons: {
-                            catch: {
-                                text: "Already have an account? Login",
-                                value: "catch",
-                                className: 'btn-primary'
-                            },
-                            defeat: {
-                                text: "New User? Register",
-                                value: "try",
-                            },
-                        },
-                    })
-                        .then((value) => {
-                            switch (value) {
 
-                                case "catch":
-                                    window.location.href = '{% url "login" %}';
-                                    break;
+                    Swal.fire({
+                        title: 'Please login to buy this course package!',
+                        showDenyButton: true,
+                        showCancelButton: false,
+                        confirmButtonText: 'Already have an account? Login',
+                        denyButtonText: `Create a new account`,
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            window.location.href = '{% url "login" %}';
+                        } else if (result.isDenied) {
+                            window.location.href = '{% url "student_registration" %}';
+                        }
+                    });
 
-                                case "try":
-                                    window.location.href = '{% url "student_registration" %}';
-                                    break;
 
-                            }
-                        })
                 });
             };
 
-            var init = function () {
+            var init = function() {
                 registerEvent();
                 getList();
             };
@@ -438,7 +338,7 @@
 
     }(jQuery));
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         var cartManager = new $.PackageCartManager({});
     });
 </script>

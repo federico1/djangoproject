@@ -49,3 +49,14 @@ class QuizSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return super(QuizSerializer, self).to_representation(instance)
+
+
+class QuizCoreSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Quiz
+        fields = ('id', 'name', 'owner', 'tags')
+
+    def to_representation(self, instance):
+        return super(QuizCoreSerializer, self).to_representation(instance)
+

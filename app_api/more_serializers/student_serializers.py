@@ -4,6 +4,7 @@ from app_api.serializers import UserSerializer
 from .course_serializers import EnrollmentP2Serializer
 from .quiz_serializers import TakenQuizSerializer, StudentAnswerSerializer
 
+
 class SSTCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = SSTCard

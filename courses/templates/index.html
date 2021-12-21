@@ -1,321 +1,214 @@
 {% extends 'app_base.html' %}
 {% load staticfiles %}
-{% block title %} {% endblock %}
+{% load course_tags %}
 
 {% block content %}
 
+    <section class="banner">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12 col-lg-8">
+                    <div class="banner-content center-heading">
+                        <h1>Online Training & Certification</h1>
+                        <a href="{% url 'courses_list' %}" class="btn btn-main">
+                            <i class="fa fa-list-ul mr-2"></i>our Courses
+                        </a>
 
-<section class="banner">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-12 col-lg-8">
-                <div class="banner-content center-heading">
-                    <h1>Online Training & Certification</h1>
-                    <a href="#" class="btn btn-main"><i class="fa fa-list-ul mr-2"></i>our Courses </a>
-                    <a href="#" class="btn btn-tp ">get Started <i class="fa fa-angle-right ml-2"></i></a>
+                    </div>
                 </div>
             </div>
-        </div> <!-- / .row -->
-    </div> <!-- / .container -->
-</section>
-
-<section class="feature-4">
-    <div class="container">
-
-        <div class="row align-items-center">
-            <div class="col-lg-12 col-md-12">
-                <div class="section-heading center-heading">
-                    <span class="subheading">Learn new skills to go ahead for your career</span>
-                    <h3>Online Training & Certification</h3>
-                </div>
-            </div>
+            <!-- / .row -->
         </div>
-        <div class="row align-items-center">
+        <!-- / .container -->
+    </section>
 
+    <section class="feature-4">
+        <div class="container">
 
-            <div class="col-lg-12 col-md-12">
-                <div class="row no-gutters">
-                    <div class="col-lg-6 col-md-6 col-xl-6">
-                        <div class="feature-item feature-style-4">
-                            <div class="feature-icon">
-                                <i class="bi bi-badge2"></i>
-                            </div>
-                            <div class="feature-text">
-                                <h4>
-                                    Engineers and Architects PDHs
-                                </h4>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 col-md-6 col-xl-6">
-                        <div class="h20"></div>
-                        <div class="feature-item feature-style-4">
-                            <div class="feature-icon">
-                                <i class="bi bi-article"></i>
-                            </div>
-                            <div class="feature-text">
-                                <h4>IACET CEUs Credits </h4>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 col-md-6 col-xl-6">
-                        <div class="feature-item feature-style-4">
-                            <div class="feature-icon">
-                                <i class="bi bi-headset"></i>
-                            </div>
-                            <div class="feature-text">
-                                <h4>Safety Professionals</h4>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 col-md-6 col-xl-6">
-                        <div class="h20"></div>
-                        <div class="feature-item feature-style-4">
-                            <div class="feature-icon">
-                                <i class="bi bi-rocket2"></i>
-                            </div>
-                            <div class="feature-text">
-                                <h4>CSP, ASP, CHST</h4>
-                            </div>
-                        </div>
+            <div class="row align-items-center">
+                <div class="col-lg-12 col-md-12">
+                    <div class="section-heading center-heading">
+                        <span class="subheading">Learn new skills to go ahead for your career</span>
+                        <h3>Online Training & Certification</h3>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-
-<!--course section start-->
-<section class="section-padding course-grid">
-    <div class="container">
-        <div class="row align-items-center justify-content-center">
-            <div class="col-lg-7">
-                <div class="section-heading center-heading">
-                    <span class="subheading">Top Trending Courses</span>
-                    <h3>Over 200+ New Online Courses</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="text-center">
-            <ul class="course-filter">
-                <li class="active"><a href="#" data-filter="*"> All</a></li>
-                <li><a href="#" data-filter=".cat1">printing</a></li>
-                <li><a href="#" data-filter=".cat2">Web</a></li>
-                <li><a href="#" data-filter=".cat3">illustration</a></li>
-                <li><a href="#" data-filter=".cat4">media</a></li>
-                <li><a href="#" data-filter=".cat5">crafts</a></li>
-            </ul>
-        </div>
-
-        <div class="row course-gallery ">
-            <div class="course-item cat1 cat3 col-lg-4 col-md-6">
-                <div class="course-block">
-                    <div class="course-img">
-                        <img src="assets/images/course/course3.jpg" alt="" class="img-fluid">
-                        <span class="course-label">Expert</span>
-                    </div>
-
-                    <div class="course-content">
-                        <div class="course-price ">$100 <span class="del">$180</span></div>
-
-                        <h4><a href="#">React – The Complete Guide (React Router)</a></h4>
-                        <div class="rating">
-                            <a href="#"><i class="fa fa-star"></i></a>
-                            <a href="#"><i class="fa fa-star"></i></a>
-                            <a href="#"><i class="fa fa-star"></i></a>
-                            <a href="#"><i class="fa fa-star"></i></a>
-                            <a href="#"><i class="fa fa-star"></i></a>
-                            <span>(5.00)</span>
-                        </div>
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis, alias.</p>
-
-                        <div class="course-footer d-lg-flex align-items-center justify-content-between">
-                            <div class="course-meta">
-                                <span class="course-student"><i class="bi bi-group"></i>340</span>
-                                <span class="course-duration"><i class="bi bi-badge3"></i>82 Lessons</span>
-                            </div>
-
-                            <div class="buy-btn"><a href="#" class="btn btn-main-2 btn-small">Details</a></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="course-item cat2 cat4 col-lg-4 col-md-6">
-                <div class="course-block">
-                    <div class="course-img">
-                        <img src="assets/images/course/course2.jpg" alt="" class="img-fluid">
-                        <span class="course-label">Advanced</span>
-                    </div>
-
-                    <div class="course-content">
-                        <div class="course-price ">$80 <span class="del">$120</span></div>
-
-                        <h4><a href="#">Photography Crash Course for Photographer</a></h4>
-                        <div class="rating">
-                            <a href="#"><i class="fa fa-star"></i></a>
-                            <a href="#"><i class="fa fa-star"></i></a>
-                            <a href="#"><i class="fa fa-star"></i></a>
-                            <a href="#"><i class="fa fa-star"></i></a>
-                            <a href="#"><i class="fa fa-star"></i></a>
-                            <span>(5.00)</span>
-                        </div>
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis, alias.</p>
-
-                        <div class="course-footer d-lg-flex align-items-center justify-content-between">
-                            <div class="course-meta">
-                                <span class="course-student"><i class="bi bi-group"></i>340</span>
-                                <span class="course-duration"><i class="bi bi-badge3"></i>82 Lessons</span>
-                            </div>
-
-                            <div class="buy-btn"><a href="#" class="btn btn-main-2 btn-small">Details</a></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="course-item cat5 cat2 col-lg-4 col-md-6">
-                <div class="course-block">
-                    <div class="course-img">
-                        <img src="assets/images/course/course1.jpg" alt="" class="img-fluid">
-                        <span class="course-label">Beginner</span>
-                    </div>
-
-                    <div class="course-content">
-                        <div class="course-price ">$50</div>
-
-                        <h4><a href="#">Information About UI/UX Design Degree</a></h4>
-                        <div class="rating">
-                            <a href="#"><i class="fa fa-star"></i></a>
-                            <a href="#"><i class="fa fa-star"></i></a>
-                            <a href="#"><i class="fa fa-star"></i></a>
-                            <a href="#"><i class="fa fa-star"></i></a>
-                            <a href="#"><i class="fa fa-star"></i></a>
-                            <span>(5.00)</span>
-                        </div>
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis, alias.</p>
-
-                        <div class="course-footer d-lg-flex align-items-center justify-content-between">
-                            <div class="course-meta">
-                                <span class="course-student"><i class="bi bi-group"></i>340</span>
-                                <span class="course-duration"><i class="bi bi-badge3"></i>82 Lessons</span>
-                            </div>
-
-                            <div class="buy-btn"><a href="#" class="btn btn-main-2 btn-small">Details</a></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--course-->
-</section>
-<!--course section end-->
-
-<section class="hero-area bg-img bg-overlay-2by5" style='background-image: url("{% static "/images/bg2.jpg" %}");'>
-    <div class="container h-100">
-        <div class="row h-100 align-items-center">
-            <div class="col-12">
-                <div class="hero-content text-center">
-                    <h2> Online Safety Training for Engineers and Architects PDHs (Professional Development Units) + IACET CEUs (Continuing Education Units) Credits  / Online Training for the Safety Professionals CSP ASP CHST and Candidates /  
-</h2>
-                    <a href="{% url 'courses_list' %}" class="btn btn-orange">Browse Courses</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-{% verbatim %}
-<script type="text/x-handlebars-template" id='courseItemTemplate'>
-    <div class="col-md-6 col-lg-4 mb-3 course-item">
-    <input type="hidden" name="id" value="{{id}}" />
-    <input type="hidden" name="title" value="{{title}}" />
-    <input type="hidden" name="subject" value="{{subject.title}}" />
-    <input type="hidden" name="price" value="{{price}}" />
-    <input type="hidden" name="discounted_price" value="{{discounted_price}}" />
-    <input type="hidden" name="modules" value="{{total_modules}}" />
-
-                    <div class="card home-course">
-                        <div class="card-body">
-                         <a href="/course/{{slug}}">
-                            <img class="card-img w-9 h-9 br-7 mb-4" src="/static/fe_v1/img/course.png" alt="{{title}}">
-                            </a>
-                            <h4 class="card-title">  <a href="/course/{{slug}}" title="{{title}}" class="text-dark">{{trim_title}}</a> </h4>
-                            <h6 class="card-subtitle mb-2 text-muted small">
-                             <a href="/course/subject/{{subject.slug}}" class="text-info">{{subject.title}}</a>
-                            </h6>
-                            <div class="buy d-flex justify-content-between align-items-center">
-                                <div class="price text-success">
-                                    <h5 class="mt-4">
-                                    {{#if is_free}}
-                                    Free
-                                    {{else if (gtz discounted_price) }}
-                                    ${{discounted_price}} <span class="ml-2 text-info"><s>${{price}}</s></span></h5>
-                                    {{else}}
-                                     ${{price}}
-                                    {{/if}}
-                                     
-                                    
+            <div class="row align-items-center">
+                <div class="col-lg-12 col-md-12">
+                    <div class="row no-gutters">
+                        <div class="col-lg-6 col-md-6 col-xl-6">
+                            <div class="feature-item feature-style-4">
+                                <div class="feature-icon">
+                                    <i class="bi bi-badge2"></i>
                                 </div>
-                                 <p class="d-none"> Instructor: {{#ownerName}}{{owner}}{{/ownerName}}  {{owner.first_name}} {{owner.last_name}}</p>
-                               {{#if is_free}}
-                                <a href="/course/{{slug}}" class="btn btn-light  btn-sm mt-3"><i class="fa fa-list-alt"></i> 
-                                View Course
+                                <div class="feature-text">
+                                    <h4>
+                                        Engineers and Architects PDHs
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-xl-6">
+                            <div class="h20"></div>
+                            <div class="feature-item feature-style-4">
+                                <div class="feature-icon">
+                                    <i class="bi bi-article"></i>
+                                </div>
+                                <div class="feature-text">
+                                    <h4>IACET CEUs Credits
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-xl-6">
+                            <div class="feature-item feature-style-4">
+                                <div class="feature-icon">
+                                    <i class="bi bi-headset"></i>
+                                </div>
+                                <div class="feature-text">
+                                    <h4>Safety Professionals</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-xl-6">
+                            <div class="h20"></div>
+                            <div class="feature-item feature-style-4">
+                                <div class="feature-icon">
+                                    <i class="bi bi-rocket2"></i>
+                                </div>
+                                <div class="feature-text">
+                                    <h4>CSP, ASP, CHST</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% if courses.count > 0 %}
+    <section class="section-padding popular-course pb-0">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="section-heading">
+                        <span class="subheading">Top Trending Courses</span>
+                        <h3>Our Popular Online Courses</h3>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="course-btn text-lg-right">
+                        <a href="/courses" class="btn btn-main">
+                            <i class="fa fa-store mr-2"></i>All Courses</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                {% for course in courses %}
+                    {% with subject=course.subject %}
+                    <div class="col-lg-4 col-md-6 course-item">
+
+                        <input type="hidden" name="id" value="{{ course.id }}"/>
+                        <input type="hidden" name="title" value="{{ course.title }}"/>
+                        <input type="hidden" name="subject" value="{{ subject }}"/>
+                        <input type="hidden" name="price" value="{{ course.price }}"/>
+                        <input type="hidden" name="discounted_price" value="{{ course.discounted_price }}"/>
+                        <input type="hidden" name="modules" value="{{ course.total_modules }}"/>
+
+
+                        <div class="course-block">
+                            <div class="course-img">
+                                <a href="{% url 'course_detail' course.slug %}">
+                                    {% if course.image %}
+                                        <img src="{{ course.image }}" alt="image" class="img-fluid"/>
+                                    {% else %}
+                                        <img src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg" alt="image" class="img-fluid"/>
+                                    {% endif %}
                                 </a>
-                                     {{else}}
-                                    <a href="javascript:;" class="btn btn-orange btn-sm mt-3 link-add-cart"><i class="fa fa-plus"></i> Add to
-                                    Cart</a>
-                                    {{/if}}
+                                {% if course.features.first.skill_level %}
+                                    <span class="course-label">{{ course.features.first.skill_level }}</span>
+                                {% endif %}
+
                             </div>
-                            <span class="badge badge-info">Modules ({{total_modules}})</span>
-                        </div>
-                         <div class="card-footer text-center">
-                                    <a href="/course/{{slug}}" class="text-info">View Details</a>
+
+                            <div class="course-content">
+                                <div class="course-price ">
+                                    {% if course.is_free %}
+                                        Free Course
+                                    {% elif course.discounted_price > 0 %}
+                                        ${{ course.discounted_price }}
+                                        <span class="del">${{ course.price }}</span>
+                                    {% else %}
+                                        ${{ course.price }}
+                                    {% endif %}
                                 </div>
+
+                                <h4>
+                                    <a href="{% url 'course_detail' course.slug %}">
+                                        {{ course.title }}
+                                    </a>
+                                </h4>
+                                <div class="rating">
+                                    <a href="#">
+                                        <i class="fa fa-star"></i>
+                                    </a>
+                                    <a href="#">
+                                        <i class="fa fa-star"></i>
+                                    </a>
+                                    <a href="#">
+                                        <i class="fa fa-star"></i>
+                                    </a>
+                                    <a href="#">
+                                        <i class="fa fa-star"></i>
+                                    </a>
+                                    <a href="#">
+                                        <i class="fa fa-star"></i>
+                                    </a>
+                                    <span>(5.00)</span>
+                                </div>
+                                <p>{{ subject }}</p>
+
+                                <div class="course-footer d-lg-flex align-items-center justify-content-between">
+                                    <div class="course-meta">
+                                        {% if course.features.first.duration %}
+                                            <span class="course-student">
+                                                <i class="bi bi-group"></i>
+                                                {{ course.features.first.duration }}</span>
+                                        {% endif %}
+                                        <span class="course-duration">
+                                            <i class="bi bi-badge3"></i>
+                                            {{ course.total_modules }}
+                                            Modules</span>
+                                    </div>
+
+                                    <div class="buy-btn">
+                                        <a href="{% url 'course_detail' course.slug %}" class="btn btn-main-2 btn-small">Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
-                </div>
-    
- </script>
-{% endverbatim %}
-{% endblock %}
-{% block scripts %}
-<script>
-    Handlebars.registerHelper('gtz', function (value) {
-        return value > 0;
-    });
+                    {% endwith %}
+                {% endfor %}
 
-    Handlebars.registerHelper("ownerName", function (options) {
-        if (this.owner.first_name) {
-            return new Handlebars.SafeString(this.owner.first_name + ' ' + this.owner.last_name);
-        }
-        return new Handlebars.SafeString(this.owner.username);
-    });
 
-    $(document).ready(function () {
-        //getLatestCourses();
-    });
+            </div>
+        </div>
+    </section>
+    {%endif%}
 
-    function getLatestCourses() {
-        $.get('/api/courses/?format=json&limit=3', {}, function (response) {
+    {% endblock %}
 
-            $("#coursesList").empty();
-
-            $(response).each(function (index, item) {
-
-                item.trim_title = item.title.length > 25 ? item.title.substr(0, 25) : item.title;
-
-                var source = document.getElementById("courseItemTemplate").innerHTML;
-                var template = Handlebars.compile(source);
-
-                $("#coursesList").append(template(item));
-
-            });
-        });
-    };
-</script>
-{% endblock %}
+    {% block scripts %}
+        <script>
+        </script>
+    {% endblock %}

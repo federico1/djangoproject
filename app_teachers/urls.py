@@ -55,4 +55,8 @@ urlpatterns = [
     path('course/<int:pk>/<int:module_id>/',
          views.CourseDetailView.as_view(), name='teacher_course_detail_module'),
 
+    path('quiz/',
+         views.QuizTemplateView.as_view(),
+         name='quiz_manager'),
+
 ]

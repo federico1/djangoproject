@@ -1,0 +1,282 @@
+{% extends 'teacher_base.html' %}
+{% load course %}
+
+{% block title %}
+    My Quizzes
+{% endblock %}
+{% block content %}
+
+    <div id="hfCsrfToken">
+        {% csrf_token %}
+    </div>
+
+    <section class="section-padding course-grid pt-5">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-lg-7">
+                    <div class="section-heading center-heading">
+                        <h3>My Quizzes</h3>
+                        <p>
+                            <a href="javascript:;" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm link-add-new">
+                                <i class="fas fa-add"></i>
+                                Create New Quiz</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 ">
+
+                    <table class="table table-bordered bg-white" id="tblProducts">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Title</th>
+                                <th>Questions</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for quiz in request.user.quizzes.all %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        <input type="hidden" name="json" value="{{ quiz|jsonify }}"/>
+                                        {{ quiz.name }}
+                                    </td>
+                                    <td>
+                                        {{ quiz.questions.count }}
+                                    </td>
+                                    <td>
+                                        {{ quiz.created|date:"M d, Y" }}
+                                    </td>
+                                    <td>
+                                        <a href="javascript:;" class="badge badge-info py-2 px-3 link-edit" data-id="{{ quiz.id }}">
+                                            Edit</a>
+                                        <a href="{% url 'quiz_question_manager' quiz.id %}" class="badge badge-info py-2 px-3">
+                                            Manage Questions</a>
+                                        <!-- <a href="javascript:" class="badge badge-danger py-2 px-3 link-delete" data-id="{{ quiz.id }}">
+                                                                                                                            Delete</a> -->
+                                    </td>
+                                </tr>
+
+                                {% empty %}
+                                <p>You haven't created any quiz yet.</p>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        <!--course-->
+    </section>
+
+    <div id="quizModal" class="modal" tabindex="-1" role="dialog"></div>
+
+    {% verbatim %}
+
+        <script id="quizFormTemplate" type="text/x-handlebars-template">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Video</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="fmQuiz" action="#" method="post">
+
+                            {{{ csrf_token }}}
+
+                            <input type="hidden" name="owner" value="{{ owner_id }}"/>
+                            <input type="hidden" name="id" value="{{ id }}"/>
+
+                            <div class="form-group d-none">
+                                <label for="cc">Tag</label>
+                                <select class="form-control" name="tags" id=""></select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="formControlVideoURL">Name</label>
+                                <input type="text" class="form-control bg-white" name="name" value="{{ name }}"/>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" id="btnSaveQuiz">
+                            Save Changes
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+    {% endverbatim %}
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    <script type="application/javascript">
+
+        (function ($) {
+
+            $.QuizManager = function (options) {
+
+                var tagsList = [];
+
+                var settings = $.extend({}, options);
+
+                var initDatatable = function () {
+
+                    var dataTableObject = $("#tblProducts").DataTable();
+
+                    dataTableObject.order([0, 'desc']).draw();
+
+                    var searchText = $.trim("{{ request.GET.q }}");
+
+                    if(searchText) {
+                        dataTableObject.search(searchText).draw();
+                    }
+
+                    $('html, body').animate({
+                        scrollTop: $("#tblProducts").offset().top - 100
+                    }, 2000);
+
+                };
+
+                var initForm = function () {
+
+                    $("#fmQuiz").ajaxForm({
+                        url: "/api/quiz/",
+                        beforeSubmit: function () {
+                            ShowLoadingModal("Please wait", "saving quiz");
+                            $("#quizModal button").attr("disabled", true);
+                        },
+                        success: function (response) {
+                            $("#quizModal button").attr("disabled", false);
+                            $("#quizModal").modal('hide');
+
+                            Swal.close();
+
+                            if (response.id > 0) {
+                                Toast.fire({icon: 'success', title: 'Quiz has been saved.'});
+                                setTimeout(function () {
+                                    window.location.reload();
+                                }, 1000);
+                            } else {
+                                Toast.fire({icon: 'error', title: 'Sorry, We are failed to save the quiz.'});
+                            }
+                        }
+                    });
+                };
+
+                var getTags = function () {
+                    ShowLoadingModal("Please wait", "loading tags");
+
+                    $.get('/api/tags/?format=json', {}, function (response) {
+                        tagsList = response;
+                        Swal.close();
+                    });
+                };
+
+                var drawTagsDropdown = function () {
+                    var activeElement = $(".link-student-enrolled.active");
+
+                    $("#fmQuiz select[name='tags']").empty();
+
+                    $(tagsList).each(function (index, item) {
+                        var option = $("<option />", {
+                            text: item.name,
+                            value: item.id
+                        });
+                        $("#fmQuiz select[name='tags']").append(option);
+                    });
+
+                    $('#fmQuiz select[name="tags"] option:contains(course)').attr('selected', 'selected');
+                };
+
+                var registerEvent = function () {
+
+                    $(".link-add-new").click(function (event) {
+                        event.stopPropagation();
+
+                        var id = $(this).attr("pk");
+
+                        var item = {
+                            owner_id:'{{ request.user.id }}'
+                        };
+
+                        item.csrf_token = $("#hfCsrfToken").html();
+
+                        var source = document.getElementById("quizFormTemplate").innerHTML;
+                        var template = Handlebars.compile(source);
+                        $("#quizModal").html(template(item));
+                        $("#quizModal").modal("show");
+                    });
+
+
+                    $(".link-edit").click(function (event) {
+                        event.stopPropagation();
+
+                        var id = $(this).attr("pk");
+
+                        var json = $(this).closest("tr").eq(0).find("input[name='json']").val();
+                        json = JSON.parse(json);
+
+                        var item = {
+                            owner_id:'{{ request.user.id }}',
+                            id: json.pk,
+                            name: json.fields.name,
+                            name: json.fields.name
+                        };
+
+                        item.csrf_token = $("#hfCsrfToken").html();
+
+                        var source = document.getElementById("quizFormTemplate").innerHTML;
+                        var template = Handlebars.compile(source);
+                        $("#quizModal").html(template(item));
+                        $("#quizModal").modal("show");
+                    });
+
+                    $("div").on("click", "#btnSaveQuiz", function (event) {
+                        event.stopPropagation();
+                        $("#fmQuiz").submit();
+                    });
+
+                    $("#quizModal").on("shown.bs.modal", function (e) {
+                        drawTagsDropdown();
+                        initForm();
+                    });
+                };
+
+                var init = function () {
+                    registerEvent();
+                    initDatatable();
+                    getTags();
+                };
+
+                init();
+
+                return this;
+            };
+
+        })(jQuery);
+
+        $(document).ready(function () {
+
+            new $.QuizManager({});
+
+        });
+    </script>
+
+{% endblock %}
