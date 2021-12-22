@@ -1,0 +1,45 @@
+<div id="imageModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Image</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Optimal size 600x488</p>
+                <form id="fmFile" action="{% url 'upload-file' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="id"/>
+                    <input type="hidden" name="image"/>
+                    <div class="row">
+                        <div class="col-md-7">
+                            <img src="https://via.placeholder.com/600x488.png?text=600x488" alt="no image" class="w-100"/>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="input-group mb-3">
+                                <div class="custom-file">
+                                    <input type="file" name="file" class="custom-file-input" id="fu"/>
+                                    <label class="custom-file-label" for="inputGroupFile01">Choose Image</label>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn btn-success btn-sm" id="btnSaveImage">
+                                Save Image
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm" id="btnDeleteImage">
+                                Delete Image
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

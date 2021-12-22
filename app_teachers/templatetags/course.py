@@ -1,5 +1,6 @@
 from django import template
 from django.core.serializers import serialize
+from courses.models import Course
 
 register = template.Library()
 
@@ -14,5 +15,5 @@ def model_name(obj):
 
 @register.filter
 def jsonify(object):
-    print(type(object))
-    return serialize('json', [object])[1:-1]
+    json = serialize('json', [object])[1:-1]
+    return json

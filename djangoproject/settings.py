@@ -161,3 +161,5 @@ EMAIL_HOST = 'smtp.ionos.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'mail@pdhsafety.com'
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+
+PAYPAL_CLIENT_ID = 'AfCYO-690TOTak5bLJ9lxaw-a7nY-8SBFID1X7a6Cmoyw2X4j79OMSm7ZDp_6oj218W5YKF19qqgWW0Y&currency=USD&disable-funding=credit,card'

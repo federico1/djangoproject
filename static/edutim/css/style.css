@@ -5734,3 +5734,10 @@ Home New 8
     color: white;
   }
   
+  .top-cart-count {
+    background: #11294d;
+    color: #fff;
+    padding: 3px 10px;
+    font-size: 16px;
+    border-radius: 12px;
+  }

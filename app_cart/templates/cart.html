@@ -1,583 +1,329 @@
-{% extends "app_base.html" %} {% load staticfiles %} {% block title %} | Cart {% endblock %} {% block content %}
+{% extends "app_base.html" %}
+{% load staticfiles %}
+{% block title %}
+    Cart | pdhsafety.com
+{% endblock %}
+{% block content %}
 
-<section class="page-header">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="page-header-content">
-                    <h1>My Cart</h1>
-                    <ul class="list-inline mb-0">
-                        <li class="list-inline-item">
-                            <a href="/">Home</a>
-                        </li>
-                        <li class="list-inline-item">/</li>
-                        <li class="list-inline-item">
-                            Cart
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<main class="site-main woocommerce single single-product page-wrapper">
-    <!--shop category start-->
-    <section class="space-3">
-        <div class="container sm-center">
-            <div class="row">
+    <section class="page-header">
+        <div class="container">
+            <div class="row justify-content-center">
                 <div class="col-lg-8">
-                    <article id="post-6" class="post-6 page type-page status-publish hentry">
-                        <!-- .entry-header -->
-                        <div class="entry-content">
-                            <div class="woocommerce">
-                                <div class="woocommerce-notices-wrapper"></div>
-                                <form class="woocommerce-cart-form" action="" method="">
-                                    <table class="shop_table shop_table_responsive cart woocommerce-cart-form__contents" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th class="product-remove">&nbsp;</th>
-                                                <th class="product-thumbnail">&nbsp;</th>
-                                                <th class="product-name">Product</th>
-                                                <th class="product-price">Price</th>
-                                                <th class="product-quantity">Quantity</th>
-                                                <th class="product-subtotal">Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            <tr class="woocommerce-cart-form__cart-item cart_item">
-                                                <td class="product-remove">
-                                                    <a href="#" class="remove" aria-label="Remove this item" data-product_id="30" data-product_sku="">×</a>
-                                                </td>
-                                                <td class="product-thumbnail">
-                                                    <a href="#"><img width="324" height="324" src="assets/images/shop/p1.jpg" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt=""></a>
-                                                </td>
-
-                                                <td class="product-name" data-title="Product">
-                                                    <a href="#">Trendy Cloth</a>
-                                                </td>
-
-                                                <td class="product-price" data-title="Price">
-                                                    <span class="woocommerce-Price-amount amount"><span
-                                                            class="woocommerce-Price-currencySymbol">$</span>90.00</span>
-                                                </td>
-
-                                                <td class="product-quantity" data-title="Quantity">
-                                                    <div class="quantity">
-                                                        <label class="screen-reader-text" for="quantity_5cc58182489a8">Quantity</label>
-                                                        <input type="number" id=" " class="input-text qty text" step="1" min="0" max="" name="cart[34173cb38f07f89ddbebc2ac9128303f][qty]" value="1" title="Qty" size="4" pattern="[0-9]*" inputmode="numeric" aria-labelledby="Sunglasses quantity">
-                                                    </div>
-                                                </td>
-                                                <td class="product-subtotal" data-title="Total">
-                                                    <span class="woocommerce-Price-amount amount"><span
-                                                            class="woocommerce-Price-currencySymbol">$</span>90.00</span>
-                                                </td>
-                                            </tr>
-                                            <tr class="woocommerce-cart-form__cart-item cart_item">
-                                                <td class="product-remove">
-                                                    <a href="#" class="remove" aria-label="Remove this item" data-product_id="30" data-product_sku="">×</a>
-                                                </td>
-                                                <td class="product-thumbnail">
-                                                    <a href="#"><img width="324" height="324" src="assets/images/shop/p2.jpg" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt=""></a>
-                                                </td>
-
-                                                <td class="product-name" data-title="Product">
-                                                    <a href="#">Sunglasses</a>
-                                                </td>
-
-                                                <td class="product-price" data-title="Price">
-                                                    <span class="woocommerce-Price-amount amount"><span
-                                                            class="woocommerce-Price-currencySymbol">$</span>90.00</span>
-                                                </td>
-
-                                                <td class="product-quantity" data-title="Quantity">
-                                                    <div class="quantity">
-                                                        <label class="screen-reader-text" for="quantity_5cc58182489a8">Quantity</label>
-                                                        <input type="number" id="quantity_5cc58182489a8" class="input-text qty text" step="1" min="0" max="" name="cart[34173cb38f07f89ddbebc2ac9128303f][qty]" value="1" title="Qty" size="4" pattern="[0-9]*" inputmode="numeric" aria-labelledby="Sunglasses quantity">
-                                                    </div>
-                                                </td>
-                                                <td class="product-subtotal" data-title="Total">
-                                                    <span class="woocommerce-Price-amount amount"><span
-                                                            class="woocommerce-Price-currencySymbol">$</span>90.00</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="6" class="actions">
-                                                    <div class="coupon">
-                                                        <label for="coupon_code">Coupon:</label> <input type="text" name="coupon_code" class="input-text" id="coupon_code" value="" placeholder="Coupon code"> <button type="submit" class="button" name="apply_coupon"
-                                                            value="Apply coupon">Apply coupon</button>
-                                                    </div>
-                                                    <button type="submit" class="button" name="update_cart" value="Update cart" disabled="">Update cart</button>
-                                                    <input type="hidden" id="woocommerce-cart-nonce" name="woocommerce-cart-nonce" value="27da9ce3e8"><input type="hidden" name="_wp_http_referer" value="/cart/">
-                                                </td>
-                                            </tr>
-
-                                        </tbody>
-                                    </table>
-                                </form>
-                            </div>
-                        </div>
-                        <!-- .entry-content -->
-                    </article>
-                </div>
-                <div class="col-lg-4">
-                    <div class="cart-collaterals">
-                        <div class="cart_totals ">
-                            <h2>Cart totals</h2>
-                            <table cellspacing="0" class="shop_table shop_table_responsive">
-                                <tbody>
-                                    <tr class="cart-subtotal">
-                                        <th>Subtotal</th>
-                                        <td data-title="Subtotal"><span class="woocommerce-Price-amount amount"><span
-                                                    class="woocommerce-Price-currencySymbol">$</span>18.00</span>
-                                        </td>
-                                    </tr>
-                                    <tr class="order-total">
-                                        <th>Total</th>
-                                        <td data-title="Total"><strong><span
-                                                    class="woocommerce-Price-amount amount"><span
-                                                        class="woocommerce-Price-currencySymbol">$</span>18.00</span></strong>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="wc-proceed-to-checkout">
-                                <a href="checkout.html" class="checkout-button button alt wc-forward">
-                                    Proceed to checkout
-                                </a>
-                            </div>
-                        </div>
+                    <div class="page-header-content">
+                        <h1>My Cart</h1>
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item">
+                                <a href="/">Home</a>
+                            </li>
+                            <li class="list-inline-item">/</li>
+                            <li class="list-inline-item">
+                                Cart
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!--shop category end-->
-</main>
 
-<div class="home-courses cart-page">
-    <div class="container">
-        <div class="row mb-4 d-none">
-            <div class="col text-center">
-                <h3>Cart</h3>
-            </div>
-        </div>
-        <div class="no-cart row d-none">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body cart">
-                        <div class="col-sm-12 empty-cart-cls text-center">
-                            <div class="mb-2">
-                                <i class="fa fa-shopping-cart fa-5x"></i>
-                            </div>
-                            <h3><strong>Your Cart is Empty</strong></h3>
-                            <h4>Add something to make me happy :)</h4> <a href="{% url 'courses_list' %}" class="btn btn-orange m-3" data-abc="true">Browse Courses</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="yes-cart row">
-            <div class="col">
-                <div class="card">
-                    <div class="row">
-                        <div class="col-md-8 cart">
-                            <div class="title">
-                                <div class="row">
-                                    <div class="col">
-                                        <h4><b>Shopping Cart</b></h4>
-                                    </div>
-                                    <div class="col align-self-center text-right text-muted count"></div>
+    <main
+        class="site-main woocommerce single single-product page-wrapper">
+        <!--shop category start-->
+        <section class="space-3">
+            <div class="container sm-center">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <article
+                            id="post-6" class="post-6 page type-page status-publish hentry">
+                            <!-- .entry-header -->
+                            <div class="entry-content">
+                                <div class="woocommerce">
+                                    <div class="woocommerce-notices-wrapper"></div>
+                                    <form class="woocommerce-cart-form" action="" method="">
+                                        <table class="shop_table shop_table_responsive cart woocommerce-cart-form__contents" id="itemsList" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th class="product-remove">&nbsp;</th>
+                                                    <th class="product-thumbnail">&nbsp;</th>
+                                                    <th class="product-name">Product</th>
+                                                    <th class="product-price">Price</th>
+                                                    <th class="product-quantity">Quantity</th>
+                                                    <th class="product-subtotal">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </form>
                                 </div>
                             </div>
-                            <div id="itemsList"></div>
-                            <div class="back-to-shop"><a href="{% url 'courses_list' %}">&leftarrow;</a><span class="text-muted">Browse More Courses</span></div>
-                        </div>
-                        <div class="col-md-4 summary">
-                            <div>
-                                <h5><b>Summary</b></h5>
+                            <!-- .entry-content -->
+                        </article>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="cart-collaterals">
+                            <div class="cart_totals ">
+                                <h2>Cart totals</h2>
+                                <table cellspacing="0" class="shop_table shop_table_responsive">
+                                    <tbody>
+                                        <tr class="cart-subtotal">
+                                            <th>Subtotal</th>
+                                            <td data-title="Subtotal">
+                                                <span class="woocommerce-Price-amount amount">
+                                                    <span class="woocommerce-Price-currencySymbol">$</span>
+                                                    <span class="sub-total-price"></span>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr class="order-total">
+                                            <th>Total</th>
+                                            <td data-title="Total">
+                                                <strong>
+                                                    <span class="woocommerce-Price-amount amount">
+                                                        <span class="woocommerce-Price-currencySymbol">$</span>
+                                                        <span class="total-price"></span>
+                                                    </span>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="wc-proceed-to-checkout d-none">
+
+                                    {% if request.user.is_authenticated %}
+                                        <a href="{% url 'checkout_detail' %}" class="checkout-button button alt wc-forward">Proceed to checkout</a>
+                                    {% else %}
+                                        <a class="checkout-button button alt wc-forward link-auth">Proceed to checkout</a>
+                                    {% endif %}
+
+
+                                </div>
                             </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-lg-6 count2">ITEMS 0</div>
-                                <div class="col-lg-6 text-lg-right total-price">$0.00</div>
-                            </div>
-                            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
-                                <div class="col-lg-6">TOTAL PRICE</div>
-                                <div class="col-lg-6 text-lg-right total-price">$0.00</div>
-                            </div>
-                            {%if request.user.is_authenticated%}
-                            <a href="{% url 'checkout_detail' %}" class="btn">CHECKOUT</a> {%else%}
-                            <button class="btn link-auth">CHECKOUT</button> {%endif%}
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-{% endblock %} {% block scripts %} {% verbatim %}
-<script type="text/x-handlebars-template" id='cartItemTemplate'>
-    <div class="row border-top border-bottom">
-        <div class="row main align-items-center">
-            <div class="col-lg-2"><img class="img-fluid" src="/static/fe_v1/img/course.png">
-            </div>
-            <div class="col-lg-5">
-                <div class="row text-muted">{{title}}</div>
-                <div class="row small">{{subject}}</div>
-            </div>
-            <div class="col-lg-5">${{price}}
-                <a href="javascript:;" class="close link-remove-item" data-id='{{id}}'>&#10005;</a></div>
-        </div>
-    </div>
-</script>
-{% endverbatim %}
-<style>
-    .cart-page .title {
-        margin-bottom: 5vh
-    }
-    
-    .cart-page .card {
-        margin: auto;
-        max-width: 950px;
-        width: 90%;
-        box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        border-radius: 1rem;
-        border: transparent
-    }
-    
-    @media(max-width:767px) {
-        .cart-page .card {
-            margin: 3vh auto
-        }
-    }
-    
-    .cart-page .cart {
-        background-color: #fff;
-        padding: 4vh 5vh;
-        border-bottom-left-radius: 1rem;
-        border-top-left-radius: 1rem
-    }
-    
-    @media(max-width:767px) {
-        .cart-page .cart {
-            padding: 4vh;
-            border-bottom-left-radius: unset;
-            border-top-right-radius: 1rem
-        }
-    }
-    
-    .cart-page .summary {
-        background-color: #ddd;
-        border-top-right-radius: 1rem;
-        border-bottom-right-radius: 1rem;
-        padding: 4vh;
-        color: rgb(65, 65, 65)
-    }
-    
-    @media(max-width:767px) {
-        .cart-page .summary {
-            border-top-right-radius: unset;
-            border-bottom-left-radius: 1rem
-        }
-    }
-    
-    .cart-page .summary .col-2 {
-        padding: 0
-    }
-    
-    .cart-page .summary .col-10 {
-        padding: 0
-    }
-    
-    .cart-page .row {
-        margin: 0
-    }
-    
-    .cart-page .title b {
-        font-size: 1.5rem
-    }
-    
-    .cart-page .main {
-        margin: 0;
-        padding: 2vh 0;
-        width: 100%
-    }
-    
-    .cart-page .col-2,
-    .cart-page .col {
-        padding: 0 1vh
-    }
-    
-    .cart-page a {
-        padding: 0 1vh
-    }
-    
-    .cart-page .close {
-        margin-left: auto;
-        font-size: 0.7rem
-    }
-    
-    .cart-page img {
-        width: 3.5rem
-    }
-    
-    .cart-page .back-to-shop {
-        margin-top: 4.5rem
-    }
-    
-    .cart-page h5 {
-        margin-top: 4vh
-    }
-    
-    .cart-page hr {
-        margin-top: 1.25rem
-    }
-    
-    .cart-page form {
-        padding: 2vh 0
-    }
-    
-    .cart-page select {
-        border: 1px solid rgba(0, 0, 0, 0.137);
-        padding: 1.5vh 1vh;
-        margin-bottom: 4vh;
-        outline: none;
-        width: 100%;
-        background-color: rgb(247, 247, 247)
-    }
-    
-    .cart-page input {
-        border: 1px solid rgba(0, 0, 0, 0.137);
-        padding: 1vh;
-        margin-bottom: 4vh;
-        outline: none;
-        width: 100%;
-        background-color: rgb(247, 247, 247)
-    }
-    
-    .cart-page input:focus::-webkit-input-placeholder {
-        color: transparent
-    }
-    
-    .cart-page .btn {
-        background-color: #000;
-        border-color: #000;
-        color: white;
-        width: 100%;
-        font-size: 0.7rem;
-        margin-top: 4vh;
-        padding: 1vh;
-        border-radius: 0
-    }
-    
-    .cart-page .btn:focus {
-        box-shadow: none;
-        outline: none;
-        box-shadow: none;
-        color: white;
-        -webkit-box-shadow: none;
-        -webkit-user-select: none;
-        transition: none
-    }
-    
-    .cart-page .btn:hover {
-        color: white
-    }
-    
-    .cart-page a {
-        color: black
-    }
-    
-    .cart-page a:hover {
-        color: black;
-        text-decoration: none
-    }
-    
-    .cart-page #code {
-        background-image: linear-gradient(to left, rgba(255, 255, 255, 0.253), rgba(255, 255, 255, 0.185)), url("https://img.icons8.com/small/16/000000/long-arrow-right.png");
-        background-repeat: no-repeat;
-        background-position-x: 95%;
-        background-position-y: center
-    }
-</style>
-<script>
-    (function($) {
+        </section>
+        <!--shop category end-->
+    </main>
 
-        $.CartPageManager = function(options) {
 
-            var that = this;
+    {% verbatim %}
+        <script type="text/x-handlebars-template" id='cartItemTemplate'>
 
-            var keyName = '__nyc_cart__data__';
+            <tr class="woocommerce-cart-form__cart-item cart_item">
+                <td class="product-remove">
+                    <a href="javascript:;" class="remove link-remove-item" data-id="{{ pk }}" aria-label="Remove this item" data-product_id="30" data-product_sku="">×</a>
+                </td>
+                <td class="product-thumbnail">
+                    <a href="#">
+                        <img width="324" height="324" src="{{ fields.image }}" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt=""/></a>
+                </td>
 
-            var settings = $.extend({}, options);
+                <td class="product-name" data-title="Product">
+                    <a href="#">{{ fields.title }}</a>
+                </td>
 
-            var drawCartData = function() {
+                <td class="product-price" data-title="Price">
+                    <span class="woocommerce-Price-amount amount">
+                        <span class="woocommerce-Price-currencySymbol">$</span>
+                        {{ final_price }}</span>
+                </td>
 
-                var memoryData = getMemoryData();
+                <td class="product-quantity" data-title="Quantity">
+                    <div class="quantity">
+                        <label class="screen-reader-text" for="quantity_5cc58182489a8">Quantity</label>
+                        <input type="number" class="input-text qty text" step="1" min="1" max="" readonly value="1" title="Qty" size="4" pattern="[0-9]*" inputmode="numeric"/></div>
+                </td>
+                <td class="product-subtotal" data-title="Total">
+                    <span class="woocommerce-Price-amount amount">
+                        <span class="woocommerce-Price-currencySymbol">$</span>
+                        {{ final_price }}</span>
+                </td>
+            </tr>
 
-                var count = 0;
-                var totalPrice = parseFloat('0.00');
-                $("#itemsList").empty();
 
-                if (!('_ps_' in memoryData)) {
-                    count = 0;
-                } else {
+        </script>
+    {% endverbatim %}
 
-                    count = memoryData['_ps_'].length;
+{% endblock %}
 
-                    $(memoryData['_ps_']).each(function(ix, item) {
+{% block scripts %}
 
-                        var price = item.discounted_price > 0 ? item.discounted_price : item.price;
-                        price = parseFloat(price);
-                        totalPrice = totalPrice + price;
 
-                        item.price = price;
+    <script>
+        (function ($) {
 
-                        var source = document.getElementById("cartItemTemplate").innerHTML;
-                        var template = Handlebars.compile(source);
+            $.CartPageManager = function (options) {
 
-                        $("#itemsList").append(template(item));
+                var that = this;
 
+                var keyName = '__nyc_cart__data__';
+
+                var settings = $.extend({}, options);
+
+                var drawCartData = function () {
+
+                    var memoryData = getMemoryData();
+
+                    var count = 0;
+                    var totalPrice = parseFloat('0.00');
+
+                    $("#itemsList tbody").empty();
+
+                    if (!('_ps_' in memoryData)) {
+                        count = 0;
+                    } else {
+
+                        count = memoryData['_ps_'].length;
+
+                        $(memoryData['_ps_']).each(function (ix, item) {
+                            
+                            var price = item.fields.discounted_price > 0 ? item.fields.discounted_price : item.fields.price;
+                            price = parseFloat(price);
+
+                            totalPrice = totalPrice + price;
+
+                            item.final_price = price.toFixed(2);
+
+                            if (! item.fields.image) {
+                                item.fields.image = '/static/edutim/images/courses/course-' + (
+                                    Math.floor(Math.random() * 12) + 1
+                                ) + ".jpg";
+                            }
+
+                            var source = document.getElementById("cartItemTemplate").innerHTML;
+                            var template = Handlebars.compile(source);
+
+                            $("#itemsList tbody").append(template(item));
+
+                        });
+
+                    };
+
+                    totalPrice = totalPrice.toFixed(2);
+
+                    $(".sub-total-price").html(totalPrice);
+                    $(".total-price").html(totalPrice);
+
+                    $(".top-cart-count").html(count);
+
+                    if(count>0) {
+                        $(".wc-proceed-to-checkout").removeClass('d-none');
+                    }
+                    else{
+                        $(".wc-proceed-to-checkout").addClass('d-none');
+                    }
+                };
+
+                var removeCartItem = function (id) {
+
+                    var memoryData = getMemoryData();
+
+                    if (('_ps_' in memoryData)) {
+
+                        var dataList = memoryData['_ps_'];
+
+                        var itemIndex = dataList.findIndex(a => a.pk == id);
+
+                        if (itemIndex >= 0) {
+
+                            dataList.splice(itemIndex, 1);
+
+                            memoryData['_ps_'] = dataList;
+                            localStorage.setItem(keyName, JSON.stringify(memoryData));
+
+                            drawCartData();
+
+                            console.log('cart updated.');
+
+                            Toast.fire({icon: 'success', title: 'Course has been removed from cart.'});
+                        }
+                    }
+
+                };
+
+                var getMemoryData = function () {
+
+                    try {
+
+                        var memoryData = localStorage.getItem(keyName);
+
+                        var parsedMemoryData = {};
+
+                        if (memoryData) {
+                            parsedMemoryData = JSON.parse(memoryData);
+                        }
+
+                        return parsedMemoryData;
+
+                    } catch (error) {
+                        return {};
+                    }
+
+                };
+
+                var loadMessage = function () {
+
+                    var urlParts = window.location.href.split('?');
+
+                    if (urlParts.length > 1 && urlParts[1] == 'register=success') {
+                        Swal.fire('Account Created!', 'You have successfully created a new account.', 'success');
+
+                        window.location.href = '#';
+                    }
+                };
+
+                var registerEvent = function () {
+
+                    $("div").on("click", '.link-remove-item', function (e) {
+                        e.stopPropagation();
+                        var id = $(this).attr('data-id');
+
+                        removeCartItem(id);
                     });
 
-                }
+                    $("div").on("click", '.link-auth', function (e) {
+                        e.stopPropagation();
 
-                $(".cart-page .count").html(count + ' items');
-                $(".cart-page .count2").html('ITEMS ' + count);
-                $(".cart-page .total-price").html('$' + parseFloat(totalPrice).toFixed(2));
+                        var opts = {
+                            title: 'You need to login as verified user to proceed. ',
+                            showDenyButton: true,
+                            confirmButtonText: 'Log in',
+                            denyButtonText: 'Create a new account'
+                        };
 
-                $(".lbl-cart-items-count").html('(' + count + ')');
-                $(".lbl-cart-items-price").html('$' + parseFloat(totalPrice).toFixed(2));
-
-                if (count > 0) {
-                    $(".no-cart").addClass('d-none');
-                    $(".yes-cart").removeClass('d-none');
-                } else {
-                    $(".no-cart").removeClass('d-none');
-                    $(".yes-cart").addClass('d-none');
-                }
-            };
-
-            var removeCartItem = function(id) {
-
-                var memoryData = getMemoryData();
-
-                if (('_ps_' in memoryData)) {
-
-                    var dataList = memoryData['_ps_'];
-
-                    var itemIndex = dataList.findIndex(a => a.id == id);
-
-                    if (itemIndex >= 0) {
-
-                        dataList.splice(itemIndex, 1);
-
-                        memoryData['_ps_'] = dataList;
-                        localStorage.setItem(keyName, JSON.stringify(memoryData));
-
-                        drawCartData();
-
-                        console.log('cart updated.');
-                    }
-                }
-
-            };
-
-            var getMemoryData = function() {
-
-                try {
-
-                    var memoryData = localStorage.getItem(keyName);
-
-                    var parsedMemoryData = {};
-
-                    if (memoryData) {
-                        parsedMemoryData = JSON.parse(memoryData);
-                    }
-
-                    return parsedMemoryData;
-
-                } catch (error) {
-                    return {};
-                }
-
-            };
-
-            var loadMessage = function() {
-                var urlParts = window.location.href.split('?');
-
-                if (urlParts.length > 1 && urlParts[1] == 'register=success') {
-                    Swal.fire(
-                        'Account Created!',
-                        'You have successfully created a new account.',
-                        'success'
-                    );
-
-                    window.location.href = '#';
-                }
-            };
-
-            var registerEvent = function() {
-                $("div").on("click", '.link-remove-item', function(e) {
-                    e.stopPropagation();
-                    var id = $(this).attr('data-id');
-
-                    removeCartItem(id);
-                });
-
-                $("div").on("click", '.link-auth', function(e) {
-                    e.stopPropagation();
-                    swal("You need to login as verified user to proceed.", {
-                            buttons: {
-                                catch: {
-                                    text: "Already have an account? Login",
-                                    value: "catch",
-                                    className: 'btn-primary'
-                                },
-                                defeat: {
-                                    text: "New User? Register",
-                                    value: "try",
-                                },
-                            },
-                        })
-                        .then((value) => {
-                            switch (value) {
-
-                                case "catch":
-                                    window.location.href = '{% url "login" %}';
-                                    break;
-
-                                case "try":
-                                    window.location.href = '{% url "student_registration" %}';
-                                    break;
-
+                        Swal.fire(opts).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "{% url 'login' %}?next=" + "{{ request.path }}";
+                            } else if (result.isDenied) {
+                                window.location.href = "{% url 'student_registration' %}?next="+"{{ request.path }}";
                             }
-                        })
-                });
+                        });
 
 
+                       
+                    });
+
+
+                };
+
+                var init = function () {
+                    registerEvent();
+                    drawCartData();
+                    loadMessage();
+                };
+
+                init();
+
+                return this;
 
             };
 
-            var init = function() {
-                registerEvent();
-                //drawCartData();
-                loadMessage();
-            };
 
-            init();
+        }(jQuery));
 
-            return this;
-
-        };
-
-
-    }(jQuery));
-
-    $(document).ready(function() {
-        var cartManager = new $.CartPageManager({});
-    });
-</script>
-{% endblock %}
+        $(document).ready(function () {
+            var cartManager = new $.CartPageManager({});
+        });
+    </script>
+{% endblock %}</tr>

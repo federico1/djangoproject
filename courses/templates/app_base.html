@@ -4,22 +4,23 @@
 
     <head>
         <meta charset="utf-8">
-        <meta
-        http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        
+
         <meta name="description" content="{% block meta_desc %}pdhsafety.com is an online learning and teaching marketplace for construction industry and other labor industries. Moreover, provides IACET CEUs credits.{% endblock %}">
         <meta name="author" content="{% block meta_author %}{% endblock %}">
         <meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
         <meta name="robots" content="all">
 
-        <title>{% block title %}Best Online Training Website for Construction Industry and Other Labor Industries | pdhsafety.com{% endblock %}</title>       
+        <title>
+            {% block title %}Best Online Training Website for Construction Industry and Other Labor Industries | pdhsafety.com
+            {% endblock %}
+        </title>
 
         <link rel="icon" type="image/png" href="{% static 'edutim/images/logo5.png' %}">
 
-        <link
-        rel="canonical" href="https://pdhsafety.com{{ request.path }}"/>
+        <link rel="canonical" href="https://pdhsafety.com{{ request.path }}"/>
 
         <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
 
@@ -35,7 +36,8 @@
 
         <!-- Main Stylesheet -->
         <link rel="stylesheet" href="{% static 'edutim/css/style.css' %}">
-        <link rel="stylesheet" href="{% static 'edutim/css/responsive.css' %}">
+        <link
+        rel="stylesheet" href="{% static 'edutim/css/responsive.css' %}">
 
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-190250545-1"></script>
@@ -50,8 +52,10 @@
 
             gtag('config', 'UA-190250545-1');
         </script>
+
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-HBMW2QHSJ4"></script>
+
         <script>
             window.dataLayer = window.dataLayer || [];
 
@@ -102,15 +106,15 @@
                                     {% if request.user.is_authenticated %}
                                         {% if request.user.is_teacher == True %}
                                             <a href="{% url 'teacher_dashboard' %}" class="btn btn-main btn-small">Teacher
-                                                                                        Dashboard</a>
+                                                                                                                                                                                                                                        Dashboard</a>
                                         {% endif %}
                                         {% if request.user.is_student == True %}
                                             <a href="{ url  'student_course_list' %}" class="btn btn-main btn-small">Student
-                                                                                        Dashboard</a>
+                                                                                                                                                                                                                                        Dashboard</a>
                                         {% endif %}
                                         {% if request.user.is_superuser == True %}
                                             <a href="{% url 'admin_dashboard' %}" class="btn btn-main btn-small">Admin
-                                                                                        Dashboard</a>
+                                                                                                                                                                                                                                        Dashboard</a>
                                         {% endif %}
                                         <a href="{% url 'logout' %}" class="btn btn-main btn-small">
                                             <i class="fa fa-sign-out-alt "></i>
@@ -156,8 +160,7 @@
                                     <a class="nav-link dropdown-toggle" href="{% url 'courses_list' %}" id="navbar3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Courses<i class="fa fa-angle-down"></i>
                                     </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbar3">
-                                    </div>
+                                    <div class="dropdown-menu" aria-labelledby="navbar3"></div>
                                 </li>
 
                                 <li class="nav-item">
@@ -182,9 +185,10 @@
 
                             <ul class="header-contact-right d-none d-lg-block">
                                 <li>
-                                    <a href="#" class="header-cart">
+                                    <a href="{% url 'cart_detail' %}" class="header-cart">
                                         <i class="fa fa-shopping-cart"></i>
                                     </a>
+                                    <span class="top-cart-count">0</span>
                                 </li>
                                 <li>
                                     <a href="#" class="header-search search_toggle">
@@ -255,8 +259,8 @@
                             <h5 class="widget-title">About Us</h5>
                             <p class="mt-3">
                                 NYC Construction Safety Training School aims to offer quality training that is relevant and useful for the construction industry and other labor industries. These efforts include offering training courses that are useful and/or necessary to achieve success
-                                                            and career outcomes in the construction workforce and other industries where course material may be useful and applicable, annual reviews of training materials for accuracy and relevance, and development of quality staff and
-                                                            instructors..
+                                                                                                                                                            and career outcomes in the construction workforce and other industries where course material may be useful and applicable, annual reviews of training materials for accuracy and relevance, and development of quality staff and
+                                                                                                                                                            instructors..
                             </p>
                             <ul class="list-inline footer-socials">
                                 <li class="list-inline-item">
@@ -374,7 +378,6 @@
             </a>
         </div>
 
-
         <!-- Main jQuery -->
         <script src="{% static 'edutim/vendors/jquery/jquery.js' %}"></script>
         <!-- Bootstrap 4.5 -->
@@ -385,6 +388,122 @@
         <script src="{% static 'edutim/vendors/handlebars.min.js' %}"></script>
         <script src="{% static 'edutim/js/script.js' %}"></script>
 
+        <script>
+            (function ($) {
+
+                $.GlobalCartManager = function (options) {
+
+                    var that = this;
+
+                    var keyName = '__nyc_cart__data__';
+
+                    var settings = $.extend({}, options);
+
+                    var addCourseToMemory = function (dataObject) {
+
+                        var memoryData = getMemoryData();
+
+                        if (!('_ps_' in memoryData)) {
+                            memoryData['_ps_'] = [];
+                        }
+
+                        var dataList = memoryData['_ps_'];
+
+                        var itemIndex = dataList.findIndex(a => a.pk == dataObject.pk);
+
+                        if (itemIndex >= 0) {
+                            dataList[itemIndex].qty = 1;
+                        } else {
+                            dataList.push(dataObject);
+                        }
+                        
+                        memoryData['_ps_'] = dataList;
+
+                        localStorage.setItem(keyName, JSON.stringify(memoryData));
+
+                        onChangeCart();
+
+                        console.log('cart updated.');
+
+                        Toast.fire({icon: 'success', title: 'Course has been added to cart.'});
+                    };
+
+                    var onChangeCart = function () {
+
+                        var memoryData = getMemoryData();
+
+                        var count = 0;
+
+                        if (!('_ps_' in memoryData)) {
+                            count = 0;
+                        } else {
+                            count = memoryData['_ps_'].length;
+                        }
+                        
+                        $(".top-cart-count").html(count);
+
+                    };
+
+                    var getMemoryData = function () {
+
+                        try {
+
+                            var memoryData = localStorage.getItem(keyName);
+
+                            var parsedMemoryData = {};
+
+                            if (memoryData) {
+                                parsedMemoryData = JSON.parse(memoryData);
+                            }
+
+                            return parsedMemoryData;
+
+                        } catch (error) {
+                            return {};
+                        }
+
+                    };
+
+                    var registerEvent = function () {
+
+                        $("div").on("click", '.link-add-cart', function (e) {
+                            e.stopPropagation();
+
+                            var dataJson = $(this).attr('data-json');
+                            var subject = $(this).attr('data-subject');
+
+                            if (dataJson) {
+
+                                var parsedData = JSON.parse(dataJson);
+
+                                if (subject) {
+                                    parsedData.subject = subject;
+                                }
+
+                                addCourseToMemory(parsedData);
+                            }
+                         
+                        });
+                    };
+
+                    var init = function () {
+                        registerEvent();
+                        onChangeCart();
+                    };
+
+                    init();
+
+                    return this;
+
+                };
+
+
+            }(jQuery));
+
+            $(document).ready(function () {
+                var globalCart = new $.GlobalCartManager({});
+            });
+        </script>
         {% block scripts %}{% endblock %}
 
     </body>
