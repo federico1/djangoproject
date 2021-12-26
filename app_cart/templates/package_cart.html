@@ -323,11 +323,11 @@
                             showDenyButton: true,
                             showCancelButton: false,
                             confirmButtonText: 'Already have an account? Login',
-                            denyButtonText: 'reate a new account'
+                            denyButtonText: 'Create a new account'
                         };
 
 
-                        Swal.fire().then((result) => {
+                        Swal.fire(opts).then((result) => {
                             if (result.isConfirmed) {
                                 window.location.href = '{% url "login" %}';
                             } else if (result.isDenied) {

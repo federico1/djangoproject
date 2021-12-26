@@ -1,0 +1,79 @@
+{% extends "student_base.html" %}
+{% load i18n %}
+{% block title %}
+Take Quiz - {{ quiz.name }}
+{% endblock %}
+
+{% block content %}
+
+<section class="section-padding popular-course-slider pt-5">
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-lg-7">
+                <div class="section-heading center-heading">
+                    <h3>Quiz -  {{ quiz.name }} </h3>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        {{ quiz.name }}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ question.text }}</h5>
+    
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                        </form>
+    
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button class="btn btn-primary" type="submit" id="btnAns">{% trans 'Next' %}</button>
+    
+                                {% if request.GET.ref is not None %}
+                                <a class="btn btn-secondary" href="{{request.GET.ref}}&type=quiz">Return Back</a>
+                                {% endif %}
+                            </div>
+    
+                            <div class="col-md-6 text-lg-right">
+    
+                                <div>
+                                    <strong>Question - </strong>
+                                    <a href="#" class="badge badge-success"> {{ progress }}</a>
+                                    Of
+                                    <a href="#" class="badge badge-info"> {{ total_questions }}</a>
+                                </div>
+    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        $(".card ul").addClass('list-group');
+        $(".card ul li").addClass('list-group-item');
+        $(".card ul li input").css('width', 30);
+        $(".card ul li input").css('margin-top', 5);
+
+        $("#btnAns").click(function () {
+            $(".card form").submit();
+        });
+    });
+</script>
+{% endblock %}

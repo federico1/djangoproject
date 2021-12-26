@@ -1,3 +1,4 @@
+from os import name
 from django.conf.urls import url, include
 from django.urls import path
 
@@ -39,9 +40,11 @@ urlpatterns = [
 
     path('video-courses/', views.VideoCoursesView.as_view()),
     path('video-courses/<int:pk>/', views.VideoCoursesView.as_view()),
-    path('users/', users_views.UserDetailView.as_view()),
-    path('users/<int:pk>/', users_views.UserDetailView.as_view()),
-    path('users/<int:pk>/', users_views.UserDetailView.as_view()),
+
+    path('users/', users_views.UserDetailView.as_view(), name="api_users_list"),
+    path('users/<int:id>/', users_views.UserDetailView.as_view(), name="api_user_detail"),
+    #path('users/<int:pk>/', users_views.UserDetailView.as_view()),
+    #path('users/<int:pk>/', users_views.UserDetailView.as_view()),
     path('email-exist/', users_views.EmailExist),
 
     path('subjects/', course_views.SubjectDetailView.as_view()),
@@ -77,8 +80,8 @@ urlpatterns = [
     path('quiz/', quiz_views.QuizApiView.as_view()),
 
     path('tags/', tag_views.TagApiView.as_view()),
-
-     path('update-module-quiz/', course_module_views.UpdateQuizApiView.as_view()),
+    
+    path('update-module-quiz/', course_module_views.UpdateQuizApiView.as_view()),
 
     path('save-base64/', views.SaveBase64ImageView),
 

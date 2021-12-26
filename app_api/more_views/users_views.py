@@ -26,8 +26,12 @@ class UserDetailView(APIView):
         except User.DoesNotExist:
             raise Http404
 
-    def get(self, request, format=None):
-        snippets = User.objects.all()
+    def get(self, request, id=None, format=None):
+
+        snippets = User.objects
+
+        if id is not None:
+            snippets  = snippets.filter(pk=id)
 
         is_student = self.request.query_params.get('is_student', None)
 
@@ -38,8 +42,9 @@ class UserDetailView(APIView):
 
         return Response(serializer.data)
 
-    def put(self, request, pk, format=None):
-        snippet = self.get_object(pk)
+    def put(self, request, id, format=None):
+
+        snippet = self.get_object(id)
         serializer = UserSerializer(snippet, data=request.data, partial=True)
 
         if serializer.is_valid():
@@ -51,7 +56,7 @@ class UserDetailView(APIView):
     def post(self, request, format=None):
 
         serializer = UserSerializer(data=request.data)
-        print(serializer)
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

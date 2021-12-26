@@ -1,0 +1,268 @@
+{% extends "student_base.html" %}
+{% load staticfiles %}
+
+{% block title %}
+    Edit Profile
+{% endblock %}
+
+{% block content %}
+
+    <section class="section-padding popular-course-slider bg-feature pt-5">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-lg-7">
+                    <div class="section-heading center-heading">
+                        <h3>My Profile</h3>
+                    </div>
+                </div>
+            </div>
+
+            <main class="site-main woocommerce single single-product">
+                <section class="space-3">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="woocommerce-notices-wrapper bg-white">
+                                    <form class="woocommerce-form woocommerce-form-login login" action="#" id="fmRegister" method="post">
+
+                                        {% csrf_token %}
+
+                                        <input type="hidden" name="image" id="id_image"/>
+                                        <input type="hidden" name="id" value="{{ request.user.id }}"/>
+
+
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="row">
+
+                                                    <div class="col-md-6 mb-2">
+                                                        <div class="form-group">
+                                                            <label style="float: none;" class="control-label" for="id_first_name">First name</label>
+                                                            <input type="text" name="first_name" class="form-control" required="" id="id_first_name"/>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-2">
+                                                        <div class="form-group">
+                                                            <label style="float: none;" class="control-label" for="id_last_name">Last name</label>
+                                                            <input type="text" name="last_name" class="form-control" required="" id="id_last_name"/>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-2">
+                                                        <div class="form-group">
+                                                            <label style="float: none;" class="control-label" for="id_cell_number">Cell number</label>
+                                                            <input type="text" name="cell_number" class="form-control" required="" id="id_cell_number"/>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-2">
+                                                        <div class="form-group">
+                                                            <label style="float: none;" class="control-label" for="id_email">Email</label>
+                                                            <input type="text" disabled name="email" class="form-control" required="" id="id_email"/>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12 mb-2">
+                                                        <div class="form-group">
+                                                            <label style="float: none;" class="control-label" for="id_address">Address</label>
+                                                            <input type="text" name="address" class="form-control" required="" id="id_address"/>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4 text-center mt-4">
+                                                <img src="https://via.placeholder.com/200x200.png?text=.." id="prevImage" alt="image" style="max-height: 200px;" class="img-thumbnail"/>
+                                                <p class="mt-2">
+                                                    <a href="javascript:;" id="btnAddImage" class="btn btn-primary btn-sm " role="button">
+                                                        Upload Image
+                                                    </a>
+                                                    <a href="javascript:;" id="btnRemoveImage" class="btn btn-danger btn-sm" role="button">
+                                                        <i class="fa fa-trash-alt"></i>
+                                                    </a>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input type="button" id="btnSubmit" class="btn btn-orange" value="Update Profile"/>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+
+        </div>
+    </section>
+
+    <div class="d-none">
+        <form id="fmFile" action="{% url 'upload-file' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="file" id="fu"/>
+
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script type="application/javascript">
+
+        (function ($) {
+
+            $.UserProfileManager = function (options) {
+                var that = this;
+
+                var productObject = [];
+
+                var settings = $.extend({}, options);
+
+                var getProfile = function () {
+
+                    ShowLoadingModal("Please wait", "fetching info");
+
+                    $.get("{% url 'api_user_detail' request.user.id %}", {}, function (response) {
+                        productObject = response[0];
+                        fillFormValues();
+                    });
+                };
+
+                var fillFormValues = function () {
+
+                    for (var item in productObject) {
+                        $("#fmRegister input[name='" + item + "']").val(productObject[item]);
+                    }
+
+                    if (productObject.image) {
+                        $("#prevImage").attr('src', productObject.image);
+                    }
+
+                    initValidate();
+
+                    Swal.close();
+                    
+                };
+
+                var saveUser = function () {
+
+                    var isValid = $("#fmRegister").valid();
+
+                    if (! isValid) {
+                        return;
+                    }
+
+                    ShowLoadingModal("Please wait", "saving info");
+
+                    var data = $("#fmRegister").serializeObject();
+
+                    $.ajax({
+                        type: "PUT",
+                        url: "/api/users/"+data.id+"/",
+                        data: JSON.stringify(data),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        },
+                        success: function (response, textStatus, xhr) {
+                            if (textStatus == 'success') {
+                                Swal.close();
+                                Toast.fire({icon: 'success', title: 'Profile has been updated'});
+                            }
+                        },
+                        complete: function (xhr, textStatus) {},
+                        failure: function (errMsg) {}
+                    });
+
+                };
+
+                var initValidate = function () {
+                    $("#fmRegister").validate({
+                        rules: {
+                            first_name: {
+                                required: true
+                            },
+                            last_name: {
+                                required: true
+                            },
+                            email: {
+                                required: true,
+                                email: true
+                            },
+                            cell_number: {
+                                required: true
+                            }
+
+                        }
+                    });
+                };
+
+                var initImageForm = function () {
+                    $('#fmFile').ajaxForm({
+                        beforeSend: function () {
+                            ShowLoadingModal('Please wait', 'Uploading image.');
+                        },
+                        uploadProgress: function (event, position, total, percentComplete) {},
+                        success: function (response) {
+                            if (response != 0) {
+                                $("#prevImage").attr('src', response);
+                                $("#id_image").val(response);
+                            }
+
+                            Swal.close();
+                        },
+                        complete: function (xhr) {}
+                    });
+                };
+
+
+                var registerEvent = function () {
+
+                    $("#btnRemoveImage").click(function () {
+                        $("#prevImage").attr('src', 'https://via.placeholder.com/200x200.png?text=..');
+                        $("#id_image").val(null);
+                    });
+
+                    $("#btnAddImage").click(function () {
+                        $("#fu").trigger('click');
+                    });
+
+                    $("#fu").change(function () {
+                        $('#fmFile').submit();
+                    });
+
+                    $("#btnSubmit").click(function () {
+                        saveUser();
+                    });
+                };
+
+                var init = function () {
+                    registerEvent();
+                    getProfile();
+                    initImageForm();
+                };
+
+                init();
+
+                return this;
+            };
+
+        })(jQuery);
+
+        $(document).ready(function () {
+            new $.UserProfileManager({});
+        });
+    </script>
+
+{% endblock %}

@@ -3,22 +3,6 @@ from django.db import models
 from django.utils.html import escape, mark_safe
 from django.utils import timezone
 
-# class Student(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-#     quizzes = models.ManyToManyField(Quiz, through='TakenQuiz')
-#     interests = models.ManyToManyField(Tag, related_name='interested_students')
-
-#     def get_unanswered_questions(self, quiz):
-#         answered_questions = self.quiz_answers \
-#             .filter(answer__question__quiz=quiz) \
-#             .values_list('answer__question__pk', flat=True)
-#         questions = quiz.questions.exclude(pk__in=answered_questions).order_by('text')
-#         return questions
-
-#     def __str__(self):
-#         return self.user.username
-
-
 class User(AbstractUser):
     is_student = models.BooleanField(default=False)
     is_teacher = models.BooleanField(default=False)

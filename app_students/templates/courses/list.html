@@ -1,0 +1,125 @@
+{% extends "student_base.html" %}
+{% load staticfiles %}
+{% load course_tags %}
+
+{% block title %}
+    My Courses
+{% endblock %}
+
+{% block content %}
+
+    <section class="section-padding popular-course-slider pt-5">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-lg-7">
+                    <div class="section-heading center-heading">
+                        <h3>My Courses</h3>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="feature-3">
+                        <div class="container">
+                            <div class="row align-items-center mb-4">
+                                <div class="col-md-4">
+                                    <div class="topbar-search">
+                                        <form method="get" id="fmSearch" action="{% url 'student_courses' %}">
+                                            <input type="text" name="q" placeholder="Search courses" class="form-control"/>
+                                            <label>
+                                                <i class="fa fa-search"></i>
+                                            </label>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-success mr-2" id="btnSearch">Search</button>
+                                    <a href="{% url 'student_courses' %}" class="btn btn-secondary">Clear</a>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                {% for course in object_list %}
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="course-block course-list-item">
+                                            <div class="row align-items-center">
+                                                <div class="col-lg-4">
+                                                    <div class="course-img">
+                                                        {% if course.image %}
+                                                            <img src="{{ course.image }}" alt="image" class="img-fluid"/>
+                                                        {% else %}
+                                                            <img src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg" alt="image" class="img-fluid"/>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <div class="course-content">
+                                                        <h4>
+                                                            <a href="{% url 'student_course_detail' course.id %}">
+                                                            {{course.title}}
+                                                            </a>
+                                                        </h4>
+                                                        <div class="rating">
+                                                           <a href="{% url 'student_course_detail' course.id %}" class="py-2 px-3 badge badge-success">
+                                                               Take Course</a>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script type="application/javascript">
+
+        (function ($) {
+
+            $.CoursesManager = function (options) {
+                var that = this;
+
+                var productObject = [];
+
+                var settings = $.extend({}, options);
+
+
+                var registerEvent = function () {
+                    $("#btnSearch").click(function () {
+                        $("#fmSearch").submit();
+                    });
+                };
+
+                var init = function () {
+                    registerEvent();
+                    getProfile();
+                    initImageForm();
+                };
+
+                init();
+
+                return this;
+            };
+
+        })(jQuery);
+
+        $(document).ready(function () {
+            new $.CoursesManager({});
+        });
+    </script>
+{% endblock %}

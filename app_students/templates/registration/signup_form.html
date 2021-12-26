@@ -1,7 +1,10 @@
 {% extends 'app_base.html' %}
 {% load i18n %}
 
-{% block title %} {% trans 'Sign up as ' %} {{ user_type }} | pdhsafety.com
+{% block title %}
+    {% trans 'Sign up as ' %}
+    {{ user_type }}
+    | pdhsafety.com
 {% endblock %}
 {% block content %}
 
@@ -33,7 +36,7 @@
                     <div class="col-md-12">
                         <div class="woocommerce-notices-wrapper"></div>
 
-                        <form class="woocommerce-form woocommerce-form-login login" role="form" action="{% url 'student_registration' %}?next={{request.GET.next }}" id="fmRegister" method="post">
+                        <form class="woocommerce-form woocommerce-form-login login" role="form" action="{% url 'student_registration' %}?next={{ request.GET.next }}" id="fmRegister" method="post">
                             {{ form.errors }}
                             {% csrf_token %}
                             {% for hidden in form.hidden_fields %}
@@ -59,173 +62,173 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4 text-center mt-4">
-                                    <img src="https://via.placeholder.com/200x200.png?text=.." id="prevImage" alt="image" style="max-height: 200px;" class="img-thumbnail">
-                                        <p class="mt-2">
-                                            <a href="javascript:;" id="btnAddImage" class="btn btn-primary btn-sm " role="button">
-                                                Upload Image
-                                            </a>
-                                            <a href="javascript:;" id="btnRemoveImage" class="btn btn-danger btn-sm" role="button">
-                                                <i class="fa fa-trash-alt"></i>
-                                            </a>
-                                        </p>
-                                    </div>
+                                    <img src="https://via.placeholder.com/200x200.png?text=.." id="prevImage" alt="image" style="max-height: 200px;" class="img-thumbnail"/>
+                                    <p class="mt-2">
+                                        <a href="javascript:;" id="btnAddImage" class="btn btn-primary btn-sm " role="button">
+                                            Upload Image
+                                        </a>
+                                        <a href="javascript:;" id="btnRemoveImage" class="btn btn-danger btn-sm" role="button">
+                                            <i class="fa fa-trash-alt"></i>
+                                        </a>
+                                    </p>
                                 </div>
-
-                                <div class="">
-                                    <p class="form-row">
-                                        <label class="woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme">
-                                            <input class="woocommerce-form__input woocommerce-form__input-checkbox" name="rememberme" type="checkbox" id="termsCheck" value="" required>
-                                                <span>
-                                                    <a class="text-muted small" href="{% url 'legal_detail' %}">
-                                                        By creating an account you are agreeing to adhere to the NYCCST Terms of
-                                                                                                    Service
-                                                    </a>
-                                                </span>
-                                            </label>
-                                        </p>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <input type="button" id="btnSubmit" class="btn btn-orange" value="{% trans 'Create an account' %}"/>
-                                            <span class="ml-3">
-                                                {% trans "Already have an account?" %}
-                                                <a class="text-primary font-weight-bold" href="{% url 'login' %}">{% trans 'Log in' %}</a>
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                </form>
                             </div>
 
-                        </div>
+                            <div class="">
+                                <p class="form-row">
+                                    <label class="woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme">
+                                        <input class="woocommerce-form__input woocommerce-form__input-checkbox" name="rememberme" type="checkbox" id="termsCheck" value="" required/>
+                                        <span>
+                                            <a class="text-muted small" href="{% url 'legal_detail' %}">
+                                                By creating an account you are agreeing to adhere to the NYCCST Terms of
+                                                                                                                                                                                                                                                    Service
+                                            </a>
+                                        </span>
+                                    </label>
+                                </p>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input type="button" id="btnSubmit" class="btn btn-orange" value="{% trans 'Create an account' %}"/>
+                                    <span class="ml-3">
+                                        {% trans "Already have an account?" %}
+                                        <a class="text-primary font-weight-bold" href="{% url 'login' %}">{% trans 'Log in' %}</a>
+                                    </span>
+                                </div>
+                            </div>
+
+                        </form>
                     </div>
-                </section>
-                <!--shop category end-->
-            </main>
 
-            <div class="d-none">
-                <form id="fmFile" action="{% url 'upload-file' %}" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="file" name="file" id="fu">
-                        <br></form>
-                    </div>
+                </div>
+            </div>
+        </section>
+        <!--shop category end-->
+    </main>
 
-                {% endblock %}
-                {% block scripts %}
+    <div class="d-none">
+        <form id="fmFile" action="{% url 'upload-file' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="file" id="fu"/>
+        </form>
+    </div>
 
-                    <style>
-                        label.error {
-                            color: #e13b3b;
-                            font-size: 13px;
+{% endblock %}
+{% block scripts %}
+
+    <style>
+        label.error {
+            color: #e13b3b;
+            font-size: 13px;
+        }
+
+        .errorlist {
+            margin-bottom: 10px;
+        }
+
+        .errorlist li {
+            text-transform: capitalize;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .errorlist li ul {
+            list-style: none;
+            margin-left: 4px;
+            color: #f05151;
+            display: inline-block;
+        }
+
+        .errorlist li ul li {
+            text-transform: initial;
+            font-weight: normal;
+            font-size: 14px;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#btnRemoveImage").click(function () {
+                $("#prevImage").attr('src', 'https://via.placeholder.com/200x200.png?text=..');
+                $("#id_image").val(null);
+            });
+
+            $("#btnAddImage").click(function () {
+                $("#fu").trigger('click');
+            });
+
+            $("#btnSubmit").click(function () {
+                var isValid = $("#fmRegister").valid();
+
+                if (isValid) {
+                    $("#fmRegister").submit();
+                }
+            });
+
+            $("#fu").change(function () {
+                $('#fmFile').submit();
+            });
+
+            $('#fmFile').ajaxForm({
+                beforeSend: function () {
+                    ShowLoadingModal('Please wait', 'Uploading image.');
+                },
+                uploadProgress: function (event, position, total, percentComplete) {},
+                success: function (response) {
+                    if (response != 0) {
+                        $("#prevImage").attr('src', response);
+                        $("#id_image").val(response);
+                    }
+
+                    Swal.close();
+                },
+                complete: function (xhr) {}
+            });
+
+            $.validator.setDefaults({ignore: []});
+
+            $("#fmRegister").validate({
+                rules: {
+                    first_name: {
+                        required: true
+                    },
+                    last_name: {
+                        required: true
+                    },
+                    email: {
+                        required: true,
+                        email: true,
+                        remote: {
+                            url: "/api/email-exist/",
+                            type: "post",
+                            beforeSend: function (xhr, settings) {
+                                xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                            }
                         }
+                    },
+                    password1: {
+                        required: true
+                    },
+                    password2: {
+                        required: true,
+                        equalTo: '#id_password1'
+                    },
+                    cell_number: {
+                        required: true
+                    },
+                    terms: {
+                        required: true
+                    }
+                },
+                messages: {
+                    email: {
+                        remote: "Email address already in use. Please use other email."
+                    }
+                }
+            });
 
-                        .errorlist {
-                            margin-bottom: 10px;
-                        }
-
-                        .errorlist li {
-                            text-transform: capitalize;
-                            font-weight: 700;
-                            font-size: 16px;
-                        }
-
-                        .errorlist li ul {
-                            list-style: none;
-                            margin-left: 4px;
-                            color: #f05151;
-                            display: inline-block;
-                        }
-
-                        .errorlist li ul li {
-                            text-transform: initial;
-                            font-weight: normal;
-                            font-size: 14px;
-                        }
-                    </style>
-
-                    <script>
-                        $(document).ready(function () {
-
-                            $("#btnRemoveImage").click(function () {
-                                $("#prevImage").attr('src', 'https://via.placeholder.com/200x200.png?text=..');
-                                $("#id_image").val(null);
-                            });
-
-                            $("#btnAddImage").click(function () {
-                                $("#fu").trigger('click');
-                            });
-
-                            $("#btnSubmit").click(function () {
-                                var isValid = $("#fmRegister").valid();
-
-                                if (isValid) {
-                                    $("#fmRegister").submit();
-                                }
-                            });
-
-                            $("#fu").change(function () {
-                                $('#fmFile').submit();
-                            });
-
-                            $('#fmFile').ajaxForm({
-                                beforeSend: function () {
-                                    ShowLoadingModal('Please wait', 'Uploading image.');
-                                },
-                                uploadProgress: function (event, position, total, percentComplete) {},
-                                success: function (response) {
-                                    if (response != 0) {
-                                        $("#prevImage").attr('src', response);
-                                        $("#id_image").val(response);
-                                    }
-
-                                    Swal.close();
-                                },
-                                complete: function (xhr) {}
-                            });
-
-                            $.validator.setDefaults({ignore: []});
-
-                            $("#fmRegister").validate({
-                                rules: {
-                                    first_name: {
-                                        required: true
-                                    },
-                                    last_name: {
-                                        required: true
-                                    },
-                                    email: {
-                                        required: true,
-                                        email: true,
-                                        remote: {
-                                            url: "/api/email-exist/",
-                                            type: "post",
-                                            beforeSend: function (xhr, settings) {
-                                                xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                                            }
-                                        }
-                                    },
-                                    password1: {
-                                        required: true
-                                    },
-                                    password2: {
-                                        required: true,
-                                        equalTo: '#id_password1'
-                                    },
-                                    cell_number: {
-                                        required: true
-                                    },
-                                    terms: {
-                                        required: true
-                                    }
-                                },
-                                messages: {
-                                    email: {
-                                        remote: "Email address already in use. Please use other email."
-                                    }
-                                }
-                            });
-
-                        });
-                    </script>
-                {% endblock %}
+        });
+    </script>
+{% endblock %}

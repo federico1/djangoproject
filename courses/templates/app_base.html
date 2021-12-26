@@ -109,7 +109,7 @@
                                                                                                                                                                                                                                         Dashboard</a>
                                         {% endif %}
                                         {% if request.user.is_student == True %}
-                                            <a href="{ url  'student_course_list' %}" class="btn btn-main btn-small">Student
+                                            <a href="{% url  'student_dashboard' %}" class="btn btn-main btn-small">Student
                                                                                                                                                                                                                                         Dashboard</a>
                                         {% endif %}
                                         {% if request.user.is_superuser == True %}

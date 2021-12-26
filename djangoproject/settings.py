@@ -127,7 +127,6 @@ STATICFILES_DIRS = (
 
 
 #from django.core.urlresolvers import reverse_lazy
-#LOGIN_REDIRECT_URL = reverse_lazy('student_course_list')
 #from django.core.urlresolvers import reverse
 LOGIN_REDIRECT_URL = reverse_lazy('course_list')
 AUTH_USER_MODEL = "students.User"

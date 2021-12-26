@@ -1,0 +1,501 @@
+{% extends "student_base.html" %}
+{% load i18n %}
+{% block title %}
+    {{ object.title }}
+{% endblock %}
+
+{% block content %}
+
+    <div>
+        <div class="container-fluid">
+
+            <div class="row my-3">
+                <div class="col-md-9">
+                    <h3>{{ object.title }}</h3>
+                </div>
+                <div class="col-md-3 text-right">
+
+                    {% if module != None and next_content != None and active_content.complete == True %}
+
+                        {% if next_content.type == 'quiz' %}
+
+                            <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}&type=quiz" class="btn btn-primary">Next Chapter (Quiz) >>
+                            </a>
+
+                        {% elif next_content.type == 'content' %}
+
+                            <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}" class="btn btn-primary">Next Chapter >>
+                            </a>
+
+                        {% endif %}
+
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="blog-sidebar">
+                        <div class="widget widget_categories">
+                            <ul>
+
+                                {% for m in object.modules.all %}
+                                    <li class="cat-item">
+                                        <div class="myCollapsible">
+                                            <div>
+                                                <a href="javascript:;" class="accordion-button" data-toggle="collapse" data-target="#collapseOne-{{ m.id }}" aria-expanded='{% if m == module %}true{% endif %}'>
+                                                    <i class="fa {% if m == module %} fa-angle-down {% else %} fa-angle-right {% endif %}"></i>
+                                                    {{ m.title }}
+                                                </a>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <div id="collapseOne-{{ m.id }}" class="collapse mt-3 {% if m == module %} show {% endif %}" aria-labelledby="headingOne-{{ m.id }}">
+                                                <ul>
+                                                    {% for content in m.contents.all %}
+                                                        {% with item=content.item %}
+
+                                                        <li class="content-item py-1 pl-2 {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}active{% endif %}" data-progress="{{ content.has_progress }}">
+                                                            {% if content.id in completed_contents or active_content.object.id  == content.id %}
+
+                                                                <a class="content-{{ content.id }} {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}pin{% endif %}" href="{% url 'student_course_detail_module' object.id m.id %}?content={{ content.id }}">
+
+                                                                    <i title=" {{ content.content_type }}" class="fa {{ content.content_type }}"></i>
+                                                                    {{ item.title }}
+
+                                                                </a>
+
+                                                            {% else %}
+                                                                <a href="javascript:;">
+                                                                    <i title=" {{ content.content_type }}" class="fa {{ content.content_type }}"></i>
+                                                                    {{ item.title }}
+                                                                </a>
+                                                            {% endif %}
+
+                                                        </li>
+
+                                                        {% endwith %}
+                                                    {% endfor %}
+
+                                                    {% if m.quiz != None and m.quiz_id in taken_quizzes and m.quiz.questions.count > 0 %}
+
+                                                        <li class="content-item py-1 pl-2" data-progress="True">
+                                                            <a class="complete" href="{% url 'student_course_detail_module' object.id m.id %}?content={{ m.quiz_id }}&type=quiz">
+                                                                <i class="fa fa-question"></i>
+                                                                Take Quiz
+                                                            </a>
+                                                        </li>
+
+                                                    {% elif m.quiz != None and m.quiz.questions.count > 0 %}
+                                                        <li class="content-item py-1 pl-2" data-progress="True">
+                                                            <a href="javascript:;">
+                                                                <i title="Quiz" class="fa fa-question"></i>
+                                                                Take Quiz
+                                                            </a>
+                                                        </li>
+                                                    {% endif %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                {% endfor %}
+
+
+                            </ul>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="blog-post-item">
+
+
+                        <div class="row">
+
+
+                            {% if module == None %}
+
+                                {% if request.GET.type == 'quiz' and object.quiz is not None %}
+                                    <div class="col-md-12 mb-30">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Quiz</th>
+                                                    <th>Score</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                <tr>
+                                                    <td>
+                                                        {{ active_content.object }}
+                                                    </td>
+                                                    <td>
+                                                        {% if active_content.complete == True %}
+                                                            {{ active_content.score }}
+                                                        {% else %}
+                                                            Not Taken
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        {% if active_content.complete == True %}
+                                                            <a href="{% url 'student_reset_quiz' active_content.object.id %}?ref={{ request.get_full_path }}" class="btn btn-primary">Retake Quiz
+                                                            </a>
+                                                        {% else %}
+                                                            <a href="{% url 'student_take_quiz' active_content.object.id %}?ref={{ request.get_full_path }}" class="btn btn-primary">Take Quiz
+                                                            </a>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                {% else %}
+                                    <div class="col-md-12">
+
+                                        <div class="p-2">
+                                            <p>
+                                                {{ object.overview|safe }}
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                {% endif %}
+
+                            {% endif %}
+
+
+                            {% if module != None %}
+
+                                {% for content in module.contents.all %}
+
+                                    {% if active_content.object.id  == content.id and active_content.type == 'content' %}
+
+                                        <div class="col-md-12">
+
+
+                                            {% with item=content.item %}
+
+                                            <div id="contentSection" class="p-2" data-id="{{ content.id }}" data-type="{{ content.content_type }}" data-completed="{{ active_content.complete }}">
+                                                {{ item.render }}
+                                            </div>
+
+                                            {% endwith %}
+
+
+                                        </div>
+
+                                    {% endif %}
+
+                                {% endfor %}
+
+                                {% if active_content.type == 'quiz' %}
+                                    <div class=" col-md-12">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Quiz</th>
+                                                    <th>Score</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                <tr>
+                                                    <td>
+                                                        {{ active_content.object }}
+                                                    </td>
+                                                    <td>
+                                                        {% if active_content.complete == True %}
+                                                            {{ active_content.score }}
+                                                        {% else %}
+                                                            Not Taken
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        {% if active_content.complete == True %}
+                                                            <a href="{% url 'student_reset_quiz' active_content.object.id %}?ref={{ request.get_full_path }}" class="btn btn-primary">Retake Quiz
+                                                            </a>
+                                                        {% else %}
+                                                            <a href="{% url 'student_take_quiz' active_content.object.id %}?ref={{ request.get_full_path }}" class="btn btn-primary">Take Quiz
+                                                            </a>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                {% endif %}
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div id="attendanceModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Mark Today Attendance
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+
+                        <div class="col">
+                            <video id="picVideo">Video stream not available.</video>
+                            <div class="">
+                                <button class="btn btn-info btn-sm" id="btnTakePicture">Take Photo</button>
+                            </div>
+                        </div>
+
+                        <div class="col">
+
+                            <canvas id="picCanvas"></canvas>
+
+                            <div class="pic-output text-center">
+                                Please take your photo.
+                            </div>
+                            <div class="">
+                                <button class="btn btn-warning mt-1 btn-sm" id="btnClearPhoto">Clear Photo</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="btnSaveAttendance">
+                        Mark Attendance
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    {% verbatim %}
+        <script type="text/x-handlebars-template" id='roomListItemTemplate'>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ title }}
+                (INTERNAL)
+                <a href="/communicate/video-rooms/{{ id }}?ref_course={{ ref_course }}" target="_blank" class="link-add-member badge badge-primary badge-pill text-white">Connect</a>
+            </li>
+        </script>
+    {% endverbatim %}
+
+    {% verbatim %}
+        <script type="text/x-handlebars-template" id='externalMeetItemTemplate'>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ title }}
+                (EXTERNAL)
+                <a href="{{ url }}" target="_blank" class="link-add-member badge badge-primary badge-pill text-white">Connect</a>
+            </li>
+        </script>
+    {% endverbatim %}
+
+{% endblock %}
+
+{% block scripts %}
+
+    <style>
+
+        .cat-item .collapse {
+            border: 1px solid #dfdfdf;
+        }
+
+        .accordion-button[aria-expanded='true'] {
+            font-weight: bold;
+            text-decoration: overline;
+        }
+
+        .content-item.complete i {
+            color: #0ee114;
+        }
+
+        .content-item.active {
+            background: #f7f7f7;
+        }
+
+        .fa.text:before {
+            content: "\f039";
+        }
+
+        .fa.file:before {
+            content: "\f1c1";
+        }
+
+        .fa.image:before {
+            content: "\f03e";
+        }
+
+        .fa.video:before {
+            content: "\f03d";
+        }
+
+        .fa.frame:before {
+            content: "\f51b";
+        }
+    </style>
+
+    <link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js" integrity="sha512-4ze/a9/4jqu+tX9dfOqJYSvyYd5M6qum/3HpCLr+/Jqf0whc37VUbkpNGHR7/8pSnCFw47T1fmIpwBV7UySh3g==" crossorigin="anonymous"></script>
+    <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
+
+    <script type="application/javascript">
+
+        (function ($) {
+
+            $.CourseDetailManager = function (options) {
+                var that = this;
+
+                var settings = $.extend({}, options);
+
+                var embedFile = function () {
+
+                    if ($(".file-item").length > 0) {
+
+                        var href = $(".file-item").eq(0).attr('href');
+
+                        if (href) {
+
+                            if (href.toLowerCase().indexOf(".png") >= 0) {
+
+                                var img = $("<img />", {src: href, class:'img-fluid'});
+
+                                $(".file-item").eq(0).replaceWith(img);
+
+                            } else if (href.toLowerCase().indexOf(".pdf") >= 0) {
+
+                                var pdfDiv = $("<div />", {id: 'pdfViewer'});
+
+                                pdfDiv.css({width: '100%', 'min-height': 600});
+
+                                $(".file-item").eq(0).replaceWith(pdfDiv);
+
+                                var options = {
+                                    height: "580px",
+                                    width: '100%',
+                                    pdfOpenParams: {
+                                        view: 'FitV',
+                                        page: '1'
+                                    }
+                                };
+
+                                PDFObject.embed(href, "#pdfViewer", options);
+                            }
+                        }
+                    }
+
+                };
+
+                var checkCourseProgress = function () {
+
+                    if ($("#contentSection").length > 0) {
+
+                        var id = $("#contentSection").attr('data-id');
+                        var content_type = $("#contentSection").attr('data-type');
+                        var is_completed = $("#contentSection").attr('data-completed');
+
+                        if (is_completed != 'False') {
+                            return;
+                        }
+
+                        var data = {
+                            content: id,
+                            is_completed: true,
+                            content_type: content_type
+                        };
+
+                        if (content_type != 'video' || $("#videoFrame").length > 0) {
+                            saveCourseProgress(data);
+                        } else if (content_type == 'video' && $("#myVideo[completed='true']").length > 0) {
+                            saveCourseProgress(data);
+                        }
+
+                    }
+
+                };
+
+                var saveCourseProgress = function (data) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/add-content-progress/",
+                        data: data,
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        },
+                        success: function (response) {
+                            if (response.id > 0) {
+                                $(".next-item-link").removeClass('d-none');
+                                $(".content-" + data.content).addClass('complete');
+                            }
+                        },
+                        failure: function (errMsg) {}
+                    });
+
+                };
+
+
+                var registerEvent = function () {
+                    $('.collapse').on('shown.bs.collapse', function () {
+
+                        var id = $(this).attr('id');
+                        var link = $("a[data-target='#" + id + "']");
+                        link.find("i").removeClass('fa-angle-right').addClass('fa-angle-down');
+
+                    });
+
+                    $('.collapse').on('hidden.bs.collapse', function () {
+
+                        var id = $(this).attr('id');
+                        var link = $("a[data-target='#" + id + "']");
+                        link.find("i").removeClass('fa-angle-down').addClass('fa-angle-right');
+
+                    });
+
+                };
+
+                var init = function () {
+                    registerEvent();
+                    checkCourseProgress();
+                    embedFile();
+
+                };
+
+                init();
+
+                return this;
+            };
+
+        })(jQuery);
+
+        $(document).ready(function () {
+            new $.CourseDetailManager({});
+        });
+    </script>
+{% endblock %}
