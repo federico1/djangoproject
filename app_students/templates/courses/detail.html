@@ -79,7 +79,7 @@
 
                                                     {% if m.quiz != None and m.quiz_id in taken_quizzes and m.quiz.questions.count > 0 %}
 
-                                                        <li class="content-item py-1 pl-2" data-progress="True">
+                                                        <li class="content-item py-1 pl-2 complete" data-progress="True">
                                                             <a class="complete" href="{% url 'student_course_detail_module' object.id m.id %}?content={{ m.quiz_id }}&type=quiz">
                                                                 <i class="fa fa-question"></i>
                                                                 Take Quiz
