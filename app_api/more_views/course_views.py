@@ -80,6 +80,7 @@ class CourseTimeLogDetailView(APIView):
 
         snippets = CourseTimeLog.objects.filter(
             user=request.user, course_id=course_id)
+            
         serializer = course_serializers.CourseTimeLogSerializer(
             snippets, many=True)
 

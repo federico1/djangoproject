@@ -252,6 +252,23 @@
                             </ul>
                         </div>
 
+                        <div class="course-widget course-metarials">
+                            <h4 class="course-title">Modules</h4>
+                            <ul>
+
+                                {% for m in object.modules.all %}
+                                    <li>
+                                        <i class="fa fa-check"></i>
+                                        {{ m.title }}
+                                    </li>
+
+                                {% endfor %}
+
+                              
+
+                            </ul>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -344,10 +361,10 @@
                             src: videoSrc
                         };
 
-                        
+
                         var source = document.getElementById("videoLocalItemTemplate").innerHTML;
 
-                        if(isValidURL(videoSrc)){
+                        if (isValidURL(videoSrc)) {
                             source = document.getElementById("videoEmbedItemTemplate").innerHTML;
                         }
 

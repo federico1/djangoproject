@@ -64,7 +64,10 @@ class CourseListView(LoginRequiredMixin, ListView):
 
         qs = qs.filter(students__in=[self.request.user])
 
-        print(self.request.GET.get('q', None))
+        q = self.request.GET.get('q', None)
+
+        if q is not None:
+            qs = qs.filter(title__icontains=q)
 
         return qs
 

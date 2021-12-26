@@ -52,6 +52,7 @@
                                             <div id="collapseOne-{{ m.id }}" class="collapse mt-3 {% if m == module %} show {% endif %}" aria-labelledby="headingOne-{{ m.id }}">
                                                 <ul>
                                                     {% for content in m.contents.all %}
+
                                                         {% with item=content.item %}
 
                                                         <li class="content-item py-1 pl-2 {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}active{% endif %}" data-progress="{{ content.has_progress }}">
@@ -109,13 +110,8 @@
                 </div>
                 <div class="col-md-8">
                     <div class="blog-post-item">
-
-
                         <div class="row">
-
-
                             {% if module == None %}
-
                                 {% if request.GET.type == 'quiz' and object.quiz is not None %}
                                     <div class="col-md-12 mb-30">
                                         <table class="table">
@@ -178,17 +174,11 @@
                                     {% if active_content.object.id  == content.id and active_content.type == 'content' %}
 
                                         <div class="col-md-12">
-
-
                                             {% with item=content.item %}
-
                                             <div id="contentSection" class="p-2" data-id="{{ content.id }}" data-type="{{ content.content_type }}" data-completed="{{ active_content.complete }}">
                                                 {{ item.render }}
                                             </div>
-
                                             {% endwith %}
-
-
                                         </div>
 
                                     {% endif %}
@@ -241,9 +231,25 @@
 
 
                         </div>
-
-
                     </div>
+
+                    <div class="row mb-5">
+                        <div class="col">
+                            <div class="d-flex justify-content-start" id="timer">
+                                <h3 class="time-output" id="hours">00</h3>
+                                <h3 class="colon" id="colon-one">:</h3>
+                                <h3 class="time-output" id="minutes">00</h3>
+                                <h3 class="colon" id="colon-two">:</h3>
+                                <h3 class="time-output" id="seconds">00</h3>
+                                <h3 class="time-end" id="end"></h3>
+                            </div>
+
+                        </div>
+                        <div class="col text-right">
+                            <h3 id="progressCompletedContents"></h3>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
@@ -468,7 +474,6 @@
 
                 };
 
-
                 var registerEvent = function () {
                     $('.collapse').on('shown.bs.collapse', function () {
 
@@ -500,10 +505,127 @@
                 return this;
             };
 
+            $.TimeTracker = function (options) {
+
+                var that = this;
+
+                var totalSeconds = 0;
+                var lastSavedTime = 0;
+                var tabFocused = true;
+
+                var settings = $.extend({}, options);
+
+                var getTimeLog = function () {
+
+                    $.get('/api/courses_time_logs/', {
+                        course: '{{ object.id }}'
+                    }, function (response) {
+
+                        if (response && response.length > 0) {
+                            totalSeconds = response[response.length - 1].total_seconds;
+                        }
+
+                        timeCounter();
+
+                    });
+                };
+
+                var saveTimeLog = function () {
+
+                    var data = {
+                        course: '{{ object.id }}',
+                        total_seconds: totalSeconds
+                    };
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/courses_time_logs/",
+                        data: JSON.stringify(data),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                            $("#timer h3").css('color', '#27c714');
+                        },
+                        success: function (response) {
+                            $("#timer h3").removeAttr('style');
+                        },
+                        failure: function (errMsg) {}
+                    });
+                };
+
+                var timeCounter = function () {
+
+                    setInterval(() => {
+
+                        if (tabFocused) {
+
+                            totalSeconds += 1;
+
+                            lastSavedTime = lastSavedTime + 1;
+
+                            if (lastSavedTime >= 55) {
+                                saveTimeLog();
+                                lastSavedTime = 0;
+                            }
+
+                            secondsToHms(totalSeconds);
+                        }
+                    }, 1000);
+
+                };
+
+                var pad = function (str, max) {
+                        str = str.toString();
+                        return str.length<max ? pad("0" + str, max) : str;
+                };
+
+                var secondsToHms = function (d) {
+                    d = Number(d);
+                    var h = Math.floor(d / 3600);
+                    var m = Math.floor(d % 3600 / 60);
+                    var s = Math.floor(d % 3600 % 60);
+
+                    $("#hours").html(pad(h, 2));
+                    $("#minutes").html(pad(m, 2));
+                    $("#seconds").html(pad(s, 2));
+
+                };
+
+                var registerEvent = function () {
+                    
+                    document.addEventListener("visibilitychange", event => {
+                            if (document.visibilityState == "visible") {
+                                tabFocused = true;
+                            } else {
+                                tabFocused = false;
+                            }
+                        }
+                    );
+
+                    var completedCount = $(".content-item.complete").length;
+                    var totalContent = $(".content-item").length;
+
+                    $("#progressCompletedContents").html('Completed: ' + completedCount + "/" + totalContent);
+
+                };
+
+                var init = function () {
+                    registerEvent();
+                    getTimeLog();
+                };
+
+                init();
+
+                return this;
+            };
+
+
         })(jQuery);
 
         $(document).ready(function () {
             new $.CourseDetailManager({});
+            new $.TimeTracker({});
         });
     </script>
 {% endblock %}
