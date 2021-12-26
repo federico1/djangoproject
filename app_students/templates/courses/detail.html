@@ -340,6 +340,11 @@
             background: #f7f7f7;
         }
 
+        .blog-sidebar .widget.widget_categories ul li a {
+
+            text-align: left;
+        }
+
         .fa.text:before {
             content: "\f039";
         }
@@ -384,7 +389,10 @@
 
                             if (href.toLowerCase().indexOf(".png") >= 0) {
 
-                                var img = $("<img />", {src: href, class:'img-fluid'});
+                                var img = $("<img />", {
+                                    src: href,
+                                    class: 'img-fluid'
+                                });
 
                                 $(".file-item").eq(0).replaceWith(img);
 
