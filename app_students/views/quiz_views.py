@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.db import transaction
 from django.http import HttpResponse
+from django.views.generic.base import TemplateResponseMixin, View
 
 from students.decorators import student_required
 from students.forms import TakeQuizForm
@@ -104,3 +105,10 @@ def quiz_reset(request, pk):
             return HttpResponse(0)
     except Exception as ex:
         return HttpResponse(0)
+
+
+class TakenQuizTemplateView(TemplateResponseMixin, View):
+    template_name = 'quiz/taken_list.html'
+
+    def get(self, request):
+        return self.render_to_response({})

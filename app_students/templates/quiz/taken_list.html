@@ -1,0 +1,102 @@
+{% extends 'student_base.html' %}
+
+{% block title %}
+    My Quizzes
+{% endblock %}
+{% block content %}
+
+    <div id="hfCsrfToken">
+        {% csrf_token %}
+    </div>
+
+    <section class="section-padding course-grid pt-5">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-lg-7">
+                    <div class="section-heading center-heading">
+                        <h3>My Quizzes</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 ">
+
+                    <table class="table table-bordered bg-white" id="tblProducts">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Title</th>
+                                <th>Date</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for quiz in request.user.taken_quizzes.all %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        {{ quiz.quiz.name }}
+                                    </td>
+                                    <td>
+                                        {{ quiz.date|date:"M d, Y" }}
+                                    </td>
+                                    <td>
+                                           {{quiz.score}}
+                                    </td>
+                                </tr>
+
+                                {% empty %}
+                                <p>You haven't taken any quiz yet.</p>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        <!--course-->
+    </section>
+
+
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    <script type="application/javascript">
+
+        (function ($) {
+
+            $.QuizManager = function (options) {
+
+                var tagsList = [];
+
+                var settings = $.extend({}, options);
+
+               
+                var registerEvent = function () {
+
+                  
+                };
+
+                var init = function () {
+                  
+                };
+
+                init();
+
+                return this;
+            };
+
+        })(jQuery);
+
+        $(document).ready(function () {
+
+            new $.QuizManager({});
+
+        });
+    </script>
+
+{% endblock %}

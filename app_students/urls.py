@@ -17,6 +17,7 @@ urlpatterns = [
     
     path('quiz/<int:pk>/', quiz_views.take_quiz, name='student_take_quiz'),
     path('quiz-reset/<int:pk>/', quiz_views.quiz_reset, name='student_reset_quiz'),
+    path('quiz-taken/', quiz_views.TakenQuizTemplateView.as_view(), name='student_taken_quiz'),
 
      path('edit-profile', profile_views.EditProfileView.as_view(),
          name='student_edit_profile'),

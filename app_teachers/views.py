@@ -267,6 +267,7 @@ class QuizTemplateView(TemplateResponseMixin, View):
     def get(self, request):
         return self.render_to_response({})
 
+
 def CourseCopy(request):
     result = 0
     if request.method == 'POST' and request.POST['id']:
