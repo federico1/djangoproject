@@ -1,3 +1,9 @@
+import datetime
+import os
+import random
+import string
+
+
 from django.views import generic
 from django.views.generic.edit import CreateView
 from braces.views import LoginRequiredMixin
@@ -5,16 +11,23 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.template.loader import get_template
+from django.conf import settings
+
+from xhtml2pdf import pisa
 
 from app_students.forms import StudentSignupForm
 from app_students.file_utils import uploaded_file
 from app_students.mail_utils import send_welcome_mail
+from students.decorators import student_required
+
+from app_students.file_utils import render_to_pdf
 
 from students.models import User
-from courses.models import Course, CourseProgress
+from courses.models import Course, CourseProgress, StudentCertificate
 
 
 class StudentRegistrationView(CreateView):
@@ -33,7 +46,7 @@ class StudentRegistrationView(CreateView):
         cd = form.cleaned_data
         user = authenticate(username=cd['email'], password=cd['password1'])
         login(self.request, user)
-        
+
         send_welcome_mail(cd)
 
         return result
@@ -42,7 +55,7 @@ class StudentRegistrationView(CreateView):
 
         if self.request.GET.get('next'):
             return self.request.GET.get('next') + "#register=success"
-        
+
         return reverse_lazy('cart_detail') + '?register=success'
 
 
@@ -170,7 +183,7 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
                 context['next_content'] = obj
                 break
         elif self.request.GET.get('type') == 'quiz' and course.quiz is not None:
-            
+
             t_q = student.taken_quizzes.filter(
                 quiz_id=course.quiz_id).select_related('quiz').first()
             score = 0
@@ -195,6 +208,115 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
 
     def get(self, *args, **kwargs):
         return super().get(*args, **kwargs)
+
+
+class CourseCertificateDetailView(LoginRequiredMixin, DetailView):
+    model = Course
+    template_name = 'certificate/certificate.html'
+
+    def get_context_data(self, **kwargs):
+
+        context = super(CourseCertificateDetailView,
+                        self).get_context_data(**kwargs)
+
+        context['certificate_valid'] = True
+        student = self.request.user
+        course = self.get_object()
+        enrolled = course.course_enrolled.filter(user=student)
+
+        if not enrolled.exists() or enrolled.last().is_completed == False:
+            context['certificate_valid'] = False
+
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        return super(CourseCertificateDetailView, self).render_to_response(context, **response_kwargs)
+
+
+class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
+    model = Course
+    template_name = 'certificate/certificate_template.html'
+
+    def get_context_data(self, **kwargs):
+
+        context = super(CertificateTemplateDetailView,
+                        self).get_context_data(**kwargs)
+
+        context['certificate_valid'] = True
+        student = self.request.user
+        course = self.get_object()
+        enrolled = course.course_enrolled.filter(user=student)
+
+        if not enrolled.exists() or enrolled.last().is_completed == False:
+            context['certificate_valid'] = False
+
+        if context['certificate_valid'] == True:
+            context['student_name'] = student.first_name + \
+                ' ' + student.last_name
+            completed_date = enrolled.last().completed_date
+            context['completed_date'] = completed_date.strftime('%m/%d/%Y')
+
+        context['sign_image'] = '/static/cert-files/image002.png'
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+
+        if context['certificate_valid'] == False:
+            return redirect('course_list')
+
+        return super(CertificateTemplateDetailView, self).render_to_response(context, **response_kwargs)
+
+
+@login_required
+@student_required
+def download_certificate(request, pk):
+    try:
+        student = request.user
+        course = Course.objects.get(pk=pk)
+        enrolled = course.course_enrolled.filter(user=student)
+
+        if enrolled.exists() or enrolled.last().is_completed == True:
+
+            student_name = student.first_name + \
+                ' ' + student.last_name
+            completed_date = enrolled.last().completed_date.strftime('%m/%d/%Y')
+
+            letters = string.digits
+            ref_number = ''.join(random.choice(letters) for i in range(5))
+            ref_number = 'NYCCST-' + datetime.datetime.now().strftime("%Y%m%d") + \
+                "-" + ref_number
+
+            template_path = 'certificate/certificate_template.html'
+
+            sign_image = os.path.realpath(os.path.dirname(
+                'static')) + '\courses\static\cert-files\image003.png'
+
+            sign_image = 'https://construction-safety-nyc.com/static/cert-files/image003.png'
+
+            context = {'certificate_valid': True,
+                       'student_name': student_name, 'completed_date': completed_date, 'object': course,
+                       'ref_number': ref_number, 'sign_image': sign_image}
+
+            # template = get_template(template_path)
+            # html = template.render(context)
+
+            pdf = render_to_pdf(template_path, context)
+            print(pdf)
+            
+            if pdf:
+                response = HttpResponse(pdf, content_type='application/pdf')
+                filename = "Invoice_%s.pdf" % ("12341231")
+                content = "inline; filename='%s'" % (filename)
+                download = request.GET.get("download")
+                if download:
+                    content = "attachment; filename='%s'" % (filename)
+                response['Content-Disposition'] = content
+                return response
+
+
+        return HttpResponse(0)
+    except Exception as ex:
+        return HttpResponse(ex)
 
 
 def file_upload(request):
