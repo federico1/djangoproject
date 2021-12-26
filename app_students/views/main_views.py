@@ -18,13 +18,12 @@ from django.template.loader import get_template
 from django.conf import settings
 
 from xhtml2pdf import pisa
+from xhtml2pdf.config.httpconfig import httpConfig
 
 from app_students.forms import StudentSignupForm
 from app_students.file_utils import uploaded_file
 from app_students.mail_utils import send_welcome_mail
 from students.decorators import student_required
-
-from app_students.file_utils import render_to_pdf
 
 from students.models import User
 from courses.models import Course, CourseProgress, StudentCertificate
@@ -291,32 +290,48 @@ def download_certificate(request, pk):
             sign_image = os.path.realpath(os.path.dirname(
                 'static')) + '\courses\static\cert-files\image003.png'
 
-            sign_image = 'https://construction-safety-nyc.com/static/cert-files/image003.png'
+            sign_image = 'https://pdhsafety.com/static/cert-files/image003.png'
 
             context = {'certificate_valid': True,
                        'student_name': student_name, 'completed_date': completed_date, 'object': course,
                        'ref_number': ref_number, 'sign_image': sign_image}
 
-            # template = get_template(template_path)
-            # html = template.render(context)
+            template = get_template(template_path)
+            html = template.render(context)
 
-            pdf = render_to_pdf(template_path, context)
-            print(pdf)
-            
-            if pdf:
-                response = HttpResponse(pdf, content_type='application/pdf')
-                filename = "Invoice_%s.pdf" % ("12341231")
-                content = "inline; filename='%s'" % (filename)
-                download = request.GET.get("download")
-                if download:
-                    content = "attachment; filename='%s'" % (filename)
-                response['Content-Disposition'] = content
+            file_name = datetime.datetime.now().strftime("%y%m%d-%H%M%S") + "-" + \
+                str(student.id) + "-" + str(course.id) + "-certificate.pdf"
+            file_path = os.path.join(settings.MEDIA_ROOT, 'uploads', file_name)
+            result_file = open(file_path, "w+b")
+
+            httpConfig.save_keys('nosslcheck', True)
+            pisa_status = pisa.CreatePDF(html, dest=result_file)
+            result_file.close()
+
+            ref_file_path = os.path.join(
+                settings.MEDIA_URL, 'uploads', file_name)
+
+            certificate_object = StudentCertificate(
+                course=course, user=student, ref_number=ref_number, file_path=ref_file_path)
+
+            certificate_object.save()
+
+            with open(file_path, 'rb') as fh:
+                response = HttpResponse(
+                    fh.read(), content_type="application/pdf")
+                response['Content-Disposition'] = 'attachment; filename="' + \
+                    student.username+' certificate.pdf"'
                 return response
+                # attachment
 
+            if pisa_status.err:
+                return HttpResponse('We had some errors <pre>' + html + '</pre>')
 
         return HttpResponse(0)
     except Exception as ex:
         return HttpResponse(ex)
+
+
 
 
 def file_upload(request):

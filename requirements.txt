@@ -7,3 +7,4 @@ requests==2.23.0
 djangorestframework==3.11.0
 cryptography
 django-environ
+xhtml2pdf==0.2.5
