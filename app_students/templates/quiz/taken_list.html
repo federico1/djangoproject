@@ -42,7 +42,7 @@
                                         {{ quiz.date|date:"M d, Y" }}
                                     </td>
                                     <td>
-                                           {{quiz.score}}
+                                        {{ quiz.score }}
                                     </td>
                                 </tr>
 
@@ -57,7 +57,6 @@
         </div>
         <!--course-->
     </section>
-
 
 
 {% endblock %}
@@ -75,14 +74,29 @@
 
                 var settings = $.extend({}, options);
 
-               
-                var registerEvent = function () {
+                var initDatatable = function () {
 
-                  
+                    var dataTableObject = $("#tblProducts").DataTable();
+
+                    dataTableObject.order([0, 'desc']).draw();
+
+                    var searchText = $.trim("{{ request.GET.q }}");
+
+                    if (searchText) {
+                        dataTableObject.search(searchText).draw();
+                    }
+
+                    $('html, body').animate({
+                        scrollTop: $("#tblProducts").offset().top - 100
+                    }, 2000);
+
                 };
 
+
+                var registerEvent = function () {};
+
                 var init = function () {
-                  
+                    initDatatable();
                 };
 
                 init();

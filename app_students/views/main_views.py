@@ -16,6 +16,7 @@ from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.template.loader import get_template
 from django.conf import settings
+from django import template
 
 from xhtml2pdf import pisa
 from xhtml2pdf.config.httpconfig import httpConfig
@@ -28,6 +29,7 @@ from students.decorators import student_required
 from students.models import User
 from courses.models import Course, CourseProgress, StudentCertificate
 
+register = template.Library()
 
 class StudentRegistrationView(CreateView):
     model = User
@@ -264,6 +266,8 @@ class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
             return redirect('course_list')
 
         return super(CertificateTemplateDetailView, self).render_to_response(context, **response_kwargs)
+
+
 
 
 @login_required

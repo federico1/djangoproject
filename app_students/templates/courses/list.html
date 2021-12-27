@@ -1,6 +1,7 @@
 {% extends "student_base.html" %}
 {% load staticfiles %}
 {% load course_tags %}
+{% load students_tags %}
 
 {% block title %}
     My Courses
@@ -43,6 +44,8 @@
 
                             <div class="row">
                                 {% for course in object_list %}
+                                    {% with enroll=course.course_enrolled|get_enroll:request.user %}
+
                                     <div class="col-lg-6 col-md-6">
                                         <div class="course-block course-list-item">
                                             <div class="row align-items-center">
@@ -59,12 +62,26 @@
                                                     <div class="course-content">
                                                         <h4>
                                                             <a href="{% url 'student_course_detail' course.id %}">
-                                                            {{course.title}}
+                                                                {{ course.title }}
                                                             </a>
                                                         </h4>
                                                         <div class="rating">
-                                                           <a href="{% url 'student_course_detail' course.id %}" class="py-2 px-3 badge badge-success">
-                                                               Take Course</a>
+                                                            <a href="{% url 'student_course_detail' course.id %}" class="py-2 px-3 badge badge-success">
+                                                                Take Course</a>
+                                                            {% if enroll.is_completed %}
+                                                                <a href="{% url 'student_course_certificate' course.id %}" class="py-2 px-3 badge badge-primary">
+                                                                    View Certificate
+                                                                </a>
+                                                            {% endif %}
+                                                        </div>
+
+                                                        <div class="rating">
+                                                            Status:
+                                                            {% if enroll.is_completed %}
+                                                          <span>Completed</span>
+                                                          {% else %}
+                                                          <span>incomplete</span>
+                                                        {% endif %}
                                                         </div>
 
                                                     </div>
@@ -72,6 +89,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    {% endwith %}
                                 {% endfor %}
                             </div>
 
