@@ -53,18 +53,16 @@
             gtag('config', 'UA-190250545-1');
         </script>
 
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-HBMW2QHSJ4"></script>
 
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-NKBKFHN4MT"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
-
             function gtag() {
                 dataLayer.push(arguments);
             }
             gtag('js', new Date());
 
-            gtag('config', 'G-HBMW2QHSJ4');
+            gtag('config', 'G-NKBKFHN4MT');
         </script>
 
     </head>
@@ -106,15 +104,15 @@
                                     {% if request.user.is_authenticated %}
                                         {% if request.user.is_teacher == True %}
                                             <a href="{% url 'teacher_dashboard' %}" class="btn btn-main btn-small">Teacher
-                                                                                                                                                                                                                                        Dashboard</a>
+                                                                                                                                                                                                                                                                                                                                                                                                                                        Dashboard</a>
                                         {% endif %}
                                         {% if request.user.is_student == True %}
-                                            <a href="{% url  'student_dashboard' %}" class="btn btn-main btn-small">Student
-                                                                                                                                                                                                                                        Dashboard</a>
+                                            <a href="{% url 'student_dashboard' %}" class="btn btn-main btn-small">Student
+                                                                                                                                                                                                                                                                                                                                                                                                                                        Dashboard</a>
                                         {% endif %}
                                         {% if request.user.is_superuser == True %}
                                             <a href="{% url 'admin_dashboard' %}" class="btn btn-main btn-small">Admin
-                                                                                                                                                                                                                                        Dashboard</a>
+                                                                                                                                                                                                                                                                                                                                                                                                                                        Dashboard</a>
                                         {% endif %}
                                         <a href="{% url 'logout' %}" class="btn btn-main btn-small">
                                             <i class="fa fa-sign-out-alt "></i>
@@ -259,8 +257,8 @@
                             <h5 class="widget-title">About Us</h5>
                             <p class="mt-3">
                                 NYC Construction Safety Training School aims to offer quality training that is relevant and useful for the construction industry and other labor industries. These efforts include offering training courses that are useful and/or necessary to achieve success
-                                                                                                                                                            and career outcomes in the construction workforce and other industries where course material may be useful and applicable, annual reviews of training materials for accuracy and relevance, and development of quality staff and
-                                                                                                                                                            instructors..
+                                                                                                                                                                                                                                                                                            and career outcomes in the construction workforce and other industries where course material may be useful and applicable, annual reviews of training materials for accuracy and relevance, and development of quality staff and
+                                                                                                                                                                                                                                                                                            instructors..
                             </p>
                             <ul class="list-inline footer-socials">
                                 <li class="list-inline-item">
@@ -415,9 +413,7 @@
                             dataList[itemIndex].qty = 1;
                         } else {
                             dataList.push(dataObject);
-                        }
-                        
-                        memoryData['_ps_'] = dataList;
+                        } memoryData['_ps_'] = dataList;
 
                         localStorage.setItem(keyName, JSON.stringify(memoryData));
 
@@ -438,9 +434,7 @@
                             count = 0;
                         } else {
                             count = memoryData['_ps_'].length;
-                        }
-                        
-                        $(".top-cart-count").html(count);
+                        } $(".top-cart-count").html(count);
 
                     };
 
@@ -482,7 +476,7 @@
 
                                 addCourseToMemory(parsedData);
                             }
-                         
+
                         });
                     };
 
