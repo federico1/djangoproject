@@ -11,140 +11,14 @@ from django.http import Http404
 from django.utils.timezone import localtime, now
 from django.conf import settings
 
-from app_chat.models import Conversation, Message, ConversationMember, \
-    VideoRoom, VideoParticipant, Notification, ParticipantLog, VideoCourses
+from app_chat.models import VideoRoom, VideoParticipant, Notification, ParticipantLog, VideoCourses
 
-from .serializers import ConversationSerializer, CourseSerializer, \
-    UserSerializer, ConversationMemberSerializer, MessageSerializer, \
+from .serializers import CourseSerializer, UserSerializer, \
     VideoRoomSerializer, VideoParticipantSerializer, NotificationSerializer, ParticipantLogSerializer, \
     VideoCoursesSerializer
 
 from students.models import User
 from app_api.helpers import save_base64
-
-
-class ConversationDetailView(APIView):
-
-    def get_object(self, pk):
-        try:
-            return Conversation.objects.get(pk=pk)
-        except Conversation.DoesNotExist:
-            raise Http404
-
-    def get(self, request, format=None):
-        snippets = Conversation.objects.filter(owner=request.user)
-
-        if request.user.is_student == True:
-            c_list = \
-                request.user.conversation_member.values_list(
-                    'conversation_id', flat=True)
-            snippets = Conversation.objects.filter(id__in=c_list)
-
-        serializer = ConversationSerializer(snippets, many=True)
-        return Response(serializer.data)
-
-    def post(self, request, format=None):
-        serializer = ConversationSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(owner=request.user)
-            return Response(serializer.data,
-                            status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(
-        self,
-        request,
-        pk,
-        format=None,
-    ):
-        snippet = self.get_object(pk)
-        snippet.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class ConversationMembersList(APIView):
-
-    def get_object(self, pk):
-        try:
-            return ConversationMember.objects.get(pk=pk)
-        except ConversationMember.DoesNotExist:
-            raise Http404
-
-    def get(self, request, format=None):
-        c_id = request.query_params.get('conversation')
-        snippets = \
-            ConversationMember.objects.filter(conversation_id=c_id)
-        serializer = ConversationMemberSerializer(snippets, many=True)
-        return Response(serializer.data)
-
-    def post(self, request, format=None):
-        serializer = ConversationMemberSerializer(data=request.data)
-        if serializer.is_valid():
-            a_count = \
-                ConversationMember.objects.filter(conversation_id=int(request.data['conversation'
-                                                                                   ]), member_id=int(request.data['member'])).count()
-
-            if a_count <= 0:
-                serializer.save()
-
-            return Response(serializer.data,
-                            status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(
-        self,
-        request,
-        pk,
-        format=None,
-    ):
-        snippet = self.get_object(pk)
-        snippet.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class MessageList(APIView):
-
-    def get_object(self, pk):
-        try:
-            return Message.objects.get(pk=pk)
-        except Message.DoesNotExist:
-            raise Http404
-
-    def get(self, request, format=None):
-        c_id = request.query_params.get('conversation')
-        type = request.query_params.get('type')
-
-        snippets = Message.objects.filter(conversation_id=c_id)
-
-        if type is not None or type == 'last10':
-            snippets = \
-                Message.objects.filter(conversation_id=c_id).order_by('-id'
-                                                                      )[:10][::-1]
-
-        serializer = MessageSerializer(snippets, many=True)
-        return Response(serializer.data)
-
-    def post(self, request, format=None):
-        serializer = MessageSerializer(data=request.data)
-        
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data,
-                            status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(
-        self,
-        request,
-        pk,
-        format=None,
-    ):
-        snippet = self.get_object(pk)
-        snippet.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class TeacherCoursesDetailView(APIView):

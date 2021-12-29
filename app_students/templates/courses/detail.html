@@ -10,10 +10,13 @@
         <div class="container-fluid">
 
             <div class="row my-3">
-                <div class="col-md-9">
+                <div class="col-md-8">
                     <h3>{{ object.title }}</h3>
                 </div>
-                <div class="col-md-3 text-right">
+                <div class="col-md-4 text-right">
+
+                    <a href="javascript:" class="btn btn-success link-talk-teacher">Talk to teacher
+                    </a>
 
                     {% if module != None and next_content != None and active_content.complete == True %}
 
@@ -257,71 +260,81 @@
     </div>
 
 
-    <div id="attendanceModal" class="modal" tabindex="-1" role="dialog">
+    <div id="chatModal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">
-                        Mark Today Attendance
-                    </h5>
+                    <div class="d-flex flex-row">
+                        <div>
+                            <img src="{{ object.owner.image }}" height="20" alt=""/>
+                        </div>
+                        <h5 class="modal-title">
+                            Talk to
+                            {{ object.owner }}
+                        </h5>
+                    </div>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
 
-                        <div class="col">
-                            <video id="picVideo">Video stream not available.</video>
-                            <div class="">
-                                <button class="btn btn-info btn-sm" id="btnTakePicture">Take Photo</button>
+                    <form method="post" id="fmChat" action="{% url 'api_messages' %}">
+
+                        {% csrf_token %}
+
+                        <input type="hidden" name="sent" value="{{ request.user.id }}"/>
+                        <input type="hidden" name="conversation" value=""/>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" name="content" placeholder="send a message to {{ object.owner }}"/>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="submit">Send</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
+                    </form>
+
+
+                    <div class="row">
                         <div class="col">
 
-                            <canvas id="picCanvas"></canvas>
+                            <div class="msg_history">
+                                <div class="incoming_msg">
+                                    <div class="incoming_msg_img">
+                                        <img src="https://ptetutorials.com/images/user-profile.png" class="img-fluid" alt="sunil"/></div>
+                                    <div class="received_msg">
+                                        <div class="received_withd_msg">
+                                            <p>Test, which is a new approach to have</p>
+                                            <span class="time_date">
+                                                11:01 AM    |    Yesterday</span>
+                                        </div>
+                                    </div>
+                                </div>
 
-                            <div class="pic-output text-center">
-                                Please take your photo.
+                                <div class="outgoing_msg">
+                                    <div class="sent_msg">
+                                        <p>Test which is a new approach to have all
+                                                                                                                                                                        solutions</p>
+                                        <span class="time_date">
+                                            11:01 AM    |    June 9</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="">
-                                <button class="btn btn-warning mt-1 btn-sm" id="btnClearPhoto">Clear Photo</button>
-                            </div>
+
+
                         </div>
                     </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id="btnSaveAttendance">
-                        Mark Attendance
-                    </button>
                 </div>
 
             </div>
         </div>
     </div>
 
-
-    {% verbatim %}
-        <script type="text/x-handlebars-template" id='roomListItemTemplate'>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                {{ title }}
-                (INTERNAL)
-                <a href="/communicate/video-rooms/{{ id }}?ref_course={{ ref_course }}" target="_blank" class="link-add-member badge badge-primary badge-pill text-white">Connect</a>
-            </li>
-        </script>
-    {% endverbatim %}
-
-    {% verbatim %}
-        <script type="text/x-handlebars-template" id='externalMeetItemTemplate'>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                {{ title }}
-                (EXTERNAL)
-                <a href="{{ url }}" target="_blank" class="link-add-member badge badge-primary badge-pill text-white">Connect</a>
-            </li>
-        </script>
-    {% endverbatim %}
 
 {% endblock %}
 
@@ -369,6 +382,63 @@
 
         .fa.frame:before {
             content: "\f51b";
+        }
+
+        .msg_history {
+            min-height: 400px;
+            overflow-y: auto;
+        }
+
+        .msg_history .incoming_msg_img {
+            display: inline-block;
+            width: 6%;
+        }
+        .msg_history .received_msg {
+            display: inline-block;
+            padding: 0 0 0 10px;
+            vertical-align: top;
+            width: 92%;
+        }
+        .msg_history .received_withd_msg p {
+            background: #ebebeb none repeat scroll 0 0;
+            border-radius: 3px;
+            color: #646464;
+            font-size: 14px;
+            margin: 0;
+            padding: 5px 10px 5px 12px;
+            width: 100%;
+        }
+        .msg_history .time_date {
+            color: #747474;
+            display: block;
+            font-size: 12px;
+            margin: 8px 0 0;
+        }
+        .msg_history .received_withd_msg {
+            width: 57%;
+        }
+        .msg_history .mesgs {
+            float: left;
+            padding: 30px 15px 0 25px;
+            width: 60%;
+        }
+
+        .msg_history .sent_msg p {
+            background: #05728f none repeat scroll 0 0;
+            border-radius: 3px;
+            font-size: 14px;
+            margin: 0;
+            color: #fff;
+            padding: 5px 10px 5px 12px;
+            width: 100%;
+        }
+        .msg_history .outgoing_msg {
+            overflow: hidden;
+            margin: 26px 0;
+        }
+        .msg_history .sent_msg {
+            float: right;
+            width: 46%;
         }
     </style>
 
@@ -620,12 +690,108 @@
                 return this;
             };
 
+            $.ChatManager = function (options) {
+
+                var that = this;
+
+                var settings = $.extend({}, options);
+
+                var getMessages = function () {
+
+                    var cId = $("#fmChat input[name='conversation']").val();
+
+                    $.get("{% url 'api_messages' %}", {
+                        conversation: cId,
+                        type: 'last10'
+                    }, function (response) {
+                        console.log(response);
+                    });
+                };
+
+                var createRoom = function () {
+
+                    var data = {
+                        course: '{{ object.id }}',
+                        title:'{{ object.title }}',
+                        teacher:'{{ object.owner.id }}'
+                    };
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'api_conversations' %}",
+                        data: JSON.stringify(data),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                            ShowLoadingModal("Please wait", "Preparing channel");
+                        },
+                        success: function (response) {
+                            if (response && response.id > 0) {
+                                $("#fmChat input[name='conversation']").val(response.id);
+                                getMessages();
+                            }
+
+                            Swal.close();
+                        },
+                        failure: function (errMsg) {}
+                    });
+                };
+
+                var initForm = function () {
+
+                    $("#fmChat").ajaxForm({
+                        beforeSend: function () {
+                            $("#fmChat input, button").attr('disabled', true);
+                        },
+                        success: function (response) {
+                            $("#fmChat input, button").attr('disabled', false);
+                            $("#fmChat input[name='content']").val(null);
+                            getMessages();
+                        },
+                        complete: function (xhr) {
+                            $("#fmChat input, button").attr('disabled', false);
+                        }
+                    });
+
+
+                };
+
+                var registerEvent = function () {
+
+                    $("div").on("click", '.link-talk-teacher', function (e) {
+                        e.stopPropagation();
+                        $("#chatModal").modal({'show': true, 'backdrop': 'static'});
+                    });
+
+                    $('#chatModal').on('shown.bs.modal', function (e) {
+                        var conversationId = $("#fmChat input[name='conversation']").val();
+
+                        if (! conversationId) {
+                            createRoom();
+                        }
+
+                    });
+
+                };
+
+                var init = function () {
+                    registerEvent();
+                    initForm();
+                };
+
+                init();
+
+                return this;
+            };
+
 
         })(jQuery);
 
         $(document).ready(function () {
             new $.CourseDetailManager({});
             new $.TimeTracker({});
+            new $.ChatManager({});
         });
     </script>
 {% endblock %}

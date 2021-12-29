@@ -17,14 +17,8 @@ router.register(r'course-enrollment',
 
 urlpatterns = [
     #url(r'^', include(router.urls)),
-    path('conversations/', views.ConversationDetailView.as_view()),
-    path('conversations/<int:pk>/', views.ConversationDetailView.as_view()),
     path('teacher-courses/', views.TeacherCoursesDetailView.as_view()),
     path('teacher-students/', views.TeacherStudentsList.as_view()),
-    path('conversation-members/', views.ConversationMembersList.as_view()),
-    path('conversation-members/<int:pk>/',
-         views.ConversationMembersList.as_view()),
-    path('messages/', views.MessageList.as_view()),
 
     path('video-rooms/', views.VideoRoomDetailView.as_view()),
     path('video-rooms/<int:pk>/', views.VideoRoomDetailView.as_view()),
@@ -64,6 +58,7 @@ urlpatterns = [
     path('external-video-room/', chat_views.ExternalVideoRoomDetailView.as_view()),
     path('external-video-room/<int:pk>/',
          chat_views.ExternalVideoRoomDetailView.as_view()),
+
     path('attendance/', attendance_views.AttendanceApiView.as_view()),
     path('attendance/<int:pk>/', attendance_views.AttendanceApiView.as_view()),
     path('approve-attendance/', attendance_views.ApproveAttendance),
@@ -82,6 +77,14 @@ urlpatterns = [
     path('tags/', tag_views.TagApiView.as_view()),
     
     path('update-module-quiz/', course_module_views.UpdateQuizApiView.as_view()),
+
+    path('conversations/', chat_views.ConversationDetailView.as_view(), name='api_conversations'),
+    path('messages/', chat_views.MessageList.as_view(),name='api_messages'),
+#     path('conversations/<int:pk>/', views.ConversationDetailView.as_view()),
+#     path('conversation-members/', views.ConversationMembersList.as_view()),
+#     path('conversation-members/<int:pk>/',
+#          views.ConversationMembersList.as_view()),
+#     ,
 
     path('save-base64/', views.SaveBase64ImageView),
 

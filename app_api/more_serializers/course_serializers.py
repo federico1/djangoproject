@@ -85,20 +85,6 @@ class CourseImageSerializer(serializers.ModelSerializer):
         fields = ['id', 'image',]
 
 
-
-# class StudentCourseSerializer(serializers.Serializer):
-#     student = serializers.IntegerField(required=True)
-#     course = serializers.IntegerField(required=True)
-
-#     def create(self, validated_data):
-#         course_id = validated_data.pop('course')
-#         student_id = validated_data.pop('student')
-
-#         Course.objects.get(pk=course_id).students.add(student_id)
-
-#         return {'student':student_id, 'course':course_id}
-
-
 class CourseFeatureSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseFeature
