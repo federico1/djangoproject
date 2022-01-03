@@ -10,9 +10,9 @@ urlpatterns = [
          name='student_dashboard'),
      path('courses', main_views.CourseListView.as_view(),
          name='student_courses'),
-    path('course/<int:pk>/', cache_page(60 * 15)
+    path('course/<int:pk>/', cache_page(60)
          (main_views.CourseDetailView.as_view()), name='student_course_detail'),
-    path('course/<int:pk>/<int:module_id>/', cache_page(60 * 15)
+    path('course/<int:pk>/<int:module_id>/', cache_page(60)
          (main_views.CourseDetailView.as_view()), name='student_course_detail_module'),
 
     path('course/certificate/<int:pk>/', cache_page(60 * 15)
