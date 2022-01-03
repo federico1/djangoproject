@@ -66,6 +66,7 @@
     {% endverbatim %}
 
 {% endblock %}
+
 {% block scripts %}
 
     <script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID' %}"></script>
@@ -124,6 +125,7 @@
                     }
 
                     setPaypal();
+                    logEvent();
                 };
 
                 var getMemoryData = function () {
@@ -147,13 +149,18 @@
                 };
 
                 var setPaypal = function () {
-
                     paypal.Buttons({
                         funding: {
                             disallowed: [paypal.FUNDING.CREDIT]
                         },
                         style: {
                             label: 'checkout'
+                        },
+                        onClick: function () {
+                            logPayEventClick();
+                        },
+                        onCancel: function () {
+                            logCancelPayEventClick();
                         },
                         createOrder: function (data, actions) {
 
@@ -187,8 +194,6 @@
                             });
                         }
                     }).render('#paypal-button-container');
-
-
                 };
 
                 var postOrder = function (paymentData) {
@@ -201,7 +206,7 @@
                     $(memoryData['_ps_']).each(function (ix, item) {
 
                         var price = item.fields.discounted_price > 0 ? item.fields.discounted_price : item.fields.price;
-                            price = parseFloat(price);
+                        price = parseFloat(price);
 
                         var item = {
                             course: item.pk,
@@ -256,6 +261,49 @@
                         },
                         failure: function (errMsg) {}
                     });
+                };
+
+                var logEvent = function () {
+
+                   setTimeout(function(){
+                    var _opts = {
+                        hitType: 'event',
+                        eventCategory: 'Checkout',
+                        eventAction: 'checkout_load',
+                        eventLabel: window.location.href,
+                        eventValue: _totalPrice
+                    };
+
+                    ga('send', _opts);
+                   }, 2000);
+
+                };
+
+                var logPayEventClick = function () {
+
+                    var _opts = {
+                        hitType: 'event',
+                        eventCategory: 'Payment',
+                        eventAction: 'pay_click',
+                        eventLabel: window.location.href,
+                        eventValue: 'paypal'
+                    };
+
+                    ga('send', _opts);
+
+                };
+
+                var logCancelPayEventClick = function () {
+
+                    var _opts = {
+                        hitType: 'event',
+                        eventCategory: 'PaymentCancel',
+                        eventAction: 'pay_cancel_click',
+                        eventLabel: window.location.href,
+                        eventValue: 'paypal'
+                    };
+
+                    ga('send', _opts);
                 };
 
                 var registerEvent = function () {};
