@@ -268,8 +268,6 @@ class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
         return super(CertificateTemplateDetailView, self).render_to_response(context, **response_kwargs)
 
 
-
-
 @login_required
 @student_required
 def download_certificate(request, pk):
@@ -334,8 +332,6 @@ def download_certificate(request, pk):
         return HttpResponse(0)
     except Exception as ex:
         return HttpResponse(ex)
-
-
 
 
 def file_upload(request):
