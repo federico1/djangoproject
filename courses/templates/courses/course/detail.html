@@ -5,14 +5,14 @@
 
 {% block title %}Enroll Online - 
     {{ object.title }}
-    Course | pdhsafety.com
+    Courses | pdhsafety.com
 {% endblock %}
 
 {% block meta_desc %}Learn
     {{ object.subject }}
-    from top-rated instructors. Find the best online
+    OSHA Authorized Trainer instructors. Find the best online
     {{ object.subject }}
-    classes and get certificate today. We provides bulk discounts. Learn Now!
+    classes and get certificate today. We provides group discounts. Learn Now!
 {% endblock %}
 
 {% block meta_keywords %}
@@ -86,7 +86,7 @@
 
                     {% if object.features.first.notes %}
                         <div class="single-course-details mb-5">
-                            <h4 class="course-title">Course Notes:</h4>
+                            <h4 class="course-title">Course Features:</h4>
                             <div>
                                 {{ object.features.first.notes | safe }}
                             </div>
