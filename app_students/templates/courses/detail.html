@@ -19,17 +19,12 @@
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
-                <li class="nav-item active dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
-
-                        Your Progress
-                        <i class="fa fa-angle-down"></i>
-
-
-                    <a href="javascript:" class="btn btn-success link-talk-teacher">Talk to a trainer  
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarp" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Your Progress<i class="fa fa-angle-down"></i>
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <div class="dropdown-menu" aria-labelledby="navbarp">
                         <a class="dropdown-item" href="#">
                             <div>
                                 <div class="d-flex justify-content-center" id="timer">
@@ -45,14 +40,15 @@
                         <a class="dropdown-item text-center" href="#">
                             <div class="font-weight-bold" id="progressCompletedContents"></div>
                         </a>
-
-                    </div>
+                   </div>
                 </li>
+
+        
 
 
             </ul>
             <button class="btn btn-success link-talk-teacher" href="javascript:;">
-                Talk to OSHA Authorized Trainer</button>
+                Talk to a trainer</button>
 
 
             <div class="mx-3">
@@ -286,7 +282,7 @@
         </div>
     </div>
 
-    <div class="container-fluid mt-4">
+    <div class="container-fluid mt-4 d-none">
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -294,10 +290,10 @@
 
                         <h6 class="card-title text-justify mb-3">
                             Please give your assessment about "{{ object }}" learning an event.
-                                                                                                                                                                                                                                                            Your thoughtful and objective response to each question is a highly valued part of
-                                                                                                                                                                                                                                                            NYC Construction Safety Training's facilitation and the learning continuous
-                                                                                                                                                                                                                                                            improvement
-                                                                                                                                                                                                                                                            process. Thank You.
+                                                                                                                                                                                                                                                                                                                        Your thoughtful and objective response to each question is a highly valued part of
+                                                                                                                                                                                                                                                                                                                        NYC Construction Safety Training's facilitation and the learning continuous
+                                                                                                                                                                                                                                                                                                                        improvement
+                                                                                                                                                                                                                                                                                                                        process. Thank You.
                         </h6>
                         <form action="#" method="post" id="fmRating">
 
@@ -456,7 +452,7 @@
                                     <tr title="The facilitators conveyed a positive and respectful attitude toward the participants.">
                                         <td>
                                             The facilitators conveyed a positive and respectful attitude toward
-                                                                                                                                                                                                                                                                                                                                                                                                                    the participants.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                the participants.
                                         </td>
                                         <td>
                                             <div class="number">1</div>
@@ -478,7 +474,7 @@
                                     <tr title="I had the opportunity to provide feedback on how to apply my new skills on the job.">
                                         <td>
                                             I had the opportunity to provide feedback on how to apply my new
-                                                                                                                                                                                                                                                                                                                                                                                                                    skills on the job.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                skills on the job.
                                         </td>
                                         <td>
                                             <div class="number">1</div>
@@ -563,7 +559,7 @@
                                     <tr title="The learning environment and facilities were appropriate for this event.">
                                         <td>
                                             The learning environment and facilities were appropriate for this
-                                                                                                                                                                                                                                                                                                                                                                                                                    event.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                event.
                                         </td>
                                         <td>
                                             <div class="number">1</div>
@@ -683,7 +679,9 @@
                     <div class="received_withd_msg">
                         <p>{{ content }}</p>
                         <span class="time_date">
-                            {{ sent.first_name }} -  {{ time }}</span>
+                            {{ sent.first_name }}
+                            -
+                            {{ time }}</span>
                     </div>
                 </div>
             </div>
