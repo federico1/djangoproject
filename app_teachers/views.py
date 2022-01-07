@@ -268,6 +268,14 @@ class QuizTemplateView(TemplateResponseMixin, View):
         return self.render_to_response({})
 
 
+class MessagesView(generic.TemplateView):
+    template_name = "messages.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(MessagesView, self).get_context_data(**kwargs)
+        return context
+
+
 def CourseCopy(request):
     result = 0
     if request.method == 'POST' and request.POST['id']:

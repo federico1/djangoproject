@@ -1,6 +1,6 @@
 from django.urls import path
 from django.views.decorators.cache import cache_page
-from .views import main_views, profile_views, quiz_views
+from .views import main_views, profile_views, quiz_views, inbox_views
 
 urlpatterns = [
      path('register/', main_views.StudentRegistrationView.as_view(),
@@ -25,6 +25,8 @@ urlpatterns = [
     path('quiz/<int:pk>/', quiz_views.take_quiz, name='student_take_quiz'),
     path('quiz-reset/<int:pk>/', quiz_views.quiz_reset, name='student_reset_quiz'),
     path('quiz-taken/', quiz_views.TakenQuizTemplateView.as_view(), name='student_taken_quiz'),
+
+    path('inbox', inbox_views.MessagesView.as_view(), name='student_messages'),
 
      path('edit-profile', profile_views.EditProfileView.as_view(),
          name='student_edit_profile'),

@@ -3,7 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from rest_framework.decorators import api_view
-
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.http import Http404
 from django.db.models import Count
 
@@ -72,6 +73,31 @@ class ConversationDetailView(APIView):
         except Conversation.DoesNotExist:
             raise Http404
 
+    def created_room_by_student(self, request, serializer):
+
+        data = serializer.validated_data
+
+        teacher_id = int(request.data['teacher'])
+        student_id = int(request.data['student'])
+
+        conversation = Conversation.objects.filter(course=data['course'],
+                                                   conversation_members__member__in=[student_id, teacher_id])
+        if conversation.count() > 0:
+            serializer = ConversationSerializer(conversation, many=True)
+            return Response(serializer.data[0], status=status.HTTP_201_CREATED)
+        else:
+            
+            serializer.save()
+
+            ConversationMember(member_id=student_id,
+                                   conversation_id=serializer.data['id']).save()
+
+            ConversationMember(member_id=teacher_id,
+                                   conversation_id=serializer.data['id']).save()
+
+            return Response(serializer.data,
+                            status=status.HTTP_201_CREATED)
+
     def get(self, request, format=None):
         snippets = Conversation.objects
 
@@ -90,22 +116,9 @@ class ConversationDetailView(APIView):
         if serializer.is_valid():
 
             if request.user.is_student == True:
-                data = serializer.validated_data
-                conversation = Conversation.objects.filter(course=data['course'],
-                                                           conversation_members__member__in=[request.user.id, request.data['teacher']])
-                print(conversation.count)
-                if conversation.count() > 0:
-                    serializer = ConversationSerializer(conversation, many=True)
-
-                    return Response(serializer.data[0], status=status.HTTP_201_CREATED)
-                else:
-                    serializer.save()
-                    ConversationMember.objects.bulk_create(
-                        [ConversationMember(member_id=request.user.id, conversation_id=serializer.data['id']),
-                         ConversationMember(member_id=request.data['teacher'], conversation_id=serializer.data['id'])])
-
-                    return Response(serializer.data,
-                                    status=status.HTTP_201_CREATED)
+                student_response = self.created_room_by_student(request, serializer)
+                if student_response:
+                    return student_response
 
         return Response(serializer.errors,
                         status=status.HTTP_400_BAD_REQUEST)
@@ -160,6 +173,7 @@ class MessageList(APIView):
         except Message.DoesNotExist:
             raise Http404
 
+    @method_decorator(cache_page(0))
     def get(self, request, format=None):
 
         c_id = request.query_params.get('conversation')
@@ -167,8 +181,8 @@ class MessageList(APIView):
 
         snippets = Message.objects.filter(conversation_id=c_id)
 
-        if type is not None or type == 'last10':
-            snippets =snippets.order_by('-id')[:10][::-1]
+        # if type is not None or type == 'last10':
+        #     snippets =snippets.order_by('-id')[:10][::-1]
 
         serializer = MessageSerializer(snippets, many=True)
         return Response(serializer.data)

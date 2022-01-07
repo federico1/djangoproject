@@ -5,9 +5,6 @@ from courses.models import Course
 class Conversation(models.Model):
     title = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add=True)
-    # owner = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True,
-    #                           related_name='conversations_created',
-    #                           on_delete=models.CASCADE)
     course = models.ForeignKey(Course, blank=True, null=True,
                               related_name='course_conversations',
                               on_delete=models.CASCADE)

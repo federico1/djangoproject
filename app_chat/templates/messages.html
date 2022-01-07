@@ -1,106 +1,106 @@
 {% extends request.user.is_student|yesno:"student_base.html,teacher_base.html" %}
 
+{% block title %}
+    My Messages
+{% endblock %}
+
 {% block content %}
 
-<div class="mt-3 d-sm-flex align-items-center justify-content-between mb-4 p-2">
-    <h1 class="h3 mb-0 text-gray-800">Inbox</h1>
-    {% if request.user.is_teacher == True %}
-    <a href="#" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm btn-new-chat"><i
-            class="fas fa-add"></i> Create New</a>
-            {%endif%}
-</div>
-
-<div class="container-fluid mb-3">
-
-    <div class="row">
-        <div class="col-md-3" id="conversation-panel">
-            <div class="card">
-                <div class="card-header container-fluid">
-                    <div class="row">
-                        <div class="col-md-10">
-                            <strong>
-                                Chat
-                            </strong>
-                        </div>
-
-                        {% if request.user.is_teacher == True%}
-                        <div class="col-md-2 float-right">
-                            <button class="btn btn-success btn-sm btn-new-chat">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                        {%endif%}
-
-                    </div>
-                </div>
-                <div class="card-body p-0">
-                    <ul class="list-group" id="list">
-                    </ul>
+<section class="section-padding popular-course-slider pt-5">
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-lg-7">
+                <div class="section-heading center-heading">
+                    <h3>My Inbox</h3>
                 </div>
             </div>
         </div>
-        <div class="col-md-9">
 
-            {% if conversation is not None%}
-            <div class="card">
-                <div class="card-header container-fluid">
-                    <div class="row">
-                        <div class="col-md-5">
-                            <strong>
-                                {{conversation}}
-                            </strong>
 
-                            {% if conversation.course is not None%}
-                            ({{conversation.course}})
+        <div class="row">
+            <div class="col-md-4" id="conversation-panel">
+
+                <div class="blog-sidebar mt-5 mt-lg-0 mt-md-0">
+                
+                    <div class="widget widget_categories">
+                        <h4 class="widget-title">Courses</h4>
+                        <ul id="list">
+                          <li class="cat-item"><a href="#"><i class="fa fa-angle-right"></i>Web Design</a>(4)</li>
+                          <li class="cat-item"><a href="#"><i class="fa fa-angle-right"></i>Wordpress</a>(14)</li>
+                          <li class="cat-item"><a href="#"><i class="fa fa-angle-right"></i>Marketing</a>(24)</li>
+                          <li class="cat-item"><a href="#"><i class="fa fa-angle-right"></i>Design &amp; dev</a>(6)</li>
+                        </ul>
+                    </div>
+                
+                </div>
+
+            
+            </div>
+            <div class="col-md-9">
+    
+                {% if conversation is not None%}
+                <div class="card">
+                    <div class="card-header container-fluid">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <strong>
+                                    {{conversation}}
+                                </strong>
+    
+                                {% if conversation.course is not None%}
+                                ({{conversation.course}})
+                                {%endif%}
+                            </div>
+    
+                            {% if request.user.is_teacher == True%}
+                            <div class="col-md-7 text-sm-right">
+                                <button class="btn btn-info btn-sm" id="btn-members">
+                                    <i class="fa fa-users"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" pk="{{conversation.id}}" id="btn-delete-conversation">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+    
+                            </div>
                             {%endif%}
+    
                         </div>
-
-                        {% if request.user.is_teacher == True%}
-                        <div class="col-md-7 text-sm-right">
-                            <button class="btn btn-info btn-sm" id="btn-members">
-                                <i class="fa fa-users"></i>
-                            </button>
-                            <button class="btn btn-danger btn-sm" pk="{{conversation.id}}" id="btn-delete-conversation">
-                                <i class="fa fa-trash"></i>
-                            </button>
-
-                        </div>
-                        {%endif%}
-
+                    </div>
+                    <div class="card-body" id="conversation-list">
+    
+                    </div>
+                    <div class="card-footer">
+                        <form>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <input class="form-control" id="text-msg"></input>
+                                </div>
+                            </div>
+    
+                            <div class="form-group row">
+                                <div class="col-sm-10">
+                                    <button type="button" id="btn-send-msg" class="btn btn-primary btn-sm">Send</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class="card-body" id="conversation-list">
-
+                {%else%}
+                <div>
+                    <strong>
+                        No conversation selected
+                    </strong>
                 </div>
-                <div class="card-footer">
-                    <form>
-                        <div class="form-group row">
-                            <div class="col-sm-12">
-                                <input class="form-control" id="text-msg"></input>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-10">
-                                <button type="button" id="btn-send-msg" class="btn btn-primary btn-sm">Send</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                {%endif%}
+    
+    
             </div>
-            {%else%}
-            <div>
-                <strong>
-                    No conversation selected
-                </strong>
-            </div>
-            {%endif%}
-
-
         </div>
     </div>
+</section>
 
-</div>
+
+
 
 <div id="create-chat-modal" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">

@@ -249,7 +249,7 @@ class Attendance(models.Model):
 class Enrollments(models.Model):
 
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, related_name='course_enrolled', on_delete=models.CASCADE)
+        settings.AUTH_USER_MODEL, related_name='my_enrolled', on_delete=models.CASCADE)
     course = models.ForeignKey(Course, related_name='course_enrolled',
                                on_delete=models.CASCADE)
 

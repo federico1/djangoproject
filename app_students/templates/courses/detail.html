@@ -6,35 +6,77 @@
 
 {% block content %}
 
-    <div>
-        <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand ml-3" href="{% url 'student_dashboard' %}">EDUTIM</a>
 
-            <div class="row my-3">
-                <div class="col-md-8">
-                    <h3>{{ object.title }}</h3>
-                </div>
-                <div class="col-md-4 text-right">
-
-                    <a href="javascript:" class="btn btn-success link-talk-teacher">Talk to teacher
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link font-weight-bold" href="#">{{ object.title }}
+                        <span class="sr-only">(current)</span>
                     </a>
+                </li>
+                <li class="nav-item active dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
-                    {% if module != None and next_content != None  %}
 
-                        {% if next_content.type == 'quiz' %}
+                        Your Progress
+                        <i class="fa fa-angle-down"></i>
 
-                            <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}&type=quiz" class="btn btn-primary">Next Chapter (Quiz) >>
-                            </a>
 
-                        {% elif next_content.type == 'content' %}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">
+                            <div>
+                                <div class="d-flex justify-content-center" id="timer">
+                                    <h3 class="time-output" id="hours">00</h3>
+                                    <h3 class="colon" id="colon-one">:</h3>
+                                    <h3 class="time-output" id="minutes">00</h3>
+                                    <h3 class="colon" id="colon-two">:</h3>
+                                    <h3 class="time-output" id="seconds">00</h3>
+                                    <h3 class="time-end" id="end"></h3>
+                                </div>
+                            </div>
+                        </a>
+                        <a class="dropdown-item text-center" href="#">
+                            <div class="font-weight-bold" id="progressCompletedContents"></div>
+                        </a>
 
-                            <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}" class="btn btn-primary">Next Chapter >>
-                            </a>
+                    </div>
+                </li>
 
-                        {% endif %}
+
+            </ul>
+            <button class="btn btn-success link-talk-teacher" href="javascript:;">
+                Talk to OSHA Authorized Trainer</button>
+
+
+            <div class="mx-3">
+                {% if module != None and next_content != None %}
+
+                    {% if next_content.type == 'quiz' %}
+
+                        <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}&type=quiz" class="btn btn-primary">Next Chapter (Quiz) >>
+                        </a>
+
+                    {% elif next_content.type == 'content' %}
+
+                        <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}" class="btn btn-primary">Next Chapter >>
+                        </a>
 
                     {% endif %}
                 </div>
-            </div>
+
+            {% endif %}
+        </div>
+    </nav>
+
+    <div>
+        <div class="container-fluid mt-2">
+
 
             <div class="row">
                 <div class="col-md-4">
@@ -236,22 +278,6 @@
                         </div>
                     </div>
 
-                    <div class="row mb-5">
-                        <div class="col">
-                            <div class="d-flex justify-content-start" id="timer">
-                                <h3 class="time-output" id="hours">00</h3>
-                                <h3 class="colon" id="colon-one">:</h3>
-                                <h3 class="time-output" id="minutes">00</h3>
-                                <h3 class="colon" id="colon-two">:</h3>
-                                <h3 class="time-output" id="seconds">00</h3>
-                                <h3 class="time-end" id="end"></h3>
-                            </div>
-
-                        </div>
-                        <div class="col text-right">
-                            <h3 id="progressCompletedContents"></h3>
-                        </div>
-                    </div>
 
                 </div>
 
@@ -259,6 +285,337 @@
         </div>
     </div>
 
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h6 class="card-title text-justify mb-3">
+                            Please give your assessment about "{{ object }}" learning an event.
+                                                                                                                                                                                                                                                            Your thoughtful and objective response to each question is a highly valued part of
+                                                                                                                                                                                                                                                            NYC Construction Safety Training's facilitation and the learning continuous
+                                                                                                                                                                                                                                                            improvement
+                                                                                                                                                                                                                                                            process. Thank You.
+                        </h6>
+                        <form action="#" method="post" id="fmRating">
+
+                            <input type="hidden" name="course" value="{{ object.id }}"/>
+                            <input type="hidden" name="student" value="{{ student_id }}"/>
+
+                            <table class="table table-bordered text-center table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Strongly Disagree</th>
+                                        <th>Disagree Somewhat</th>
+                                        <th>Neutral</th>
+                                        <th>Agree Somewhat</th>
+                                        <th>Strongly Agreee</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <td>1</td>
+                                    <td>2</td>
+                                    <td>3</td>
+                                    <td>4</td>
+                                    <td>5</td>
+                                </tbody>
+                            </table>
+
+                            <table class="table table-striped" id="tblRatings">
+
+                                <tbody>
+                                    <tr title="The learning event meet my expectations">
+                                        <td>
+                                            The learning event meet my expectations.
+                                        </td>
+                                        <td>
+                                            <div class="number">1</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">2</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">3</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">4</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">5</div>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr title="The subject matter was well organized.">
+                                        <td>
+                                            The subject matter was well organized.
+                                        </td>
+                                        <td>
+                                            <div class="number">1</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">2</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">3</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">4</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">5</div>
+                                        </td>
+                                    </tr>
+
+                                    <tr title="The materials and handouts were helpful.">
+                                        <td>
+                                            The materials and handouts were helpful.
+                                        </td>
+                                        <td>
+                                            <div class="number">1</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">2</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">3</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">4</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">5</div>
+                                        </td>
+                                    </tr>
+
+                                    <tr title="The learning event achieved the defined learning outcomes.">
+                                        <td>
+                                            The learning event achieved the defined learning outcomes.
+                                        </td>
+                                        <td>
+                                            <div class="number">1</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">2</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">3</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">4</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">5</div>
+                                        </td>
+                                    </tr>
+
+                                    <tr title="I liked how the facilitators presented and delivered the content.">
+                                        <td>
+                                            I liked how the facilitators presented and delivered the content.
+                                        </td>
+                                        <td>
+                                            <div class="number">1</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">2</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">3</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">4</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">5</div>
+                                        </td>
+                                    </tr>
+
+                                    <tr title="The facilitators seemed knowledgeable about the subject matter.">
+                                        <td>
+                                            The facilitators seemed knowledgeable about the subject matter.
+                                        </td>
+                                        <td>
+                                            <div class="number">1</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">2</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">3</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">4</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">5</div>
+                                        </td>
+                                    </tr>
+
+                                    <tr title="The facilitators conveyed a positive and respectful attitude toward the participants.">
+                                        <td>
+                                            The facilitators conveyed a positive and respectful attitude toward
+                                                                                                                                                                                                                                                                                                                                                                                                                    the participants.
+                                        </td>
+                                        <td>
+                                            <div class="number">1</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">2</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">3</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">4</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">5</div>
+                                        </td>
+                                    </tr>
+
+                                    <tr title="I had the opportunity to provide feedback on how to apply my new skills on the job.">
+                                        <td>
+                                            I had the opportunity to provide feedback on how to apply my new
+                                                                                                                                                                                                                                                                                                                                                                                                                    skills on the job.
+                                        </td>
+                                        <td>
+                                            <div class="number">1</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">2</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">3</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">4</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">5</div>
+                                        </td>
+                                    </tr>
+
+                                    <tr title="I was given clear direction on how to implement my action items.">
+                                        <td>
+                                            I was given clear direction on how to implement my action items.
+                                        </td>
+                                        <td>
+                                            <div class="number">1</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">2</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">3</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">4</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">5</div>
+                                        </td>
+                                    </tr>
+
+                                    <tr title="I was provided with guidance and support to access training course.">
+                                        <td>
+                                            I was provided with guidance and support to access training course.
+                                        </td>
+                                        <td>
+                                            <div class="number">1</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">2</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">3</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">4</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">5</div>
+                                        </td>
+                                    </tr>
+
+                                    <tr title="The learning event met my learning style.">
+                                        <td>
+                                            The learning event met my learning style.
+                                        </td>
+                                        <td>
+                                            <div class="number">1</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">2</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">3</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">4</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">5</div>
+                                        </td>
+                                    </tr>
+
+                                    <tr title="The learning environment and facilities were appropriate for this event.">
+                                        <td>
+                                            The learning environment and facilities were appropriate for this
+                                                                                                                                                                                                                                                                                                                                                                                                                    event.
+                                        </td>
+                                        <td>
+                                            <div class="number">1</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">2</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">3</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">4</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">5</div>
+                                        </td>
+                                    </tr>
+
+                                    <tr title="I would recommend this learning event to my colleagues.">
+                                        <td>
+                                            I would recommend this learning event to my colleagues.
+                                        </td>
+                                        <td>
+                                            <div class="number">1</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">2</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">3</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">4</div>
+                                        </td>
+                                        <td>
+                                            <div class="number">5</div>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                        </form>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-success" id="btnSubmit">Submit Response</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
 
     <div id="chatModal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
@@ -279,54 +636,34 @@
                 </div>
                 <div class="modal-body">
 
-                    <form method="post" id="fmChat" action="{% url 'api_messages' %}">
+                    <div>
+                        <form method="post" id="fmChat" action="{% url 'api_messages' %}">
 
-                        {% csrf_token %}
+                            {% csrf_token %}
 
-                        <input type="hidden" name="sent" value="{{ request.user.id }}"/>
-                        <input type="hidden" name="conversation" value=""/>
+                            <input type="hidden" name="sent" value="{{ request.user.id }}"/>
+                            <input type="hidden" name="conversation" value=""/>
 
-                        <div class="row">
-                            <div class="col">
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" name="content" placeholder="send a message to {{ object.owner }}"/>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" type="submit">Send</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </form>
-
-
-                    <div class="row">
-                        <div class="col">
-
-                            <div class="msg_history">
-                                <div class="incoming_msg">
-                                    <div class="incoming_msg_img">
-                                        <img src="https://ptetutorials.com/images/user-profile.png" class="img-fluid" alt="sunil"/></div>
-                                    <div class="received_msg">
-                                        <div class="received_withd_msg">
-                                            <p>Test, which is a new approach to have</p>
-                                            <span class="time_date">
-                                                11:01 AM    |    Yesterday</span>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control bg-white" name="content" placeholder="send a message to {{ object.owner }}"/>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-success" type="submit">Send</button>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="outgoing_msg">
-                                    <div class="sent_msg">
-                                        <p>Test which is a new approach to have all
-                                                                                                                                                                        solutions</p>
-                                        <span class="time_date">
-                                            11:01 AM    |    June 9</span>
-                                    </div>
-                                </div>
                             </div>
 
+                        </form>
+                    </div>
 
+                    <div class="message-box">
+                        <p>loading ..</p>
+                        <div class="row">
+                            <div class="col">
+                                <div class="msg_history"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -335,6 +672,36 @@
         </div>
     </div>
 
+
+    {% verbatim %}
+        <script type="text/x-handlebars-template" id="msgRcvItemTemplate">
+            <div class="incoming_msg msg-item" data-id="{{ id }}">
+                <div class="incoming_msg_img">
+                    <img src="{{ sent.image }}" class="img-fluid" alt="{{ sent.first_name }}"/></div>
+                <div class="received_msg">
+                    <div class="received_withd_msg">
+                        <p>{{ content }}</p>
+                        <span class="time_date">
+                            {{ sent.first_name }} -  {{ time }}</span>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <script type="text/x-handlebars-template" id="msgSentItemTemplate">
+            <div class="outgoing_msg msg-item" data-id="{{ id }}">
+                <div class="sent_msg">
+                    <p>{{ content }}</p>
+                    <span class="time_date">
+                        {{ sent.first_name }}
+                        -
+                        {{ time }}
+                    </span>
+                </div>
+            </div>
+        </script>
+
+    {% endverbatim %}
 
 {% endblock %}
 
@@ -387,6 +754,7 @@
         .msg_history {
             min-height: 400px;
             overflow-y: auto;
+            padding: 25px;
         }
 
         .msg_history .incoming_msg_img {
@@ -440,6 +808,22 @@
             float: right;
             width: 46%;
         }
+
+        #chatModal .modal-dialog {
+            height: 100%;
+        }
+        #chatModal .modal-content {
+            height: 90%;
+        }
+        #chatModal .modal-body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #chatModal .message-box {
+            height: 100%;
+            overflow: scroll;
+        }
     </style>
 
     <link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet"/>
@@ -449,6 +833,8 @@
     <script type="application/javascript">
 
         (function ($) {
+
+            $("header").hide();
 
             $.CourseDetailManager = function (options) {
                 var that = this;
@@ -694,9 +1080,13 @@
 
                 var that = this;
 
+                var messagesList = [];
+
                 var settings = $.extend({}, options);
 
                 var getMessages = function () {
+
+                    $(".message-box p").eq(0).html('Loading messages');
 
                     var cId = $("#fmChat input[name='conversation']").val();
 
@@ -704,7 +1094,8 @@
                         conversation: cId,
                         type: 'last10'
                     }, function (response) {
-                        console.log(response);
+                        messagesList = response;
+                        drawAllMessages();
                     });
                 };
 
@@ -713,7 +1104,8 @@
                     var data = {
                         course: '{{ object.id }}',
                         title:'{{ object.title }}',
-                        teacher:'{{ object.owner.id }}'
+                        teacher:'{{ object.owner.id }}',
+                        student:'{{ request.user.id }}'
                     };
 
                     $.ajax({
@@ -743,17 +1135,50 @@
                     $("#fmChat").ajaxForm({
                         beforeSend: function () {
                             $("#fmChat input, button").attr('disabled', true);
+                            $(".message-box p").eq(0).html('Sending');
                         },
                         success: function (response) {
-                            $("#fmChat input, button").attr('disabled', false);
+
                             $("#fmChat input[name='content']").val(null);
+
+                            $(".message-box p").eq(0).html('Sent');
+
                             getMessages();
                         },
-                        complete: function (xhr) {
-                            $("#fmChat input, button").attr('disabled', false);
+                        complete: function (xhr) { // $("#fmChat input, button").attr('disabled', false);
                         }
                     });
 
+                };
+
+                var drawAllMessages = function () {
+
+                    $(messagesList).each(function (index, item) {
+
+                        var messageItem = $(".msg-item[data-id='" + item.id + "']");
+
+                        if (messageItem.length <= 0) {
+                            var source = document.getElementById("msgRcvItemTemplate").innerHTML;
+
+                            if (item.sent.id == '{{ request.user.id }}') {
+                                source = document.getElementById("msgSentItemTemplate").innerHTML;
+                            }
+
+                            var template = Handlebars.compile(source);
+
+                            item.time = moment(item.created).calendar();
+                            $(".msg_history").append(template(item));
+                        }
+
+                    });
+
+                    $("#fmChat input, button").attr('disabled', false);
+
+                    $(".message-box p").eq(0).html('');
+
+                    setTimeout(function () {
+                        $('.message-box').scrollTop($('.message-box')[0].scrollHeight);
+                    }, 1000);
 
                 };
 
