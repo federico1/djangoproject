@@ -14,6 +14,8 @@ router = routers.DefaultRouter()
 router.register(r'courses', course_views.CourseViewset, basename="course")
 router.register(r'course-enrollment',
                 course_views.EnrollmentViewset, "enrollment"),
+router.register(r'course-assess-rating',
+                course_views.CourseRatingViewSet),
 
 urlpatterns = [
     #url(r'^', include(router.urls)),
@@ -49,7 +51,7 @@ urlpatterns = [
     path('course-features/', course_views.CourseFeatureApiView.as_view()),
     path('course-features/<int:pk>/', course_views.CourseFeatureApiView.as_view()),
     path('course-evaluation/', course_views.CourseEvaluationApiView.as_view()),
-    path('course-assess-rating/', course_views.CourseRatingApiView.as_view()),
+    #path('course-assess-rating/', course_views.CourseRatingApiView.as_view(), name='api_course_assess_rating'),
     path('course-price/<int:pk>/', course_views.CoursePriceApiView.as_view()),
     path('course-image/<int:pk>/', course_views.CourseImageApiView.as_view()),
     path('course-video/<int:pk>/', course_views.CourseVideoApiView.as_view()),
@@ -80,6 +82,7 @@ urlpatterns = [
 
     path('conversations/', chat_views.ConversationDetailView.as_view(), name='api_conversations'),
     path('messages/', chat_views.MessageList.as_view(),name='api_messages'),
+
 #     path('conversations/<int:pk>/', views.ConversationDetailView.as_view()),
 #     path('conversation-members/', views.ConversationMembersList.as_view()),
 #     path('conversation-members/<int:pk>/',

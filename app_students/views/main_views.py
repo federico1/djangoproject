@@ -99,7 +99,9 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
 
         course = self.get_object()
 
-        if not course.course_enrolled.filter(user=student).exists():
+        enrollment = course.course_enrolled.filter(user=student)
+
+        if not enrollment.exists():
             context['not_found'] = True
             return context
 
@@ -110,6 +112,7 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
         context['active_content'] = None
         context['next_content'] = None
         context['content_completed'] = True
+        context['enrollment'] = enrollment.first()
 
         course_details = []
         modules_list = course.modules.all().order_by('order')

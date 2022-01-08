@@ -80,7 +80,7 @@ class CourseTimeLogDetailView(APIView):
 
         snippets = CourseTimeLog.objects.filter(
             user=request.user, course_id=course_id)
-            
+
         serializer = course_serializers.CourseTimeLogSerializer(
             snippets, many=True)
 
@@ -162,12 +162,12 @@ class EnrollmentViewset(viewsets.ViewSet):
         if request.user.is_authenticated and request.user.is_student == True and serializer.is_valid():
 
             if not Enrollments.objects.filter(course=request.data['course'], user=self.request.user).exists():
-               
+
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.data, status=status.HTTP_226_IM_USED)
-        
+
         serializer.is_valid()
 
         return Response(serializer.errors, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
@@ -289,22 +289,6 @@ class UpdateQuizApiView(APIView):
         return Response(result)
 
 
-@api_view(['GET', 'POST'])
-def UpdateHasProgress(request):
-
-    result = 0
-    message = ""
-
-    if request.method == 'POST':
-        content = Content.objects.get(pk=request.data['id'])
-        content.has_progress = request.data['progress']
-
-        content.save()
-        result = 1
-
-    return Response({"message": message, "result": result})
-
-
 class CourseEvaluationApiView(APIView):
 
     def get(self, request, format=None):
@@ -325,21 +309,70 @@ class CourseEvaluationApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CourseRatingApiView(APIView):
+# class CourseRatingApiView(APIView):
 
-    def get(self, request, format=None):
-        snippets = AssessRating.objects.all()
-        serializer = course_serializers.RatingSerializer(snippets, many=True)
-        return Response(serializer.data)
+#     def get(self, request, format=None):
+#         snippets = AssessRating.objects.all()
+#         serializer = course_serializers.RatingSerializer(snippets, many=True)
+#         return Response(serializer.data)
 
-    def post(self, request, format=None):
-        serializer = course_serializers.RatingSerializer(
-            data=request.data, many=True)
+#     def post(self, request, format=None):
+#         serializer = course_serializers.RatingSerializer(
+#             data=request.data, many=True)
 
-        if serializer.is_valid():
+#         if serializer.is_valid():
 
-            serializer.save()
+#             serializer.save()
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#     @action(detail=True, methods=['post'])
+#     def is_rated(self, request):
+#         return Response(True)
+
+class CourseRatingViewSet(viewsets.ModelViewSet):
+
+    queryset = AssessRating.objects.all()
+    serializer_class = course_serializers.RatingSerializer
+
+    def create(self, request, *args, **kwargs):
+       
+        data = request.data
+        if isinstance(data, list):
+            serializer = self.get_serializer(data=request.data, many=True)
+        else:
+            serializer = self.get_serializer(data=request.data)
+            
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED,
+                    headers=headers)
+
+    @action(detail=False, methods=['get'])
+    def is_rated(self, request):
+
+        course = request.GET["course"]
+        user = request.GET["user"]
+        is_course_rated = AssessRating.objects.filter(course=course, student=user).exists()
+
+        return Response(is_course_rated,
+                            status=status.HTTP_200_OK)
+
+
+@api_view(['GET', 'POST'])
+def UpdateHasProgress(request):
+
+    result = 0
+    message = ""
+
+    if request.method == 'POST':
+        content = Content.objects.get(pk=request.data['id'])
+        content.has_progress = request.data['progress']
+
+        content.save()
+        result = 1
+
+    return Response({"message": message, "result": result})
