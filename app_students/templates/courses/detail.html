@@ -42,8 +42,6 @@
                         </a>
                     </div>
                 </li>
-
-
             </ul>
             <button class="btn btn-success link-talk-teacher" href="javascript:;">
                 Talk to a trainer</button>
@@ -63,11 +61,23 @@
                         </a>
 
                     {% endif %}
-                </div>
 
-            {% endif %}
+                {% endif %}
+
+                {% if module == None %}
+
+                    <a href="javascript:;" class="btn btn-primary link-start-course">
+                        Start Course >>
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+
         </div>
     </nav>
+
 
     <div>
         <div class="container-fluid mt-2">
@@ -464,7 +474,7 @@
                                 <tr title="The facilitators conveyed a positive and respectful attitude toward the participants.">
                                     <td>
                                         The facilitators conveyed a positive and respectful attitude toward
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    the participants.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        the participants.
                                     </td>
                                     <td>
                                         <div class="number">1</div>
@@ -486,7 +496,7 @@
                                 <tr title="I had the opportunity to provide feedback on how to apply my new skills on the job.">
                                     <td>
                                         I had the opportunity to provide feedback on how to apply my new
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    skills on the job.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        skills on the job.
                                     </td>
                                     <td>
                                         <div class="number">1</div>
@@ -571,7 +581,7 @@
                                 <tr title="The learning environment and facilities were appropriate for this event.">
                                     <td>
                                         The learning environment and facilities were appropriate for this
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    event.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        event.
                                     </td>
                                     <td>
                                         <div class="number">1</div>
@@ -713,7 +723,6 @@
         </script>
 
     {% endverbatim %}
-
 {% endblock %}
 
 {% block scripts %}
@@ -917,6 +926,20 @@
 
 
                 var registerEvent = function () {
+
+                    $("div").on("click", '.link-start-course', function (e) {
+                        e.stopPropagation();
+
+                        var link = $(".content-item.complete a").last();
+
+                        if (link.length > 0) {
+                            link[0].click();
+                        }
+                        else{
+                            $(".content-item.active a").eq(0)[0].click();
+                        }
+                    });
+
                     $('.collapse').on('shown.bs.collapse', function () {
                         var id = $(this).attr('id');
                         var link = $("a[data-target='#" + id + "']");
@@ -930,6 +953,7 @@
                         link.find("i").removeClass('fa-angle-down').addClass('fa-angle-right');
 
                     });
+
 
                 };
 
