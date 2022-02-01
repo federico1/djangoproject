@@ -259,6 +259,10 @@ class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
                 ' ' + student.last_name
             completed_date = enrolled.last().completed_date
             context['completed_date'] = completed_date.strftime('%m/%d/%Y')
+        
+        context['credits'] = course.features.first().credits
+
+        print(context['credits'])
 
         context['sign_image'] = '/static/cert-files/image002.png'
         return context
