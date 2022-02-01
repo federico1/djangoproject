@@ -260,7 +260,9 @@ class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
             completed_date = enrolled.last().completed_date
             context['completed_date'] = completed_date.strftime('%m/%d/%Y')
         
-        context['credits'] = course.features.first().credits
+        credits = course.features.first().credits
+
+        context['credits'] = credits if credits is not None else ''
 
         print(context['credits'])
 
