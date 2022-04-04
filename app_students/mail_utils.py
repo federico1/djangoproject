@@ -14,8 +14,8 @@ def send_welcome_mail(form_data):
         "registration/_mail_signup_confirm.html").render(ctx)
 
     send_mail(
-        subject='Your account at NYC Construction Safety Training, LLC',
-        message="Welcome to NYC Construction Safety Training, LLC!",
+        subject='Your account at Construction Safety Training, LLC',
+        message="Welcome to Construction Safety Training, LLC!",
         html_message=html_message,
         from_email='mail@pdhsafety.com',
         recipient_list=[form_data['email']],
