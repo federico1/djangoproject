@@ -149,7 +149,7 @@
 {% endblock %}
 {% block scripts %}
 
-    <script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID' %}"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID_SANDBOX' %}"></script>
 
 
     <script>
@@ -219,7 +219,6 @@
                     Swal.close();
 
                 };
-
 
                 var setPaypal = function () {
 
