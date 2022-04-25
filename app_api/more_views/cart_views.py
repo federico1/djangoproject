@@ -1,13 +1,12 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view
-from django.http import Http404
+from django.http import Http404, JsonResponse
 
 from app_cart.models import Order, Package, PackageCourse
 from app_api.more_serializers.cart_serializers import OrderSerializer, PackageSerializer, PackageCourseSerializer
 
-from django.utils.timezone import localtime, now
+import json
 
 
 class OrderApiView(APIView):
@@ -100,9 +99,10 @@ class PackageCourseApiView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = PackageCourseSerializer(data=request.data)
-
+        dataArray = request.POST['tasks']  
+        serializer = PackageCourseSerializer(data=json.loads(dataArray), many=True)
         if serializer.is_valid():
+            print(serializer.data)
             serializer.save()
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)

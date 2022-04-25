@@ -56,6 +56,8 @@ class PackageCourseSerializer(serializers.ModelSerializer):
         model = PackageCourse
         fields = ('id', 'course', 'package', 'course_id')
 
+
+
     def to_representation(self, instance):
         self.fields['course'] = CourseCoreSerializer(read_only=True)
         return super(PackageCourseSerializer, self).to_representation(instance)

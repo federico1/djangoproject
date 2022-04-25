@@ -39,7 +39,7 @@
 
 <div id="coursesModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
 
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="myModalLabel">
@@ -56,9 +56,11 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-5">
                         <button class="btn btn-success" id="btnAddCourse">Add Course</button>
+                        <button class="btn btn-success" id="btnAddAllCourses">Add All Courses</button>
                     </div>
+
                 </div>
 
                 <div class="row" id="coursesList">
@@ -281,7 +283,9 @@
 
                 $("#coursesList").html('Loading');
 
-               var packageId = $("#coursesModal").attr('data-id');
+                $("#coursesModal button").attr('disabled', true);
+
+                var packageId = $("#coursesModal").attr('data-id');
 
                 var parms = {
                     format: 'json',
@@ -307,6 +311,8 @@
 
                     $("#coursesList").append(template(item));
                 });
+
+                $("#coursesModal button").attr('disabled', false);
             };
 
             var saveCourse = function (data) {
@@ -421,9 +427,9 @@
                     var course_id = $("select[name='course_id']").val();
                     var package_id = $("#coursesModal").attr('data-id');
 
-                    var courseCount = packageCourses.filter(a=>a.course.id == course_id).length;
+                    var courseCount = packageCourses.filter(a => a.course.id == course_id).length;
 
-                    if(courseCount>0){
+                    if (courseCount > 0) {
                         toastr.warning('Course already added');
                         return;
                     }
@@ -432,15 +438,40 @@
                         course: course_id, package: package_id
                     };
 
+                    data = {
+                        'tasks': JSON.stringify([data])
+                    };
+
                     saveCourse(data);
                 });
 
-                $("div").on("click", ".link-remove-course", function(e) {
+                $("div").on("click", "#btnAddAllCourses", function (e) {
+                    e.stopPropagation();
+                    var tasks = [];
+                    var package_id = $("#coursesModal").attr('data-id');
+
+                    $(coursesList).each(function (ix, item) {
+                        var course_id = item.id;
+                        var courseCount = packageCourses.filter(a => a.course.id == course_id).length;
+                        if (courseCount <= 0) {
+                            tasks.push({course: course_id, package: package_id})
+                        }
+                    });
+                  
+                    data = {
+                        'tasks': JSON.stringify(tasks)
+                    };
+
+                    saveCourse(data);
+                });
+
+
+                $("div").on("click", ".link-remove-course", function (e) {
                     e.stopPropagation();
                     var id = $(this).attr('data-id');
                     if (!id) return;
 
-                    bootbox.confirm("Are you sure! You want to delete this course?", function(result) {
+                    bootbox.confirm("Are you sure! You want to delete this course?", function (result) {
 
                         if (result) {
                             deletePackageCourse(id);
