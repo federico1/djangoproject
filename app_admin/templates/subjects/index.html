@@ -1,0 +1,345 @@
+{% extends "admin_base.html" %}
+{% block title %} - Subjects {% endblock %}
+
+{% block content %}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Subjects</h6>
+        <div class="dropdown no-arrow">
+            <!-- <button type="button" class="btn btn-success btn-sm link-new-package"> <i class="fa fa-plus"></i> ADD
+                NEW</button> -->
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="listTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Courses</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="formModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+
+    </div>
+</div><!-- /.modal -->
+
+
+{% verbatim %}
+<script type="text/x-handlebars-template" id='listItemTemplate'>
+
+    <tr id="{{id}}">
+        <td>{{id}}</td>
+        <td> {{title}} </td>
+        <td> {{course_count}} </td>
+        <td>
+            <a href="javascript:;" class="btn btn-info btn-sm link-edit" data-id="{{id}}">Edit</a>
+            <a href="javascript:;" class="btn btn-info btn-sm link-courses" data-id="{{id}}">Manage Courses</a>
+            <a href="javascript:;" class="btn btn-danger btn-sm link-delete" data-id="{{id}}">Delete</a>
+        </td>
+    </tr>
+</script>
+
+<script type="text/x-handlebars-template" id='formTemplate'>
+    <div class="modal-content ">
+        <div class="modal-header">
+            <h5 class="modal-title" id="myModalLabel">
+                {{#ifCond id '>' 0}}
+                <span>Update Subject</span>
+                {{else}}
+                <span>New Subject</span>
+                {{/ifCond}}
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body">
+            <form id="fmEntity" action="/api/subjects/">
+
+                <input type="hidden" name="id" value="{{id}}">
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group mb-4">
+                            <label for="">Name*</label>
+                            <input type="text" class="form-control form-control-sm" name="title" autocomplete="on"
+                                value="{{title}}">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group mb-4">
+                            <label for="">Slug*</label>
+                            <input type="text" class="form-control form-control-sm" name="slug" value="{{slug}}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group mb-4">
+                            <label for="">Page Heading*</label>
+                            <input type="text" class="form-control form-control-sm" name="page_title" autocomplete="on"
+                                value="{{page_title}}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group mb-4">
+                            <label for="">Page Description</label>
+                            <textarea class="form-control form-control-sm" name="page_details"
+                                >
+                                {{page_details}}
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group mb-4">
+                            <label for="">Meta Title</label>
+                            <input type="text" class="form-control form-control-sm" name="meta_title"
+                                value="{{meta_title}}">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group mb-4">
+                            <label for="">Meta Tags</label>
+                            <input type="text" class="form-control form-control-sm" name="meta_tags"
+                                value="{{meta_tags}}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group mb-4">
+                            <label for="">Meta Description</label>
+                            <input type="text" class="form-control form-control-sm" name="meta_description"
+                                value="{{meta_description}}">
+                        </div>
+                    </div>
+                </div>
+               
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary waves-effect waves-light" id="btnSave">Save changes</button>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id='courseItemTemplate'>
+    <div class="col-md-6 mb-1">
+        <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center plan-sound" id="{{id}}">
+            {{course.title}}
+            <a href="javascript:;" class="badge badge-danger badge-pill link-remove-course" data-id="{{id}}">
+                Remove</a>
+        </li>
+    </ul>
+    </div>
+</script>
+
+{% endverbatim %}
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    (function ($) {
+
+        Handlebars.registerHelper("date", function (options) {
+            return new Handlebars.SafeString(moment(this.created).format('LL'));
+        });
+
+        $.PackagesManager = function (options) {
+
+            var that = this;
+
+            var packagesList = [];
+            var coursesList = [];
+            var packageCourses = [];
+
+            var dataTableObject;
+
+            var csrfToken = "{% csrf_token %}";
+
+            var settings = $.extend({}, options);
+
+            var getList = function () {
+                var parms = {
+                    format: 'json',
+                    version: new Date().toISOString()
+                };
+
+                $.get('/api/subjects/', parms, function (response) {
+                    packagesList = response;
+                    drawList();
+                });
+            };
+
+            var drawList = function () {
+
+
+                if (dataTableObject) {
+                    dataTableObject.destroy();
+                }
+
+                $("#listTable tbody").empty();
+
+                $(packagesList).each(function (index, item) {
+
+                    var source = document.getElementById("listItemTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+                    $("#listTable tbody").append(template(item));
+
+                });
+
+                dataTableObject = $("#listTable").DataTable();
+
+                dataTableObject.order([
+                    [0, 'asc']
+                ]).draw();
+
+            };
+
+            var validateForm = function () {
+                $("#fmEntity").validate({
+                    rules: {
+                        title: {
+                            required: true,
+                        },
+                        slug: {
+                            required: true,
+                        }
+                    },
+                });
+            };
+
+            var saveSubject = function () {
+
+                var r = $("#fmEntity").valid();
+                if (!r) return r;
+
+                $("#fmEntity button").attr('disabled', true);
+
+                var data = $("#fmEntity").serializeObject();
+
+                $.ajax({
+                    type: data.id > 0 ? "PUT" : "POST",
+                    url: "/api/subjects/",
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (response, textStatus, xhr) {
+                    },
+                    complete: function (xhr, textStatus) {
+                        if (xhr.status == 200) {
+                            getList();
+                            $("#formModal").modal('hide');
+                            toastr.success('Subject has been saved');
+                        }
+                        else {
+                            toastr.success('Subject failed to saved. Please try again or reload the page.');
+                        }
+                        $("#fmEntity button").attr('disabled', false);
+                    },
+                    failure: function (errMsg) {
+                        $("#formModal").modal('hide');
+                        toastr.success(errMsg);
+                        $("#fmEntity button").attr('disabled', false);
+
+                    }
+                });
+
+            };
+
+            var registerEvent = function () {
+
+                $("div").on("click", "#btnSave", function (e) {
+                    e.stopPropagation();
+
+                    saveSubject();
+                });
+
+                $("div").on("click", ".link-edit", function (e) {
+                    e.stopPropagation();
+
+                    var id = $(this).attr('data-id');
+
+                    var item = packagesList.find(a => a.id == id);
+
+                    var source = document.getElementById("formTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+
+                    $("#formModal .modal-dialog").html(template(item));
+
+                    $("#formModal").modal({
+                        'show': true,
+                        'backdrop': 'static'
+                    });
+
+                });
+
+                $("div").on("click", ".link-delete", function (e) {
+                    e.stopPropagation();
+                    var id = $(this).attr('data-id');
+                    if (!id) return;
+
+                    bootbox.confirm("Are you sure! You want to delete this plan?", function (result) {
+
+                        if (result) {
+                            deletePackage(id);
+                        }
+                    });
+
+                });
+
+                $('#formModal').on('shown.bs.modal', function (e) {
+                    validateForm();
+                    $('#formModal form').append(csrfToken);
+                    $("#formModal textarea").each(function () {
+                        $(this).val($.trim($(this).val()));
+                    });
+                });
+
+            };
+
+            var init = function () {
+                registerEvent();
+                getList();
+            };
+
+            init();
+
+            return this;
+
+        };
+
+    }(jQuery));
+
+    $(document).ready(function () {
+        var packageManager = new $.PackagesManager({});
+    });
+</script>
+
+{% endblock %}

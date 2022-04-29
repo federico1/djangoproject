@@ -13,6 +13,11 @@ from students.models import Quiz
 class Subject(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
+    page_title = models.TextField(default=None, null=True, blank=True)
+    page_details = models.TextField(default=None, null=True, blank=True)
+    meta_title = models.TextField(default=None, null=True, blank=True)
+    meta_tags = models.TextField(default=None, null=True, blank=True)
+    meta_description = models.TextField(default=None, null=True, blank=True)
 
     class Meta:
         ordering = ['title']

@@ -11,7 +11,7 @@ class SubjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Subject
-        fields = ['id', 'title', 'slug', 'course_count']
+        fields = ['id', 'title', 'slug', 'course_count', 'page_title', 'page_details', 'meta_title', 'meta_tags', 'meta_description']
     
     def get_course_count(self, obj):
         return obj.courses.count()

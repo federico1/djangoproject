@@ -140,7 +140,11 @@
                 <i class="fas fa-shopping-bag fa-fw mr-2"></i> Packages
               </a>
             </li>
-
+            <li class="nav-item">
+              <a class="nav-link text-dark" href="{% url 'admin_subjects' %}">
+                <i class="fas fa-shopping-bag fa-fw mr-2"></i> Subjects
+              </a>
+            </li>
           </ul>
 
           <!-- Topbar Navbar -->
@@ -229,6 +233,29 @@
 
   <script>
 
+(function ($) {
+        $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+
+            $.each(a, function () {
+
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+
+            return o;
+        };
+
+    })(jQuery);
+    
     Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
 
       switch (operator) {

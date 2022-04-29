@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import general, students, packages
+from .views import general, students, packages, subjects
 # from views.students import StudentsView
 # from django.conf import settings
 
@@ -22,4 +22,7 @@ urlpatterns = [
     path('packages',
          packages.IndexView.as_view(),
          name='admin_packages'),
+    path('subjects',
+         subjects.IndexView.as_view(),
+         name='admin_subjects'),
 ]
