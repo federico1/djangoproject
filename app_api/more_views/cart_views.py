@@ -120,7 +120,7 @@ class PackageCourseApiView(APIView):
 class PackageSubjectApiView(APIView):
 
     def post(self, request, format=None):
-        packageId = request.POST['package']  
+        packageId = int(request.POST['package'])  
         subjectId = int(request.POST['subject'])
         method = request.POST['method']
         result = 0
