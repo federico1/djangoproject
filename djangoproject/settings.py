@@ -37,7 +37,7 @@ DATABASES = {
 }
 
 
-ALLOWED_HOSTS = ['127.0.0.1', '18.219.91.250', 'pdhsafety.com']
+ALLOWED_HOSTS = ['127.0.0.1', '18.219.91.250', 'pdhsafety.com', 'www.pdhsafety.com']
 
 # '18.221.173.7','127.0.0.1:8000'
 

@@ -71,6 +71,24 @@
     </div>
 </div><!-- /.modal -->
 
+<div id="subjectsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">
+                    Subjects
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="subjectList"></div>
+            </div>
+
+        </div>
+    </div>
+</div><!-- /.modal -->
+
 {% verbatim %}
 <script type="text/x-handlebars-template" id='listItemTemplate'>
 
@@ -84,6 +102,7 @@
         <td>
             <a href="javascript:;" class="btn btn-info btn-sm link-edit" data-id="{{id}}">Edit</a>
             <a href="javascript:;" class="btn btn-info btn-sm link-courses" data-id="{{id}}">Manage Courses</a>
+            <a href="javascript:;" class="btn btn-info btn-sm link-subjects" data-id="{{id}}">Manage Subjects</a>
             <a href="javascript:;" class="btn btn-danger btn-sm link-delete" data-id="{{id}}">Delete</a>
         </td>
     </tr>
@@ -141,6 +160,17 @@
                 Remove</a>
         </li>
     </ul>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id='subjectItemTemplate'>
+    <div class="col-md-3 mb-1">
+        <div class="form-check">
+            <input class="form-check-input chk-subject" type="checkbox" value="" id="{{id}}">
+            <label class="form-check-label" for="{{id}}">
+             {{title}}
+            </label>
+          </div>
     </div>
 </script>
 
@@ -351,6 +381,52 @@
                 });
             };
 
+            var getSubjects = function () {
+                $.get('/api/subjects/', { format: 'json' }, function (response) {
+
+                    $("#subjectList").empty();
+
+                    $(response).each(function (ix, item) {
+                        var source = document.getElementById("subjectItemTemplate").innerHTML;
+                        var template = Handlebars.compile(source);
+                        $("#subjectList").append(template(item));
+                    });
+
+
+                });
+            };
+
+            var getPackageSubjects = function () {
+                var packageId = $("#subjectsModal").attr('data-id');
+            };
+
+            var savePackageSubject = function (data) {
+
+                $('#subjectsModal input').prop('disabled', true);
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/package-subjects/",
+                    data: data,
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (response) {
+                        toastr.success('Subject is added.', 'Success!');
+                        $('#subjectsModal input').prop('disabled', false);
+                        var package = packagesList.find(a => a.id == data.package);
+                        if (data.method == 'add') {
+                            package.subjects.push(data.subject);
+                        }
+                        else {
+                            package.subjects = package.subjects.filter(value => value !== data.subject);
+                        }
+                    },
+                    failure: function (errMsg) {
+                    }
+                });
+            };
+
             var registerEvent = function () {
 
                 $("div").on("click", ".link-new-package", function (e) {
@@ -454,17 +530,16 @@
                         var course_id = item.id;
                         var courseCount = packageCourses.filter(a => a.course.id == course_id).length;
                         if (courseCount <= 0) {
-                            tasks.push({course: course_id, package: package_id})
+                            tasks.push({ course: course_id, package: package_id })
                         }
                     });
-                  
+
                     data = {
                         'tasks': JSON.stringify(tasks)
                     };
 
                     saveCourse(data);
                 });
-
 
                 $("div").on("click", ".link-remove-course", function (e) {
                     e.stopPropagation();
@@ -480,10 +555,40 @@
 
                 });
 
+                $("div").on("click", ".link-subjects", function (e) {
+                    e.stopPropagation();
+                    var id = $(this).attr('data-id');
+                    if (!id) return;
+
+                    $("#subjectsModal").attr('data-id', id);
+                    $("#subjectsModal").modal('show');
+                });
+
+                $("div").on("change", ".chk-subject", function (e) {
+                    e.stopPropagation();
+                    var id = $(this).attr('id');
+                    if (!id) return;
+
+                    var pkgId = $("#subjectsModal").attr('data-id');
+                    var checked = $(this).is(":checked");
+                    var data = { subject: id, package: pkgId, method: checked ? "add" : 'delete' }
+                    savePackageSubject(data);
+                });
+
                 $('#formModal').on('shown.bs.modal', function (e) {
                     initForm();
                     validateForm();
                     $('#formModal form').append(csrfToken);
+                });
+
+                $('#subjectsModal').on('shown.bs.modal', function (e) {
+                    $('#subjectsModal input').prop('checked', false);
+                    var pkgId = $("#subjectsModal").attr('data-id');
+                    var package = packagesList.find(a => a.id == pkgId);
+
+                    $(package.subjects).each(function (ix, item) {
+                        $('#subjectsModal input#' + item).prop('checked', true);
+                    });
                 });
 
             };
@@ -492,6 +597,7 @@
                 registerEvent();
                 getList();
                 getCourses();
+                getSubjects();
             };
 
             init();

@@ -40,6 +40,19 @@ classes and get certificate today. We provides bulk discounts. Learn Now!
 <section class="section-padding course">
     <div class="course-top-wrap">
         <div class="container">
+
+            {% if subject.page_details %}
+            <div class="row mb-5">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <p>{{subject.page_details}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
             <div class="row align-items-center">
                 <div class="col-lg-8">
                     <p>Showing
@@ -158,26 +171,63 @@ classes and get certificate today. We provides bulk discounts. Learn Now!
                     </div>
                 </div>
 
-
             </div>
             {% endwith %}
             {% endfor %}
-        </div>
-        {% if subject.page_details %}
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <p>{{subject.page_details}}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endif %}
+        </div>    
     </div>
 
 </section>
 
+{% if subject and subject.package_set.count > 0 %}
+<section class="team section-padding bg-grey mb-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-12">
+                <div class="section-heading">
+                    <h3>Buy Packages/Bundles for these courses</h3>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            {% for item in subject.package_set.all %}
+            <div class="col-md-6">
+                <div class="card border-0 mb-4 shadow">
+                    <div class="card-header bg-primary">
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="my-0 font-weight-normal text-white">{{ item.name }}</h4>
+                            </div>
+                            <div class="col">
+                                <h4 class="my-0 text-right text-white">${{ item.price }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="text-center">Courses</h3>
+                        <div class="text-center mb-2">
+                            <ul class="list-unstyled" style="max-height: 150px;overflow: hidden auto;">
+                                
+                                {% for cs in item.courses.all %}
+                                <li>{{ cs.course }}</li>
+                                {% endfor %}
+                           
+                            </ul>
+                        </div>
+            
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="/package-buy/{{ item.id }}/" class="btn btn-success">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
 
 {% endblock %}
 

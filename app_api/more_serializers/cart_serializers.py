@@ -68,6 +68,6 @@ class PackageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Package
-        fields = ('id', 'name', 'price', 'sort_order', 'created', 'is_deleted', 'courses')
+        fields = ('id', 'name', 'price', 'sort_order', 'created', 'is_deleted', 'courses','subjects')
 
 

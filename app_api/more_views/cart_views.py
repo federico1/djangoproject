@@ -1,9 +1,11 @@
+from unittest import result
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404, JsonResponse
 
 from app_cart.models import Order, Package, PackageCourse
+from courses.models import Subject
 from app_api.more_serializers.cart_serializers import OrderSerializer, PackageSerializer, PackageCourseSerializer
 
 import json
@@ -113,3 +115,25 @@ class PackageCourseApiView(APIView):
         snippet = self.get_object(pk)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class PackageSubjectApiView(APIView):
+
+    def post(self, request, format=None):
+        packageId = request.POST['package']  
+        subjectId = int(request.POST['subject'])
+        method = request.POST['method']
+        result = 0
+        print(subjectId)
+        packageObject = Package.objects.get(pk=9)
+        
+        if method == 'add':
+            packageObject.subjects.add(subjectId)
+            result = 1
+        else:
+             packageObject.subjects.remove(subjectId)
+             result = 1
+       
+        return Response(result, status=status.HTTP_201_CREATED)
+
+        #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
