@@ -125,7 +125,7 @@ class PackageSubjectApiView(APIView):
         method = request.POST['method']
         result = 0
         print(subjectId)
-        packageObject = Package.objects.get(pk=9)
+        packageObject = Package.objects.get(pk=packageId)
         
         if method == 'add':
             packageObject.subjects.add(subjectId)
