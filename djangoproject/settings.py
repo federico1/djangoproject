@@ -18,7 +18,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, 'external.env'))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'xmo&z@u0(dfbq!w(dl_0a^f(s9ukugs%id3)i(ei=$oxg%ir80'
 
-DEBUG = True
+DEBUG = True #env('DEBUG')
 
 # DATABASES = {
 #     'default': {
