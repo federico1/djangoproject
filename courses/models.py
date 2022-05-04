@@ -18,6 +18,7 @@ class Subject(models.Model):
     meta_title = models.TextField(default=None, null=True, blank=True)
     meta_tags = models.TextField(default=None, null=True, blank=True)
     meta_description = models.TextField(default=None, null=True, blank=True)
+    video_link = models.TextField(default=None, null=True, blank=True)
 
     class Meta:
         ordering = ['title']

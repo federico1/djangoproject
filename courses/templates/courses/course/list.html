@@ -37,6 +37,7 @@ classes and get certificate today. We provides bulk discounts. Learn Now!
         </div>
     </div>
 </section>
+
 <section class="section-padding course">
     <div class="course-top-wrap">
         <div class="container">
@@ -193,6 +194,23 @@ classes and get certificate today. We provides bulk discounts. Learn Now!
 
 </section>
 
+{% if subject and subject.video_link %}
+<section class="team section-padding bg-grey mb-5">
+    <div class="container">
+        <div class="row" >
+            {% for item in subject.package_set.all %}
+            <div class="col-md-12">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe id="iframeVideo" class="embed-responsive-item" data-src="{{ subject.video_link }}"  title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
 {% if subject and subject.package_set.count > 0 %}
 <section class="team section-padding bg-grey mb-5">
     <div class="container">
@@ -313,6 +331,24 @@ classes and get certificate today. We provides bulk discounts. Learn Now!
             var val = $(this).val();
             window.location.href = val;
         });
+
+        var videoLink = $("#iframeVideo").attr('data-src');
+
+        if(videoLink) {
+            var link = 'https://www.youtube.com/embed/'+getId(videoLink);
+            $("#iframeVideo").attr('src', link);
+        }
     });
+
+    function getId(url) {
+        var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        var match = url.match(regExp);
+
+        if (match && match[2].length == 11) {
+            return match[2];
+        } else {
+            return 'error';
+        }
+    };
 </script>
 {% endblock %}
