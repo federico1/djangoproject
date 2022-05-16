@@ -38,7 +38,6 @@ class StudentRegistrationView(CreateView):
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'student'
-        print(self.request.GET.get('next'))
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):

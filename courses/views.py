@@ -57,7 +57,7 @@ class CourseListView(TemplateResponseMixin, View):
 
         # instructors = User.objects.annotate(
         #                    total_courses=Count('courses_created')).filter(total_courses__gt=0)
-            
+
         return self.render_to_response({'subjects': subjects,
                                         'subject': subject,
                                         'courses': courses,

@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.db import transaction
 
-from students.models import User
+from students.models import Student, User
 
 
 class StudentSignupForm(UserCreationForm):
@@ -30,4 +30,5 @@ class StudentSignupForm(UserCreationForm):
         user.username = user.email
         user.set_password(cleaned_data['password1'])
         user.save()
+        student = Student.objects.create(user=user)
         return user

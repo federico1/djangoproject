@@ -25,6 +25,11 @@ class User(AbstractUser):
 
         return questions
 
+class Student(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+
+    def __str__(self):
+        return self.user.username
 
 class Tag(models.Model):
     name = models.CharField(max_length=30)
