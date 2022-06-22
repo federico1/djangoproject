@@ -1,7 +1,7 @@
 Django==2.0.5
 django-embed-video==1.0.0
 django-braces==1.13.0
-numpy==1.16.1
+numpy==1.22.0
 sklearn==0.0
 requests==2.23.0
 djangorestframework==3.11.0
