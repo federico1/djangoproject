@@ -65,8 +65,8 @@ urlpatterns = [
     path('attendance/<int:pk>/', attendance_views.AttendanceApiView.as_view()),
     path('approve-attendance/', attendance_views.ApproveAttendance),
 
-    path('student-history/', student_views.StudentsHistoryApiView.as_view()),
     path('quiz-details/', student_views.QuizApiView.as_view()),
+    path('student-course-progress/', student_views.CourseProgressView.as_view()),
 
     path('orders/', cart_views.OrderApiView.as_view()),
     path('packages/', cart_views.PackageApiView.as_view()),

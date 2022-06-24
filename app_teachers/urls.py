@@ -39,26 +39,24 @@ urlpatterns = [
     path('content/order/',
          views.ContentOrderView.as_view(),
          name='content_order'),
-    path('students-manager/',
-         views.StudentsManagementView.as_view(),
-         name='students_manager'),
     path('course-copy/',
          views.CourseCopy,
          name='course_copy'),
-
     path('module-copy/',
          views.ModuleCopy,
          name='module_copy'),
-
     path('course/<int:pk>/',
-         views.CourseDetailView.as_view(), name='teacher_course_detail'),
+         views.CourseDetailView.as_view(),
+         name='teacher_course_detail'),
     path('course/<int:pk>/<int:module_id>/',
-         views.CourseDetailView.as_view(), name='teacher_course_detail_module'),
-
-    path('inbox', views.MessagesView.as_view(), name='teacher_messages'),
-    
+         views.CourseDetailView.as_view(),
+         name='teacher_course_detail_module'),
+    path('inbox', views.MessagesView.as_view(),
+         name='teacher_messages'),
     path('quiz/',
          views.QuizTemplateView.as_view(),
          name='quiz_manager'),
-
+    path('students/',
+         views.Students.as_view(),
+         name='teacher_students'),
 ]

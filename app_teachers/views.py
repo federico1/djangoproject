@@ -1,3 +1,4 @@
+from operator import le
 from django.views import generic
 from django.urls import reverse_lazy
 from django.views.generic.list import ListView
@@ -219,19 +220,12 @@ class TeacherHomeView(generic.TemplateView):
 
         users_id = list(self.request.user.courses_created.values_list('students',
                                                                       flat=True))
-        students_count = User.objects.filter(id__in=users_id).count()
+        users_id = list(filter(lambda id: id is not None and id > 0, users_id))
+        
+        #students_count = users_id #User.objects.filter(id__in=users_id).count()
 
-        context['students_count'] = students_count
+        context['students_count'] = len(users_id)
 
-        return context
-
-
-class StudentsManagementView(generic.TemplateView):
-    template_name = 'students_management.html'
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(StudentsManagementView,
-                        self).get_context_data(*args, **kwargs)
         return context
 
 
@@ -273,6 +267,15 @@ class MessagesView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(MessagesView, self).get_context_data(**kwargs)
+        return context
+
+
+class Students(generic.TemplateView):
+    template_name = 'students/index.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(Students,
+                        self).get_context_data(*args, **kwargs)
         return context
 
 

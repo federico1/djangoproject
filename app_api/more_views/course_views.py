@@ -318,29 +318,6 @@ class CourseEvaluationApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class CourseRatingApiView(APIView):
-
-#     def get(self, request, format=None):
-#         snippets = AssessRating.objects.all()
-#         serializer = course_serializers.RatingSerializer(snippets, many=True)
-#         return Response(serializer.data)
-
-#     def post(self, request, format=None):
-#         serializer = course_serializers.RatingSerializer(
-#             data=request.data, many=True)
-
-#         if serializer.is_valid():
-
-#             serializer.save()
-
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-#     @action(detail=True, methods=['post'])
-#     def is_rated(self, request):
-#         return Response(True)
-
 class CourseRatingViewSet(viewsets.ModelViewSet):
 
     queryset = AssessRating.objects.all()
