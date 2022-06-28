@@ -91,7 +91,6 @@
         </div>
     </nav>
 
-
     <div>
         <div class="container-fluid mt-2">
 
@@ -121,7 +120,7 @@
                                                         <li class="content-item py-1 pl-2 {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}active{% endif %}" data-progress="{{ content.has_progress }}">
                                                             {% if content.id in completed_contents or active_content.object.id  == content.id %}
 
-                                                                <a class="content-{{ content.id }} {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}pin{% endif %}" href="{% url 'student_course_detail_module' object.id m.id %}?content={{ content.id }}">
+                                                                <a class="lesson content-{{ content.id }} {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}pin{% endif %}" href="{% url 'student_course_detail_module' object.id m.id %}?content={{ content.id }}">
 
                                                                     <i title=" {{ content.content_type }}" class="fa {{ content.content_type }}"></i>
                                                                     {{ item.title }}
@@ -316,7 +315,6 @@
             </div>
         </div>
     </div>
-
 
     <div id="ratingModal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
@@ -704,7 +702,6 @@
         </div>
     </div>
 
-
     {% verbatim %}
         <script type="text/x-handlebars-template" id="msgRcvItemTemplate">
             <div class="incoming_msg msg-item" data-id="{{ id }}">
@@ -943,7 +940,7 @@
                     $("div").on("click", '.link-start-course', function (e) {
                         e.stopPropagation();
 
-                        var link = $(".content-item.complete a").last();
+                        var link = $(".lesson.content-item.complete a").last();
 
                         if (link.length > 0) {
                             link[0].click();

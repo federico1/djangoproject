@@ -1,114 +1,232 @@
-{% extends "app_base.html" %}
-{% load staticfiles %}
-{% block title %} Contact | pdhsafety.com
+{% extends "app_base.html" %} {% load staticfiles %} {% block title %} Contact | pdhsafety.com {% endblock %} {% block content %}
+
+<section class="page-header">
+   <div class="container">
+      <div class="row justify-content-center">
+         <div class="col-lg-8">
+            <div class="page-header-content">
+               <h1>Contact Us</h1>
+               <ul class="list-inline mb-0">
+                  <li class="list-inline-item">
+                     <a href="/">Home</a>
+                  </li>
+                  <li class="list-inline-item">/</li>
+                  <li class="list-inline-item">Contact</li>
+               </ul>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+
+<section class="contact-info section-padding">
+   <div class="container">
+      <div class="row align-items-center justify-content-center">
+         <div class="col-lg-6">
+            <div class="section-heading center-heading">
+               <h3>Have any questions?</h3>
+            </div>
+         </div>
+      </div>
+
+      <div class="row justify-content-center">
+         <div class="col-lg-4">
+            <div class="row">
+               <div class="col-lg-12 col-md-6">
+                  <div class="contact-item">
+                     <p>Email Us</p>
+                     <h4>mail@pdhsafety.com</h4>
+                  </div>
+               </div>
+               <div class="col-lg-12 col-md-6">
+                  <div class="contact-item">
+                     <p>Make a Call</p>
+                     <h4>+914-473-6791</h4>
+                  </div>
+               </div>
+               <div class="col-lg-12 col-md-6">
+                  <div class="contact-item">
+                     <p>Training Center/Hands On Facility</p>
+                     <h4>189 Valentine Ln Yonkers, New York 10705</h4>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <div class="col-lg-8">
+            <form class="contact__form" method="POST" action="./" id="fmContact">
+               {% csrf_token %}
+
+               <div class="row">
+                  <div class="col-12">
+                     <div class="alert alert-success contact__msg" style="display: none" role="alert">Your message was sent successfully.</div>
+                  </div>
+               </div>
+
+               <div class="row">
+                  <div class="col-lg-6">
+                     <div class="form-group">
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Your Name" />
+                     </div>
+                  </div>
+
+                  <div class="col-lg-6">
+                     <div class="form-group">
+                        <input type="text" name="email" id="email" class="form-control" placeholder="Email Address" />
+                     </div>
+                  </div>
+
+                  <div class="col-lg-12">
+                     <div class="form-group">
+                        <input type="text" name="subject" id="subject" class="form-control" placeholder="Subject" />
+                     </div>
+                  </div>
+
+                  <div class="col-lg-12">
+                     <div class="form-group">
+                        <textarea id="message" name="message" cols="30" rows="6" class="form-control" placeholder="Your Message"></textarea>
+                     </div>
+                  </div>
+
+                  <div class="col-lg-12">
+                     <div class="mt-4 text-right">
+                        <button class="btn btn-main" type="button" id="btnSubmit">
+                           Send Message
+                           <i class="fa fa-angle-right ml-2"></i>
+                        </button>
+                     </div>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+   {% comment %} container {% endcomment %}
+</section>
+
+{% endblock %} {% block scripts %}
+
+<style>
+    label.error {
+        color: #bc2f2f;
+        margin-left: 14px;
+    
+    }
+</style>
+
+<script>
+
+
+
+   (function ($) {
+      $.SSTVerifyPage = function (options) {
+         var that = this;
+
+         var settings = $.extend({}, options);
+
+         var initForm = function () {
+            $("#fmContact").ajaxForm({
+               beforeSend: function () {
+                  $("#fmContact").find("input, button").attr('disabled', true);
+               },
+               success: function (response) {
+                  if (response != 0) {
+                     Swal.fire('Your request has been sent. Thank You')
+                  }
+                  $("#fmContact").find("input, button").attr('disabled', false);
+               },
+               complete: function (xhr) {},
+            });
+         };
+
+         var validateForm = function () {
+            $("#fmContact").validate({
+               rules: {
+                  name: {
+                     required: true,
+                  },
+                  email: {
+                     required: true,
+                  },
+                  message: {
+                     required: true,
+                  },
+               },
+            });
+         };
+
+         var getNumber = function (cardNumber) {
+            var cNum = $("#txtCardNumber").val();
+
+            $("#fm .alert").remove();
+
+            if (cNum) {
+               ShowLoadingModal("Getting info", "");
+
+               $("#fm input").attr("disabled", true);
+               $("#fm button").attr("disabled", true);
+
+               $.get(
+                  "/api/sst-cards/?format=json",
+                  {
+                     card_number: cNum,
+                  },
+                  function (response) {
+                     onGetNumberResponse(response);
+                  }
+               );
+            } else {
+               Swal.fire("Please provide the certificate number");
+            }
+         };
+
+         var onGetNumberResponse = function (response) {
+            $("#fm .spinner-border").addClass("d-none");
+            $("#fm input").attr("disabled", false);
+            $("#fm button").attr("disabled", false);
+
+            $("#fm .alert").remove();
+
+            $("#sstDetails").empty();
+
+            if (response.length > 0) {
+               var item = response[0];
+
+               var source = document.getElementById("detailItemTemplate").innerHTML;
+               var template = Handlebars.compile(source);
+               $("#sstDetails").html(template(item));
+            } else {
+               var alert = $("<div />", { class: "alert alert-primary mt-3" }).html("Card number is not valid.");
+
+               $("#fm").append(alert);
+            }
+         };
+
+         var registerEvent = function () {
+            $("div").on("click", "#btnSubmit", function (e) {
+               e.stopPropagation();
+               var isValid = $("#fmContact").valid();
+               if(isValid) {
+                  $("#fmContact").submit();
+               }
+            });
+
+         };
+
+         var init = function () {
+            registerEvent();
+            validateForm();
+            initForm();
+         };
+
+         init();
+
+         return this;
+      };
+   })(jQuery);
+
+   $(document).ready(function () {
+      var messagesPage = new $.SSTVerifyPage({});
+   });
+</script>
 {% endblock %}
-{% block content %}
-
-    <section class="page-header">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="page-header-content">
-                        <h1>Contact Us</h1>
-                        <ul class="list-inline mb-0">
-                            <li class="list-inline-item">
-                                <a href="/">Home</a>
-                            </li>
-                            <li class="list-inline-item">/</li>
-                            <li class="list-inline-item">
-                                Contact
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="contact-info section-padding">
-        <div class="container">
-            <div class="row align-items-center justify-content-center">
-                <div class="col-lg-6">
-                    <div class="section-heading center-heading">
-                        <h3>Have any questions?</h3>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row justify-content-center">
-                <div class="col-lg-4">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-6">
-                            <div class="contact-item">
-                                <p>Email Us</p>
-                                <h4>mail@pdhsafety.com</h4>
-                            </div>
-                        </div>
-                        <div class="col-lg-12 col-md-6">
-                            <div class="contact-item">
-                                <p>Make a Call</p>
-                                <h4>+914-473-6791</h4>
-                            </div>
-                        </div>
-                        <div class="col-lg-12 col-md-6">
-                            <div class="contact-item">
-                                <p> Training Center/Hands On Facility </p>
-                                <h4>189 Valentine Ln Yonkers, New York 10705
-                                </h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-8">
-                    <form class="contact__form form-row " method="POST" action="#" id="contactForm">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="alert alert-success contact__msg" style="display: none" role="alert">
-                                    Your message was sent successfully.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <input type="text" id="name" name="name" class="form-control" placeholder="Your Name"></div>
-                                </div>
-
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <input type="text" name="email" id="email" class="form-control" placeholder="Email Address"></div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="form-group">
-                                            <input type="text" name="subject" id="subject" class="form-control" placeholder="Subject"></div>
-                                        </div>
-
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <textarea id="message" name="message" cols="30" rows="6" class="form-control" placeholder="Your Message"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-12">
-                                        <div class="mt-4 text-right">
-                                            <button class="btn btn-main" type="submit">Send Message
-                                                <i class="fa fa-angle-right ml-2"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-
-            {% endblock %}
-            {% block scripts %}
-                <script>
-                    $(document).ready(function () {});
-                </script>
-            {% endblock %}
