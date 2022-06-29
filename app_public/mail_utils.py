@@ -5,8 +5,8 @@ from django.template.loader import get_template
 
 def send_contact_alert(form_data):
     try:
-        message= "Name: " + form_data['name'] + "< br> ";
-        message= message + "Message: " + form_data['message'] + "< br> "
+        message= "Name: " + form_data['name'] + ", ";
+        message= message + "Message: " + form_data['message'] + ", "
 
         send_mail(
             subject='Someone has contacted you at pdhsafety -' + form_data['subject'],
