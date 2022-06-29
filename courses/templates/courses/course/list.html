@@ -3,7 +3,9 @@
 {% load course_tags %}
 
 {% block title %}
-{% if subject %} Best {{ subject.title }} Courses Online | pdhsafety.com {% endif %}
+{% if subject %} Best {{ subject.title }} Courses Online | pdhsafety.com {%else%}
+Best Accredit Safety Training Courses Online | pdhsafety.com
+{% endif %}
 {% endblock %}
 
 {% block meta_desc %}
