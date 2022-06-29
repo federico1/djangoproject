@@ -337,13 +337,13 @@ Banner Area
     display: none;
 }
 
-.center-heading h3 {
+.center-heading h2{
     position: relative;
     padding-bottom: 20px;
     margin-bottom: 20px;
 }
 
-.center-heading h3:before {
+.center-heading h2:before {
     position: absolute;
     content: "";
     left: 0px;
@@ -1220,6 +1220,11 @@ Course Block
 .rating span {
     color: #222;
     margin-left: 10px;
+}
+
+.rating p {
+    line-height: 1.7em;
+    font-size: 1.3em;
 }
 
 
@@ -2111,6 +2116,8 @@ Footer Section
 
 .footer .footer-widget p {
     color: rgba(255, 255, 255, 0.8);
+    font-size: 1.0em;
+    line-height: 1.8em;
 }
 
 .footer .footer-contact ul {
@@ -2182,6 +2189,8 @@ Footer Section
 .footer-btm .copyright p {
     color: rgba(255, 255, 255, 0.8);
     margin-bottom: 0px;
+    font-size: 1.0em;
+    line-height: 1.8em;
 }
 
 .form-subscribe {
@@ -3050,7 +3059,7 @@ Feature style
     padding-right: 30px;
 }
 
-.feature-4 .section-heading h3 {
+.feature-4 .section-heading h2 {
     font-size: 40px;
 }
 
@@ -3067,7 +3076,7 @@ Feature style
     padding: 50px 20px;
 }
 
-.feature-item.feature-style-4 h4 {
+.feature-item.feature-style-4 h3 {
     margin-bottom: 0px;
     font-size: 20px;
 }
