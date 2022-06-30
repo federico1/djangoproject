@@ -249,7 +249,7 @@
 {% endverbatim %} {% verbatim %}
 
 <script type="text/x-handlebars-template" id="studentCourseItemTemplate">
-   {{#each ._enrollments}}
+   {{#each _enrollments}}
        <tr id="{{id}}"><td>{{course}}</td><td>{{../title}}</td>
        <td> <a href='#' class='badge badge-danger link-delete-enrollment' data-id='{{id}}'>Delete</a> </td>
        </tr>
@@ -317,10 +317,11 @@
             );
          };
 
-         var getCourses = function () {
+         var getCourses = function (isFetchStudents) {
             return $.get("/api/courses/?format=json", { _: $.now() }, function (response) {
                coursesList = response;
-               getStudents();
+
+               if (isFetchStudents) getStudents();
             });
          };
 
@@ -452,7 +453,7 @@
             });
          };
 
-         var getStudentCourses = function () {
+         var drawStudentCourses = function () {
             var id = $("#courseModal").attr("data-id");
 
             id = parseInt(id);
@@ -466,6 +467,23 @@
                   var template = Handlebars.compile(source);
                   $("#tblStudentCourses tbody").append(template(item));
                }
+            });
+
+            $(".student-courses").each(function () {
+               $(this).empty();
+               var id = $(this).attr("pk");
+               id = parseInt(id);
+
+               var courses = coursesList.filter(a => a.course_enrolled.filter(d => d.user.id == id).length > 0);
+
+               var _that = this;
+
+               $(courses).each(function (index, item) {
+                  if (index < 3) {
+                     var bd = '<span class="badge badge-secondary mr-2">' + courses[0].title + "</span>";
+                     $(_that).append(bd);
+                  }
+               });
             });
          };
 
@@ -489,9 +507,9 @@
                },
                success: function (response, textStatus, xhr) {
                   if (textStatus == "success") {
-                     getCourses().then(function () {
+                     getCourses(false).then(function () {
                         setTimeout(function () {
-                           getStudentCourses();
+                           drawStudentCourses();
 
                            $("#courseModal .spinner-border").addClass("d-none");
 
@@ -519,12 +537,11 @@
                   xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
                },
                success: function (response, textStatus, xhr) {
+                  toastr.success("Enrollment deleted");
 
-                toastr.success('Enrollment deleted');
-
-                  getCourses().then(function () {
+                  getCourses(false).then(function () {
                      setTimeout(function () {
-                        getStudentCourses();
+                        drawStudentCourses();
 
                         $("#courseModal .spinner-border").addClass("d-none");
 
@@ -571,7 +588,7 @@
                });
 
                fillCoursesList();
-               getStudentCourses();
+               drawStudentCourses();
             });
 
             $("div").on("click", ".link-delete-user", function (e) {
@@ -673,7 +690,7 @@
 
          var init = function () {
             registerEvent();
-            getCourses();
+            getCourses(true);
          };
 
          init();
