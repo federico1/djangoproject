@@ -1,721 +1,689 @@
-{% extends "admin_base.html" %}
-{% block title %} - Students{% endblock %}
-
-{% block content %}
+{% extends "admin_base.html" %} {% block title %} - Students{% endblock %} {% block content %}
 
 <div class="card shadow mb-4">
-    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">Students</h6>
-        <div class="dropdown no-arrow">
-            <button type="button" class="btn btn-success btn-sm link-new-user"> <i class="fa fa-plus"></i> ADD
-                NEW</button>
-        </div>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered" id="usersTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>IMG</th>
-                        <th>UserName</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Phone</th>
-                        <th>Email</th>
-                    </tr>
-                </thead>
-                <tbody>
+   <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+      <h6 class="m-0 font-weight-bold text-primary">Students</h6>
+      <div class="dropdown no-arrow">
+         <button type="button" class="btn btn-success btn-sm link-new-user"><i class="fa fa-plus"></i> ADD NEW</button>
+      </div>
+   </div>
+   <div class="card-body">
+      <div class="spinner-border" role="status">
+         <span class="sr-only">Loading...</span>
+      </div>
 
-                </tbody>
-            </table>
-        </div>
-    </div>
+      <div class="table-responsive">
+         <table class="table table-bordered" id="usersTable" width="100%" cellspacing="0">
+            <thead>
+               <tr>
+                  <th>#</th>
+                  <th>IMG</th>
+                  <th>UserName</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+               </tr>
+            </thead>
+            <tbody></tbody>
+         </table>
+      </div>
+   </div>
 </div>
 
 <div id="userModal" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Manage Student Details</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnSaveUser">Save Changes</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
+   <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title">Manage Student Details</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body"></div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="btnSaveUser">Save Changes</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+         </div>
+      </div>
+   </div>
 </div>
 
 <div id="courseModal" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Student Courses</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row mb-3">
-                    <div class="col">
-                        <select class="form-control" id="ddlCourses" name="course">
-                            <option value="">Select Course</option>
-                        </select>
-                    </div>
-                    <div class="col">
-                        <button class="btn btn-info" id="btnAssignCourse">Add Course </button>
-
-
-                    </div>
-                </div>
-
-                <div class="spinner-border text-primary mb-2 d-none" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col">
-                        <table class="table table-bordered" id="tblStudentCourses">
-                            <thead class="bg-light">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Course</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-
-                            </tbody>
-
-                        </table>
-                    </div>
-                </div>
-
+   <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title">Student Courses</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <div class="row mb-3">
+               <div class="col">
+                  <select class="form-control" id="ddlCourses" name="course">
+                     <option value="">Select Course</option>
+                  </select>
+               </div>
+               <div class="col">
+                  <button class="btn btn-info" id="btnAssignCourse">Add Course</button>
+               </div>
             </div>
 
-        </div>
-    </div>
+            <div class="spinner-border text-primary mb-2 d-none" role="status">
+               <span class="sr-only">Loading...</span>
+            </div>
+
+            <div class="row mb-3">
+               <div class="col">
+                  <table class="table table-bordered" id="tblStudentCourses">
+                     <thead class="bg-light">
+                        <tr>
+                           <th>ID</th>
+                           <th>Course</th>
+                           <th>Action</th>
+                        </tr>
+                     </thead>
+
+                     <tbody></tbody>
+                  </table>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
 </div>
 
 <div class="d-none">
-    <form id="fmFile" action="{% url 'upload-file' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="file" name="file" id="fu"><br>
-    </form>
+   <form id="fmFile" action="{% url 'upload-file' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="file" name="file" id="fu" /><br />
+   </form>
 </div>
 
 {% verbatim %}
-<script type="text/x-handlebars-template" id='studentListItemTemplate'>
+<script type="text/x-handlebars-template" id="studentListItemTemplate">
+   <tr id="{{id}}">
+      <td>{{id}}</td>
+      <td>
 
-    <tr id="{{id}}">
-        <td>{{id}}</td>
-        <td>
+         {{#if image}}
 
-        {{#if image}}
-        
-         <a href="{{image}}" target="_blank">
-            <img src="{{image}}" width="35" alt="img">
+            <a href="{{image}}" target="_blank">
+               <img src="{{image}}" width="35" alt="img" />
+            </a>
+         {{else}}
+            <img src="https://via.placeholder.com/200x200.png?text=.." width="35" alt="img" />
+         {{/if}}
+
+      </td>
+      <td>{{username}}</td>
+      <td>{{first_name}}</td>
+      <td>{{last_name}}</td>
+      <td>{{cell_number}}</td>
+      <td>{{email}}</td>
+
+   </tr>
+</script>
+{% endverbatim %} {% verbatim %}
+<script type="text/x-handlebars-template" id="studentFormTemplate">
+
+   <form>
+
+       <input type="hidden" name="id" id="id" value="{{id}}" >
+       <input type="hidden" name="image" id="id_image" value="{{image}}">
+
+       <div class="row">
+
+           <div class="col-md-8">
+
+               <div class="row mb-3">
+
+                   <div class="col d-none">
+                       <div class="custom-control custom-radio custom-control-inline">
+                           <input checked type="radio" id="customRadioInline1" name="role" value="is_student"
+                               class="custom-control-input">
+                           <label class="custom-control-label" for="customRadioInline1">Student</label>
+                       </div>
+                       <div class="custom-control custom-radio custom-control-inline">
+                           <input type="radio" id="customRadioInline2" name="role" value="is_teacher"
+                               class="custom-control-input">
+                           <label class="custom-control-label" for="customRadioInline2">Teacher</label>
+                       </div>
+                   </div>
+
+               </div>
+
+               <div class="row mb-3">
+                   <div class="col">
+                       <input type="text" class="form-control" value="{{first_name}}" id="first_name" name="first_name" placeholder="First name">
+                   </div>
+                   <div class="col">
+                       <input type="text" class="form-control" value="{{last_name}}" id="last_name" name="last_name" placeholder="Last name">
+                   </div>
+               </div>
+               <div class="row mb-3">
+
+                   <div class="col">
+                       <input type="text" class="form-control" value="{{cell_number}}" id="cell_number" name="cell_number"
+                           placeholder="Cell number">
+                   </div>
+
+
+                   <div class="col">
+                       <input type="text" class="form-control" value="{{email}}" id="email" name="email" placeholder="Email">
+                   </div>
+
+               </div>
+               <div class="row mb-3 bg-light p-1">
+
+                   <div class="col">
+                       <input type="text" class="form-control" {{#if id}}disabled{{/if}} value="{{username}}" id="username" name="username" placeholder="Login name">
+                   </div>
+
+                   <div class="col">
+                       <input type="password" class="form-control" {{#if id}}disabled{{/if}} id="password" name="password" placeholder="Password">
+                   </div>
+
+               </div>
+               <div class="row mb-3">
+                   <div class="col">
+                       <input type="text" class="form-control" value="{{address}}" id="address" name="address" placeholder="Address">
+                   </div>
+               </div>
+
+           </div>
+
+           <div class="col-md-4 text-center mt-3">
+
+               {{#if image}}
+                   <img src="{{image}}" id="prevImage" alt="image" style="max-height: 200px;"
+                   class="img-thumbnail">
+
+               {{else}}
+               <img src="https://via.placeholder.com/200x200.png?text=.." id="prevImage" alt="image" style="max-height: 200px;"
+                   class="img-thumbnail">
+               {{/if}}
+
+               <p class="mt-2">
+                   <a href="javascript:;" id="btnAddImage" class="btn btn-primary btn-sm" role="button">
+                       Upload Image
+                   </a>
+
+                   <a href="javascript:;" id="btnRemoveImage" class="btn btn-danger btn-sm" role="button">
+                       Remove
+                   </a>
+               </p>
+
+               <div class="progress" style="height:3px;">
+                   <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+               </div>
+
+           </div>
+
+       </div>
+   </form>
+</script>
+{% endverbatim %} {% verbatim %}
+
+<script type="text/x-handlebars-template" id="itemActionTemplate">
+   <div class="row">
+      <div class="col student-courses" pk="{{id}}">
+
+      </div>
+
+      <div class="col text-right">
+         <a href="javascript:;" class="btn btn-dark btn-sm link-course-user" id="{{id}}">
+            Courses
          </a>
-        {{else}}
-            <img src="https://via.placeholder.com/200x200.png?text=.." width="35" alt="img">
-        {{/if}}
-                
-        
 
-        </td>
-        <td>{{username}}</td>
-        <td>{{first_name}}</td>
-        <td>{{last_name}}</td>
-        <td>{{cell_number}}</td>
-        <td>{{email}}</td>
-        
-    </tr>
-  
+         <a href="javascript:;" class="btn btn-info btn-sm link-edit-user" id="{{id}}">
+            Edit
+         </a>
+         <a href="javascript:;" class="btn btn-danger btn-sm link-delete-user" id="{{id}}">
+            Delete
+         </a>
+      </div>
+   </div>
 </script>
-{% endverbatim %}
+{% endverbatim %} {% verbatim %}
 
-
-{% verbatim %}
-<script type="text/x-handlebars-template" id='studentFormTemplate'>
-
-    <form>
-
-        <input type="hidden" name="id" id="id" value="{{id}}" >
-        <input type="hidden" name="image" id="id_image" value="{{image}}">
-
-        <div class="row">
-
-            <div class="col-md-8">
-
-                <div class="row mb-3">
-
-                    <div class="col d-none">
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input checked type="radio" id="customRadioInline1" name="role" value="is_student"
-                                class="custom-control-input">
-                            <label class="custom-control-label" for="customRadioInline1">Student</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="customRadioInline2" name="role" value="is_teacher"
-                                class="custom-control-input">
-                            <label class="custom-control-label" for="customRadioInline2">Teacher</label>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col">
-                        <input type="text" class="form-control" value="{{first_name}}" id="first_name" name="first_name" placeholder="First name">
-                    </div>
-                    <div class="col">
-                        <input type="text" class="form-control" value="{{last_name}}" id="last_name" name="last_name" placeholder="Last name">
-                    </div>
-                </div>
-                <div class="row mb-3">
-
-                    <div class="col">
-                        <input type="text" class="form-control" value="{{cell_number}}" id="cell_number" name="cell_number"
-                            placeholder="Cell number">
-                    </div>
-
-
-                    <div class="col">
-                        <input type="text" class="form-control" value="{{email}}" id="email" name="email" placeholder="Email">
-                    </div>
-
-                </div>
-                <div class="row mb-3 bg-light p-1">
-
-                    <div class="col">
-                        <input type="text" class="form-control" {{#if id}}disabled{{/if}} value="{{username}}" id="username" name="username" placeholder="Login name">
-                    </div>
-
-                    <div class="col">
-                        <input type="password" class="form-control" {{#if id}}disabled{{/if}} id="password" name="password" placeholder="Password">
-                    </div>
-
-                </div>
-                <div class="row mb-3">
-                    <div class="col">
-                        <input type="text" class="form-control" value="{{address}}" id="address" name="address" placeholder="Address">
-                    </div>
-                </div>
-               
-            </div>
-
-            <div class="col-md-4 text-center mt-3">
-
-                {{#if image}}
-                    <img src="{{image}}" id="prevImage" alt="image" style="max-height: 200px;"
-                    class="img-thumbnail">
-
-                {{else}}
-                <img src="https://via.placeholder.com/200x200.png?text=.." id="prevImage" alt="image" style="max-height: 200px;"
-                    class="img-thumbnail">
-                {{/if}}
-                
-                <p class="mt-2">
-                    <a href="javascript:;" id="btnAddImage" class="btn btn-primary btn-sm" role="button">
-                        Upload Image
-                    </a>
-
-                    <a href="javascript:;" id="btnRemoveImage" class="btn btn-danger btn-sm" role="button">
-                        Remove
-                    </a>
-                </p>
-
-                <div class="progress" style="height:3px;">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-
-            </div>
-
-        </div>
-    </form>
-
+<script type="text/x-handlebars-template" id="studentCourseItemTemplate">
+   {{#each course_enrolled}}
+       <tr id="{{id}}"><td>{{course}}</td><td>{{../title}}</td>
+       <td> <a href='#' class='badge badge-danger link-delete-enrollment' data-id='{{id}}'>Delete</a> </td>
+       </tr>
+   {{/each}}
 </script>
-{% endverbatim %}
-
-
-{% verbatim %}
-
-<script type="text/x-handlebars-template" id='itemActionTemplate'>
-
-    <div class="row">
-         <div class="col student-courses" pk="{{id}}">
-           
-        </div>
-
-        <div class="col text-right">
-          <a href="javascript:;" class="btn btn-dark btn-sm link-course-user" id="{{id}}">
-                    Courses
-            </a>
-
-            <a href="javascript:;" class="btn btn-info btn-sm link-edit-user" id="{{id}}">
-                    Edit
-            </a>
-             <a href="javascript:;" class="btn btn-danger btn-sm link-delete-user" id="{{id}}">
-                    Delete
-            </a>
-        </div>
-    </div>
- 
-</script>
-{% endverbatim %}
-
-{% verbatim %}
-
-<script type="text/x-handlebars-template" id='studentCourseItemTemplate'>
-    <tr id="{{id}}"><td>{{id}}</td><td>{{title}}</td></tr>
-</script>
-{% endverbatim %}
-
-
-
-{% endblock %}
-
-{% block scripts %}
+{% endverbatim %} {% endblock %} {% block scripts %}
 
 <script>
-    Handlebars.registerHelper("get_name", function (options) {
-        var r = this.username;
+   Handlebars.registerHelper("get_name", function (options) {
+      var r = this.username;
 
-        if (this.first_name && this.last_name) {
-            r = this.first_name + " " + this.last_name;
-        } else if (this.email) {
-            r = this.email;
-        }
+      if (this.first_name && this.last_name) {
+         r = this.first_name + " " + this.last_name;
+      } else if (this.email) {
+         r = this.email;
+      }
 
-        return new Handlebars.SafeString(r);
-    });
+      return new Handlebars.SafeString(r);
+   });
 
-    (function ($) {
-        $.fn.serializeObject = function () {
-            var o = {};
-            var a = this.serializeArray();
+   (function ($) {
+      $.fn.serializeObject = function () {
+         var o = {};
+         var a = this.serializeArray();
 
-            $.each(a, function () {
+         $.each(a, function () {
+            if (o[this.name] !== undefined) {
+               if (!o[this.name].push) {
+                  o[this.name] = [o[this.name]];
+               }
 
-                if (o[this.name] !== undefined) {
-                    if (!o[this.name].push) {
-                        o[this.name] = [o[this.name]];
-                    }
+               o[this.name].push(this.value || "");
+            } else {
+               o[this.name] = this.value || "";
+            }
+         });
 
-                    o[this.name].push(this.value || '');
-                } else {
-                    o[this.name] = this.value || '';
-                }
+         return o;
+      };
+   })(jQuery);
+
+   (function ($) {
+      $.StudentManager = function (options) {
+         var that = this;
+
+         var studentsList = [];
+         var userDataTable;
+
+         var coursesList = [];
+
+         var settings = $.extend({}, options);
+
+         var getStudents = function () {
+            $(".spinner-border").show();
+
+            $.get(
+               "/api/users/?format=json",
+               {
+                  is_student: 1,
+               },
+               function (response) {
+                  studentsList = response;
+                  drawStudentsList();
+               }
+            );
+         };
+
+         var getCourses = function () {
+            return $.get("/api/courses/?format=json", { _: $.now() }, function (response) {
+               coursesList = response;
+               getStudents();
+            });
+         };
+
+         var drawStudentsList = function () {
+            if (userDataTable) {
+               userDataTable.destroy();
+            }
+
+            $("#usersTable tbody").empty();
+
+            $(studentsList).each(function (index, item) {
+               if (item.is_active == 1) {
+                  var source = document.getElementById("studentListItemTemplate").innerHTML;
+                  var template = Handlebars.compile(source);
+                  $("#usersTable tbody").append(template(item));
+               }
             });
 
-            return o;
-        };
+            $("#usersTable").on("draw.dt", function () {
+               if (!userDataTable) return;
 
-    })(jQuery);
+               $("#usersTable tbody tr").each(function () {
+                  var row = userDataTable.row($(this));
 
+                  var source = document.getElementById("itemActionTemplate").innerHTML;
+                  var template = Handlebars.compile(source);
 
-    (function ($) {
+                  var element = studentsList.find(a => a.id == $(this).attr("id"));
 
-        $.StudentManager = function (options) {
+                  row.child(template(element)).show();
+               });
 
-            var that = this;
+               $(".student-courses").each(function () {
+                  var id = $(this).attr("pk");
+                  id = parseInt(id);
 
-            var studentsList = [];
-            var userDataTable;
+                  var courses = coursesList.filter(a => a.course_enrolled.filter(d => d.user.id == id).length > 0);
 
-            var coursesList = [];
+                  var _that = this;
 
-            var settings = $.extend({}, options);
+                  $(courses).each(function (index, item) {
+                     if (index < 3) {
+                        var bd = '<span class="badge badge-secondary mr-2">' + courses[0].title + "</span>";
+                        $(_that).append(bd);
+                     }
+                  });
+               });
 
-            var getStudents = function () {
-                $.get('/api/users/?format=json', {
-                    is_student: 1
-                }, function (response) {
-                    studentsList = response;
-                    drawStudentsList();
-                });
+               $(".spinner-border").hide();
+            });
+
+            userDataTable = $("#usersTable").DataTable();
+
+            userDataTable.order([[0, "desc"]]).draw();
+         };
+
+         var fillCoursesList = function () {
+            $("#ddlCourses").html('<option value="">Select Course</option>');
+
+            $(coursesList).each(function (index, item) {
+               $("#ddlCourses").append('<option value="' + item.id + '">' + item.title + "</option>");
+            });
+         };
+
+         var saveUser = function () {
+            var isValid = $("#userModal form").valid();
+
+            if (!isValid) return;
+
+            var data = $("#userModal form").eq(0).serializeObject();
+
+            if (data.role) {
+               data[data.role] = true;
+               delete data.role;
+            }
+
+            $("#userModal form .alert").remove();
+
+            $.ajax({
+               type: data.id > 0 ? "PUT" : "POST",
+               url: "/api/users/" + (data.id > 0 ? data.id + "/" : ""),
+               data: JSON.stringify(data),
+               contentType: "application/json; charset=utf-8",
+               dataType: "json",
+               beforeSend: function (xhr, settings) {
+                  xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+               },
+               success: function (response, textStatus, xhr) {
+                  if (textStatus == "success") {
+                     $("#userModal").modal("hide");
+                     getStudents();
+                  }
+               },
+               complete: function (xhr, textStatus) {
+                  if (xhr.status == 400) {
+                     $("#userModal form .alert").remove();
+
+                     $("#userModal form").append(
+                        $("<div />", {
+                           class: "alert alert-warning",
+                        }).html(xhr.responseText)
+                     );
+                  }
+               },
+               failure: function (errMsg) {
+                  $("#userModal").modal("hide");
+               },
+            });
+         };
+
+         var deleteUser = function (id) {
+            $.ajax({
+               type: "DELETE",
+               url: "/api/users/" + id + "/",
+               data: JSON.stringify({
+                  is_active: false,
+               }),
+               contentType: "application/json; charset=utf-8",
+               dataType: "json",
+               beforeSend: function (xhr, settings) {
+                  xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+               },
+               success: function (response, textStatus, xhr) {
+                  toastr.warning("User has been deleted");
+                  getStudents();
+               },
+               complete: function (xhr, textStatus) {},
+               failure: function (errMsg) {},
+            });
+         };
+
+         var getStudentCourses = function () {
+            var id = $("#courseModal").attr("data-id");
+
+            id = parseInt(id);
+
+            $("#tblStudentCourses tbody").empty();
+
+            $(coursesList).each(function (index, item) {
+               if (item.course_enrolled.filter(d => d.user.id == id).length > 0) {
+                  var source = document.getElementById("studentCourseItemTemplate").innerHTML;
+                  var template = Handlebars.compile(source);
+                  $("#tblStudentCourses tbody").append(template(item));
+               }
+            });
+         };
+
+         var assignCourse = function (user, course) {
+            $("#courseModal .spinner-border").removeClass("d-none");
+            $("#courseModal button").attr("disabled", true);
+
+            var data = {
+               user: user,
+               course: course,
             };
 
-            var getCourses = function () {
-                return $.get('/api/courses/?format=json', {}, function (response) {
-                    coursesList = response;
-                    getStudents();
-                });
-            };
-
-            var drawStudentsList = function () {
-
-                if (userDataTable) {
-                    userDataTable.destroy();
-                }
-
-                $("#usersTable tbody").empty();
-
-                $(studentsList).each(function (index, item) {
-                    if (item.is_active == 1) {
-                        var source = document.getElementById("studentListItemTemplate").innerHTML;
-                        var template = Handlebars.compile(source);
-                        $("#usersTable tbody").append(template(item));
-                    }
-
-                });
-
-                $('#usersTable').on('draw.dt', function () {
-
-                    if (!userDataTable) return;
-
-                    $("#usersTable tbody tr").each(function () {
-
-                        var row = userDataTable.row($(this));
-
-                        var source = document.getElementById("itemActionTemplate")
-                            .innerHTML;
-                        var template = Handlebars.compile(source);
-
-                        var element = studentsList.find(a => a.id == $(this).attr('id'));
-
-                        row.child(template(element)).show();
-
-                    });
-
-                    $(".student-courses").each(function () {
-
-                        var id = $(this).attr('pk');
-                        id = parseInt(id);
-
-                        var courses = coursesList
-                            .filter(a => a.course_enrolled.filter(d => d.user.id == id)
-                                .length > 0);
-
-                        var _that = this;
-
-                        $(courses).each(function (index, item) {
-
-                            if (index < 3) {
-                                var bd =
-                                    '<span class="badge badge-secondary mr-2">' +
-                                    courses[0]
-                                    .title + '</span>';
-                                $(_that).append(bd);
-                            }
-
-                        });
-
-
-                    });
-
-                    $(".loading").hide();
-
-                });
-
-                userDataTable = $("#usersTable").DataTable();
-
-                userDataTable.order([
-                    [0, 'desc']
-                ]).draw();
-
-            };
-
-            var fillCoursesList = function () {
-
-                $("#ddlCourses").html('<option value="">Select Course</option>');
-
-                $(coursesList).each(function (index, item) {
-                    $("#ddlCourses").append('<option value="' + item.id + '">' + item.title +
-                        '</option>');
-                });
-            };
-
-            var saveUser = function () {
-
-                var isValid = $("#userModal form").valid();
-
-                if (!isValid) return;
-
-                var data = $("#userModal form").eq(0).serializeObject();
-
-                if (data.role) {
-                    data[data.role] = true;
-                    delete data.role;
-                }
-
-                $("#userModal form .alert").remove();
-
-                $.ajax({
-                    type: data.id > 0 ? "PUT" : "POST",
-                    url: "/api/users/" + (data.id > 0 ? (data.id + "/") : ""),
-                    data: JSON.stringify(data),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    beforeSend: function (xhr, settings) {
-                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                    },
-                    success: function (response, textStatus, xhr) {
-                        if (textStatus == 'success') {
-                            $("#userModal").modal('hide');
-                            getStudents();
-                        }
-                    },
-                    complete: function (xhr, textStatus) {
-                        if (xhr.status == 400) {
-
-                            $("#userModal form .alert").remove();
-
-                            $("#userModal form").append($("<div />", {
-                                class: 'alert alert-warning'
-                            }).html(xhr.responseText));
-                        }
-                    },
-                    failure: function (errMsg) {
-                        $("#userModal").modal('hide');
-                    }
-                });
-
-            };
-
-            var deleteUser = function (id) {
-
-                $.ajax({
-                    type: "DELETE",
-                    url: "/api/users/" + id + "/",
-                    data: JSON.stringify({
-                        is_active: false
-                    }),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    beforeSend: function (xhr, settings) {
-                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                    },
-                    success: function (response, textStatus, xhr) {
-                        toastr.warning('User has been deleted');
-                        getStudents();
-                    },
-                    complete: function (xhr, textStatus) {},
-                    failure: function (errMsg) {}
-                });
-
-            };
-
-            var getStudentCourses = function () {
-
-                var id = $("#courseModal").attr('data-id');
-
-                id = parseInt(id);
-
-                $("#tblStudentCourses tbody").empty();
-
-                $(coursesList).each(function (index, item) {
-
-                    if (item.course_enrolled.filter(d => d.user.id == id).length > 0) {
-                        var source = document.getElementById("studentCourseItemTemplate").innerHTML;
-                        var template = Handlebars.compile(source);
-                        $("#tblStudentCourses tbody").append(template(item));
-                    }
-
-                });
-            };
-
-            var assignCourse = function (user, course) {
-
-                $("#courseModal .spinner-border").removeClass('d-none');
-                $("#courseModal button").attr('disabled', true);
-
-                var data = {
-                    user: user,
-                    course: course
-                }
-
-                $.ajax({
-                    type: "POST",
-                    url: "/api/course-enrollment/",
-                    data: JSON.stringify(data),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    beforeSend: function (xhr, settings) {
-                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                    },
-                    success: function (response, textStatus, xhr) {
-                        if (textStatus == 'success') {
-                            getCourses().then(function () {
-
-                                setTimeout(function () {
-                                    getStudentCourses();
-
-                                    $("#courseModal .spinner-border")
-                                        .addClass('d-none');
-
-                                    $("#courseModal button").attr('disabled',
-                                        false);
-
-                                }, 2000);
-
-                            });
-                        }
-                    },
-                    complete: function (xhr, textStatus) {
-                        if (xhr.status == 400) {}
-                    },
-                    failure: function (errMsg) {}
-                });
-
-            };
-
-            var registerEvent = function () {
-
-                $("div").on("click", ".link-new-user", function (e) {
-                    e.stopPropagation();
-
-                    $("#userModal").removeAttr('data-id');
-
-                    $("#userModal").modal({
-                        show: true,
-                        backdrop: 'static'
-                    });
-
-                });
-
-                $("div").on("click", ".link-edit-user", function (e) {
-                    e.stopPropagation();
-
-                    $("#userModal").attr('data-id', $(this).attr('id'));
-
-                    $("#userModal").modal({
-                        show: true,
-                        backdrop: 'static'
-                    });
-
-                });
-
-                $("div").on("click", ".link-course-user", function (e) {
-                    e.stopPropagation();
-
-                    var id = $(this).attr('id');
-
-                    $("#courseModal").attr('data-id', $(this).attr('id'));
-
-                    $("#courseModal").modal({
-                        show: true,
-                        backdrop: 'static'
-                    });
-
-                    fillCoursesList();
-                    getStudentCourses();
-
-                });
-
-                $("div").on("click", ".link-delete-user", function (e) {
-                    e.stopPropagation();
-
-                    var id = $(this).attr('id');
-
-                    bootbox.confirm("Are you sure? You want to delete this user", function (r) {
-                        if (r == true) {
-                            deleteUser(id);
-                        }
-                    });
-
-                });
-
-                $("div").on("click", "#btnAssignCourse", function (e) {
-                    e.stopPropagation();
-
-                    var val = $('#ddlCourses').val();
-
-                    var trs = $("#tblStudentCourses tr#" + (val ? val : 0));
-
-                    var user = $("#courseModal").attr('data-id');
-
-                    if (val && trs.length <= 0) {
-                        assignCourse(user, val);
-                    }
-
-                });
-
-                $("div").on("click", '#btnSaveUser', function (e) {
-                    e.stopPropagation();
-                    saveUser();
-                });
-
-                $("div").on("click", '#btnAddImage', function (e) {
-                    e.stopPropagation();
-                    $("#fu").trigger('click');
-                });
-
-                $("div").on("click", '#btnRemoveImage', function (e) {
-                    e.stopPropagation();
-                    $("#prevImage").attr('src', 'https://via.placeholder.com/200x200.png?text=..');
-                    $("#id_image").val(null);
-                });
-
-                $("#fu").change(function () {
-                    $('#fmFile').submit();
-                });
-
-                $('#fmFile').ajaxForm({
-                    beforeSend: function () {
-                        $(".progress-bar").css('width', 0);
-                    },
-                    uploadProgress: function (event, position, total, percentComplete) {
-                        $(".progress-bar").css('width', percentComplete + '%');
-                    },
-                    success: function (response) {
-                        if (response != 0) {
-                            $("#prevImage").attr('src', response);
-                            $("#id_image").val(response);
-                        }
-                    },
-                    complete: function (xhr) {}
-                });
-
-                $('#userModal').on('shown.bs.modal', function (e) {
-
-                    var id = $("#userModal").attr('data-id');
-
-                    var element = studentsList.find(a => a.id == id);
-
-                    var source = document.getElementById("studentFormTemplate").innerHTML;
-                    var template = Handlebars.compile(source);
-                    $("#userModal .modal-body").html(template(element));
-
-                    $("#userModal form").validate({
-                        rules: {
-                            first_name: "required",
-                            last_name: "required",
-                            password: "required",
-                            username: "required",
-                            email: {
-                                email: true
-                            }
-                        }
-                    });
-
-
-                });
-
-            };
-
-            var init = function () {
-                registerEvent();
-                getCourses();
-            };
-
-            init();
-
-            return this;
-
-        };
-
-    }(jQuery));
-
-    $(document).ready(function () {
-        var studentManager = new $.StudentManager({});
-    });
+            $.ajax({
+               type: "POST",
+               url: "/api/course-enrollment/",
+               data: JSON.stringify(data),
+               contentType: "application/json; charset=utf-8",
+               dataType: "json",
+               beforeSend: function (xhr, settings) {
+                  xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+               },
+               success: function (response, textStatus, xhr) {
+                  if (textStatus == "success") {
+                     getCourses().then(function () {
+                        setTimeout(function () {
+                           getStudentCourses();
+
+                           $("#courseModal .spinner-border").addClass("d-none");
+
+                           $("#courseModal button").attr("disabled", false);
+                        }, 2000);
+                     });
+                  }
+               },
+               complete: function (xhr, textStatus) {
+                  if (xhr.status == 400) {
+                  }
+               },
+               failure: function (errMsg) {},
+            });
+         };
+
+         var deleteEnrollment = function (id) {
+            $.ajax({
+               type: "POST",
+               url: "/api/course-enrollment/" + id + "/force_remove/",
+               data: null,
+               contentType: "application/json; charset=utf-8",
+               dataType: "json",
+               beforeSend: function (xhr, settings) {
+                  xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+               },
+               success: function (response, textStatus, xhr) {
+
+                toastr.success('Enrollment deleted');
+
+                  getCourses().then(function () {
+                     setTimeout(function () {
+                        getStudentCourses();
+
+                        $("#courseModal .spinner-border").addClass("d-none");
+
+                        $("#courseModal button").attr("disabled", false);
+                     }, 2000);
+                  });
+               },
+            });
+         };
+
+         var registerEvent = function () {
+            $("div").on("click", ".link-new-user", function (e) {
+               e.stopPropagation();
+
+               $("#userModal").removeAttr("data-id");
+
+               $("#userModal").modal({
+                  show: true,
+                  backdrop: "static",
+               });
+            });
+
+            $("div").on("click", ".link-edit-user", function (e) {
+               e.stopPropagation();
+
+               $("#userModal").attr("data-id", $(this).attr("id"));
+
+               $("#userModal").modal({
+                  show: true,
+                  backdrop: "static",
+               });
+            });
+
+            $("div").on("click", ".link-course-user", function (e) {
+               e.stopPropagation();
+
+               var id = $(this).attr("id");
+
+               $("#courseModal").attr("data-id", $(this).attr("id"));
+
+               $("#courseModal").modal({
+                  show: true,
+                  backdrop: "static",
+               });
+
+               fillCoursesList();
+               getStudentCourses();
+            });
+
+            $("div").on("click", ".link-delete-user", function (e) {
+               e.stopPropagation();
+
+               var id = $(this).attr("id");
+
+               bootbox.confirm("Are you sure? You want to delete this user", function (r) {
+                  if (r == true) {
+                     deleteUser(id);
+                  }
+               });
+            });
+
+            $("div").on("click", "#btnAssignCourse", function (e) {
+               e.stopPropagation();
+
+               var val = $("#ddlCourses").val();
+
+               var trs = $("#tblStudentCourses tr#" + (val ? val : 0));
+
+               var user = $("#courseModal").attr("data-id");
+
+               if (val && trs.length <= 0) {
+                  assignCourse(user, val);
+               }
+            });
+
+            $("div").on("click", "#btnSaveUser", function (e) {
+               e.stopPropagation();
+               saveUser();
+            });
+
+            $("div").on("click", "#btnAddImage", function (e) {
+               e.stopPropagation();
+               $("#fu").trigger("click");
+            });
+
+            $("div").on("click", "#btnRemoveImage", function (e) {
+               e.stopPropagation();
+               $("#prevImage").attr("src", "https://via.placeholder.com/200x200.png?text=..");
+               $("#id_image").val(null);
+            });
+
+            $("div").on("click", ".link-delete-enrollment", function (e) {
+               e.stopPropagation();
+
+               var id = $(this).attr("data-id");
+
+               bootbox.confirm("Are you sure? You want to delete this enrollment.", function (r) {
+                  if (r == true) {
+                     deleteEnrollment(id);
+                  }
+               });
+            });
+
+            $("#fu").change(function () {
+               $("#fmFile").submit();
+            });
+
+            $("#fmFile").ajaxForm({
+               beforeSend: function () {
+                  $(".progress-bar").css("width", 0);
+               },
+               uploadProgress: function (event, position, total, percentComplete) {
+                  $(".progress-bar").css("width", percentComplete + "%");
+               },
+               success: function (response) {
+                  if (response != 0) {
+                     $("#prevImage").attr("src", response);
+                     $("#id_image").val(response);
+                  }
+               },
+               complete: function (xhr) {},
+            });
+
+            $("#userModal").on("shown.bs.modal", function (e) {
+               var id = $("#userModal").attr("data-id");
+
+               var element = studentsList.find(a => a.id == id);
+
+               var source = document.getElementById("studentFormTemplate").innerHTML;
+               var template = Handlebars.compile(source);
+               $("#userModal .modal-body").html(template(element));
+
+               $("#userModal form").validate({
+                  rules: {
+                     first_name: "required",
+                     last_name: "required",
+                     password: "required",
+                     username: "required",
+                     email: {
+                        email: true,
+                     },
+                  },
+               });
+            });
+         };
+
+         var init = function () {
+            registerEvent();
+            getCourses();
+         };
+
+         init();
+
+         return this;
+      };
+   })(jQuery);
+
+   $(document).ready(function () {
+      var studentManager = new $.StudentManager({});
+   });
 </script>
 
 {% endblock %}

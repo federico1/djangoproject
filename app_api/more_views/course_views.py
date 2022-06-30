@@ -164,13 +164,23 @@ class EnrollmentViewset(viewsets.ViewSet):
 
     def create(self, request):
         data = request.data
-        data['user'] = self.request.user.id
+
+        if 'user' not in data:
+            data['user'] = self.request.user.id
 
         serializer = course_serializers.EnrollmentSerializer(data=data)
 
         if request.user.is_authenticated and request.user.is_student == True and serializer.is_valid():
 
             if not Enrollments.objects.filter(course=request.data['course'], user=self.request.user).exists():
+
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.data, status=status.HTTP_226_IM_USED)
+        elif request.user.is_superuser == True and serializer.is_valid():
+            
+            if not Enrollments.objects.filter(course=request.data['course'], user=request.data['user']).exists():
 
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -190,6 +200,13 @@ class EnrollmentViewset(viewsets.ViewSet):
 
         serializer = course_serializers.EnrollmentSerializer(snippet)
 
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['post'])
+    def force_remove(self, request, pk=None):
+        snippet = self.get_object(pk)
+        snippet.delete()
+        serializer = course_serializers.EnrollmentSerializer(snippet)
         return Response(serializer.data)
 
 
