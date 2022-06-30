@@ -249,7 +249,7 @@
 {% endverbatim %} {% verbatim %}
 
 <script type="text/x-handlebars-template" id="studentCourseItemTemplate">
-   {{#each course_enrolled}}
+   {{#each ._enrollments}}
        <tr id="{{id}}"><td>{{course}}</td><td>{{../title}}</td>
        <td> <a href='#' class='badge badge-danger link-delete-enrollment' data-id='{{id}}'>Delete</a> </td>
        </tr>
@@ -461,6 +461,7 @@
 
             $(coursesList).each(function (index, item) {
                if (item.course_enrolled.filter(d => d.user.id == id).length > 0) {
+                  item._enrollments = item.course_enrolled.filter(d => d.user.id == id);
                   var source = document.getElementById("studentCourseItemTemplate").innerHTML;
                   var template = Handlebars.compile(source);
                   $("#tblStudentCourses tbody").append(template(item));
