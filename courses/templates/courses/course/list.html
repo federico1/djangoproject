@@ -41,19 +41,18 @@ Easy To Take CSP Exam Prep Course Money Back Guarantee
 
             {% if subject and subject.package_set.count > 0 %}
             
-<div class="row">
-    <div class="col">
-
-        <div class="sp-badge-panel">
-            <a href="#bundles" class="sp-badge ">
-                <span>Buy All CSP Exam Preparation Courses at One Low Price $199
-</span>
-            </a>
-        </div>
-    
-    </div>
-</div>
-{% endif %}
+                <div class="row">
+                    <div class="col">
+                        <div class="sp-badge-panel">
+                            <a href="#bundles" aria-label="Buy All CSP Exam Preparation Courses at One Low Price $199" class="sp-badge ">
+                                <span>Buy All CSP Exam Preparation Courses at One Low Price $199</span>
+                            </a>
+                        </div>
+                    
+                    </div>
+                </div>
+            {% endif %}
+            
             {% if subject.page_details %}
             <div class="row mb-5">
                 <div class="col">
@@ -74,9 +73,9 @@ Easy To Take CSP Exam Prep Course Money Back Guarantee
                 </div>
 
                 <div class="col-lg-4">
-                    <div class="topbar-search">
+                    <div class="topbar-search" id="category">
                         <form method="get" action="#">
-                            <select class="form-control" id="ddlCategory">
+                            <select class="form-control" title="select cateory" aria-labelledby="category" id="ddlCategory">
                                 <option value="{% url 'courses_list' %}">Choose Category</option>
                                 {% for s in subjects %}
                                 <option {% if subject == s %} selected {% endif %}
@@ -138,25 +137,25 @@ Easy To Take CSP Exam Prep Course Money Back Guarantee
                             {% endif %}
                         </div>
 
-                        <h4>
+                        <h2>
                             <a href="{% url 'course_detail' course.slug %}">
                                 {{ course.title }}
                             </a>
-                        </h4>
+                        </h2>
                         <div class="rating">
-                            <a href="#">
+                            <a href="#" aria-label="Rate">
                                 <i class="fa fa-star"></i>
                             </a>
-                            <a href="#">
+                            <a href="#" aria-label="Rate">
                                 <i class="fa fa-star"></i>
                             </a>
-                            <a href="#">
+                            <a href="#" aria-label="Rate">
                                 <i class="fa fa-star"></i>
                             </a>
-                            <a href="#">
+                            <a href="#" aria-label="Rate">
                                 <i class="fa fa-star"></i>
                             </a>
-                            <a href="#">
+                            <a href="#" aria-label="Rate">
                                 <i class="fa fa-star"></i>
                             </a>
                             <span>(5.00)</span>
@@ -225,10 +224,10 @@ Easy To Take CSP Exam Prep Course Money Back Guarantee
                     <div class="card-header bg-primary">
                         <div class="row">
                             <div class="col">
-                                <h4 class="my-0 font-weight-normal text-white">{{ item.name }}</h4>
+                                <h3 class="my-0 font-weight-normal text-white">{{ item.name }}</h3>
                             </div>
                             <div class="col">
-                                <h4 class="my-0 text-right text-white">${{ item.price }}</h4>
+                                <h3 class="my-0 text-right text-white">${{ item.price }}</h3>
                             </div>
                         </div>
                     </div>
@@ -246,7 +245,7 @@ Easy To Take CSP Exam Prep Course Money Back Guarantee
             
                     </div>
                     <div class="card-footer text-center">
-                        <a href="/package-buy/{{ item.id }}/" class="btn btn-success">Purchase Now /a>
+                        <a href="/package-buy/{{ item.id }}/" class="btn btn-success">Purchase Now </a>
                     </div>
                 </div>
             </div>

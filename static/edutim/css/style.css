@@ -1141,8 +1141,9 @@ Course Block
     padding: 20px;
 }
 
-.course-block .course-content h4 {
+.course-block .course-content h2 {
     margin: 10px 0px;
+    font-size: 22px;
 }
 
 .course-block .course-footer {
