@@ -3,9 +3,19 @@ from django.http import JsonResponse
 
 from .mail_utils import send_contact_alert
 
-class LegalView(generic.TemplateView):
-    template_name = "legal/legal.html"
+# class LegalView(generic.TemplateView):
+#     template_name = "legal/legal.html"
 
+class PrivacyPolicyView(generic.TemplateView):
+    template_name = "privacy/privacy.html"
+
+
+class TermsView(generic.TemplateView):
+    template_name = "privacy/terms.html"
+
+
+class RefundView(generic.TemplateView):
+    template_name = "privacy/refund.html"
 
 class AboutView(generic.TemplateView):
     template_name = "about/about.html"
