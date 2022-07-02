@@ -6,12 +6,13 @@ class StaticViewSitemap(Sitemap):
     changefreq = "hourly"
 
     def items(self):
-        items_list = ['course_list', 'about_detail', 'legal_detail', 'contact_detail', 'student_manual_detail', 'faq', 'sst_verify']
+        items_list = ['course_list', 'about_detail', 'privacy_policy', 'terms', 'refund', 'contact_detail', 'faq', 'sst_verify']
         items_list = items_list + ['login', 'courses_list']
         return items_list
     
     def location(self, item):
         return reverse(item)
+
 
 class SubjectsSitemap(Sitemap):
     changefreq = "hourly"

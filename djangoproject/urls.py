@@ -46,7 +46,6 @@ urlpatterns = [
     path('course/', include('courses.urls')),
     path('courses', CourseListView.as_view(), name='courses_list'),
     path('', IndexView.as_view(), name='course_list'),
-    #path('students/', include('students.urls')),
     path('teachers/', include('app_teachers.urls')),
     path('quiz/', include('app_quiz.urls')),
     path('communicate/', include('app_chat.urls')),

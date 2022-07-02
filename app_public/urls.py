@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import PrivacyPolicyView, AboutView, ContactView, StudentManualView, FaqView, PackagesView, RefundView, TermsView
+from .views import PrivacyPolicyView, AboutView, ContactView, FaqView, PackagesView, RefundView, TermsView
 from .more_views.views_sst import SSTVerifyView
 
 urlpatterns = [
