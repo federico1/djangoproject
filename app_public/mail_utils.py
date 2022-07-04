@@ -13,7 +13,7 @@ def send_contact_alert(form_data):
             message=message,
             html_message=message,
             from_email='mail@pdhsafety.com',
-            recipient_list=['shoaib.ijaz8@gmail.com'],
+            recipient_list=['federico.roca@my.liu.edu'],
             fail_silently=False
         )
 
