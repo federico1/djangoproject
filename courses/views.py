@@ -12,7 +12,7 @@ from django.core.cache import cache
 #     template_name = "home.html"
 
 obsele_subjects = {
-  "csp-exam-prep-course": "csp",
+  "csp":"csp-exam-prep",
 }
 
 class IndexView(TemplateResponseMixin, View):
@@ -69,6 +69,7 @@ class CourseListView(TemplateResponseMixin, View):
                                             'instructors': None})
         except Subject.DoesNotExist:
             url = '/'
+            print(subject)
             if subject in obsele_subjects:
                 url = (reverse('course_list_subject', kwargs={"subject": obsele_subjects[subject]}))
                 print(url)
