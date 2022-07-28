@@ -4,7 +4,7 @@ django-braces==1.13.0
 numpy==1.16.1
 sklearn==0.0
 requests==2.23.0
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 cryptography
 django-environ
 xhtml2pdf==0.2.5
