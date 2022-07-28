@@ -22,6 +22,10 @@ from django.urls import path
 from django.conf.urls import url
 from django.contrib.sitemaps.views import sitemap
 
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
 from .sitemap import StaticViewSitemap, SubjectsSitemap, CourseSitemap
 
 sitemaps = {
@@ -30,8 +34,21 @@ sitemaps = {
     'course': CourseSitemap
 }
 
+schema_view = get_schema_view(
+   openapi.Info(
+      title="API",
+      default_version='v1',
+      description="Test description",
+      terms_of_service="https://www.google.com/policies/terms/",
+      contact=openapi.Contact(email="contact@snippets.local"),
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+   permission_classes=[permissions.AllowAny],
+)
 
 urlpatterns = [
+    path(r'swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
 

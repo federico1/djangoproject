@@ -8,3 +8,4 @@ djangorestframework==3.11.0
 cryptography
 django-environ
 xhtml2pdf==0.2.5
+drf-yasg==1.21.3
