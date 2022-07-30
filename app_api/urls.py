@@ -56,6 +56,7 @@ urlpatterns = [
     path('course-image/<int:pk>/', course_views.CourseImageApiView.as_view()),
     path('course-video/<int:pk>/', course_views.CourseVideoApiView.as_view()),
     path('update-course-quiz/', course_views.UpdateQuizApiView.as_view()),
+    path('courses-depth/', course_views.DumpCourse.as_view()),
 
     path('external-video-room/', chat_views.ExternalVideoRoomDetailView.as_view()),
     path('external-video-room/<int:pk>/',
@@ -84,13 +85,7 @@ urlpatterns = [
     path('conversations/', chat_views.ConversationDetailView.as_view(), name='api_conversations'),
     path('messages/', chat_views.MessageList.as_view(),name='api_messages'),
 
-#     path('conversations/<int:pk>/', views.ConversationDetailView.as_view()),
-#     path('conversation-members/', views.ConversationMembersList.as_view()),
-#     path('conversation-members/<int:pk>/',
-#          views.ConversationMembersList.as_view()),
-#     ,
-
     path('save-base64/', views.SaveBase64ImageView),
-
+    
     path('', include(router.urls)),
 ]

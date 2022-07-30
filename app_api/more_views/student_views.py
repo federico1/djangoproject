@@ -50,11 +50,6 @@ class CourseProgressView(APIView):
                 if c_count > 0:
                     completed_lessons = completed_lessons+1
 
-                # item_obj = {'type': 'content',
-                #             'object': serializers.serialize('json', [content.item, ]),
-                #             'module': serializers.serialize('json', [module, ]),
-                #             'complete': True if c_count > 0 else False}
-
             if module.quiz is not None:
 
                 if module.quiz.questions.count() > 0:

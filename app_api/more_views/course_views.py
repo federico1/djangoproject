@@ -365,6 +365,15 @@ class CourseRatingViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_200_OK)
 
 
+class DumpCourse(APIView):
+
+    def get(self, request, format=None):
+        snippets = Course.objects
+        serializer = course_serializers.CourseDepthSerializer(snippets, many=True)
+
+        return Response(serializer.data)
+
+
 @api_view(['GET', 'POST'])
 def UpdateHasProgress(request):
 

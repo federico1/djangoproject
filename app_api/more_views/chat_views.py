@@ -80,8 +80,9 @@ class ConversationDetailView(APIView):
         teacher_id = int(request.data['teacher'])
         student_id = int(request.data['student'])
 
-        conversation = Conversation.objects.filter(course=data['course'],
-                                                   conversation_members__member__in=[student_id, teacher_id])
+        conversation = Conversation.objects.filter(course=data['course']).filter(
+                                                   conversation_members__member=student_id).filter(conversation_members__member=teacher_id)
+        print(conversation)
         if conversation.count() > 0:
             serializer = ConversationSerializer(conversation, many=True)
             return Response(serializer.data[0], status=status.HTTP_201_CREATED)
@@ -100,13 +101,6 @@ class ConversationDetailView(APIView):
 
     def get(self, request, format=None):
         snippets = Conversation.objects
-
-        # if request.user.is_student == True:
-        #     c_list = \
-        #         request.user.conversation_member.values_list(
-        #             'conversation_id', flat=True)
-        #     snippets = Conversation.objects.filter(id__in=c_list)
-
         serializer = ConversationSerializer(snippets, many=True)
         return Response(serializer.data)
 
