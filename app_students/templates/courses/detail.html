@@ -1,5 +1,6 @@
 {% extends "student_base.html" %}
 {% load i18n %}
+{% load staticfiles %}
 {% block title %}
     {{ object.title }}
 {% endblock %}
@@ -10,7 +11,9 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand ml-3" href="{% url 'student_dashboard' %}">EDUTIM</a>
+        <a class="navbar-brand ml-3" href="{% url 'student_dashboard' %}">
+            <img src="{% static 'edutim/images/logo5.png' %}" width="55" alt="Construction Safety Training" class="img-fluid">
+        </a>
 
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">

@@ -17,9 +17,13 @@ class OrderApiView(APIView):
 
         snippets = Order.objects
         ref_id = request.GET.get('ref')
+        user_id = request.GET.get('user')
 
         if ref_id is not None:
             snippets = snippets.filter(ref_id=ref_id)
+
+        if user_id is not None:
+            snippets = snippets.filter(user_id=user_id)
 
         serializer = OrderSerializer(snippets, many=True)
         return Response(serializer.data)
