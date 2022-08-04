@@ -1,19 +1,18 @@
 from os import name
 from django.conf.urls import url, include
 from django.urls import path
-
 from rest_framework import routers
 
 from .more_views import course_views, users_views, chat_views, attendance_views, \
     student_views, cart_views, quiz_views, tag_views, course_module_views
-
 from . import views
+
 
 router = routers.DefaultRouter()
 
 router.register(r'courses', course_views.CourseViewset, basename="course")
 router.register(r'course-enrollment',
-                course_views.EnrollmentViewset, "enrollment"),
+                course_views.EnrollmentViewset, basename ="enrollments"),
 router.register(r'course-assess-rating',
                 course_views.CourseRatingViewSet),
 

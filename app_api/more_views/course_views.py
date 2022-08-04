@@ -7,7 +7,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, action
-
 from django.http import Http404
 from django.db.models import Count
 from datetime import datetime
@@ -15,9 +14,7 @@ from django.conf import settings
 
 from courses.models import Subject, Course, CourseTimeLog, CourseProgress, Content, CourseFeature, \
     Enrollments, Evaluation, AssessRating
-
 from students.models import User
-
 from app_api.more_serializers import course_serializers
 
 
@@ -46,7 +43,8 @@ class SubjectDetailView(APIView):
 
 
 class CourseViewset(viewsets.ModelViewSet):
-
+    """ details of function"""
+    
     queryset = Course.objects.all()
     serializer_class = course_serializers.CourseSerializer
 

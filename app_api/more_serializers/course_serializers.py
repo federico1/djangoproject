@@ -40,6 +40,7 @@ class EnrollmentP2Serializer(serializers.ModelSerializer):
         return super(EnrollmentP2Serializer, self).to_representation(instance)
 
 
+
 class CourseSerializer(serializers.ModelSerializer):
     total_modules = serializers.IntegerField()
     course_enrolled = EnrollmentSerializer(many=True)
