@@ -17,6 +17,7 @@ from django.conf import settings
 
 from django.utils.timezone import localtime, now
 
+from drf_yasg.utils import swagger_auto_schema
 
 class ExternalVideoRoomDetailView(APIView):
 
@@ -66,7 +67,7 @@ class ExternalVideoRoomDetailView(APIView):
 
 
 class ConversationDetailView(APIView):
-
+  
     def get_object(self, pk):
         try:
             return Conversation.objects.get(pk=pk)
@@ -104,6 +105,7 @@ class ConversationDetailView(APIView):
         serializer = ConversationSerializer(snippets, many=True)
         return Response(serializer.data)
 
+   # @swagger_auto_schema(query_serializer=ConversationSerializer)
     def post(self, request, format=None):
         serializer = ConversationSerializer(data=request.data)
 
