@@ -74,10 +74,11 @@ urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
 ]
 
-handler400 = 'app_public.views.bad_request'
-handler403 = 'app_public.views.bad_request'
-handler404 = 'app_public.views.bad_request'
-handler500 = 'app_public.views.bad_request'
+if not settings.DEBUG:
+    handler400 = 'app_public.views.bad_request'
+    handler403 = 'app_public.views.bad_request'
+    handler404 = 'app_public.views.bad_request'
+    handler500 = 'app_public.views.bad_request'
 
 #if settings.DEBUG:
 urlpatterns += static(settings.MEDIA_URL,
