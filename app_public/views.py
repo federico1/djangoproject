@@ -1,5 +1,6 @@
 from django.views import generic
 from django.http import JsonResponse
+from django.shortcuts import redirect
 
 from .mail_utils import send_contact_alert
 
@@ -16,6 +17,7 @@ class TermsView(generic.TemplateView):
 
 class RefundView(generic.TemplateView):
     template_name = "privacy/refund.html"
+
 
 class AboutView(generic.TemplateView):
     template_name = "about/about.html"
@@ -48,3 +50,8 @@ class FaqView(generic.TemplateView):
 
 class PackagesView(generic.TemplateView):
     template_name = "packages/packages.html"
+
+
+def bad_request(request):
+    response = redirect('/')
+    return response

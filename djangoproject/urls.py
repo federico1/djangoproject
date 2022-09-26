@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 from django.urls import path
 from django.conf.urls import url
 from django.contrib.sitemaps.views import sitemap
-
+from django.conf.urls import (handler400, handler403, handler404, handler500)
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -73,6 +73,11 @@ urlpatterns = [
     path('students/', include('app_students.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
 ]
+
+handler400 = 'app_public.views.bad_request'
+handler403 = 'app_public.views.bad_request'
+handler404 = 'app_public.views.bad_request'
+handler500 = 'app_public.views.bad_request'
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
