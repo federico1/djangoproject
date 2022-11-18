@@ -11,7 +11,7 @@ class StudentSignupForm(UserCreationForm):
     email = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
     first_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
     last_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
-    cell_number = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+    cell_number = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=False)
     image = forms.CharField(widget=forms.HiddenInput(), required=False)
     password1 = forms.CharField(label=_('Password'), widget=forms.PasswordInput(attrs={'class':'form-control'}))
     password2 = forms.CharField(label=_('Password verification'), widget=forms.PasswordInput(attrs={'class':'form-control'}))
