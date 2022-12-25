@@ -1,0 +1,8 @@
+myenv
+djangoprojectenv
+__pycache__/
+__pycache__
+*.pyc
+.pyc
+.vscode
+_test/
