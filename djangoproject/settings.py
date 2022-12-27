@@ -37,7 +37,7 @@ DATABASES = {
 }
 
 
-ALLOWED_HOSTS = ['127.0.0.1', '18.219.91.250', '75.101.218.53', 'pdhsafety.com', 'www.pdhsafety.com', 'ec2-18-219-91-250.us-east-2.compute.amazonaws.com']
+ALLOWED_HOSTS = ['*']
 
 # '18.221.173.7','127.0.0.1:8000'
 
