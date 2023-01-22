@@ -20,7 +20,6 @@
       <title>{% block title %} Accredit Safety Training | pdhsafety.com {% endblock %}</title>
 
       <link rel="icon" type="image/png" href="{% static 'edutim/images/logo5.png' %}" />
-
       <link rel="canonical" href="https://pdhsafety.com{{ request.path }}" />
 
       <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
@@ -28,14 +27,14 @@
       <!-- bootstrap.min css -->
       <link rel="stylesheet" href="{% static 'edutim/vendors/bootstrap/bootstrap.css' %}" />
       <!-- Iconfont Css -->
-      <link rel="stylesheet" href="{% static 'edutim/vendors/fontawesome/css/all.css' %}" />
+      <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{% static 'edutim/vendors/fontawesome/css/all.css' %}" />
 
       <!-- animate.css -->
-      <link rel="stylesheet" href="{% static 'edutim/vendors/animate-css/animate.css' %}" />
+      <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{% static 'edutim/vendors/animate-css/animate.css' %}" />
 
       <!-- Main Stylesheet -->
-      <link rel="stylesheet" href="{% static 'edutim/css/style.css' %}" />
-      <link rel="stylesheet" href="{% static 'edutim/css/responsive.css' %}" />
+      <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{% static 'edutim/css/style.css' %}" />
+      <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{% static 'edutim/css/responsive.css' %}" />
 
       <!-- Global site tag (gtag.js) - Google Analytics -->
       <script async src="https://www.googletagmanager.com/gtag/js?id=UA-190250545-1"></script>
@@ -367,7 +366,7 @@
             <div class="row">
                <div class="col text-center">
                   <a href="https://www.iacet.org/" target="_blank">
-                     <img src="{% static 'images/iacet.jpg' %}" width="300" alt="money back" />
+                     <img data-src="{% static 'images/iacet.jpg' %}" class="lazy" width="300" alt="money back" />
                   </a>
                   <p class="text-white mt-2">
                      NYC Construction Safety Training LLC is accredited by the International Association for Continuing Education and Training (IACET)
@@ -375,7 +374,7 @@
                </div>
                <div class="col text-center">
                   <a href="https://www.epa.gov/" target="_blank">
-                     <img src="{% static 'images/epa-seal.svg' %}" width="225" alt="money back" />
+                     <img data-src="{% static 'images/epa-seal.svg' %}" class="lazy" width="225" alt="money back" />
                   </a>
                </div>
             </div>
@@ -386,7 +385,7 @@
                <div class="row justify-content-center align-items-center">
                   <div class="col-lg-2">
                      <div class="footer-logo">
-                        <img src="{% static 'edutim/images/logo5.png' %}" width="70" alt="NYC Construction Safety Training, LLC" class="img-fluid" />
+                        <img data-src="{% static 'edutim/images/logo5.png' %}" width="70" alt="NYC Construction Safety Training, LLC" class="lazy img-fluid" />
                      </div>
                   </div>
                   <div class="col-lg-10">
@@ -413,9 +412,17 @@
       <script src="{% static 'edutim/vendors/jquery.form.min.js' %}"></script>
       <script src="{% static 'edutim/vendors/sweetalert.min.js' %}"></script>
       <script src="{% static 'edutim/vendors/handlebars.min.js' %}"></script>
+      <script src="{% static 'edutim/vendors/jquery.lazy.min.js' %}"></script>
       <script src="{% static 'edutim/js/script.js' %}"></script>
 
       <script>
+
+         $(function() {
+            $('img.lazy').lazy({
+                placeholder: "data:image/gif;base64,R0lGODlhEALAPQAPzl5uLr9Nrl8e7..."
+            });
+        });
+
          (function ($) {
             $.GlobalCartManager = function (options) {
                var that = this;

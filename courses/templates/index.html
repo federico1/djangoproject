@@ -136,9 +136,9 @@
                                         <div class="course-img">
                                             <a href="{% url 'course_detail' course.slug %}">
                                                 {% if course.image %}
-                                                    <img src="{{ course.image }}" alt="image" class="img-fluid rounded-0"/>
+                                                    <img data-src="{{ course.image }}" alt="image" class="lazy img-fluid rounded-0"/>
                                                 {% else %}
-                                                    <img src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg" alt="image" class="img-fluid rounded-0"/>
+                                                    <img data-src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg" alt="image" class="lazy img-fluid rounded-0"/>
                                                 {% endif %}
                                             </a>
                                         </div>
