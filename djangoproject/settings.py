@@ -77,7 +77,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    # 'courses.middleware.SubdomainCourseMiddleware',
+    'compression_middleware.middleware.CompressionMiddleware',
 ]
 
 ROOT_URLCONF = 'djangoproject.urls'
