@@ -67,6 +67,7 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE = [
+    'compression_middleware.middleware.CompressionMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -77,7 +78,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'compression_middleware.middleware.CompressionMiddleware',
 ]
 
 ROOT_URLCONF = 'djangoproject.urls'

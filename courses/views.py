@@ -6,7 +6,8 @@ from django.db.models import Count
 from .models import Subject, Course
 from students.forms import CourseEnrollForm
 from django.core.cache import cache
-
+from django.utils.decorators import method_decorator
+from compression_middleware.decorators import compress_page
 
 # class HomePage(generic.TemplateView):
 #     template_name = "home.html"
@@ -15,6 +16,8 @@ obsele_subjects = {
   "csp":"csp-exam-prep",
 }
 
+
+@method_decorator(compress_page, name="dispatch")
 class IndexView(TemplateResponseMixin, View):
     template_name = 'index.html'
 
@@ -25,6 +28,7 @@ class IndexView(TemplateResponseMixin, View):
         })
 
 
+@method_decorator(compress_page, name="dispatch")
 class CourseListView(TemplateResponseMixin, View):
     model = Course
     template_name = 'courses/course/list.html'
@@ -76,6 +80,7 @@ class CourseListView(TemplateResponseMixin, View):
             return redirect(url)
 
 
+@method_decorator(compress_page, name="dispatch")
 class CourseDetailView(DetailView):
     model = Course
     template_name = 'courses/course/detail.html'
@@ -88,6 +93,7 @@ class CourseDetailView(DetailView):
         return context
 
 
+@method_decorator(compress_page, name="dispatch")
 class PostClassSurveryDetailView(generic.TemplateView):
     template_name = 'courses/post_survery.html'
 

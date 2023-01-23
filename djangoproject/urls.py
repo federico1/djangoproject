@@ -63,7 +63,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('course/', include('courses.urls')),
     path('courses', cache_page(60 * 15)(CourseListView.as_view()), name='courses_list'),
-    path('', IndexView.as_view(), name='course_list'),
+    path('', cache_page(60 * 15)(IndexView.as_view()), name='course_list'),
     path('teachers/', include('app_teachers.urls')),
     path('quiz/', include('app_quiz.urls')),
     path('communicate/', include('app_chat.urls')),
