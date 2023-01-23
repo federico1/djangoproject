@@ -113,10 +113,10 @@ Easy To Take Course Money Back Guarantee
                     <div class="course-img">
                         <a href="{% url 'course_detail' course.slug %}">
                             {% if course.image %}
-                            <img src="{{ course.image }}" alt="image" class="img-fluid" />
+                            <img data-src="{{ course.image }}" alt="image" class="lazy img-fluid" />
                             {% else %}
-                            <img src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg" alt="image"
-                                class="img-fluid" />
+                            <img data-src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg" alt="image"
+                                class="img-fluid lazy" />
                             {% endif %}
                         </a>
                         {% if course.features.first.skill_level %}
