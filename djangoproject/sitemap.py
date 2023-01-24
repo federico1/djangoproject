@@ -21,6 +21,9 @@ class SubjectsSitemap(Sitemap):
         subject_list = Subject.objects.all()
         return subject_list
 
+    def location(self, obj):
+        url = obj.get_absolute_url()
+        return url if len(url)>0 and url[-1]=='/' else url + '/'
 
 class CourseSitemap(Sitemap):
     changefreq = "hourly"
@@ -28,3 +31,7 @@ class CourseSitemap(Sitemap):
     def items(self):
         item = Course.objects.all()
         return item
+
+    def location(self, obj):
+        url = obj.get_absolute_url()
+        return url if len(url)>0 and url[-1]=='/' else url + '/'

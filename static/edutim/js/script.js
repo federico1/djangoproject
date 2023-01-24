@@ -44,7 +44,7 @@
      $(response).each(function(ix , item){
         var link = $("<a />", {
             class: "dropdown-item",
-            href: '/course/subject/' + item.slug,
+            href: '/course/subject/' + item.slug+'/',
             text:item.title + " ("+item.course_count+" courses)"
         });
         $("div[aria-labelledby='navbar3']").append(link);
