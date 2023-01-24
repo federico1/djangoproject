@@ -24,7 +24,7 @@
 
       <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
 
-      <link rel="stylesheet" href="{% static 'edutim/combine.css' %}" />
+      <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{% static 'edutim/combine.css' %}" />
       {% comment %} <!-- bootstrap.min css -->
       <link rel="stylesheet" href="{% static 'edutim/vendors/bootstrap/bootstrap.css' %}" />
       <!-- Iconfont Css -->
@@ -385,7 +385,7 @@
       <!-- Main jQuery -->
       <script src="{% static 'edutim/vendors/jquery/jquery.js' %}"></script>
       <!-- Bootstrap 4.5 -->
-      <script src="{% static 'edutim/vendors/bootstrap/bootstrap.js' %}"></script>
+      <script src="{% static 'edutim/vendors/bootstrap/bootstrap.min.js' %}"></script>
       <script src="{% static 'edutim/vendors/jquery.validate.min.js' %}"></script>
       <script src="{% static 'edutim/vendors/jquery.form.min.js' %}"></script>
       <script src="{% static 'edutim/vendors/sweetalert.min.js' %}"></script>
