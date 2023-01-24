@@ -26,6 +26,7 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.views.decorators.cache import cache_page
+from django.views.generic.base import TemplateView
 
 from .sitemap import StaticViewSitemap, SubjectsSitemap, CourseSitemap
 
@@ -73,6 +74,7 @@ urlpatterns = [
     path('', include('app_cart.urls')),
     path('students/', include('app_students.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
+    path("robots.txt",TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
 ]
 
 if not settings.DEBUG:
