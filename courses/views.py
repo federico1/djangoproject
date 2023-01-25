@@ -8,6 +8,7 @@ from students.forms import CourseEnrollForm
 from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from compression_middleware.decorators import compress_page
+from django.views.decorators.cache import cache_page
 
 # class HomePage(generic.TemplateView):
 #     template_name = "home.html"
@@ -29,6 +30,7 @@ class IndexView(TemplateResponseMixin, View):
 
 
 @method_decorator(compress_page, name="dispatch")
+@method_decorator(cache_page(60*60*2), name="dispatch")
 class CourseListView(TemplateResponseMixin, View):
     model = Course
     template_name = 'courses/course/list.html'
