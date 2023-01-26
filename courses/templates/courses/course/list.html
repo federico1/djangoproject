@@ -320,12 +320,11 @@ Easy To Take Course Money Back Guarantee
 
 <script>
 
-    $(function() {
+    $(document).ready(function () {
+
         $('section.lazy').lazy({
         });
-    });
 
-    $(document).ready(function () {
         $("#ddlCategory").change(function () {
             var val = $(this).val();
             window.location.href = val;
