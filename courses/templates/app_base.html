@@ -381,11 +381,6 @@
 
       <script>
 
-         $(function() {
-            $('img.lazy').lazy({
-            });
-        });
-
          (function ($) {
             $.GlobalCartManager = function (options) {
                var that = this;
@@ -494,6 +489,9 @@
          })(jQuery);
 
          $(document).ready(function () {
+
+            $('img.lazy').lazy({});
+
             var globalCart = new $.GlobalCartManager({});
          });
       </script>
