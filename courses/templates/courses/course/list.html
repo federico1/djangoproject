@@ -18,7 +18,7 @@ Easy To Take Course Money Back Guarantee
 
 {% block content %}
 
-<section class="page-header lazy" data-src="{% static 'edutim/images/bg/page-header.jpg' %}" data-time='{% now "SHORT_DATETIME_FORMAT" %}'>
+<section class="page-header" data-time='{% now "SHORT_DATETIME_FORMAT" %}'>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -321,9 +321,6 @@ Easy To Take Course Money Back Guarantee
 <script>
 
     $(document).ready(function () {
-
-        $('section.lazy').lazy({
-        });
 
         $("#ddlCategory").change(function () {
             var val = $(this).val();
