@@ -399,7 +399,7 @@ Checkout | pdhsafety.com
             var payViaBank = function() {
 
                 $("#bankTransferModal").find("button, input").attr('disabled', true);
-                
+
                 var items = [];
                 var payments = [];
 
@@ -468,6 +468,7 @@ Checkout | pdhsafety.com
             var createREfID = function() {
                return new Date().valueOf() + parseInt('{{user.id}}') + "-" +(Math.random() + 1).toString(36).substring(7).toUpperCase();
             };
+            
             var registerEvent = function () {
 
                 $("#btnPayBank").click(function () {

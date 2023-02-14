@@ -99,6 +99,13 @@
                                 </table>
                                 <div class="wc-proceed-to-checkout">
                                     {% if request.user.is_authenticated %}
+                                    <div>
+                                        <button id="btnPayBank" class="btn btn-block btn-info mb-1">Pay via Bank Transfer</button>
+                                    </div>
+                                    <div class="text-center">
+                                        or Pay Online
+                                    </div>
+
                                         <div id="paypal-button-container" class="mt-3"></div>
                                     {% else %}
 
@@ -145,6 +152,88 @@
         </script>
     {% endverbatim %}
 
+    <div id="bankTransferModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Pay via Bank Transfer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-primary small" role="alert">
+                        <strong>How it works!</strong>
+                        You can pay via bank transfer. We will provide you with the bank details. The good thing is you can
+                        enroll in the course without making payment instantly.
+                   
+                    </div>
+    
+                    <div class="row">
+    
+                        <div class="col-md-8">
+                            <table class="table table-bordered table-sm small d-none">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th colspan="2">Bank Account Information</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            Bank Name
+                                        </td>
+                                        <td>
+                                            Standard Chartered
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>IBAN (Account):</td>
+                                        <td>PK09SCBL0000001714073601</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Local Account:</td>
+                                        <td>01714073601</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Name:</td>
+                                        <td>Shoaib Ijaz</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Country:</td>
+                                        <td>Pakistan, City: Lahore</td>
+                                    </tr>
+                                  
+                                    <tr>
+                                        <td>Address:</td>
+                                        <td>H#7A, Gulberg-3, Lahore</td>
+                                    </tr>
+                                    <tr>
+                                        <td>PostCode:</td>
+                                        <td>53000, Phone: +923467082281</td>
+                                    </tr>
+                                  
+                                </tbody>
+                            </table>
+                        </div>
+                       
+                       
+                    </div>
+    
+                    <div>
+                        <small>
+                            If you wouldn't able to make a bank transfer. You can contact us so we will help you.
+                        </small>
+                    </div>
+    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="enrollViaBank">Enroll Course Now</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 {% block scripts %}
@@ -312,6 +401,53 @@
                     });
                 };
 
+                var payViaBank = function() {
+
+                    $("#bankTransferModal").find("button, input").attr('disabled', true);
+    
+                    var payments = [];
+
+                    payments.push({gateway: 'Bank Tranfer', info: "", total_price: totalPrice, 
+                    amount_paid: totalPrice});
+
+                    var orderObject = {
+                        ref_id: createREfID(),
+                        user: '{{ request.user.id }}',
+                        total_amount: totalPrice,
+                        items: items,
+                        payments: payments
+                    };
+    
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/orders/",
+                        data: JSON.stringify(orderObject),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                            ShowLoadingModal("Please wait", "working on your request");
+                        },
+                        success: function (response) {
+    
+                            if (response && response.ref_id) {
+                                window.location.href = '/order/' + response.ref_id + '/';
+                            } else {
+                                Swal.close();
+    
+                                Swal.fire({ title: 'Order failed to complete', text: 'Please refresh the page and try again.' }).then(function () {
+                                    window.location.reload();
+                                });
+                            }
+                        },
+                        failure: function (errMsg) { }
+                    });
+                };
+    
+                var createREfID = function() {
+                   return new Date().valueOf() + parseInt('{{user.id}}') + "-" +(Math.random() + 1).toString(36).substring(7).toUpperCase();
+                };
+
                 var registerEvent = function () {
 
                     $("div").on("click", '.link-auth', function (e) {
@@ -335,6 +471,14 @@
                         });
 
 
+                    });
+
+                    $("#btnPayBank").click(function () {
+                        $("#bankTransferModal").modal('show');
+                    });
+    
+                    $("#enrollViaBank").click(function () {
+                        payViaBank();
                     });
                 };
 
