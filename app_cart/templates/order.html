@@ -6,7 +6,7 @@
         <div class="container sm-center">
             <div class="row">
                 <div class="col">
-                    <div class="home-courses cart-page">
+                    <div class="home-courses cart-page mb-2">
                         <div class="container">
                             <div class="row">
                                 <!-- BEGIN INVOICE -->
@@ -49,7 +49,8 @@
                                                 <div class="col-md-6">
                                                     <address>
                                                     <strong>Payment Method:</strong><br>
-                                                    PayPal<br>
+                                                    <span id="labelPaymentMethod">PayPal</span>
+                                                    <br>
                                                 </address>
                                                 </div>
                                                 <div class="col-md-6 text-right">
@@ -87,6 +88,11 @@
                                     </div>
                                 </div>
                                 <!-- END INVOICE -->
+                            </div>
+                            <div class="row">
+                                <div class="col text-right">
+                                    <button type="button" class="btn btn-primary" id="btnPrint">Print Invoice</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -136,6 +142,11 @@
                         $(".sub_total").html('$' + item.total_amount);
                         $(".total_price").html('$' + item.total_amount);
 
+                        if(item.payments) {
+                            item.payments.forEach(a=>{
+                                $("#labelPaymentMethod").html(a.gateway);
+                            });
+                        }
 
                     } else {
                         $('.invoice').remove();
@@ -143,7 +154,11 @@
                 });
             };
 
-            var registerEvent = function() {};
+            var registerEvent = function() {
+                $("#btnPrint").click(function () {
+                    window.print()
+                });
+            };
 
             var init = function() {
                 registerEvent();
