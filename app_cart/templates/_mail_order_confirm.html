@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <title>You're in! Here's your order confirmation.</title>
+
+      <!-- Start Common CSS -->
+      <style type="text/css">
+         #outlook a {
+            padding: 0;
+         }
+
+         body {
+            width: 100% !important;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Helvetica, arial, sans-serif;
+         }
+
+         .ExternalClass {
+            width: 100%;
+         }
+
+         .ExternalClass,
+         .ExternalClass p,
+         .ExternalClass span,
+         .ExternalClass font,
+         .ExternalClass td,
+         .ExternalClass div {
+            line-height: 100%;
+         }
+
+         .backgroundTable {
+            margin: 0;
+            padding: 0;
+            width: 100% !important;
+            line-height: 100% !important;
+         }
+
+         .main-temp table {
+            border-collapse: collapse;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+            font-family: Helvetica, arial, sans-serif;
+         }
+
+         .main-temp table td {
+            border-collapse: collapse;
+         }
+
+         .button-blue {
+            display: inline-block;
+            width: 200px;
+            background-color: #ff9800;
+            border-radius: 3px;
+            color: #ffffff !important;
+            font-size: 15px;
+            line-height: 45px;
+            text-align: center;
+            text-decoration: none;
+            -webkit-text-size-adjust: none;
+            mso-hide: all;
+            text-transform: uppercase;
+         }
+      </style>
+      <!-- End Common CSS -->
+   </head>
+
+   <body style="background-color: #fff">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" class="backgroundTable main-temp" style="background-color: #fff">
+         <tbody>
+            <tr>
+               <td>
+                  <table
+                     width="600"
+                     align="center"
+                     cellpadding="15"
+                     cellspacing="0"
+                     border="0"
+                     class="devicewidth"
+                     style="background-color: #ffffff; margin-top: 15px"
+                  >
+                     <tbody>
+                        <!-- Start header Section -->
+                        <tr>
+                           <td style="padding-top: 30px">
+                              <table
+                                 width="560"
+                                 align="center"
+                                 cellpadding="0"
+                                 cellspacing="0"
+                                 border="0"
+                                 class="devicewidthinner"
+                                 style="border-bottom: 1px solid #eeeeee; text-align: center"
+                              >
+                                 <tbody>
+                                    <tr>
+                                       <td>
+                                          <a href="https://pdhsafety.com/">
+                                             <img width="100" src="https://pdhsafety.com/static/edutim/images/logo5.png" />
+                                          </a>
+                                       </td>
+                                    </tr>
+                                    <tr>
+                                       <td style="padding-bottom: 10px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, 'Roboto'">
+                                          <h5>Order Confirmation</h5>
+                                         <span style="font-size: 12px"> {% now "jS F Y" %}</span>
+                                          <p style="font-size: 14px">
+                                            Thank you for your purchase! This email is to confirm your order with pdhsafety.com
+                                          </p>
+                                          <p style="font-size: 14px">
+                                            You can view the invoice details with following link
+                                            <a href="/order/{{ref}}" target="_blank"> View Invoice</a>
+                                          </p>
+                                       </td>
+                                    </tr>
+
+                                    <tr>
+                                       <td
+                                          style="
+                                             font-size: 14px;
+                                             line-height: 18px;
+                                             padding-bottom: 25px;
+                                             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, 'Roboto';
+                                          "
+                                       >
+                                          <p>Please do not hesitate to send us an email at 
+                                            <a href="mailto: mail@pdhsafety.com" target="_blank">mail@pdhsafety.com</a>
+                                            if you have any questions at all.</p>
+                                          <p style="text-align: left; padding-left: 40px; margin-top: 40px">
+                                             Thanks, <br />
+                                             The Construction Safety Training, LLC Team
+                                          </p>
+                                       </td>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                           </td>
+                        </tr>
+                        <!-- End header Section -->
+                     </tbody>
+                  </table>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+   </body>
+</html>

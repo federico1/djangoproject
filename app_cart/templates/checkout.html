@@ -72,7 +72,7 @@ Checkout | pdhsafety.com
                     <strong>How it works!</strong>
                     You can pay via bank transfer. We will provide you with the bank details. The good thing is you can
                     enroll in the course without making payment instantly.
-               
+
                 </div>
 
                 <div class="row">
@@ -109,7 +109,7 @@ Checkout | pdhsafety.com
                                     <td>Country:</td>
                                     <td>Pakistan, City: Lahore</td>
                                 </tr>
-                              
+
                                 <tr>
                                     <td>Address:</td>
                                     <td>H#7A, Gulberg-3, Lahore</td>
@@ -118,12 +118,12 @@ Checkout | pdhsafety.com
                                     <td>PostCode:</td>
                                     <td>53000, Phone: +923467082281</td>
                                 </tr>
-                              
+
                             </tbody>
                         </table>
                     </div>
-                   
-                   
+
+
                 </div>
 
                 <div>
@@ -157,7 +157,7 @@ Checkout | pdhsafety.com
 
 {% block scripts %}
 
-<script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID_SANDBOX' %}"></script>
+<script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID' %}"></script>
 
 <script>
     (function ($) {
@@ -339,8 +339,7 @@ Checkout | pdhsafety.com
                     success: function (response) {
 
                         if (response && response.ref_id) {
-                            localStorage.removeItem(keyName);
-                            window.location.href = '/order/' + response.ref_id + '/';
+                            sendConfirmMail(response);
                         } else {
                             Swal.close();
 
@@ -396,7 +395,7 @@ Checkout | pdhsafety.com
                 ga('send', _opts);
             };
 
-            var payViaBank = function() {
+            var payViaBank = function () {
 
                 $("#bankTransferModal").find("button, input").attr('disabled', true);
 
@@ -423,7 +422,7 @@ Checkout | pdhsafety.com
 
                 var payOpts = {
                     gateway: 'Bank Tranfer',
-                    info: JSON.stringify({created:new Date()}),
+                    info: JSON.stringify({ created: new Date() }),
                     total_price: _totalPrice,
                     amount_paid: _totalPrice
                 };
@@ -451,8 +450,7 @@ Checkout | pdhsafety.com
                     success: function (response) {
 
                         if (response && response.ref_id) {
-                            localStorage.removeItem(keyName);
-                            window.location.href = '/order/' + response.ref_id + '/';
+                            sendConfirmMail(response);
                         } else {
                             Swal.close();
 
@@ -465,10 +463,32 @@ Checkout | pdhsafety.com
                 });
             };
 
-            var createREfID = function() {
-               return new Date().valueOf() + parseInt('{{user.id}}') + "-" +(Math.random() + 1).toString(36).substring(7).toUpperCase();
+            var createREfID = function () {
+                return new Date().valueOf() + parseInt('{{user.id}}') + "-" + (Math.random() + 1).toString(36).substring(7).toUpperCase();
             };
-            
+
+            var sendConfirmMail = function (order) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/send-order-confirm-mail",
+                    data: { ref: order.ref_id },
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        ShowLoadingModal("Please wait", "working on your request");
+                    },
+                    success: function (response) {
+                        localStorage.removeItem(keyName);
+                        window.location.href = '/order/' + order.ref_id + '/';
+                    },
+                    failure: function (errMsg) {
+                        localStorage.removeItem(keyName);
+                        window.location.href = '/order/' + order.ref_id + '/';
+                    }
+                });
+
+            };
+
             var registerEvent = function () {
 
                 $("#btnPayBank").click(function () {

@@ -379,7 +379,7 @@
                         success: function (response) {
 
                             if (response && response.ref_id) {
-                                window.location.href = '/order/' + response.ref_id + '/';
+                                sendConfirmMail(response);
                             } else {
                                 swal({
                                     title: "Order failed to complete",
@@ -431,7 +431,7 @@
                         success: function (response) {
     
                             if (response && response.ref_id) {
-                                window.location.href = '/order/' + response.ref_id + '/';
+                                sendConfirmMail(response);
                             } else {
                                 Swal.close();
     
@@ -447,6 +447,29 @@
                 var createREfID = function() {
                    return new Date().valueOf() + parseInt('{{user.id}}') + "-" +(Math.random() + 1).toString(36).substring(7).toUpperCase();
                 };
+
+                
+            var sendConfirmMail = function (order) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/send-order-confirm-mail",
+                    data: { ref: order.ref_id },
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        ShowLoadingModal("Please wait", "working on your request");
+                    },
+                    success: function (response) {
+                        window.location.href = '/order/' + order.ref_id + '/';
+                    },
+                    failure: function (errMsg) {
+                        localStorage.removeItem(keyName);
+                        window.location.href = '/order/' + order.ref_id + '/';
+                    }
+                });
+
+            };
+
 
                 var registerEvent = function () {
 
