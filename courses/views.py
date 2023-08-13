@@ -81,7 +81,29 @@ class CourseListView(TemplateResponseMixin, View):
                 print(url)
             return redirect(url)
 
+@method_decorator(compress_page, name="dispatch")
+@method_decorator(cache_page(60*60*2), name="dispatch")
+class CourseListViewV2(TemplateResponseMixin, View):
+    model = Course
+    template_name = 'courses/course/list_v2.html'
 
+    def get(self, request, subject=None):
+        try:
+            subject = Subject.objects.get(slug=subject)
+         
+            return self.render_to_response({'subjects': None,
+                                            'subject': subject,
+                                            'courses': None,
+                                            'instructors': None})
+        except Subject.DoesNotExist:
+            url = '/'
+            print(subject)
+            if subject in obsele_subjects:
+                url = (reverse('course_list_subject', kwargs={
+                       "subject": obsele_subjects[subject]}))
+                print(url)
+            return redirect(url)
+            
 @method_decorator(compress_page, name="dispatch")
 class CourseDetailView(DetailView):
     model = Course

@@ -1,0 +1,233 @@
+{% extends "app_base.html" %}
+{% load staticfiles %}
+
+
+{% block title %}
+{% if subject %} Best {{ subject.title }} Courses Online | pdhsafety.com {%else%}
+Best Accredit Safety Training Courses Online | pdhsafety.com
+{% endif %}
+{% endblock %}
+
+{% block meta_desc %}
+{% if subject %} Best Price Online {{ subject.title }}
+OSHA Compliant  (Easy Access 24/7 On All Devices)
+Easy To Take Course Satisfaction Guarantee
+
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<section class="page-header" data-time='{% now "SHORT_DATETIME_FORMAT" %}'>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="page-header-content">
+                    {% if subject.page_title %}
+                    <h1>{{subject.page_title}}</h1>
+                    {%else%}
+                    <h1>BEST SELLING COURSES</h1>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding course">
+    <div class="course-top-wrap">
+        <div class="container">
+
+            {% if subject and subject.package_set.count > 0 %}
+            
+                <div class="row">
+                    <div class="col">
+                        <div class="sp-badge-panel">
+                            <a href="#bundles" aria-label="Buy All Exam Preparation Courses at One Low Price $199" class="sp-badge ">
+                                <span>Buy All Exam Preparation Courses at One Low Price $199</span>
+                            </a>
+                        </div>
+                    
+                    </div>
+                </div>
+            {% endif %}
+            
+            {% if subject.page_details %}
+            <div class="row mb-5">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <p>{{subject.page_details}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+           
+          
+        </div>
+    </div>
+
+
+   
+
+</section>
+
+{% if subject and subject.video_link %}
+<section class="team section-padding bg-grey mb-5">
+    <div class="container">
+        <div class="row" >
+            <div class="col-md-12">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe id="iframeVideo" class="embed-responsive-item" data-src="{{ subject.video_link }}"  title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if subject and subject.package_set.count > 0 %}
+<section class="team section-padding bg-grey mb-5">
+    <div class="container">
+        <div class="row align-items-center" id="bundles">
+            <div class="col-lg-12">
+                <div class="section-heading">
+                    <h3>There's never been a better time to take your career to the next level  </h3>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row" >
+            {% for item in subject.package_set.all %}
+            <div class="col-md-6">
+                <div class="card border-0 mb-4 shadow">
+                    <div class="card-header bg-primary">
+                        <div class="row">
+                            <div class="col">
+                                <h3 class="my-0 font-weight-normal text-white">{{ item.name }}</h3>
+                            </div>
+                            <div class="col">
+                                <h3 class="my-0 text-right text-white">${{ item.price }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="text-center">Courses</h3>
+                        <div class="text-center mb-2">
+                            <ul class="list-unstyled" style="max-height: 150px;overflow: hidden auto;">
+                                
+                                {% for cs in item.courses.all %}
+                                <li>{{ cs.course }}</li>
+                                {% endfor %}
+                           
+                            </ul>
+                        </div>
+            
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="/package-buy/{{ item.id }}/" class="btn btn-success">Purchase Now </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+
+<style>
+
+
+.sp-badge {
+
+    position: relative;
+    letter-spacing: 0.08em;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+    text-align: center;
+    filter: drop-shadow(0.25em 0.7em 0.95em rgba(0, 0, 0, 0.8));
+    font-size: calc(11px + 14 * (( 100vw - 420px ) / (860)));
+    margin-bottom: 70px;
+}
+@media screen and (max-width: 420px) {
+  .sp-badge  {
+    font-size: 11px;
+  }
+}
+@media screen and (min-width: 1280px) {
+  .sp-badge  {
+    font-size: 25px;
+  }
+}
+
+.sp-badge :hover {
+  color: #fff;
+  text-decoration: none;
+ 
+}
+.sp-badge :hover::before {
+  opacity: 0.9;
+}
+.sp-badge svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  z-index: 0;
+  width: 10em;
+  height: 10em;
+}
+.sp-badge  span {
+  display: block;
+  background: #111;
+  border-radius: 0.4em;
+  padding: 0.4em 1em;
+  z-index: 1;
+  min-width: 11em;
+  border: 1px solid;
+  text-transform: uppercase;
+}
+</style>
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#ddlCategory").change(function () {
+            var val = $(this).val();
+            window.location.href = val;
+        });
+
+        var videoLink = $("#iframeVideo").attr('data-src');
+
+        if(videoLink) {
+            var link = 'https://www.youtube.com/embed/'+getId(videoLink);
+            $("#iframeVideo").attr('src', link);
+        }
+    });
+
+    function getId(url) {
+        var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        var match = url.match(regExp);
+
+        if (match && match[2].length == 11) {
+            return match[2];
+        } else {
+            return 'error';
+        }
+    };
+</script>
+{% endblock %}
