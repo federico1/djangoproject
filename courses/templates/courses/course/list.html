@@ -19,7 +19,7 @@ Easy To Take Course Satisfaction Guarantee
 
 {% block content %}
 
-<section class="page-header" data-time='{% now "SHORT_DATETIME_FORMAT" %}'>
+<section class="page-header" data-time='{{page_time}}'>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -100,7 +100,7 @@ Easy To Take Course Satisfaction Guarantee
 
             {% for course in courses %}
             {% with subject=course.subject %}
-            <div class="col-lg-4 col-md-6 course-item">
+            <div class="col-xl-4 col-md-6 course-item">
 
                 <input type="hidden" name="id" value="{{ course.id }}" />
                 <input type="hidden" name="title" value="{{ course.title }}" />
@@ -114,9 +114,9 @@ Easy To Take Course Satisfaction Guarantee
                     <div class="course-img">
                         <a href="{% url 'course_detail' course.slug %}">
                             {% if course.image %}
-                            <img data-src="{{ course.image }}" alt="image" class="lazy img-fluid" />
+                            <img width="300" height="115" data-src="{{ course.image }}" alt="image" class="lazy img-fluid" />
                             {% else %}
-                            <img data-src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg" alt="image"
+                            <img width="348" height="281" data-src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg" alt="image"
                                 class="img-fluid lazy" />
                             {% endif %}
                         </a>
@@ -317,6 +317,29 @@ Easy To Take Course Satisfaction Guarantee
   border: 1px solid;
   text-transform: uppercase;
 }
+
+@media only screen and (min-width: 768px) {
+    .course-img {
+        min-height:281px;
+        max-height:281px;
+        margin-bottom: 10px;
+        }
+
+        .course-img img {
+            width:100%;
+            max-height:100%;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+  }
+
+
+
+
 </style>
 
 <script>

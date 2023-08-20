@@ -10,11 +10,13 @@ from django.utils.decorators import method_decorator
 from compression_middleware.decorators import compress_page
 from django.views.decorators.cache import cache_page
 
+from datetime import datetime
+
 # class HomePage(generic.TemplateView):
 #     template_name = "home.html"
 
 obsele_subjects = {
-  "csp":"csp-exam-prep",
+    "csp": "csp-exam-prep",
 }
 
 
@@ -46,10 +48,13 @@ class CourseListView(TemplateResponseMixin, View):
 
             all_courses = Course.objects.annotate(
                 total_modules=Count('modules'))
+
             if subject:
-                subject = Subject.objects.get(slug=subject) #get_object_or_404(Subject, slug=subject)
+                # get_object_or_404(Subject, slug=subject)
+                subject = Subject.objects.get(slug=subject)
                 key = 'subject_{}_courses'.format(subject.id)
                 courses = cache.get(key)
+
                 if not courses:
                     courses = all_courses.filter(subject=subject)
                     cache.set(key, courses)
@@ -64,7 +69,8 @@ class CourseListView(TemplateResponseMixin, View):
                     title__icontains=str(request.GET.get('q')))
 
             if request.GET.get('teacher') is not None:
-                courses = all_courses.filter(owner=int(request.GET.get('teacher')))
+                courses = all_courses.filter(
+                    owner=int(request.GET.get('teacher')))
 
         # instructors = User.objects.annotate(
         #                    total_courses=Count('courses_created')).filter(total_courses__gt=0)
@@ -72,14 +78,18 @@ class CourseListView(TemplateResponseMixin, View):
             return self.render_to_response({'subjects': subjects,
                                             'subject': subject,
                                             'courses': courses,
-                                            'instructors': None})
+                                            'instructors': None,
+                                            'page_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                            })
         except Subject.DoesNotExist:
             url = '/'
             print(subject)
             if subject in obsele_subjects:
-                url = (reverse('course_list_subject', kwargs={"subject": obsele_subjects[subject]}))
+                url = (reverse('course_list_subject', kwargs={
+                       "subject": obsele_subjects[subject]}))
                 print(url)
             return redirect(url)
+
 
 @method_decorator(compress_page, name="dispatch")
 @method_decorator(cache_page(60*60*2), name="dispatch")
@@ -89,12 +99,36 @@ class CourseListViewV2(TemplateResponseMixin, View):
 
     def get(self, request, subject=None):
         try:
-            subject = Subject.objects.get(slug=subject)
-         
-            return self.render_to_response({'subjects': None,
+            
+            subjects = Subject.objects.annotate(
+                    total_courses=Count('courses'))
+
+            all_courses = Course.objects.annotate(
+                total_modules=Count('modules'))
+
+            if subject:
+                subject = Subject.objects.get(slug=subject)
+                courses = all_courses.filter(subject=subject)
+            else:
+                courses = all_courses
+
+            if request.GET.get('q') is not None:
+                courses = all_courses.filter(
+                    title__icontains=str(request.GET.get('q')))
+
+            if request.GET.get('teacher') is not None:
+                courses = all_courses.filter(
+                    owner=int(request.GET.get('teacher')))
+
+        # instructors = User.objects.annotate(
+        #                    total_courses=Count('courses_created')).filter(total_courses__gt=0)
+
+            return self.render_to_response({'subjects': subjects,
                                             'subject': subject,
-                                            'courses': None,
-                                            'instructors': None})
+                                            'courses': courses,
+                                            'instructors': None,
+                                            'page_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                            })
         except Subject.DoesNotExist:
             url = '/'
             print(subject)
@@ -103,7 +137,8 @@ class CourseListViewV2(TemplateResponseMixin, View):
                        "subject": obsele_subjects[subject]}))
                 print(url)
             return redirect(url)
-            
+
+
 @method_decorator(compress_page, name="dispatch")
 class CourseDetailView(DetailView):
     model = Course

@@ -1,5 +1,6 @@
 {% extends "app_base.html" %}
 {% load staticfiles %}
+{% load course_tags %}
 
 
 {% block title %}
@@ -65,13 +66,129 @@ Easy To Take Course Satisfaction Guarantee
             </div>
             {% endif %}
 
-           
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <p>Showing
+                        {{ courses.count }}
+                        results</p>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="topbar-search" id="category">
+                        <form method="get" action="#">
+                            <select class="form-control" title="select cateory" aria-labelledby="category" id="ddlCategory">
+                                <option value="{% url 'courses_list' %}">Choose Category</option>
+                                {% for s in subjects %}
+                                <option {% if subject == s %} selected {% endif %}
+                                    value="{% url 'course_list_subject' s.slug %}">
+                                    {{ s.title }}
+                                    ({{ s.total_courses }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                    </div>
+                </div>
+            </div>
           
         </div>
     </div>
 
 
-   
+    <div class="container">
+        <div class="row">
+
+            {% for course in courses %}
+            {% with subject=course.subject %}
+            <div class="col-xl-4 col-md-6 course-item">
+
+                <input type="hidden" name="id" value="{{ course.id }}" />
+                <input type="hidden" name="title" value="{{ course.title }}" />
+                <input type="hidden" name="subject" value="{{ subject }}" />
+                <input type="hidden" name="price" value="{{ course.price }}" />
+                <input type="hidden" name="discounted_price" value="{{ course.discounted_price }}" />
+                <input type="hidden" name="modules" value="{{ course.total_modules }}" />
+
+
+                <div class="course-block">
+                    <div class="course-img">
+                        <a href="{% url 'course_detail' course.slug %}">
+                            {% if course.image %}
+                            <img width="300" height="115" data-src="{{ course.image }}" alt="image" class="lazy img-fluid" />
+                            {% else %}
+                            <img width="348" height="281" data-src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg" alt="image"
+                                class="img-fluid lazy" />
+                            {% endif %}
+                        </a>
+                        {% if course.features.first.skill_level %}
+                        <span class="course-label">{{ course.features.first.skill_level }}</span>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="course-content">
+                        <div class="course-price ">
+                            {% if course.is_free %}
+                            Free Course
+                            {% elif course.discounted_price > 0 %}
+                            ${{ course.discounted_price }}
+                            <span class="del">${{ course.price }}</span>
+                            {% else %}
+                            ${{ course.price }}
+                            {% endif %}
+                        </div>
+
+                        <h2>
+                            <a href="{% url 'course_detail' course.slug %}">
+                                {{ course.title }}
+                            </a>
+                        </h2>
+                        <div class="rating">
+                            <a href="#" aria-label="Rate">
+                                <i class="fa fa-star"></i>
+                            </a>
+                            <a href="#" aria-label="Rate">
+                                <i class="fa fa-star"></i>
+                            </a>
+                            <a href="#" aria-label="Rate">
+                                <i class="fa fa-star"></i>
+                            </a>
+                            <a href="#" aria-label="Rate">
+                                <i class="fa fa-star"></i>
+                            </a>
+                            <a href="#" aria-label="Rate">
+                                <i class="fa fa-star"></i>
+                            </a>
+                            <span>(5.00)</span>
+                        </div>
+                        <p>{{ subject }}</p>
+
+                        <div class="course-footer d-lg-flex align-items-center justify-content-between">
+                            <div class="course-meta">
+                                {% if course.features.first.duration %}
+                                <span class="course-student">
+                                    <i class="bi bi-group"></i>
+                                    {{ course.features.first.duration }}</span>
+                                {% endif %}
+                                <span class="course-duration">
+                                    <i class="bi bi-badge3"></i>
+                                    {{ course.total_modules }}
+                                    Modules</span>
+                            </div>
+
+                            <div class="buy-btn">
+                                <a href="{% url 'course_detail' course.slug %}"
+                                    class="btn btn-main-2 btn-small">Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {% endwith %}
+            {% endfor %}
+        </div>    
+    </div>
 
 </section>
 
@@ -200,6 +317,29 @@ Easy To Take Course Satisfaction Guarantee
   border: 1px solid;
   text-transform: uppercase;
 }
+
+@media only screen and (min-width: 768px) {
+    .course-img {
+        min-height:281px;
+        max-height:281px;
+        margin-bottom: 10px;
+        }
+
+        .course-img img {
+            width:100%;
+            max-height:100%;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+  }
+
+
+
+
 </style>
 
 <script>
