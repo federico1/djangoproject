@@ -21,11 +21,19 @@ obsele_subjects = {
 
 
 @method_decorator(compress_page, name="dispatch")
+@method_decorator(cache_page(60*60*2), name="dispatch")
 class IndexView(TemplateResponseMixin, View):
     template_name = 'index.html'
 
     def get(self, request):
-        courses = Course.objects.filter(is_deleted=False, mark_type='popular')
+        
+        courses = cache.get('home_popular')
+        
+        if not courses:
+            courses = Course.objects.filter(is_deleted=False, mark_type='popular')
+            cache.set('home_popular', courses)
+
+        
         return self.render_to_response({
             'courses': courses
         })
