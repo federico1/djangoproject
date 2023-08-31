@@ -21,31 +21,41 @@
       <link rel="icon" type="image/png" href="{% static 'edutim/images/logo100.png' %}" />
       <link rel="canonical" href="https://pdhsafety.com{{ request.path }}" />
 
-      <link rel="dns-prefetch" href="https://www.googletagmanager.com/" >
-      <link href="https://www.googletagmanager.com/gtag/js?id=UA-190250545-1" rel="preload" as="script">
-      <link href="https://www.googletagmanager.com/gtag/js?id=G-NKBKFHN4MT" rel="preload" as="script">
+      <link rel="dns-prefetch" href="https://www.googletagmanager.com/" />
+      <link href="https://www.googletagmanager.com/gtag/js?id=UA-190250545-1" rel="preload" as="script" />
+      <link href="https://www.googletagmanager.com/gtag/js?id=G-NKBKFHN4MT" rel="preload" as="script" />
 
       <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
 
+      <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{% static 'edutim/combine.css' %}" />
 
-     <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{% static 'edutim/combine.css' %}" />
-     
-      {% comment %} <!-- bootstrap.min css -->
+      {% comment %}
+      <!-- bootstrap.min css -->
       <link rel="stylesheet" href="{% static 'edutim/vendors/bootstrap/bootstrap.css' %}" />
 
       {% endcomment %}
 
       <!-- Iconfont Css -->
-      {% comment %} <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{% static 'edutim/vendors/fontawesome/css/all.min.css' %}" /> {% endcomment %}
+      {% comment %}
+      <link
+         rel="preload"
+         as="style"
+         onload="this.onload=null;this.rel='stylesheet'"
+         href="{% static 'edutim/vendors/fontawesome/css/all.min.css' %}"
+      />
+      {% endcomment %}
 
       <!-- animate.css -->
-      {% comment %} <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{% static 'edutim/vendors/animate-css/animate.css' %}" />
+      {% comment %}
+      <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{% static 'edutim/vendors/animate-css/animate.css' %}" />
 
       <!-- Main Stylesheet -->
       <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{% static 'edutim/css/style.css' %}" />
-      <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{% static 'edutim/css/responsive.css' %}" />  {% endcomment %}
+      <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{% static 'edutim/css/responsive.css' %}" />
+      {% endcomment %}
 
       <!-- Global site tag (gtag.js) - Google Analytics -->
+      {% comment %}
       <script async src="https://www.googletagmanager.com/gtag/js?id=UA-190250545-1"></script>
 
       <script>
@@ -58,8 +68,8 @@
 
          gtag("config", "UA-190250545-1");
       </script>
+      {% endcomment %}
 
-      
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-NKBKFHN4MT"></script>
       <script>
          window.dataLayer = window.dataLayer || [];
@@ -71,6 +81,17 @@
          gtag("config", "G-NKBKFHN4MT");
       </script>
 
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-K1L4WGV6EM"></script>
+      <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag() {
+            dataLayer.push(arguments);
+         }
+         gtag("js", new Date());
+
+         gtag("config", "G-K1L4WGV6EM");
+      </script>
    </head>
 
    <body id="top-header">
@@ -130,7 +151,13 @@
             <nav class="navbar navbar-expand-lg">
                <div class="container justify-content-center">
                   <a class="navbar-brand" href="/" aria-label="Home">
-                     <img src="{% static 'edutim/images/logo100.png' %}" width="100" height="100" alt="Make Safety Training Happen" class="img-fluid" />
+                     <img
+                        src="{% static 'edutim/images/logo100.png' %}"
+                        width="100"
+                        height="100"
+                        alt="Make Safety Training Happen"
+                        class="img-fluid"
+                     />
                   </a>
 
                   <h3>Make Safety Training Happen</h3>
@@ -228,7 +255,9 @@
                               class="search-close"
                               src="{% static 'edutim/images/close.png' %}"
                               srcset="% static 'edutim/images/close@2x.png 2x' %}"
-                              alt="" width="39" height="39"
+                              alt=""
+                              width="39"
+                              height="39"
                            />
                         </div>
                      </div>
@@ -349,8 +378,6 @@
                   </div>
                </div>
             </div>
-
-          
          </div>
 
          <div class="footer-btm">
@@ -358,7 +385,13 @@
                <div class="row justify-content-center align-items-center">
                   <div class="col-lg-2">
                      <div class="footer-logo">
-                        <img data-src="{% static 'edutim/images/logo100.png' %}" width="100" height="100" alt="NYC Construction Safety Training, LLC" class="lazy img-fluid" />
+                        <img
+                           data-src="{% static 'edutim/images/logo100.png' %}"
+                           width="100"
+                           height="100"
+                           alt="NYC Construction Safety Training, LLC"
+                           class="lazy img-fluid"
+                        />
                      </div>
                   </div>
                   <div class="col-lg-10">
@@ -377,9 +410,20 @@
          </a>
       </div>
 
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha512-znmTf4HNoF9U6mfB6KlhAShbRvbt4CvCaHoNV0gyssfToNQ/9A0eNdUbvsSwOIUoJdMjFG2ndSvr0Lo3ZpsTqQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-      <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{% static 'edutim/vendors/fontawesome/css/all.min.css' %}" />
-      
+      <link
+         rel="stylesheet"
+         href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css"
+         integrity="sha512-znmTf4HNoF9U6mfB6KlhAShbRvbt4CvCaHoNV0gyssfToNQ/9A0eNdUbvsSwOIUoJdMjFG2ndSvr0Lo3ZpsTqQ=="
+         crossorigin="anonymous"
+         referrerpolicy="no-referrer"
+      />
+      <link
+         rel="preload"
+         as="style"
+         onload="this.onload=null;this.rel='stylesheet'"
+         href="{% static 'edutim/vendors/fontawesome/css/all.min.css' %}"
+      />
+
       <!-- Main jQuery -->
       <script src="{% static 'edutim/vendors/jquery/jquery.js' %}"></script>
       <!-- Bootstrap 4.5 -->
@@ -392,7 +436,6 @@
       <script src="{% static 'edutim/js/script.js' %}"></script>
 
       <script>
-
          (function ($) {
             $.GlobalCartManager = function (options) {
                var that = this;
@@ -501,8 +544,7 @@
          })(jQuery);
 
          $(document).ready(function () {
-
-            $('img.lazy').lazy({});
+            $("img.lazy").lazy({});
 
             var globalCart = new $.GlobalCartManager({});
          });
