@@ -105,7 +105,7 @@
                      </ul>
                   </div>
                   <div class="col-lg-6 col-md-6">
-                     <div class="header-right float-right1">
+                     <div class="header-right float-right d-none">
                         <div class="header-socials">
                            <ul>
                               <li>
@@ -538,6 +538,8 @@
 
          $(document).ready(function () {
             $("img.lazy").lazy({});
+
+            $(".header-right").removeClass('d-none');
 
             var globalCart = new $.GlobalCartManager({});
          });
