@@ -27,12 +27,13 @@ class IndexView(TemplateResponseMixin, View):
 
     def get(self, request):
         
-        courses = cache.get('home_popular')
+        # courses = cache.get('home_popular')
         
-        if not courses:
-            courses = Course.objects.filter(is_deleted=False, mark_type='popular')[:4]
-            cache.set('home_popular', courses)
+        # if not courses:
+        #     courses = Course.objects.filter(is_deleted=False, mark_type='popular')[:4]
+        #     cache.set('home_popular', courses)
 
+        courses = []
         
         return self.render_to_response({
             'courses': courses
