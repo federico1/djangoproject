@@ -106,9 +106,9 @@
                     <div class="course-sidebar">
                         <div class="course-single-thumb">
                             {% if object.image %}
-                                <img data-src="{{ object.image }}" alt="" class="img-fluid w-100 lazy" width="320" height="279" />
+                                <img data-src="{{ object.image }}" alt="" class="img-fluid w-100 lazy" width="320" height="278" />
                             {% else %}
-                                <img data-src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg" width="320" height="279" alt="" class="img-fluid w-100 lazy"/>
+                                <img data-src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg" width="320" height="278" alt="" class="img-fluid w-100 lazy"/>
                             {% endif %}
                             <div class="course-price-wrapper">
                                 <div class="course-price">
