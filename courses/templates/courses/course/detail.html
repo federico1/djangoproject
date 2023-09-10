@@ -114,9 +114,9 @@ Easy To Take Money Back Guarante
                     <div class="course-sidebar">
                         <div class="course-single-thumb">
                             {% if object.image %}
-                                <img src="{{ object.image }}" alt="" class="img-fluid w-100"/>
+                                <img src="{{ object.image }}" alt="" class="img-fluid w-100" width="320" height="279" />
                             {% else %}
-                                <img src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg" alt="" class="img-fluid w-100"/>
+                                <img src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg" width="320" height="279" alt="" class="img-fluid w-100"/>
                             {% endif %}
                             <div class="course-price-wrapper">
                                 <div class="course-price">
@@ -275,7 +275,7 @@ Easy To Take Money Back Guarante
          
             <div class="row">
                 <div class="col text-center">
-                    <img src="{% static 'images/money_back.png' %}" width="400" alt="money back">
+                    <img src="{% static 'images/money_back.png' %}" width="400" height="294" alt="money back">
                 </div>
             </div>
         </div>
@@ -367,7 +367,6 @@ Easy To Take Money Back Guarante
                             src: videoSrc
                         };
 
-
                         var source = document.getElementById("videoLocalItemTemplate").innerHTML;
 
                         if (isValidURL(videoSrc)) {
@@ -375,7 +374,10 @@ Easy To Take Money Back Guarante
                         }
 
                         var template = Handlebars.compile(source);
+
+                       setTimeout(function(){
                         $("#videoTag").html(template(item));
+                       }, 4000)
 
                     }
                 };
