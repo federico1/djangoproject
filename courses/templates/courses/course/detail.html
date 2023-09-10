@@ -298,7 +298,7 @@
                 </div>
                 {{/if}}
                 <div class="embed-responsive embed-responsive-16by9 d-none">
-                    <iframe class="embed-responsive-item" src="{{ src }}" allowfullscreen></iframe>
+                    <iframe class="embed-responsive-item" data-src="{{ src }}" allow="autoplay" allowfullscreen></iframe>
                 </div>
             </div>    
             
@@ -401,7 +401,16 @@
                         item.img=false;
 
                         if(id && id!="") {
-                            item.img = `https://img.youtube.com/vi/${id}/sddefault.jpg`
+                            item.img = `https://img.youtube.com/vi/${id}/sddefault.jpg`;
+
+                            if(videoSrc.indexOf('?') >=0) {
+                                videoSrc = videoSrc + "&autoplay=1"
+                            }
+                            else{
+                                videoSrc = videoSrc + "?autoplay=1";
+                            }
+
+                            item.src = videoSrc;
                         }
 
                             source = document.getElementById("videoEmbedItemTemplate").innerHTML;
@@ -463,6 +472,10 @@
                         e.stopPropagation();
                      $(this).addClass('d-none');
                        $(this).parent().find(".embed-responsive").removeClass('d-none');
+
+                       var src =  $(this).parent().find(".embed-responsive iframe").eq(0).attr('data-src');
+
+                       $(this).parent().find(".embed-responsive iframe").attr('src', src);
                     });
 
                 };
