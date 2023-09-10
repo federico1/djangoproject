@@ -3,17 +3,9 @@
 {% load course_tags %}
 {% load course %}
 
-{% block title %}Best Price Online - 
-    {{ object.title }}
-    Course | pdhsafety.com
-{% endblock %}
+{% block title %}Best Price Online - {{ object.title }} Course | pdhsafety.com {% endblock %}
 
-{% block meta_desc %} Best Price Online 
-    {{ object.subject }}
-   IACET Accredited, Access 24/7 On All Devices.
-Easy To Take Money Back Guarante
-   
-{% endblock %}
+{% block meta_desc %} Best Price Online {{ object.subject }} IACET Accredited, Access 24/7 On All Devices. Easy To Take Money Back Guarante{% endblock %}
 
 {% block meta_keywords %}
     {{ object.subject }},
@@ -275,7 +267,7 @@ Easy To Take Money Back Guarante
          
             <div class="row">
                 <div class="col text-center">
-                    <img src="{% static 'images/money_back.png' %}" width="400" height="294" alt="money back">
+                    <img class="lazy" data-src="{% static 'images/money_back.png' %}" width="400" height="294" alt="money back">
                 </div>
             </div>
         </div>
@@ -295,9 +287,21 @@ Easy To Take Money Back Guarante
         </script>
 
         <script type="text/x-handlebars-template" id="videoEmbedItemTemplate">
-            <div class="embed-responsive embed-responsive-16by9">
-                <iframe class="embed-responsive-item" src="{{ src }}" allowfullscreen></iframe>
-            </div>
+
+            <div class="embed-vidoe">
+                {{#if img}}
+                <div class="img-section">
+                    <img class="img-fluid lazy w-100" data-src="{{img}}" width="730" height="547" />
+                    <button type="button" class="btn btn-danger rounded-2 btn-lg">
+                        <i class="fab fa-youtube fa-lg"></i>
+                    </button>
+                </div>
+                {{/if}}
+                <div class="embed-responsive embed-responsive-16by9 d-none">
+                    <iframe class="embed-responsive-item" src="{{ src }}" allowfullscreen></iframe>
+                </div>
+            </div>    
+            
         </script>
 
 
@@ -307,6 +311,28 @@ Easy To Take Money Back Guarante
 
 
 {% block scripts %}
+<style>
+    .img-section {
+        position:relative;
+        cursor:pointer;
+    }
+
+    .img-section button {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        width: 130px;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 76px;
+    }
+
+   .img-section button i {
+        font-size: 2em;
+    }
+</style>
     <script>
         (function ($) {
 
@@ -370,15 +396,22 @@ Easy To Take Money Back Guarante
                         var source = document.getElementById("videoLocalItemTemplate").innerHTML;
 
                         if (isValidURL(videoSrc)) {
+                            var id = youtubeParser(videoSrc);
+
+                        item.img=false;
+
+                        if(id && id!="") {
+                            item.img = `https://img.youtube.com/vi/${id}/sddefault.jpg`
+                        }
+
                             source = document.getElementById("videoEmbedItemTemplate").innerHTML;
                         }
 
                         var template = Handlebars.compile(source);
 
-                       setTimeout(function(){
                         $("#videoTag").html(template(item));
-                       }, 4000)
 
+                        $('#videoTag .lazy').Lazy();
                     }
                 };
 
@@ -391,6 +424,12 @@ Easy To Take Money Back Guarante
                             '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
                     return !! pattern.test(str);
                 };
+
+                var youtubeParser = function (url){
+                    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+                    var match = url.match(regExp);
+                    return (match&&match[7].length==11)? match[7] : false;
+                }
 
                 var registerEvent = function () {
 
@@ -420,7 +459,12 @@ Easy To Take Money Back Guarante
                         enrollCourse();
                     });
 
-
+                    $("#videoTag").on("click", '.img-section', function (e) {
+                        e.stopPropagation();
+                     $(this).addClass('d-none');
+                       $(this).parent().find(".embed-responsive").removeClass('d-none');
+                    });
+                    
                 };
 
                 var init = function () {
