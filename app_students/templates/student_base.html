@@ -31,7 +31,13 @@
             <nav class="navbar navbar-expand-lg">
                <div class="container">
                   <a class="navbar-brand" href="/">
-                     <img src="{% static 'edutim/images/logo100.png' %}" width="55" height="55" alt="Construction Safety Training" class="img-fluid" />
+                     <img
+                        src="{% static 'edutim/images/logo100.png' %}"
+                        width="55"
+                        height="55"
+                        alt="Construction Safety Training"
+                        class="img-fluid"
+                     />
                   </a>
 
                   <!-- Toggler -->
@@ -215,22 +221,22 @@
       </div>
 
       <link
-         rel="preload"
-         as="style"
-         onload="this.onload=null;this.rel='stylesheet'"
+         rel="stylesheet"
+         media="print"
+         onload="this.media='all'; this.onload = null"
          href="{% static 'edutim/vendors/fontawesome/css/all.min.css' %}"
       />
 
       <link
-         rel="preload"
-         as="style"
-         onload="this.onload=null;this.rel='stylesheet'"
+         rel="stylesheet"
+         media="print"
+         onload="this.media='all'; this.onload = null"
          href="{% static 'edutim/vendors/summernote/summernote.min.css' %}"
       />
       <link
-         rel="preload"
-         as="style"
-         onload="this.onload=null;this.rel='stylesheet'"
+         rel="stylesheet"
+         media="print"
+         onload="this.media='all'; this.onload = null"
          href="{% static 'edutim/vendors/summernote/summernote-bs4.min.css' %}"
       />
 
