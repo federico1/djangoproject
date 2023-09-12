@@ -30,7 +30,7 @@
                                     </div>
                                     <div class="feature-text">
                                         <h4>
-                                            Courses Enrolled -  {{request.user.my_enrolled.count}}
+                                            {% comment %} Courses Enrolled -  {{request.user.my_enrolled.count}} {% endcomment %}
                                         </h4>
                                         <p>
                                             <a href="{% url 'student_courses' %}" class="btn btn-main-2">
@@ -47,7 +47,7 @@
                                         <i class="fa fa-stream"></i>
                                     </div>
                                     <div class="feature-text">
-                                        <h4>Quizzes Taken -  {{request.user.taken_quizzes.count}}</h4>
+                                        {% comment %} <h4>Quizzes Taken -  {{request.user.taken_quizzes.count}}</h4> {% endcomment %}
                                         <p>
                                             <a href="#" class="btn btn-main-2">
                                                 <i class="fab fa-buromobelexperte mr-2"></i>
