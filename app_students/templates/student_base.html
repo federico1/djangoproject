@@ -21,21 +21,10 @@
 
       <link rel="canonical" href="https://pdhsafety.com{{ request.path }}" />
 
-      {% comment %} <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{% static 'edutim/combine.css' %}" /> {% endcomment %}
+      {% comment %}
+      <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{% static 'edutim/combine.css' %}" />
+      {% endcomment %}
       <link rel="stylesheet" href="{% static 'edutim/combine.css' %}" />
-
-      <!-- Google tag (gtag.js) -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-HCVT7V0D71"></script>
-
-      <script>
-         window.dataLayer = window.dataLayer || [];
-         function gtag() {
-            dataLayer.push(arguments);
-         }
-         gtag("js", new Date());
-
-         gtag("config", "G-HCVT7V0D71");
-      </script>
    </head>
 
    <body id="top-header">
@@ -266,10 +255,10 @@
 
       <script src="{% static 'edutim/combine.js' %}"></script>
 
-      {% comment %} <script defer src="{% static '/sb-admin/vendor/datatables/jquery.dataTables.min.js' %}"></script>
-      <script defer src="{% static '/sb-admin/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script> {% endcomment %}
-      
       {% comment %}
+      <script defer src="{% static '/sb-admin/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+      <script defer src="{% static '/sb-admin/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+      {% endcomment %} {% comment %}
       <script src="{% static 'edutim/vendors/jquery/jquery.js' %}"></script>
       <script src="{% static 'edutim/vendors/jquery-ui/jquery-ui.min.js' %}"></script>
       <script src="{% static 'edutim/vendors/popper.min.js' %}"></script>
@@ -282,12 +271,11 @@
       <script src="{% static 'edutim/vendors/moment.min.js'%}"></script>
       <script src="{% static 'edutim/vendors/summernote/summernote.min.js' %}"></script>
       <script src="{% static 'edutim/vendors/summernote/summernote-bs4.min.js' %}"></script>
+      {% endcomment %} {% comment %}
+      <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.3/datatables.min.js"></script>
+      {% endcomment %} {% comment %}
+      <script src="{% static 'edutim/js/script.js' %}"></script>
       {% endcomment %}
-      {% comment %} <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.3/datatables.min.js"></script> {% endcomment %}
-
-      {% comment %} <script src="{% static 'edutim/js/script.js' %}"></script> {% endcomment %}
-
-     
 
       <script>
          Handlebars.registerHelper("dateOnly", function (options) {
@@ -323,6 +311,19 @@
          })(jQuery);
 
          $(document).ready(function () {});
+      </script>
+
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-HCVT7V0D71"></script>
+
+      <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag() {
+            dataLayer.push(arguments);
+         }
+         gtag("js", new Date());
+
+         gtag("config", "G-HCVT7V0D71");
       </script>
 
       {% block scripts %}{% endblock %}
