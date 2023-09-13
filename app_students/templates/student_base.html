@@ -21,7 +21,8 @@
 
       <link rel="canonical" href="https://pdhsafety.com{{ request.path }}" />
 
-      <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{% static 'edutim/combine.css' %}" />
+      {% comment %} <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{% static 'edutim/combine.css' %}" /> {% endcomment %}
+      <link rel="stylesheet" href="{% static 'edutim/combine.css' %}" />
 
       <!-- Google tag (gtag.js) -->
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-HCVT7V0D71"></script>
