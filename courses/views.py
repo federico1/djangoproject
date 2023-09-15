@@ -5,7 +5,7 @@ from django.views.generic.base import TemplateResponseMixin, View
 from django.db.models import Count
 from .models import Subject, Course
 from students.forms import CourseEnrollForm
-from django.core.cache import cache
+from django.core.cache import cache, never_cache
 from django.utils.decorators import method_decorator
 from compression_middleware.decorators import compress_page
 from django.views.decorators.cache import cache_page
@@ -22,6 +22,7 @@ obsele_subjects = {
 
 @method_decorator(compress_page, name="dispatch")
 #@method_decorator(cache_page(60*60*2), name="dispatch")
+@method_decorator(never_cache())
 class IndexView(TemplateResponseMixin, View):
     template_name = 'index.html'
 
