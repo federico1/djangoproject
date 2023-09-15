@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.views.decorators.cache import cache_page, never_cache
 #from django.conf import settings
 
 urlpatterns = [
@@ -38,7 +39,7 @@ urlpatterns = [
 #          name='content_order'),
 
     path('subject/<slug:subject>/',
-         views.CourseListView.as_view(),
+         never_cache(cache_page(60*60)(views.CourseListView.as_view())),
          name='course_list_subject'),
     path('subject_v/<slug:subject>/',
          views.CourseListViewV2.as_view(),
