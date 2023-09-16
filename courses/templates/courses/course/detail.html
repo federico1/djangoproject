@@ -2,6 +2,7 @@
 {% load staticfiles %}
 {% load course_tags %}
 {% load course %}
+{% load cache %}
 
 {% block title %}Best Price Online - {{ object.title }} Course | pdhsafety.com {% endblock %}
 
@@ -15,6 +16,7 @@
 {% block content %}
     {% with subject=object.subject %}
 
+    {% cache 500 coursedetails course.slug %}
     <section class="page-wrapper edutim-course-single course-single-style-3">
         <div class="course-single-wrapper">
             <div class="container">
@@ -272,7 +274,8 @@
             </div>
         </div>
     </section>
-
+    {% endcache %}
+    
     {% endwith %}
 
 
@@ -303,36 +306,34 @@
             </div>    
             
         </script>
-
-
     {% endverbatim %}
 
 {% endblock %}
 
 
 {% block scripts %}
-<style>
-    .img-section {
-        position:relative;
-        cursor:pointer;
-    }
+    <style>
+        .img-section {
+            position:relative;
+            cursor:pointer;
+        }
 
-    .img-section button {
-        position: absolute;
-        left: 0;
-        right: 0;
-        margin-left: auto;
-        margin-right: auto;
-        width: 130px;
-        top: 50%;
-        transform: translateY(-50%);
-        height: 76px;
-    }
+        .img-section button {
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            width: 130px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 76px;
+        }
 
-   .img-section button i {
-        font-size: 2em;
-    }
-</style>
+    .img-section button i {
+            font-size: 2em;
+        }
+    </style>
     <script>
         (function ($) {
 
