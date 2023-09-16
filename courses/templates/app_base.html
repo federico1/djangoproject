@@ -1,5 +1,4 @@
 {% load staticfiles %}
-{% load cache %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -264,7 +263,6 @@
 
       {% block content %}{% endblock %}
 
-      {% cache 500 footer %}
       <section class="footer pt-120">
          <div class="container">
             <div class="row">
@@ -398,7 +396,6 @@
             </div>
          </div>
       </section>
-      {% endcache %}
 
       <div class="fixed-btm-top">
          <a href="#top-header" class="js-scroll-trigger scroll-to-top" aria-label="Scroll Top" alt="Scroll Top">
