@@ -1,11 +1,13 @@
 {% extends "app_base.html" %}
 {% load staticfiles %}
+{% load cache %}
 
 {% block title %} About Us | pdhsafety.com
 {% endblock %}
 
 {% block content %}
 
+{% cache 500 sidebar %}
     <section class="page-header">
         <div class="container">
             <div class="row justify-content-center">
@@ -85,7 +87,8 @@
         </section>
         <!--shop category end-->
     </main>
-
+{% endcache %}
+    
 {% endblock %}
 {% block scripts %}
     <script>
