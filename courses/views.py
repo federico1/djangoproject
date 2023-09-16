@@ -60,7 +60,7 @@ class CourseListView(TemplateResponseMixin, View):
 
             if subject:
                 # get_object_or_404(Subject, slug=subject)
-                subject = Subject.objects.get(slug=subject)
+                subject = subjects.get(slug=subject)
                 key = 'subject_{}_courses'.format(subject.id)
                 courses = cache.get(key)
 
