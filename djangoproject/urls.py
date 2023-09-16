@@ -25,7 +25,7 @@ from django.conf.urls import (handler400, handler403, handler404, handler500)
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from django.views.decorators.cache import cache_page
+from django.views.decorators.cache import cache_page, never_cache
 from django.views.generic.base import TemplateView
 
 from .sitemap import StaticViewSitemap, SubjectsSitemap, CourseSitemap
@@ -63,8 +63,8 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     path('course/', include('courses.urls')),
-    path('courses', (CourseListView.as_view()), name='courses_list'),
-    path('', (IndexView.as_view()), name='course_list'),
+    path('courses', never_cache(cache_page(60*60*2)(CourseListView.as_view())), name='courses_list'),
+    path('', never_cache(cache_page(60*60*2)(IndexView.as_view())), name='course_list'),
     path('teachers/', include('app_teachers.urls')),
     path('quiz/', include('app_quiz.urls')),
     path('communicate/', include('app_chat.urls')),

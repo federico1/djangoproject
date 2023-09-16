@@ -48,7 +48,7 @@ urlpatterns = [
          views.PostClassSurveryDetailView.as_view(),
          name='course_post_survey'),
     path('<slug:slug>/',
-         views.CourseDetailView.as_view(),
+         never_cache(cache_page(60*60)(views.CourseDetailView.as_view())),
          name='course_detail'),
 
 ]
