@@ -1,7 +1,7 @@
 {% extends "app_base.html" %}
 {% load staticfiles %}
 {% load course_tags %}
-
+{% load cache %}
 
 {% block title %}
 {% if subject %} Best {{ subject.title }} Courses Online | pdhsafety.com {%else%}
@@ -18,6 +18,8 @@ Easy To Take Course Satisfaction Guarantee
 {% endblock %}
 
 {% block content %}
+
+{% cache 500 courses subject.slug if subject else all %}
 
 <section class="page-header" data-time='{{page_time}}'>
     <div class="container">
@@ -189,6 +191,7 @@ Easy To Take Course Satisfaction Guarantee
     </div>
 
 </section>
+{% endcache %}
 
 {% if subject and subject.video_link %}
 <section class="team section-padding bg-grey mb-5">
