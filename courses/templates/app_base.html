@@ -139,7 +139,7 @@
          </div>
 
          <!-- Main Menu Start -->
-         {% cache 500 sidebar %}
+   
          <div class="site-navigation main_menu">
             <nav class="navbar navbar-expand-lg">
                <div class="container justify-content-center">
@@ -160,7 +160,7 @@
                <!-- / .container -->
             </nav>
          </div>
-         {% endcache %}
+     
          <div class="site-navigation main_menu" id="mainmenu-area">
             <nav class="navbar navbar-expand-lg">
                <div class="container justify-content-center">
@@ -178,8 +178,7 @@
 
                   <!-- Collapse -->
                   <div class="collapse navbar-collapse justify-content-center" id="navbarMenu">
-
-                     {% cache 500 sidebar %}
+                     
                      <ul class="navbar-nav">
                         <li class="nav-item">
                            <a class="nav-link" href="/" aria-label="Home"> Home </a>
@@ -212,8 +211,7 @@
                            <a href="/contact/" class="nav-link"> Contact </a>
                         </li>
                      </ul>
-                     {% endcache %}
-
+ 
                      <ul class="header-contact-right">
                         <li>
                            <a href="{% url 'cart_detail' %}" class="header-cart" alt="My Cart" aria-label="My Cart">
@@ -401,7 +399,7 @@
          </div>
       </section>
       {% endcache %}
-      
+
       <div class="fixed-btm-top">
          <a href="#top-header" class="js-scroll-trigger scroll-to-top" aria-label="Scroll Top" alt="Scroll Top">
             <i class="fa fa-angle-up"></i>
