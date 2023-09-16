@@ -40,6 +40,7 @@ class IndexView(TemplateResponseMixin, View):
 
 
 @method_decorator(compress_page, name="dispatch")
+@method_decorator(never_cache, name="dispatch")
 class CourseListView(TemplateResponseMixin, View):
     model = Course
     template_name = 'courses/course/list.html'
@@ -159,6 +160,7 @@ class CourseDetailView(DetailView):
 
 
 @method_decorator(compress_page, name="dispatch")
+@method_decorator(never_cache, name="dispatch")
 class PostClassSurveryDetailView(generic.TemplateView):
     template_name = 'courses/post_survery.html'
 
