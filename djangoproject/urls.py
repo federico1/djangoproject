@@ -64,7 +64,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('course/', include('courses.urls')),
     path('courses', never_cache(cache_page(60*60*2)(CourseListView.as_view())), name='courses_list'),
-    path('', never_cache(cache_page(60*60*2)(IndexView.as_view())), name='course_list'),
+    path('', (IndexView.as_view()), name='course_list'),
     path('teachers/', include('app_teachers.urls')),
     path('quiz/', include('app_quiz.urls')),
     path('communicate/', include('app_chat.urls')),
