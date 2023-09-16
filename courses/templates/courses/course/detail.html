@@ -17,7 +17,7 @@
     {% with subject=object.subject %}
 
     {% cache 500 coursedetails course.slug %}
-    <section class="page-wrapper edutim-course-single course-single-style-3">
+    <section class="page-wrapper edutim-course-single course-single-style-3" time="{% now 'SHORT_DATETIME_FORMAT' %}">
         <div class="course-single-wrapper">
             <div class="container">
                 <div class="row">
@@ -275,7 +275,7 @@
         </div>
     </section>
     {% endcache %}
-    
+
     {% endwith %}
 
 

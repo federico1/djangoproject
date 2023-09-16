@@ -21,8 +21,6 @@ obsele_subjects = {
 
 
 @method_decorator(compress_page, name="dispatch")
-#@method_decorator(cache_page(60*60*2), name="dispatch")
-#@method_decorator(never_cache, name="dispatch")
 class IndexView(TemplateResponseMixin, View):
     template_name = 'index.html'
 
@@ -41,7 +39,6 @@ class IndexView(TemplateResponseMixin, View):
 
 
 @method_decorator(compress_page, name="dispatch")
-#@method_decorator(never_cache(cache_page(60*60*5)), name="dispatch")
 class CourseListView(TemplateResponseMixin, View):
     model = Course
     template_name = 'courses/course/list.html'
@@ -101,7 +98,6 @@ class CourseListView(TemplateResponseMixin, View):
 
 
 @method_decorator(compress_page, name="dispatch")
-#@method_decorator(cache_page(60*60*2), name="dispatch")
 class CourseListViewV2(TemplateResponseMixin, View):
     model = Course
     template_name = 'courses/course/list_v2.html'
@@ -149,7 +145,6 @@ class CourseListViewV2(TemplateResponseMixin, View):
 
 
 @method_decorator(compress_page, name="dispatch")
-@method_decorator(cache_page(60*60*5), name="dispatch")
 class CourseDetailView(DetailView):
     model = Course
     template_name = 'courses/course/detail.html'
