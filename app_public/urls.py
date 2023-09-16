@@ -1,33 +1,34 @@
 from django.urls import path
+from django.views.decorators.cache import cache_page, never_cache
 from .views import PrivacyPolicyView, AboutView, ContactView, FaqView, PackagesView, RefundView, TermsView
 from .more_views.views_sst import SSTVerifyView
 
 urlpatterns = [
     path('privacy-policy/',
-         PrivacyPolicyView.as_view(),
+         never_cache(cache_page(60*60)(PrivacyPolicyView.as_view())),
          name='privacy_policy'),
     path('terms-conditions/',
-         TermsView.as_view(),
+         never_cache(cache_page(60*60)(TermsView.as_view())),
          name='terms'),
     path('refund-policy/',
-         RefundView.as_view(),
+         never_cache(cache_page(60*60)(RefundView.as_view())),
          name='refund'),
     path('about/',
-         AboutView.as_view(),
+         never_cache(cache_page(60*60)(AboutView.as_view())),
          name='about_detail'),
     path('contact/',
-         ContactView.as_view(),
+         never_cache(cache_page(60*60)(ContactView.as_view())),
          name='contact_detail'),
 #     path('student-manual/',
 #          StudentManualView.as_view(),
 #          name='student_manual_detail'),
     path('sst-verify/',
-         SSTVerifyView.as_view(),
+         never_cache(cache_page(60*60)(SSTVerifyView.as_view())),
          name='sst_verify'),
     path('faq/',
-         FaqView.as_view(),
+         never_cache(cache_page(60*60)(FaqView.as_view())),
          name='faq'),
     path('packages/',
-         PackagesView.as_view(),
+         never_cache(cache_page(60*60)(PackagesView.as_view())),
          name='packages'),
 ]
