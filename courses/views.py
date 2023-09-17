@@ -22,8 +22,8 @@ obsele_subjects = {
 
 
 @method_decorator(compress_page, name="dispatch")
-#@method_decorator(cache_page(60*5), name='dispatch')
-#@method_decorator(vary_on_cookie, name='dispatch')
+@method_decorator(cache_page(60*5), name='dispatch')
+@method_decorator(vary_on_cookie, name='dispatch')
 #@method_decorator([never_cache,], name="dispatch")
 class IndexView(TemplateResponseMixin, View):
     template_name = 'index.html'
