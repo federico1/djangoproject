@@ -369,12 +369,16 @@
                             xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
                         },
                         success: function (response, textStatus, xhr) {
+
+                            var courseURL = "{% url 'student_courses' %}?id={{ course.id }}";
+
                             if (xhr.status == 201) {
                                 Toast.fire({icon: 'success', title: 'You have successfully enrolled to this course'});
-
+                                window.location.href = courseURL;
                             } else if (xhr.status == 226) {
                                 $(".link-free-enroll").hide();
                                 Swal.fire({icon: 'warning', title: 'Note!', text: 'You have been already enrolled in this course!'});
+                                window.location.href = courseURL;
                             } else if (xhr.status == 203) {
                                 $(".link-free-enroll").hide();
                                 Swal.fire({icon: 'error', title: 'Note!', text: 'You are not allowed to take this class.'});
