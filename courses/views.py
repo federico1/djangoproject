@@ -41,7 +41,8 @@ class IndexView(TemplateResponseMixin, View):
 
 
 @method_decorator(compress_page, name="dispatch")
-@method_decorator(never_cache, name="dispatch")
+@method_decorator(cache_page(1), name='dispatch')
+@method_decorator([never_cache,], name="dispatch")
 class CourseListView(TemplateResponseMixin, View):
     model = Course
     template_name = 'courses/course/list.html'
