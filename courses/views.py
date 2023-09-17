@@ -9,6 +9,7 @@ from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from compression_middleware.decorators import compress_page
 from django.views.decorators.cache import cache_page, never_cache
+from django.views.decorators.vary import vary_on_cookie
 
 from datetime import datetime
 
@@ -21,7 +22,8 @@ obsele_subjects = {
 
 
 @method_decorator(compress_page, name="dispatch")
-#@method_decorator(cache_page(1), name='dispatch')
+@method_decorator(cache_page(1), name='dispatch')
+@method_decorator(vary_on_cookie, name='dispatch')
 #@method_decorator([never_cache,], name="dispatch")
 class IndexView(TemplateResponseMixin, View):
     template_name = 'index.html'
