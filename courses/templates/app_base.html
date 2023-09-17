@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load cache %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +12,7 @@
       <meta
          name="description"
          content="{% block meta_desc %} 100% Online Best Prices-Money Back Guarantee-Live Access-IACET Accredited-Access 24/7 On All Devices
-{% endblock %}"
+         {% endblock %}"
       />
       <meta name="author" content="{% block meta_author %}{% endblock %}" />
       <meta name="keywords" content="{% block meta_keywords %}{% endblock %}" />
@@ -88,6 +89,9 @@
 
    <body id="top-header">
       <header>
+
+         {% cache 5 topbar request.user.username %}
+
          <div class="header-top">
             <div class="container">
                <div class="row align-items-center">
@@ -136,7 +140,7 @@
                </div>
             </div>
          </div>
-
+         {% endcache %}
          <!-- Main Menu Start -->
    
          <div class="site-navigation main_menu">
