@@ -11,6 +11,7 @@ from django.http import Http404
 from django.db.models import Count
 from datetime import datetime
 from django.conf import settings
+from django.core.cache import cache
 
 from courses.models import Subject, Course, CourseTimeLog, CourseProgress, Content, CourseFeature, \
     Enrollments, Evaluation, AssessRating
@@ -38,6 +39,7 @@ class SubjectDetailView(APIView):
 
         if serializer.is_valid():
             serializer.save()
+            cache.clear()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -237,6 +239,8 @@ class CourseFeatureApiView(APIView):
 
             serializer.save()
 
+            cache.clear()
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -257,6 +261,7 @@ class CoursePriceApiView(APIView):
 
         if serializer.is_valid():
             serializer.save()
+            cache.clear()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -276,6 +281,7 @@ class CourseImageApiView(APIView):
 
         if serializer.is_valid():
             serializer.save()
+            cache.clear()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -292,6 +298,7 @@ class CourseVideoApiView(APIView):
         snippet = self.get_object(pk)
         snippet.video = request.POST['video']
         snippet.save()
+        cache.clear()
         result = 1
         return Response(result)
 
@@ -309,6 +316,7 @@ class UpdateQuizApiView(APIView):
         snippet = self.get_object(pk)
         snippet.quiz_id = request.POST['quiz_id']
         snippet.save()
+        cache.clear()
         result = 1
         return Response(result)
 

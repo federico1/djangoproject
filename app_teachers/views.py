@@ -58,6 +58,7 @@ class ManageCourseListView(OwnerCourseMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object_json'] = serializers.serialize('json', self.object_list)
+        cache.clear()
         return context
 
 
@@ -191,10 +192,10 @@ class ModuleOrderView(CsrfExemptMixin,
                       JsonRequestResponseMixin,
                       View):
     def post(self, request):
-        print(self.request_json)
         for id, order in self.request_json.items():
             Module.objects.filter(id=id,
                                   course__owner=request.user).update(order=order)
+        cache.clear()
         return self.render_json_response({'saved': 'OK'})
 
 
@@ -206,6 +207,7 @@ class ContentOrderView(CsrfExemptMixin,
             Content.objects.filter(id=id,
                                    module__course__owner=request.user) \
                 .update(order=order)
+        cache.clear()
         return self.render_json_response({'saved': 'OK'})
 
 
