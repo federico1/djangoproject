@@ -483,6 +483,9 @@
                        $(this).parent().find(".embed-responsive iframe").attr('src', src);
                     });
 
+                    if('{{request.user.is_authenticated}}' == 'True') {
+                        $(".link-free-auth").removeClass('link-free-auth').addClass('link-free-enroll');
+                    }
                 };
 
                 var init = function () {
