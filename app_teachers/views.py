@@ -17,6 +17,8 @@ from django.core.cache import cache
 from django.http import HttpResponse
 from django.utils.text import slugify
 from django.core import serializers
+from django.views.decorators.cache import never_cache
+from django.utils.decorators import method_decorator
 
 from courses.models import Subject, Course, Module, Content, CourseProgress
 from .forms import ModuleFormSet
@@ -52,6 +54,7 @@ class OwnerCourseEditMixin(OwnerCourseMixin, OwnerEditMixin):
     template_name = 'manage/course/form.html'
 
 
+@method_decorator([never_cache,], name="dispatch")
 class ManageCourseListView(OwnerCourseMixin, ListView):
     template_name = 'manage/course/list.html'
 
@@ -61,19 +64,20 @@ class ManageCourseListView(OwnerCourseMixin, ListView):
         cache.clear()
         return context
 
-
+@method_decorator([never_cache,], name="dispatch")
 class CourseCreateView(PermissionRequiredMixin,
                        OwnerCourseEditMixin,
                        CreateView):
     permission_required = 'courses.add_course'
 
 
+@method_decorator([never_cache,], name="dispatch")
 class CourseUpdateView(PermissionRequiredMixin,
                        OwnerCourseEditMixin,
                        UpdateView):
     permission_required = 'courses.change_course'
 
-
+@method_decorator([never_cache,], name="dispatch")
 class CourseDeleteView(PermissionRequiredMixin,
                        OwnerCourseMixin,
                        DeleteView):
@@ -176,7 +180,7 @@ class ContentDeleteView(View):
         content.delete()
         return redirect('module_content_list', module.id)
 
-
+@method_decorator([never_cache,], name="dispatch")
 class ModuleContentListView(TemplateResponseMixin, View):
     template_name = 'manage/module/content_list.html'
 
@@ -198,7 +202,7 @@ class ModuleOrderView(CsrfExemptMixin,
         cache.clear()
         return self.render_json_response({'saved': 'OK'})
 
-
+@method_decorator([never_cache,], name="dispatch")
 class ContentOrderView(CsrfExemptMixin,
                        JsonRequestResponseMixin,
                        View):
@@ -230,7 +234,7 @@ class TeacherHomeView(generic.TemplateView):
 
         return context
 
-
+@method_decorator([never_cache,], name="dispatch")
 class CourseDetailView(DetailView):
     model = Course
     template_name = 'course_detail/index.html'
