@@ -309,6 +309,7 @@
                "/api/users/?format=json",
                {
                   is_student: 1,
+                  _: $.now()
                },
                function (response) {
                   studentsList = response;
