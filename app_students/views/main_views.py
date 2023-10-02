@@ -17,8 +17,12 @@ from django.template.loader import get_template
 from django.conf import settings
 from django import template
 
+from django.utils.decorators import method_decorator
 from xhtml2pdf import pisa
 from xhtml2pdf.config.httpconfig import httpConfig
+
+from django.views.decorators.cache import cache_page, never_cache
+from django.views.decorators.vary import vary_on_cookie
 
 from app_students.forms import StudentSignupForm
 from app_students.file_utils import uploaded_file
@@ -30,6 +34,7 @@ from courses.models import Course, CourseProgress, StudentCertificate
 
 register = template.Library()
 
+@method_decorator(never_cache, name="dispatch")
 class StudentRegistrationView(CreateView):
     model = User
     template_name = 'registration/signup_form.html'
@@ -57,7 +62,7 @@ class StudentRegistrationView(CreateView):
 
         return reverse_lazy('cart_detail') + '?register=success'
 
-
+@method_decorator(never_cache, name="dispatch")
 class StudentHomeView(generic.TemplateView):
     template_name = 'student_home.html'
 
@@ -67,6 +72,7 @@ class StudentHomeView(generic.TemplateView):
         return context
 
 
+@method_decorator(never_cache, name="dispatch")
 class CourseListView(LoginRequiredMixin, ListView):
     model = Course
     template_name = 'courses/list.html'
@@ -87,7 +93,7 @@ class CourseListView(LoginRequiredMixin, ListView):
 
         return qs
 
-
+@method_decorator(never_cache, name="dispatch")
 class CourseDetailView(LoginRequiredMixin, DetailView):
     model = Course
     template_name = 'courses/detail.html'
@@ -215,7 +221,7 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
     def get(self, *args, **kwargs):
         return super().get(*args, **kwargs)
 
-
+@method_decorator(never_cache, name="dispatch")
 class CourseCertificateDetailView(LoginRequiredMixin, DetailView):
     model = Course
     template_name = 'certificate/certificate.html'
@@ -238,7 +244,7 @@ class CourseCertificateDetailView(LoginRequiredMixin, DetailView):
     def render_to_response(self, context, **response_kwargs):
         return super(CourseCertificateDetailView, self).render_to_response(context, **response_kwargs)
 
-
+@method_decorator(never_cache, name="dispatch")
 class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
     model = Course
     template_name = 'certificate/certificate_template.html'
