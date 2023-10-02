@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 import os
 import environ
 
-#from django.urls import reverse
+# from django.urls import reverse
 
 BASE_DIR = os.path.dirname(os.path.dirname(
     os.path.abspath(os.path.join(__file__, os.pardir))))
@@ -43,19 +43,7 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-INSTALLED_APPS = (   
-    'courses',
-    'app_teachers',
-    'rest_framework',
-    'students',
-    'embed_video',
-    'app_quiz',
-    'app_chat',
-    'app_api',
-    'app_admin',
-    'app_public',
-    'app_cart',
-    'app_students',
+INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -63,8 +51,20 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
+    'courses',
+    'app_teachers',
+    'students',
+    'app_quiz',
+    'app_chat',
+    'app_api',
+    'app_admin',
+    'app_public',
+    'app_cart',
+    'app_students',
+    'embed_video',
+    'rest_framework',
     'drf_yasg',
-    'corsheaders'
+    'corsheaders',
 )
 
 MIDDLEWARE = [
@@ -79,7 +79,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'corsheaders.middleware.CorsMiddleware'
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'djangoproject.urls'
@@ -100,7 +100,7 @@ TEMPLATES = [
     },
 ]
 
-#WSGI_APPLICATION = 'wsgi.application'
+# WSGI_APPLICATION = 'wsgi.application'
 
 # Internationalization
 # https://docs.djangoproject.com/en/dev/topics/i18n/
@@ -126,11 +126,11 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static/'),
 )
 
-#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 
 
-#from django.core.urlresolvers import reverse_lazy
-#from django.core.urlresolvers import reverse
+# from django.core.urlresolvers import reverse_lazy
+# from django.core.urlresolvers import reverse
 LOGIN_REDIRECT_URL = reverse_lazy('course_list')
 AUTH_USER_MODEL = "students.User"
 
@@ -139,7 +139,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 LOGOUT_REDIRECT_URL = '/'
 
-#APPEND_SLASH= False
+# APPEND_SLASH= False
 
 CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 60 * 15  # 15 minutes

@@ -95,7 +95,9 @@ class CourseListView(LoginRequiredMixin, ListView):
 
         return qs
 
-@method_decorator(never_cache, name="dispatch")
+
+@method_decorator(cache_page(2), name='dispatch')
+@method_decorator(vary_on_cookie, name='dispatch')
 class CourseDetailView(LoginRequiredMixin, DetailView):
     model = Course
     template_name = 'courses/detail.html'
@@ -223,7 +225,8 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
     def get(self, *args, **kwargs):
         return super().get(*args, **kwargs)
 
-@method_decorator(never_cache, name="dispatch")
+@method_decorator(cache_page(2), name='dispatch')
+@method_decorator(vary_on_cookie, name='dispatch')
 class CourseCertificateDetailView(LoginRequiredMixin, DetailView):
     model = Course
     template_name = 'certificate/certificate.html'
@@ -246,7 +249,8 @@ class CourseCertificateDetailView(LoginRequiredMixin, DetailView):
     def render_to_response(self, context, **response_kwargs):
         return super(CourseCertificateDetailView, self).render_to_response(context, **response_kwargs)
 
-@method_decorator(never_cache, name="dispatch")
+@method_decorator(cache_page(2), name='dispatch')
+@method_decorator(vary_on_cookie, name='dispatch')
 class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
     model = Course
     template_name = 'certificate/certificate_template.html'
