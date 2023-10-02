@@ -62,7 +62,8 @@ class StudentRegistrationView(CreateView):
 
         return reverse_lazy('cart_detail') + '?register=success'
 
-@method_decorator(never_cache, name="dispatch")
+@method_decorator(cache_page(2), name='dispatch')
+@method_decorator(vary_on_cookie, name='dispatch')
 class StudentHomeView(generic.TemplateView):
     template_name = 'student_home.html'
 
@@ -72,7 +73,8 @@ class StudentHomeView(generic.TemplateView):
         return context
 
 
-@method_decorator(never_cache, name="dispatch")
+@method_decorator(cache_page(2), name='dispatch')
+@method_decorator(vary_on_cookie, name='dispatch')
 class CourseListView(LoginRequiredMixin, ListView):
     model = Course
     template_name = 'courses/list.html'
