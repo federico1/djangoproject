@@ -28,7 +28,13 @@ class SubjectDetailView(APIView):
             raise Http404
 
     def get(self, request, format=None):
-        snippets = Subject.objects
+
+        snippets = cache.get('api_all_subjects')
+
+        if not snippets:
+            snippets = Subject.objects.all()
+            cache.set('api_all_subjects', snippets)
+
         serializer = course_serializers.SubjectSerializer(snippets, many=True)
 
         return Response(serializer.data)
@@ -65,9 +71,7 @@ class CourseViewset(viewsets.ModelViewSet):
         if c_limit is not None:
             snippets = snippets.order_by(order_field)[:int(c_limit)]
 
-        snippets = snippets.annotate(total_modules=Count('modules'))
-
-        serializer = course_serializers.CourseSerializer(snippets, many=True)
+        serializer = course_serializers.CourseCoreSerializer(snippets, many=True)
 
         return Response(serializer.data)
 
@@ -80,6 +84,26 @@ class CourseViewset(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
+    @action(detail=False)
+    def depth(self, request):
+        snippets = self.queryset
+
+        c_order = request.query_params.get('order')
+        c_limit = request.query_params.get('limit')
+
+        order_field = '-id'
+
+        if c_order is not None and c_order == 'asc':
+            order_field = 'id'
+
+        if c_limit is not None:
+            snippets = snippets.order_by(order_field)[:int(c_limit)]
+
+        snippets = snippets.annotate(total_modules=Count('modules'))
+
+        serializer = course_serializers.CourseSerializer(snippets, many=True)
+
+        return Response(serializer.data)
 
 class CourseTimeLogDetailView(APIView):
 

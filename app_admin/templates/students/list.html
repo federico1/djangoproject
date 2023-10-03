@@ -1,17 +1,20 @@
 {% extends "admin_base.html" %} {% block title %} - Students{% endblock %} {% block content %}
 
+<div>
+   <div class="d-flex align-items-center justify-content-center loader mb-2">
+      <div class="spinner-border text-primary mr-2" role="status" aria-hidden="true"></div>
+      <span class="badge badge-secondary px-2"><strong>Loading...</strong></span>
+   </div>
+</div>
+
 <div class="card shadow mb-4">
    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
       <h6 class="m-0 font-weight-bold text-primary">Students</h6>
       <div class="dropdown no-arrow">
-         <button type="button" class="btn btn-success btn-sm link-new-user"><i class="fa fa-plus"></i> ADD NEW</button>
+         <button type="button" class="btn btn-success btn-sm link-new-user" disabled><i class="fa fa-plus"></i> ADD NEW</button>
       </div>
    </div>
    <div class="card-body">
-      <div class="spinner-border" role="status">
-         <span class="sr-only">Loading...</span>
-      </div>
-
       <div class="table-responsive">
          <table class="table table-bordered" id="usersTable" width="100%" cellspacing="0">
             <thead>
@@ -23,6 +26,7 @@
                   <th>Last Name</th>
                   <th>Phone</th>
                   <th>Email</th>
+                  <th>Courses</th>
                </tr>
             </thead>
             <tbody></tbody>
@@ -303,22 +307,70 @@
          var settings = $.extend({}, options);
 
          var getStudents = function () {
-            $(".spinner-border").show();
+            $(".loader").parent().show();
+            $(".loader strong").text("Loading Students");
+
+            $("#usersTable").on("draw.dt", function () {
+               if (!userDataTable) return;
+
+               $("#usersTable tbody tr").each(function () {
+                  var row = userDataTable.row($(this));
+
+                  var source = document.getElementById("itemActionTemplate").innerHTML;
+                  var template = Handlebars.compile(source);
+
+                  var element = studentsList.find(a => a.id == $(this).attr("id"));
+
+                  row.child(template(element)).show();
+               });
+
+               $(".loader").parent().hide();
+               $(".link-new-user").removeAttr('disabled');
+            });
+
+            userDataTable = $("#usersTable").DataTable({
+               ajax: "/api/users/?format=json&is_student=1&_=" + $.now(),
+               processing: true,
+               serverSide: true,
+               columns: [
+                  { data: "id" },
+                  {
+                     data: "image",
+                     render: function (data) {
+                        return '<img src="' + data + '" width="40px">';
+                     },
+                  },
+                  { data: "username" },
+                  { data: "first_name" },
+                  { data: "last_name" },
+                  { data: "cell_number" },
+                  { data: "email" },
+                  { data: "enrolled_count" },
+               ],
+            });
+
+
+
+            return;
 
             $.get(
                "/api/users/?format=json",
                {
                   is_student: 1,
-                  _: $.now()
+                  _: $.now(),
                },
                function (response) {
                   studentsList = response;
                   drawStudentsList();
                }
             );
+            
          };
 
          var getCourses = function (isFetchStudents) {
+            $(".loader").parent().show();
+            $(".loader strong").text("Loading courses..");
+
             return $.get("/api/courses/?format=json", { _: $.now() }, function (response) {
                coursesList = response;
 

@@ -11,9 +11,11 @@ class CourseSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    enrolled_count = serializers.IntegerField(source='my_enrolled.count', read_only=True)
     class Meta:
         model = User
         fields = '__all__'
+        extra_fields = ['enrolled_count']
 
     def create(self, validated_data):
         password = validated_data.pop('password')
