@@ -33,6 +33,8 @@ class UserDetailView(APIView):
 
         if pk is not None:
             snippets = snippets.filter(pk=pk)
+            serializer = UserSerializer(snippets, many=True)
+            return Response(serializer.data)
 
         is_student = self.request.query_params.get('is_student', None)
 
