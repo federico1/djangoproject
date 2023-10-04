@@ -132,7 +132,7 @@
 
                     ShowLoadingModal("Please wait", "fetching info");
 
-                    $.get("{% url 'api_user_detail' request.user.id %}", {}, function (response) {
+                    $.get("{% url 'api_v1:api_user_detail' request.user.id %}", {}, function (response) {
                         productObject = response[0];
                         fillFormValues();
                     });

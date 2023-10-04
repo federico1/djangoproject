@@ -670,7 +670,7 @@
                 <div class="modal-body">
 
                     <div>
-                        <form method="post" id="fmChat" action="{% url 'api_messages' %}">
+                        <form method="post" id="fmChat" action="{% url 'api_v1:api_messages' %}">
 
                             {% csrf_token %}
 
@@ -1200,7 +1200,7 @@
 
                     var cId = $("#fmChat input[name='conversation']").val();
 
-                    $.get("{% url 'api_messages' %}", {
+                    $.get("{% url 'api_v1:api_messages' %}", {
                         conversation: cId,
                         type: 'last10'
                     }, function (response) {
