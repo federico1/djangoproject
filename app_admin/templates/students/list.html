@@ -359,8 +359,12 @@
                $(".link-new-user").removeAttr("disabled");
             });
 
+            $("#usersTable").on('xhr.dt', function (e, settings, json, xhr) {
+               studentsList = json.data;
+            });
+
             userDataTable = $("#usersTable").DataTable({
-               ajax: '{% url "api_v1:api_users_list" %}' + "?format=json&is_student=1&_=" + $.now(),
+               ajax: '{% url "api_v1:api_users_list" %}' + "?format=json&is_student=1&is_active=1&_=" + $.now(),
                processing: true,
                serverSide: true,
                columns: [
@@ -479,11 +483,8 @@
             $.ajax({
                type: "DELETE",
                url: "/api/users/" + id + "/",
-               data: JSON.stringify({
-                  is_active: false,
-               }),
-               contentType: "application/json; charset=utf-8",
-               dataType: "json",
+               // contentType: "application/json; charset=utf-8",
+               // dataType: "json",
                beforeSend: function (xhr, settings) {
                   xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
                },
@@ -733,6 +734,7 @@
             });
 
             $("#userModal").on("shown.bs.modal", function (e) {
+
                var id = $("#userModal").attr("data-id");
 
                var element = studentsList.find(a => a.id == id);
