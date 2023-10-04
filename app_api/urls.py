@@ -42,6 +42,8 @@ urlpatterns = [
     #path('users/<int:pk>/', users_views.UserDetailView.as_view()),
     path('email-exist/', users_views.EmailExist),
 
+    path('sst-cards/', users_views.SSTCardApiView.as_view()),
+
     path('subjects/', course_views.SubjectDetailView.as_view()),
     path('subjects/<int:pk>/', course_views.SubjectDetailView.as_view()),
     path('courses_time_logs/', course_views.CourseTimeLogDetailView.as_view()),

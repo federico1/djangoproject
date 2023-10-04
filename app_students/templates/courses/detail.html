@@ -99,94 +99,7 @@
 
 
             <div class="row">
-                <div class="col-md-4">
-                    <div class="blog-sidebar">
-                        <div class="widget widget_categories">
-                            <ul>
-
-                                {% for m in object.modules.all %}
-                                    <li class="cat-item">
-                                        <div class="myCollapsible">
-                                            <div>
-                                                <a href="javascript:;" class="accordion-button" data-toggle="collapse" data-target="#collapseOne-{{ m.id }}" aria-expanded='{% if m == module %}true{% endif %}'>
-                                                    <i class="fa {% if m == module %} fa-angle-down {% else %} fa-angle-right {% endif %}"></i>
-                                                    {{ m.title }}
-                                                </a>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <div id="collapseOne-{{ m.id }}" class="collapse mt-3 {% if m == module %} show {% endif %}" aria-labelledby="headingOne-{{ m.id }}">
-                                                <ul>
-                                                    {% for content in m.contents.all %}
-
-                                                        {% with item=content.item %}
-
-                                                        <li class="content-item py-1 pl-2 {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}active{% endif %}" data-progress="{{ content.has_progress }}">
-                                                            {% if content.id in completed_contents or active_content.object.id  == content.id %}
-
-                                                                <a class="lesson content-{{ content.id }} {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}pin{% endif %}" href="{% url 'student_course_detail_module' object.id m.id %}?content={{ content.id }}">
-
-                                                                    <i title=" {{ content.content_type }}" class="fa {{ content.content_type }}"></i>
-                                                                    {{ item.title }}
-
-                                                                </a>
-
-                                                            {% else %}
-                                                                <a href="javascript:;">
-                                                                    <i title=" {{ content.content_type }}" class="fa {{ content.content_type }}"></i>
-                                                                    {{ item.title }}
-                                                                </a>
-                                                            {% endif %}
-
-                                                        </li>
-
-                                                        {% endwith %}
-                                                    {% endfor %}
-
-                                                    {% if m.quiz != None and m.quiz_id in taken_quizzes and m.quiz.questions.count > 0 %}
-
-                                                        <li class="content-item py-1 pl-2 complete" data-progress="True">
-                                                            <a class="complete" href="{% url 'student_course_detail_module' object.id m.id %}?content={{ m.quiz_id }}&type=quiz">
-                                                                <i class="fa fa-question"></i>
-                                                                Take Quiz
-                                                            </a>
-                                                        </li>
-
-                                                    {% elif m.quiz != None and m.quiz.questions.count > 0 %}
-                                                        <li class="content-item py-1 pl-2" data-progress="True">
-                                                            <a href="javascript:;">
-                                                                <i title="Quiz" class="fa fa-question"></i>
-                                                                Take Quiz
-                                                            </a>
-                                                        </li>
-                                                    {% endif %}
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                {% endfor %}
-
-                                {% if object.quiz and object.quiz.id in taken_quizzes %}
-
-                                    <li class="cat-item  {% if not enrollment.is_completed %} d-none {% endif %}">
-                                        <a href="{% url 'student_course_detail' object.id %}?content={{ object.quiz.id }}&type=quiz" class="btn btn-block btn-success text-white text-center link-final-quiz-taken">
-                                            Final Quiz
-                                        </a>
-                                    </li>
-
-                                {% elif object.quiz %}
-                                    <li class="cat-item {% if not enrollment.is_completed %} d-none {% endif %}">
-                                        <a href="{% url 'student_course_detail' object.id %}?content={{ object.quiz.id }}&type=quiz&final=true" class="btn btn-block btn-info text-white text-center link-final-quiz">
-                                            Take Final Quiz
-                                        </a>
-                                    </li>
-                                {% endif %}
-                            </ul>
-                        </div>
-
-
-                    </div>
-                </div>
+              
                 <div class="col-md-8">
                     <div class="blog-post-item">
                         <div class="row">
@@ -313,6 +226,94 @@
                     </div>
 
 
+                </div>
+                <div class="col-md-4">
+                    <div class="blog-sidebar">
+                        <div class="widget widget_categories">
+                            <ul>
+
+                                {% for m in object.modules.all %}
+                                    <li class="cat-item">
+                                        <div class="myCollapsible">
+                                            <div>
+                                                <a href="javascript:;" class="accordion-button" data-toggle="collapse" data-target="#collapseOne-{{ m.id }}" aria-expanded='{% if m == module %}true{% endif %}'>
+                                                    <i class="fa {% if m == module %} fa-angle-down {% else %} fa-angle-right {% endif %}"></i>
+                                                    {{ m.title }}
+                                                </a>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <div id="collapseOne-{{ m.id }}" class="collapse mt-3 {% if m == module %} show {% endif %}" aria-labelledby="headingOne-{{ m.id }}">
+                                                <ul>
+                                                    {% for content in m.contents.all %}
+
+                                                        {% with item=content.item %}
+
+                                                        <li class="content-item py-1 pl-2 {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}active{% endif %}" data-progress="{{ content.has_progress }}">
+                                                            {% if content.id in completed_contents or active_content.object.id  == content.id %}
+
+                                                                <a class="lesson content-{{ content.id }} {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}pin{% endif %}" href="{% url 'student_course_detail_module' object.id m.id %}?content={{ content.id }}">
+
+                                                                    <i title=" {{ content.content_type }}" class="fa {{ content.content_type }}"></i>
+                                                                    {{ item.title }}
+
+                                                                </a>
+
+                                                            {% else %}
+                                                                <a href="javascript:;">
+                                                                    <i title=" {{ content.content_type }}" class="fa {{ content.content_type }}"></i>
+                                                                    {{ item.title }}
+                                                                </a>
+                                                            {% endif %}
+
+                                                        </li>
+
+                                                        {% endwith %}
+                                                    {% endfor %}
+
+                                                    {% if m.quiz != None and m.quiz_id in taken_quizzes and m.quiz.questions.count > 0 %}
+
+                                                        <li class="content-item py-1 pl-2 complete" data-progress="True">
+                                                            <a class="complete" href="{% url 'student_course_detail_module' object.id m.id %}?content={{ m.quiz_id }}&type=quiz">
+                                                                <i class="fa fa-question"></i>
+                                                                Take Quiz
+                                                            </a>
+                                                        </li>
+
+                                                    {% elif m.quiz != None and m.quiz.questions.count > 0 %}
+                                                        <li class="content-item py-1 pl-2" data-progress="True">
+                                                            <a href="javascript:;">
+                                                                <i title="Quiz" class="fa fa-question"></i>
+                                                                Take Quiz
+                                                            </a>
+                                                        </li>
+                                                    {% endif %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                {% endfor %}
+
+                                {% if object.quiz and object.quiz.id in taken_quizzes %}
+
+                                    <li class="cat-item  {% if not enrollment.is_completed %} d-none {% endif %}">
+                                        <a href="{% url 'student_course_detail' object.id %}?content={{ object.quiz.id }}&type=quiz" class="btn btn-block btn-success text-white text-center link-final-quiz-taken">
+                                            Final Quiz
+                                        </a>
+                                    </li>
+
+                                {% elif object.quiz %}
+                                    <li class="cat-item {% if not enrollment.is_completed %} d-none {% endif %}">
+                                        <a href="{% url 'student_course_detail' object.id %}?content={{ object.quiz.id }}&type=quiz&final=true" class="btn btn-block btn-info text-white text-center link-final-quiz">
+                                            Take Final Quiz
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+
+
+                    </div>
                 </div>
 
             </div>
