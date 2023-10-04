@@ -3,11 +3,12 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from django.http import Http404
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.conf import settings
 from datetime import datetime
 from cryptography.fernet import Fernet
 from rest_framework.pagination import PageNumberPagination
+
 import json
 
 from app_api.serializers import UserSerializer
@@ -65,12 +66,18 @@ class UserDetailView(APIView):
         dt_length = int(self.request.query_params.get('length'))
         dt_start = int(self.request.query_params.get('start'))
         dt_draw = self.request.query_params.get('draw')
+        dt_search = self.request.query_params.get('search[value]')
+
+        if dt_search:
+            snippets = snippets.filter(Q(email__icontains=dt_search) | Q(first_name__icontains=dt_search) | Q(
+                last_name__icontains=dt_search) | Q(username__icontains=dt_search))
 
         records_total = snippets.count()
 
-        serializer = UserSerializer(snippets.order_by('-id')[dt_start:dt_start+dt_length], many=True)
+        serializer = UserSerializer(snippets.order_by(
+            '-id')[dt_start:dt_start+dt_length], many=True)
 
-        #return Response(serializer.data)
+        # return Response(serializer.data)
 
         return Response({'draw': dt_draw,
                          "recordsTotal": records_total,
@@ -82,16 +89,16 @@ class UserDetailView(APIView):
 
         return response
 
-    def put(self, request, id, format=None):
+    # def put(self, request, id, format=None):
 
-        snippet = self.get_object(id)
-        serializer = UserSerializer(snippet, data=request.data, partial=True)
+    #     snippet = self.get_object(id)
+    #     serializer = UserSerializer(snippet, data=request.data, partial=True)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request, format=None):
 
@@ -109,6 +116,8 @@ class UserDetailView(APIView):
         is_active = request.data['is_active']
         snippet.is_active = is_active
         snippet.save()
+
+        print(snippet)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 

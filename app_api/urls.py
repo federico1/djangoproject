@@ -7,10 +7,11 @@ from .more_views import course_views, users_views, chat_views, attendance_views,
     student_views, cart_views, quiz_views, tag_views, course_module_views
 from . import views
 
+app_name = "api_v1"
 
 router = routers.DefaultRouter()
 
-router.register(r'courses', course_views.CourseViewset, basename="course")
+router.register(r'courses', course_views.CourseViewset, basename="courses")
 router.register(r'course-enrollment',
                 course_views.EnrollmentViewset, basename ="enrollments"),
 router.register(r'course-assess-rating',
@@ -36,7 +37,7 @@ urlpatterns = [
     # path('video-courses/<int:pk>/', views.VideoCoursesView.as_view()),
 
     path('users/', users_views.UserDetailView.as_view(), name="api_users_list"),
-    path('users/<int:id>/', users_views.UserDetailView.as_view(), name="api_user_detail"),
+    path('users/<int:pk>/', users_views.UserDetailView.as_view(), name="api_user_detail"),
     #path('users/<int:pk>/', users_views.UserDetailView.as_view()),
     #path('users/<int:pk>/', users_views.UserDetailView.as_view()),
     path('email-exist/', users_views.EmailExist),

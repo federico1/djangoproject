@@ -11,7 +11,8 @@
    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
       <h6 class="m-0 font-weight-bold text-primary">Students</h6>
       <div class="dropdown no-arrow">
-         <button type="button" class="btn btn-success btn-sm link-new-user" disabled><i class="fa fa-plus"></i> ADD NEW</button>
+         <button type="button" class="btn btn-success btn-sm link-new-user" disabled><i class="fa fa-plus"></i> ADD
+            NEW</button>
       </div>
    </div>
    <div class="card-body">
@@ -62,21 +63,28 @@
                <span aria-hidden="true">&times;</span>
             </button>
          </div>
-         <div class="modal-body">
-            <div class="row mb-3">
-               <div class="col">
+
+         <div class="bg-light p-2">
+            <div class="row mb-1">
+               <div class="col-md-8">
                   <select class="form-control" id="ddlCourses" name="course">
                      <option value="">Select Course</option>
                   </select>
                </div>
-               <div class="col">
+               <div class="col-md-2">
                   <button class="btn btn-info" id="btnAssignCourse">Add Course</button>
+               </div>
+               <div class="col-md-1">
+                  <div class="spinner-border text-primary mb-2 d-none" role="status">
+                     <span class="sr-only">Loading...</span>
+                  </div>
+
                </div>
             </div>
 
-            <div class="spinner-border text-primary mb-2 d-none" role="status">
-               <span class="sr-only">Loading...</span>
-            </div>
+         </div>
+
+         <div class="modal-body">
 
             <div class="row mb-3">
                <div class="col">
@@ -183,11 +191,18 @@
 
                    <div class="col">
                        <input type="text" class="form-control" {{#if id}}disabled{{/if}} value="{{username}}" id="username" name="username" placeholder="Login name">
-                   </div>
+                  
+                       <!-- <div>
+                        <a href="javascript:;" class="text-info link-create-username">Create Random</a>
+                       </div> -->
+                     </div>
 
                    <div class="col">
                        <input type="password" class="form-control" {{#if id}}disabled{{/if}} id="password" name="password" placeholder="Password">
-                   </div>
+                       <!-- <div>
+                        <a href="javascript:;" class="text-info link-create-password">Create Random</a>
+                       </div> -->
+                     </div>
 
                </div>
                <div class="row mb-3">
@@ -226,6 +241,12 @@
            </div>
 
        </div>
+
+       <div class="spinner-border text-primary mb-2 d-none" role="status">
+         <span class="sr-only">Loading...</span>
+      </div>
+
+
    </form>
 </script>
 {% endverbatim %} {% verbatim %}
@@ -253,11 +274,11 @@
 {% endverbatim %} {% verbatim %}
 
 <script type="text/x-handlebars-template" id="studentCourseItemTemplate">
-   {{#each _enrollments}}
-       <tr id="{{id}}"><td>{{course}}</td><td>{{../title}}</td>
-       <td> <a href='#' class='badge badge-danger link-delete-enrollment' data-id='{{id}}'>Delete</a> </td>
-       </tr>
-   {{/each}}
+   <tr id="{{id}}" data-enrollment-id="{{enrollment.id}}">
+      <td>{{id}}</td>
+      <td>{{title}}</td>
+      <td> <a href='#' class='badge badge-danger link-delete-enrollment' data-id='{{enrollment.id}}'>Delete</a> </td>
+   </tr>
 </script>
 {% endverbatim %} {% endblock %} {% block scripts %}
 
@@ -296,40 +317,50 @@
    })(jQuery);
 
    (function ($) {
+
       $.StudentManager = function (options) {
          var that = this;
 
          var studentsList = [];
          var userDataTable;
+         var studentCoursetDT;
 
          var coursesList = [];
 
          var settings = $.extend({}, options);
 
          var getStudents = function () {
+
             $(".loader").parent().show();
             $(".loader strong").text("Loading Students");
+
+            if (userDataTable) {
+               userDataTable.destroy();
+            }
 
             $("#usersTable").on("draw.dt", function () {
                if (!userDataTable) return;
 
                $("#usersTable tbody tr").each(function () {
+
                   var row = userDataTable.row($(this));
+
+                  var data = row.data();
 
                   var source = document.getElementById("itemActionTemplate").innerHTML;
                   var template = Handlebars.compile(source);
 
-                  var element = studentsList.find(a => a.id == $(this).attr("id"));
+                  //var element = studentsList.find(a => a.id == $(this).attr("id"));
 
-                  row.child(template(element)).show();
+                  row.child(template(data)).show();
                });
 
                $(".loader").parent().hide();
-               $(".link-new-user").removeAttr('disabled');
+               $(".link-new-user").removeAttr("disabled");
             });
 
             userDataTable = $("#usersTable").DataTable({
-               ajax: "/api/users/?format=json&is_student=1&_=" + $.now(),
+               ajax: '{% url "api_v1:api_users_list" %}' + "?format=json&is_student=1&_=" + $.now(),
                processing: true,
                serverSide: true,
                columns: [
@@ -348,87 +379,17 @@
                   { data: "enrolled_count" },
                ],
             });
-
-
-
-            return;
-
-            $.get(
-               "/api/users/?format=json",
-               {
-                  is_student: 1,
-                  _: $.now(),
-               },
-               function (response) {
-                  studentsList = response;
-                  drawStudentsList();
-               }
-            );
-            
          };
 
          var getCourses = function (isFetchStudents) {
             $(".loader").parent().show();
             $(".loader strong").text("Loading courses..");
 
-            return $.get("/api/courses/?format=json", { _: $.now() }, function (response) {
+            return $.get('{% url "api_v1:courses-list" %}', { format: "json", _: $.now() }, function (response) {
                coursesList = response;
 
                if (isFetchStudents) getStudents();
             });
-         };
-
-         var drawStudentsList = function () {
-            if (userDataTable) {
-               userDataTable.destroy();
-            }
-
-            $("#usersTable tbody").empty();
-
-            $(studentsList).each(function (index, item) {
-               if (item.is_active == 1) {
-                  var source = document.getElementById("studentListItemTemplate").innerHTML;
-                  var template = Handlebars.compile(source);
-                  $("#usersTable tbody").append(template(item));
-               }
-            });
-
-            $("#usersTable").on("draw.dt", function () {
-               if (!userDataTable) return;
-
-               $("#usersTable tbody tr").each(function () {
-                  var row = userDataTable.row($(this));
-
-                  var source = document.getElementById("itemActionTemplate").innerHTML;
-                  var template = Handlebars.compile(source);
-
-                  var element = studentsList.find(a => a.id == $(this).attr("id"));
-
-                  row.child(template(element)).show();
-               });
-
-               $(".student-courses").each(function () {
-                  var id = $(this).attr("pk");
-                  id = parseInt(id);
-
-                  var courses = coursesList.filter(a => a.course_enrolled.filter(d => d.user.id == id).length > 0);
-
-                  var _that = this;
-
-                  $(courses).each(function (index, item) {
-                     if (index < 3) {
-                        var bd = '<span class="badge badge-secondary mr-2">' + courses[0].title + "</span>";
-                        $(_that).append(bd);
-                     }
-                  });
-               });
-
-               $(".spinner-border").hide();
-            });
-
-            userDataTable = $("#usersTable").DataTable();
-
-            userDataTable.order([[0, "desc"]]).draw();
          };
 
          var fillCoursesList = function () {
@@ -440,9 +401,12 @@
          };
 
          var saveUser = function () {
-            var isValid = $("#userModal form").valid();
 
+            var isValid = $("#userModal form").valid();
             if (!isValid) return;
+
+            $("#userModal .spinner-border").removeClass("d-none");
+            $("#userModal button").attr("disabled", true);
 
             var data = $("#userModal form").eq(0).serializeObject();
 
@@ -453,9 +417,18 @@
 
             $("#userModal form .alert").remove();
 
+            url = '{% url "api_v1:api_user_detail" pk=0 %}';
+
+            if (data.id > 0) {
+               url = url.replace("0", data.id);
+            }
+            else {
+               url = url.replace("/0", "");
+            }
+
             $.ajax({
                type: data.id > 0 ? "PUT" : "POST",
-               url: "/api/users/" + (data.id > 0 ? data.id + "/" : ""),
+               url: url,
                data: JSON.stringify(data),
                contentType: "application/json; charset=utf-8",
                dataType: "json",
@@ -465,6 +438,14 @@
                success: function (response, textStatus, xhr) {
                   if (textStatus == "success") {
                      $("#userModal").modal("hide");
+
+                     if (data.id > 0) {
+                        toastr.success("Student has been updated");
+                     }
+                     else {
+                        toastr.success("Student has been added");
+                     }
+
                      getStudents();
                   }
                },
@@ -478,14 +459,23 @@
                         }).html(xhr.responseText)
                      );
                   }
+
+                  $("#userModal .spinner-border").addClass("d-none");
+                  $("#userModal button").attr("disabled", false);
                },
                failure: function (errMsg) {
                   $("#userModal").modal("hide");
+                  $("#userModal .spinner-border").addClass("d-none");
+                  $("#userModal button").attr("disabled", false);
                },
             });
          };
 
          var deleteUser = function (id) {
+
+            url = '{% url "api_v1:api_user_detail" pk=0 %}';
+            url = url.replace("0", id);
+
             $.ajax({
                type: "DELETE",
                url: "/api/users/" + id + "/",
@@ -501,46 +491,49 @@
                   toastr.warning("User has been deleted");
                   getStudents();
                },
-               complete: function (xhr, textStatus) {},
-               failure: function (errMsg) {},
+               complete: function (xhr, textStatus) { },
+               failure: function (errMsg) { },
             });
          };
 
          var drawStudentCourses = function () {
+
             var id = $("#courseModal").attr("data-id");
 
             id = parseInt(id);
 
-            $("#tblStudentCourses tbody").empty();
+            if (studentCoursetDT) {
+               studentCoursetDT.destroy();
+            }
 
-            $(coursesList).each(function (index, item) {
-               if (item.course_enrolled.filter(d => d.user.id == id).length > 0) {
-                  item._enrollments = item.course_enrolled.filter(d => d.user.id == id);
+            $("#tblStudentCourses tbody").html('<div class="badge badge-info">Loading courses</div>');
+
+            $.get('{% url "api_v1:enrollments-list" %}', { student: id, _: $.now() }, function (response) {
+
+               $("#tblStudentCourses tbody").empty();
+
+               $(response).each(function (index, item) {
+
+                  var course = coursesList.find(a => a.id == item.course);
+                  course.enrollment = item;
+
                   var source = document.getElementById("studentCourseItemTemplate").innerHTML;
                   var template = Handlebars.compile(source);
-                  $("#tblStudentCourses tbody").append(template(item));
-               }
-            });
-
-            $(".student-courses").each(function () {
-               $(this).empty();
-               var id = $(this).attr("pk");
-               id = parseInt(id);
-
-               var courses = coursesList.filter(a => a.course_enrolled.filter(d => d.user.id == id).length > 0);
-
-               var _that = this;
-
-               $(courses).each(function (index, item) {
-                  if (index < 3) {
-                     var bd = '<span class="badge badge-secondary mr-2">' + courses[0].title + "</span>";
-                     $(_that).append(bd);
-                  }
+                  $("#tblStudentCourses tbody").append(template(course));
                });
+
+               if (response.length <= 0) {
+                  $("#tblStudentCourses tbody").html('<div class="badge badge-info">No course found..</div>');
+               }
+               else {
+                  studentCoursetDT = $("#tblStudentCourses").DataTable();
+               }
+
             });
          };
 
          var assignCourse = function (user, course) {
+
             $("#courseModal .spinner-border").removeClass("d-none");
             $("#courseModal button").attr("disabled", true);
 
@@ -551,7 +544,7 @@
 
             $.ajax({
                type: "POST",
-               url: "/api/course-enrollment/",
+               url: '{% url "api_v1:enrollments-list" %}',
                data: JSON.stringify(data),
                contentType: "application/json; charset=utf-8",
                dataType: "json",
@@ -560,29 +553,45 @@
                },
                success: function (response, textStatus, xhr) {
                   if (textStatus == "success") {
-                     getCourses(false).then(function () {
-                        setTimeout(function () {
-                           drawStudentCourses();
 
-                           $("#courseModal .spinner-border").addClass("d-none");
+                     $("#courseModal .spinner-border").addClass("d-none");
+                     $("#courseModal button").attr("disabled", false);
 
-                           $("#courseModal button").attr("disabled", false);
-                        }, 2000);
-                     });
+                     toastr.success("Course has been addded");
+
+                     drawStudentCourses();
+
+                     // getCourses(false).then(function () {
+                     //    setTimeout(function () {
+                     //       drawStudentCourses();
+
+                     //       $("#courseModal .spinner-border").addClass("d-none");
+
+                     //       $("#courseModal button").attr("disabled", false);
+                     //    }, 2000);
+                     // });
+
                   }
                },
                complete: function (xhr, textStatus) {
                   if (xhr.status == 400) {
                   }
                },
-               failure: function (errMsg) {},
+               failure: function (errMsg) { },
             });
          };
 
          var deleteEnrollment = function (id) {
+
+            $("#courseModal .spinner-border").removeClass("d-none");
+            $("#courseModal button").attr("disabled", true);
+
+            var url = '{% url "api_v1:enrollments-force-remove" pk=0 %}';
+            url = url.replace("0", id);
+
             $.ajax({
                type: "POST",
-               url: "/api/course-enrollment/" + id + "/force_remove/",
+               url: url,
                data: null,
                contentType: "application/json; charset=utf-8",
                dataType: "json",
@@ -591,21 +600,16 @@
                },
                success: function (response, textStatus, xhr) {
                   toastr.success("Enrollment deleted");
+                  $("tr[data-enrollment-id='" + id + "']").remove();
+                  $("#courseModal .spinner-border").addClass("d-none");
+                  $("#courseModal button").attr("disabled", false);
 
-                  getCourses(false).then(function () {
-                     setTimeout(function () {
-                        drawStudentCourses();
-
-                        $("#courseModal .spinner-border").addClass("d-none");
-
-                        $("#courseModal button").attr("disabled", false);
-                     }, 2000);
-                  });
                },
             });
          };
 
          var registerEvent = function () {
+
             $("div").on("click", ".link-new-user", function (e) {
                e.stopPropagation();
 
@@ -659,6 +663,8 @@
             $("div").on("click", "#btnAssignCourse", function (e) {
                e.stopPropagation();
 
+               $("#btnAssignCourse").attr('disabled', true);
+
                var val = $("#ddlCourses").val();
 
                var trs = $("#tblStudentCourses tr#" + (val ? val : 0));
@@ -668,6 +674,14 @@
                if (val && trs.length <= 0) {
                   assignCourse(user, val);
                }
+               else {
+                  $("#btnAssignCourse").attr('disabled', false);
+                  toastr.warning("Course already exist in this student record..");
+               }
+            });
+
+            $("div").on("click", ".link-create-username", function (e) {
+               e.stopPropagation();
             });
 
             $("div").on("click", "#btnSaveUser", function (e) {
@@ -715,7 +729,7 @@
                      $("#id_image").val(response);
                   }
                },
-               complete: function (xhr) {},
+               complete: function (xhr) { },
             });
 
             $("#userModal").on("shown.bs.modal", function (e) {

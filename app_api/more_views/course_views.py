@@ -175,11 +175,15 @@ class EnrollmentViewset(viewsets.ViewSet):
     def list(self, request):
 
         course_id = request.query_params.get('course')
+        student_id = request.query_params.get('student')
 
         snippets = Enrollments.objects
 
         if course_id is not None:
             snippets = snippets.filter(course_id=course_id)
+
+        if student_id is not None:
+            snippets = snippets.filter(user_id=student_id)
 
         serializer = course_serializers.EnrollmentSerializer(
             snippets, many=True)
