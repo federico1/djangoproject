@@ -1220,7 +1220,7 @@
 
                     $.ajax({
                         type: "POST",
-                        url: "{% url 'api_conversations' %}",
+                        url: "{% url 'api_v1:api_conversations' %}",
                         data: JSON.stringify(data),
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
