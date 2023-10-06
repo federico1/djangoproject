@@ -40,7 +40,9 @@ class ContactView(generic.TemplateView):
             'message': request.POST['message'],
         }
 
-        result = send_contact_alert(ctx)
+        #result = send_contact_alert(ctx)
+
+        result = 0
 
         return JsonResponse({'result': result})
 
