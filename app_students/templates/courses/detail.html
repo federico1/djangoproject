@@ -993,6 +993,10 @@
                         }
                     });
 
+                    $('html, body').animate({
+                        scrollTop: $(".blog-post-item").offset().top
+                    }, 500);
+
                     $('.collapse').on('shown.bs.collapse', function () {
                         var id = $(this).attr('id');
                         var link = $("a[data-target='#" + id + "']");
