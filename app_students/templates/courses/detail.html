@@ -59,37 +59,41 @@
                 </li>
 
             </ul>
-            <button class="btn btn-success link-talk-teacher" href="javascript:;">
-                Talk to a trainer</button>
-
-
-            <div class="mx-3">
-                {% if module != None and next_content != None %}
-
-                    {% if next_content.type == 'quiz' %}
-
-                        <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}&type=quiz" class="btn btn-primary">Next Chapter (Quiz) >>
-                        </a>
-
-                    {% elif next_content.type == 'content' %}
-
-                        <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}" class="btn btn-primary">Next Chapter >>
-                        </a>
-
+           
+           <div class="d-none d-sm-block">
+            <div class="d-flex flex-row justify-content-center">
+                <button class="btn btn-success link-talk-teacher" href="javascript:;">
+                    Talk to a trainer</button>
+    
+                <div class="mx-3">
+                    {% if module != None and next_content != None %}
+    
+                        {% if next_content.type == 'quiz' %}
+    
+                            <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}&type=quiz" class="btn btn-primary">Next Chapter (Quiz) >>
+                            </a>
+    
+                        {% elif next_content.type == 'content' %}
+    
+                            <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}" class="btn btn-primary">Next Chapter >>
+                            </a>
+    
+                        {% endif %}
+    
                     {% endif %}
-
-                {% endif %}
-
-                {% if module == None %}
-
-                    <a href="javascript:;" class="btn btn-primary link-start-course">
-                        Start Course >>
-                    </a>
-
-                {% endif %}
-
+    
+                    {% if module == None %}
+    
+                        <a href="javascript:;" class="btn btn-primary link-start-course">
+                            Start Course >>
+                        </a>
+    
+                    {% endif %}
+    
+                </div>
+    
             </div>
-
+           </div>
 
         </div>
     </nav>
@@ -97,6 +101,42 @@
     <div>
         <div class="container-fluid mt-2">
 
+            <div class="row mb-2 d-block d-sm-none">
+                <div class="col">
+                    <div class="d-flex flex-row justify-content-center">
+                        <button class="btn btn-success link-talk-teacher" href="javascript:;">
+                            Talk to a trainer</button>
+            
+                        <div class="mx-3">
+                            {% if module != None and next_content != None %}
+            
+                                {% if next_content.type == 'quiz' %}
+            
+                                    <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}&type=quiz" class="btn btn-primary">Next Chapter (Quiz) >>
+                                    </a>
+            
+                                {% elif next_content.type == 'content' %}
+            
+                                    <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}" class="btn btn-primary">Next Chapter >>
+                                    </a>
+            
+                                {% endif %}
+            
+                            {% endif %}
+            
+                            {% if module == None %}
+            
+                                <a href="javascript:;" class="btn btn-primary link-start-course">
+                                    Start Course >>
+                                </a>
+            
+                            {% endif %}
+            
+                        </div>
+            
+                    </div>
+                </div>
+            </div>
 
             <div class="row">
               
