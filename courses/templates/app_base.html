@@ -478,6 +478,8 @@
                   console.log("cart updated.");
 
                   Toast.fire({ icon: "success", title: "Course has been added to cart." });
+
+                  window.location.href = '{% url "cart_detail" %}';
                };
 
                var onChangeCart = function () {
