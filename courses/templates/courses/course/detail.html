@@ -6,281 +6,317 @@
 
 {% block title %}Best Price Online - {{ object.title }} Course | pdhsafety.com {% endblock %}
 
-{% block meta_desc %} Best Price Online {{ object.subject }} IACET Accredited, Access 24/7 On All Devices. Easy To Take Money Back Guarante{% endblock %}
+{% block meta_desc %} Best Price Online {{ object.subject }} IACET Accredited, Access 24/7 On All Devices. Easy To Take
+Money Back Guarante{% endblock %}
 
 {% block meta_keywords %}
-    {{ object.subject }},
-    {{ object.title }}
+{{ object.subject }},
+{{ object.title }}
+{% endblock %}
+
+{% block head %}
+
+{% if not object.is_free %}
+
+<!-- Begin Inspectlet Asynchronous Code -->
+<script type="text/javascript">
+    (function () {
+        window.__insp = window.__insp || [];
+        __insp.push(["wid", 1713537870]);
+        var ldinsp = function () {
+            if (typeof window.__inspld != "undefined") return;
+            window.__inspld = 1;
+            var insp = document.createElement("script");
+            insp.type = "text/javascript";
+            insp.async = true;
+            insp.id = "inspsync";
+            insp.src =
+                ("https:" == document.location.protocol ? "https" : "http") +
+                "://cdn.inspectlet.com/inspectlet.js?wid=1713537870&r=" +
+                Math.floor(new Date().getTime() / 3600000);
+            var x = document.getElementsByTagName("script")[0];
+            x.parentNode.insertBefore(insp, x);
+        };
+        setTimeout(ldinsp, 0);
+    })();
+</script>
+<!-- End Inspectlet Asynchronous Code -->
+
+{% endif %}
 {% endblock %}
 
 {% block content %}
-    {% with subject=object.subject %}
+{% with subject=object.subject %}
 
-    {% cache 500 coursedetails course.slug %}
-    <section class="page-wrapper edutim-course-single course-single-style-3" time="{% now 'SHORT_DATETIME_FORMAT' %}">
-        <div class="course-single-wrapper">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div class="course-single-header white-text">
-                            <span class="subheading">{{ subject }}</span>
-                            <h3 class="single-course-title">{{ object.title }}</h3>
-                            <p>{{ object.overview |slice:"0:185" }}</p>
-                            <div class="d-flex align-items-center ">
-                                <div class="single-top-meta">
-                                    <i class="fa fa-book"></i>
-                                    <span>
-                                        {{ object.modules.count }}
-                                        Modules
-                                    </span>
-                                </div>
-
-                                <div class="single-top-meta">
-                                    <div class="rating">
-                                        <a href="#">
-                                            <i class="fa fa-star"></i>
-                                        </a>
-                                        <a href="#">
-                                            <i class="fa fa-star"></i>
-                                        </a>
-                                        <a href="#">
-                                            <i class="fa fa-star"></i>
-                                        </a>
-                                        <a href="#">
-                                            <i class="fa fa-star"></i>
-                                        </a>
-                                        <a href="#">
-                                            <i class="fa fa-star"></i>
-                                        </a>
-                                        <span>5.00</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+{% cache 500 coursedetails course.slug %}
+<section class="page-wrapper edutim-course-single course-single-style-3" time="{% now 'SHORT_DATETIME_FORMAT' %}">
+    <div class="course-single-wrapper">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8">
+                    <div class="course-single-header white-text">
+                        <span class="subheading">{{ subject }}</span>
+                        <h3 class="single-course-title">{{ object.title }}</h3>
+                        <p>{{ object.overview |slice:"0:185" }}</p>
+                        <div class="d-flex align-items-center ">
+                            <div class="single-top-meta">
+                                <i class="fa fa-book"></i>
+                                <span>
+                                    {{ object.modules.count }}
+                                    Modules
+                                </span>
+                            </div>
 
-                    {% if object.video %}
-                        <div class="single-course-details mb-5">
-                            <div id="videoTag" data-value="{{ object.video }}"></div>
+                            <div class="single-top-meta">
+                                <div class="rating">
+                                    <a href="#">
+                                        <i class="fa fa-star"></i>
+                                    </a>
+                                    <a href="#">
+                                        <i class="fa fa-star"></i>
+                                    </a>
+                                    <a href="#">
+                                        <i class="fa fa-star"></i>
+                                    </a>
+                                    <a href="#">
+                                        <i class="fa fa-star"></i>
+                                    </a>
+                                    <a href="#">
+                                        <i class="fa fa-star"></i>
+                                    </a>
+                                    <span>5.00</span>
+                                </div>
+                            </div>
                         </div>
-                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
 
-                    <div class="single-course-details mb-5">
-                        <h4 class="course-title">Description</h4>
+                {% if object.video %}
+                <div class="single-course-details mb-5">
+                    <div id="videoTag" data-value="{{ object.video }}"></div>
+                </div>
+                {% endif %}
+
+                <div class="single-course-details mb-5">
+                    <h4 class="course-title">Description</h4>
+                    <p>
+                        {{ object.overview }}
+                    </p>
+                </div>
+
+                {% if object.features.first.notes %}
+                <div class="single-course-details mb-5">
+                    <h4 class="course-title">Course Features:</h4>
+                    <div>
+                        {{ object.features.first.notes | safe }}
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="single-course-details mb-5">
+                    <h4 class="course-title">
+                        Learning Outcomes:</h4>
+                    <div>
+                        {{ object.features.first.outcomes  |safe }}
+                    </div>
+                </div>
+
+                <div class="single-course-details mb-5">
+                    <h4 class="course-title">
+                        Completion Requirements:</h4>
+                    <div>
+                        {{ object.features.first.completion_requirements  |safe }}
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-4">
+                <div class="course-sidebar">
+                    <div class="course-single-thumb">
+                        {% if object.image %}
+                        <img data-src="{{ object.image }}" alt="" class="img-fluid w-100 lazy" width="320"
+                            height="278" />
+                        {% else %}
+                        <img data-src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg"
+                            width="320" height="278" alt="" class="img-fluid w-100 lazy" />
+                        {% endif %}
+                        <div class="course-price-wrapper">
+                            <div class="course-price">
+
+                                {% if object.is_free %}
+                                <h4>
+                                    <span>
+                                        Price: Free</span>
+                                </h4>
+                                {% elif object.discounted_price > 0 %}
+
+                                <h4>Price:
+                                    <span>${{ object.discounted_price }}</span>
+                                    <del class="text-muted">${{ object.price }}</del>
+                                </h4>
+
+                                {% else %}
+                                <h4>
+                                    Price:
+                                    <span>${{ object.price }}</span>
+                                </h4>
+                                {% endif %}
+
+                            </div>
+                            <div class="buy-btn">
+                                {% if object.is_free %}
+                                {% if request.user.is_authenticated %}
+                                <a href="javascript:;" class="btn btn-main btn-block link-free-enroll">
+                                    Take Free Course
+                                </a>
+                                {% else %}
+                                <a href="javascript:;" class="btn btn-main btn-block link-free-auth">
+                                    Enroll Free Course
+                                </a>
+                                {% endif %}
+
+                                {% else %}
+
+                                <a href="javascript:;" data-subject="{{ subject.title }}"
+                                    data-json="{{ object|jsonify }}" class="btn btn-main btn-block link-add-cart">
+                                    Add To Cart
+                                </a>
+
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-widget course-details-info">
+                        <h4 class="course-title">Credits </h4>
                         <p>
-                            {{ object.overview }}
+                            {{ object.features.first.schedule  |safe }}
                         </p>
                     </div>
 
-                    {% if object.features.first.notes %}
-                        <div class="single-course-details mb-5">
-                            <h4 class="course-title">Course Features:</h4>
-                            <div>
-                                {{ object.features.first.notes | safe }}
-                            </div>
-                        </div>
-                    {% endif %}
+                    <div class="course-widget course-details-info">
+                        <h4 class="course-title">This Course Includes</h4>
+                        <ul>
+                            <li>
+                                <div class="">
+                                    <span>
+                                        <i class="fa fa-user"></i>Instructor :</span>
+                                    <a href="#" class="d-inline-block">
 
-                    <div class="single-course-details mb-5">
-                        <h4 class="course-title">
-                            Learning Outcomes:</h4>
-                        <div>
-                            {{ object.features.first.outcomes  |safe }}
-                        </div>
-                    </div>
-
-                    <div class="single-course-details mb-5">
-                        <h4 class="course-title">
-                            Completion Requirements:</h4>
-                        <div>
-                            {{ object.features.first.completion_requirements  |safe }}
-                        </div>
-                    </div>
-
-                </div>
-                <div class="col-lg-4">
-                    <div class="course-sidebar">
-                        <div class="course-single-thumb">
-                            {% if object.image %}
-                                <img data-src="{{ object.image }}" alt="" class="img-fluid w-100 lazy" width="320" height="278" />
-                            {% else %}
-                                <img data-src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg" width="320" height="278" alt="" class="img-fluid w-100 lazy"/>
-                            {% endif %}
-                            <div class="course-price-wrapper">
-                                <div class="course-price">
-
-                                    {% if object.is_free %}
-                                        <h4>
-                                            <span>
-                                                Price: Free</span>
-                                        </h4>
-                                    {% elif object.discounted_price > 0 %}
-
-                                        <h4>Price:
-                                            <span>${{ object.discounted_price }}</span>
-                                            <del class="text-muted">${{ object.price }}</del>
-                                        </h4>
-
-                                    {% else %}
-                                        <h4>
-                                            Price:
-                                            <span>${{ object.price }}</span>
-                                        </h4>
-                                    {% endif %}
-
-                                </div>
-                                <div class="buy-btn">
-                                    {% if object.is_free %}
-                                        {% if request.user.is_authenticated %}
-                                            <a href="javascript:;" class="btn btn-main btn-block link-free-enroll">
-                                                Take Free Course
-                                            </a>
+                                        {% if object.owner.first_name %}
+                                        {{ object.owner.first_name }}
+                                        {{ object.owner.last_name }}
                                         {% else %}
-                                            <a href="javascript:;" class="btn btn-main btn-block link-free-auth">
-                                                Enroll Free Course
-                                            </a>
+                                        {{ object.owner }}
                                         {% endif %}
 
-                                    {% else %}
-
-                                        <a href="javascript:;" data-subject="{{ subject.title }}" data-json="{{ object|jsonify }}" class="btn btn-main btn-block link-add-cart">
-                                            Add To Cart
-                                        </a>
-
-                                    {% endif %}
-
+                                    </a>
                                 </div>
-                            </div>
-                        </div>
+                            </li>
 
-                        <div class="course-widget course-details-info">
-                            <h4 class="course-title">Credits </h4>
-                           <p>
-                            {{ object.features.first.schedule  |safe }}
-                           </p>
-                        </div>
+                            <li>
+                                <div class="">
+                                    <span>
+                                        <i class="fa fa-book"></i>Modules :</span>
+                                    {{ object.modules.count }}
+                                </div>
+                            </li>
 
-                        <div class="course-widget course-details-info">
-                            <h4 class="course-title">This Course Includes</h4>
-                            <ul>
-                                <li>
-                                    <div class="">
-                                        <span>
-                                            <i class="fa fa-user"></i>Instructor :</span>
-                                        <a href="#" class="d-inline-block">
+                            {% if object.features.first.duration %}
+                            <li>
+                                <div class="">
+                                    <span>
+                                        <i class="fa fa-clock"></i>Duration :
+                                    </span>
+                                    {{ object.features.first.duration }}
+                                </div>
+                            </li>
+                            {% endif %}
 
-                                            {% if object.owner.first_name %}
-                                                {{ object.owner.first_name }}
-                                                {{ object.owner.last_name }}
-                                            {% else %}
-                                                {{ object.owner }}
-                                            {% endif %}
+                            {% if object.features.first.certificate_status %}
+                            <li>
+                                <div class="">
+                                    <span>
+                                        <i class="fa fa-certificate"></i>Certificate :
+                                    </span>
+                                    {{ object.features.first.certificate_status }}
+                                </div>
+                            </li>
+                            {% endif %}
 
-                                        </a>
-                                    </div>
-                                </li>
+                            {% if object.features.first.language %}
+                            <li>
+                                <div class="">
+                                    <span>
+                                        <i class="fa fa-language"></i>Language :
+                                    </span>
+                                    {{ object.features.first.language }}
+                                </div>
+                            </li>
+                            {% endif %}
 
-                                <li>
-                                    <div class="">
-                                        <span>
-                                            <i class="fa fa-book"></i>Modules :</span>
-                                        {{ object.modules.count }}
-                                    </div>
-                                </li>
+                            {% if object.features.first.skill_level %}
+                            <li>
+                                <div class="">
+                                    <span>
+                                        <i class="fa fa-fill-drip"></i>Skill Level :
+                                    </span>
+                                    {{ object.features.first.skill_level }}
+                                </div>
+                            </li>
+                            {% endif %}
 
-                                {% if object.features.first.duration %}
-                                    <li>
-                                        <div class="">
-                                            <span>
-                                                <i class="fa fa-clock"></i>Duration :
-                                            </span>
-                                            {{ object.features.first.duration }}
-                                        </div>
-                                    </li>
-                                {% endif %}
-
-                                {% if object.features.first.certificate_status %}
-                                    <li>
-                                        <div class="">
-                                            <span>
-                                                <i class="fa fa-certificate"></i>Certificate :
-                                            </span>
-                                            {{ object.features.first.certificate_status }}
-                                        </div>
-                                    </li>
-                                {% endif %}
-
-                                {% if object.features.first.language %}
-                                    <li>
-                                        <div class="">
-                                            <span>
-                                                <i class="fa fa-language"></i>Language :
-                                            </span>
-                                            {{ object.features.first.language }}
-                                        </div>
-                                    </li>
-                                {% endif %}
-
-                                {% if object.features.first.skill_level %}
-                                    <li>
-                                        <div class="">
-                                            <span>
-                                                <i class="fa fa-fill-drip"></i>Skill Level :
-                                            </span>
-                                            {{ object.features.first.skill_level }}
-                                        </div>
-                                    </li>
-                                {% endif %}
-
-                            </ul>
-                        </div>
-
-                        <div class="course-widget course-metarials">
-                            <h4 class="course-title">Modules - ({{object.modules.count}})</h4>
-                            <ul>
-
-                                {% for m in object.modules.all %}
-                                    <li>
-                                        <i class="fa">{{forloop.counter}})</i>
-                                        {{ m.title }}
-                                    </li>
-
-                                {% endfor %}
-
-                              
-
-                            </ul>
-                        </div>
-
+                        </ul>
                     </div>
+
+                    <div class="course-widget course-metarials">
+                        <h4 class="course-title">Modules - ({{object.modules.count}})</h4>
+                        <ul>
+
+                            {% for m in object.modules.all %}
+                            <li>
+                                <i class="fa">{{forloop.counter}})</i>
+                                {{ m.title }}
+                            </li>
+
+                            {% endfor %}
+
+
+
+                        </ul>
+                    </div>
+
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="team section-padding bg-grey py-3 mb-4">
-        <div class="container">
-         
-            <div class="row">
-                <div class="col text-center">
-                    <img class="lazy" data-src="{% static 'images/money_back.png' %}" width="400" height="294" alt="money back">
-                </div>
+<section class="team section-padding bg-grey py-3 mb-4">
+    <div class="container">
+
+        <div class="row">
+            <div class="col text-center">
+                <img class="lazy" data-src="{% static 'images/money_back.png' %}" width="400" height="294"
+                    alt="money back">
             </div>
         </div>
-    </section>
-    {% endcache %}
+    </div>
+</section>
+{% endcache %}
 
-    {% endwith %}
+{% endwith %}
 
 
-    {% verbatim %}
-        <script type="text/x-handlebars-template" id="videoLocalItemTemplate">
+{% verbatim %}
+<script type="text/x-handlebars-template" id="videoLocalItemTemplate">
             <div class="embed-responsive embed-responsive-16by9">
                 <video class="embed-responsive-item">
                     <source src="{{ src }}" type="video/mp4"/>
@@ -289,7 +325,7 @@
             </div>
         </script>
 
-        <script type="text/x-handlebars-template" id="videoEmbedItemTemplate">
+<script type="text/x-handlebars-template" id="videoEmbedItemTemplate">
 
             <div class="embed-vidoe">
                 {{#if img}}
@@ -306,204 +342,204 @@
             </div>    
             
         </script>
-    {% endverbatim %}
+{% endverbatim %}
 
 {% endblock %}
 
 
 {% block scripts %}
-    <style>
-        .img-section {
-            position:relative;
-            cursor:pointer;
-        }
+<style>
+    .img-section {
+        position: relative;
+        cursor: pointer;
+    }
 
-        .img-section button {
-            position: absolute;
-            left: 0;
-            right: 0;
-            margin-left: auto;
-            margin-right: auto;
-            width: 130px;
-            top: 50%;
-            transform: translateY(-50%);
-            height: 76px;
-        }
+    .img-section button {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        width: 130px;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 76px;
+    }
 
     .img-section button i {
-            font-size: 2em;
-        }
-    </style>
-    <script>
-        (function ($) {
+        font-size: 2em;
+    }
+</style>
+<script>
+    (function ($) {
 
-            $.CourseDetailPage = function (options) {
+        $.CourseDetailPage = function (options) {
 
-                var settings = $.extend({}, options);
+            var settings = $.extend({}, options);
 
-                var loadMessage = function () {
+            var loadMessage = function () {
 
-                    var urlParts = window.location.href.indexOf('#register=success');
+                var urlParts = window.location.href.indexOf('#register=success');
 
-                    if (urlParts >= 0) {
-                        Swal.fire('Account Created!', 'You have successfully created a new account.', 'success');
-                    }
+                if (urlParts >= 0) {
+                    Swal.fire('Account Created!', 'You have successfully created a new account.', 'success');
+                }
 
-                    history.pushState("", document.title, window.location.pathname + window.location.search);
+                history.pushState("", document.title, window.location.pathname + window.location.search);
 
+            };
+
+            var enrollCourse = function () {
+
+                var formData = {
+                    course: '{{ object.id }}'
                 };
 
-                var enrollCourse = function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/api/course-enrollment/",
+                    data: JSON.stringify(formData),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (response, textStatus, xhr) {
 
-                    var formData = {
-                        course: '{{ object.id }}'
+                        var courseURL = "{% url 'student_courses' %}?id={{ course.id }}";
+
+                        if (xhr.status == 201) {
+                            Toast.fire({ icon: 'success', title: 'You have successfully enrolled to this course' });
+                            window.location.href = courseURL;
+                        } else if (xhr.status == 226) {
+                            $(".link-free-enroll").hide();
+                            Swal.fire({ icon: 'warning', title: 'Note!', text: 'You have been already enrolled in this course!' });
+                            window.location.href = courseURL;
+                        } else if (xhr.status == 203) {
+                            $(".link-free-enroll").hide();
+                            Swal.fire({ icon: 'error', title: 'Note!', text: 'You are not allowed to take this class.' });
+                        }
+                    }
+                });
+
+            };
+
+            var videoEmbeder = function () {
+
+                var videoSrc = $("#videoTag").attr('data-value');
+
+                if (videoSrc) {
+
+                    var item = {
+                        src: videoSrc
                     };
 
-                    $.ajax({
-                        type: "POST",
-                        url: "/api/course-enrollment/",
-                        data: JSON.stringify(formData),
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        beforeSend: function (xhr, settings) {
-                            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
-                        },
-                        success: function (response, textStatus, xhr) {
+                    var source = document.getElementById("videoLocalItemTemplate").innerHTML;
 
-                            var courseURL = "{% url 'student_courses' %}?id={{ course.id }}";
+                    if (isValidURL(videoSrc)) {
+                        var id = youtubeParser(videoSrc);
 
-                            if (xhr.status == 201) {
-                                Toast.fire({icon: 'success', title: 'You have successfully enrolled to this course'});
-                                window.location.href = courseURL;
-                            } else if (xhr.status == 226) {
-                                $(".link-free-enroll").hide();
-                                Swal.fire({icon: 'warning', title: 'Note!', text: 'You have been already enrolled in this course!'});
-                                window.location.href = courseURL;
-                            } else if (xhr.status == 203) {
-                                $(".link-free-enroll").hide();
-                                Swal.fire({icon: 'error', title: 'Note!', text: 'You are not allowed to take this class.'});
-                            }
-                        }
-                    });
+                        item.img = false;
 
-                };
-
-                var videoEmbeder = function () {
-
-                    var videoSrc = $("#videoTag").attr('data-value');
-
-                    if (videoSrc) {
-
-                        var item = {
-                            src: videoSrc
-                        };
-
-                        var source = document.getElementById("videoLocalItemTemplate").innerHTML;
-
-                        if (isValidURL(videoSrc)) {
-                            var id = youtubeParser(videoSrc);
-
-                        item.img=false;
-
-                        if(id && id!="") {
+                        if (id && id != "") {
                             item.img = `https://img.youtube.com/vi/${id}/sddefault.jpg`;
 
-                            if(videoSrc.indexOf('?') >=0) {
+                            if (videoSrc.indexOf('?') >= 0) {
                                 videoSrc = videoSrc + "&autoplay=1"
                             }
-                            else{
+                            else {
                                 videoSrc = videoSrc + "?autoplay=1";
                             }
 
                             item.src = videoSrc;
                         }
 
-                            source = document.getElementById("videoEmbedItemTemplate").innerHTML;
-                        }
-
-                        var template = Handlebars.compile(source);
-
-                        $("#videoTag").html(template(item));
-
-                        $('#videoTag .lazy').Lazy();
+                        source = document.getElementById("videoEmbedItemTemplate").innerHTML;
                     }
-                };
 
-                var isValidURL = function (str) {
-                    var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
-                            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-                            '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-                            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-                            '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-                            '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
-                    return !! pattern.test(str);
-                };
+                    var template = Handlebars.compile(source);
 
-                var youtubeParser = function (url){
-                    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-                    var match = url.match(regExp);
-                    return (match&&match[7].length==11)? match[7] : false;
+                    $("#videoTag").html(template(item));
+
+                    $('#videoTag .lazy').Lazy();
                 }
-
-                var registerEvent = function () {
-
-                    $("div").on("click", '.link-free-auth', function (e) {
-                        e.stopPropagation();
-
-                        var opts = {
-                            title: 'You are not logged in. ',
-                            showDenyButton: true,
-                            confirmButtonText: 'Log in',
-                            denyButtonText: 'Create a new account'
-                        };
-
-                        Swal.fire(opts).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = "{% url 'login' %}?next=" + "{{ request.path }}";
-                            } else if (result.isDenied) {
-                                window.location.href = "{% url 'student_registration' %}?next=" +"{{ request.path }}";
-                            }
-                        });
-
-                    });
-
-                    $("div").on("click", '.link-free-enroll', function (e) {
-                        e.stopPropagation();
-
-                        enrollCourse();
-                    });
-
-                    $("#videoTag").on("click", '.img-section', function (e) {
-                        e.stopPropagation();
-                     $(this).addClass('d-none');
-                       $(this).parent().find(".embed-responsive").removeClass('d-none');
-
-                       var src =  $(this).parent().find(".embed-responsive iframe").eq(0).attr('data-src');
-
-                       $(this).parent().find(".embed-responsive iframe").attr('src', src);
-                    });
-
-                    if('{{request.user.is_authenticated}}' == 'True') {
-                        $(".link-free-auth").removeClass('link-free-auth').addClass('link-free-enroll');
-                    }
-                };
-
-                var init = function () {
-                    registerEvent();
-                    loadMessage();
-                    videoEmbeder();
-                };
-
-                init();
-
-                return this;
-
             };
 
-        }(jQuery));
+            var isValidURL = function (str) {
+                var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+                    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+                    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+                    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+                    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+                    '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+                return !!pattern.test(str);
+            };
 
-        $(document).ready(function () {
-            var pl = new $.CourseDetailPage({});
-        });
-    </script>
+            var youtubeParser = function (url) {
+                var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+                var match = url.match(regExp);
+                return (match && match[7].length == 11) ? match[7] : false;
+            }
+
+            var registerEvent = function () {
+
+                $("div").on("click", '.link-free-auth', function (e) {
+                    e.stopPropagation();
+
+                    var opts = {
+                        title: 'You are not logged in. ',
+                        showDenyButton: true,
+                        confirmButtonText: 'Log in',
+                        denyButtonText: 'Create a new account'
+                    };
+
+                    Swal.fire(opts).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "{% url 'login' %}?next=" + "{{ request.path }}";
+                        } else if (result.isDenied) {
+                            window.location.href = "{% url 'student_registration' %}?next=" + "{{ request.path }}";
+                        }
+                    });
+
+                });
+
+                $("div").on("click", '.link-free-enroll', function (e) {
+                    e.stopPropagation();
+
+                    enrollCourse();
+                });
+
+                $("#videoTag").on("click", '.img-section', function (e) {
+                    e.stopPropagation();
+                    $(this).addClass('d-none');
+                    $(this).parent().find(".embed-responsive").removeClass('d-none');
+
+                    var src = $(this).parent().find(".embed-responsive iframe").eq(0).attr('data-src');
+
+                    $(this).parent().find(".embed-responsive iframe").attr('src', src);
+                });
+
+                if ('{{request.user.is_authenticated}}' == 'True') {
+                    $(".link-free-auth").removeClass('link-free-auth').addClass('link-free-enroll');
+                }
+            };
+
+            var init = function () {
+                registerEvent();
+                loadMessage();
+                videoEmbeder();
+            };
+
+            init();
+
+            return this;
+
+        };
+
+    }(jQuery));
+
+    $(document).ready(function () {
+        var pl = new $.CourseDetailPage({});
+    });
+</script>
 {% endblock %}
