@@ -498,7 +498,11 @@
                      eventValue: product.pk,
                   };
 
-                  // ga("send", _opts);
+                  gtag('event', 'click', {
+                     'app_name': 'pdhsafety',
+                     'event_label': "add_to_cart",
+                     'value':product.pk
+                   });
                };
 
                var registerEvent = function () {
