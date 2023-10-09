@@ -269,18 +269,27 @@ class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
             context['certificate_valid'] = False
 
         if context['certificate_valid'] == True:
+
+            enrolled_last = enrolled.last()
+
             context['student_name'] = student.first_name + \
                 ' ' + student.last_name
-            completed_date = enrolled.last().completed_date
+            completed_date = enrolled_last.completed_date
             context['completed_date'] = completed_date.strftime('%m/%d/%Y')
+
+            if enrolled_last.certificates.count() <=0:
+                certificate = StudentCertificate(
+                course=course, user=student, enrollment=enrolled_last)
+                certificate.add_new_certificate()
+
+                context['ref_number'] = certificate.ref_number
+            else:
+                context['ref_number'] = enrolled_last.certificates.first().ref_number
         
         credits = course.features.first().credits
-
         context['credits'] = credits if credits is not None else ''
-
-        print(context['credits'])
-
         context['sign_image'] = '/static/cert-files/image002.png'
+
         return context
 
     def render_to_response(self, context, **response_kwargs):
@@ -301,14 +310,18 @@ def download_certificate(request, pk):
 
         if enrolled.exists() or enrolled.last().is_completed == True:
 
+            enrolled_last = enrolled.last()
+
+            certificate = None
+
+            if enrolled_last.certificates.count() <=0:
+                return HttpResponse("We are unable to create your certificate. Please contact to support.")
+            else:
+                certificate = enrolled_last.certificates.first()
+
             student_name = student.first_name + \
                 ' ' + student.last_name
-            completed_date = enrolled.last().completed_date.strftime('%m/%d/%Y')
-
-            letters = string.digits
-            ref_number = ''.join(random.choice(letters) for i in range(5))
-            ref_number = 'NYCCST-' + datetime.datetime.now().strftime("%Y%m%d") + \
-                "-" + ref_number
+            completed_date = enrolled_last.completed_date.strftime('%m/%d/%Y')
 
             template_path = 'certificate/certificate_template.html'
 
@@ -316,6 +329,8 @@ def download_certificate(request, pk):
                 'static')) + '\courses\static\cert-files\image003.png'
 
             sign_image = 'https://pdhsafety.com/static/cert-files/image003.png'
+
+            ref_number = certificate.ref_number
 
             context = {'certificate_valid': True,
                        'student_name': student_name, 'completed_date': completed_date, 'object': course,
@@ -325,7 +340,7 @@ def download_certificate(request, pk):
             html = template.render(context)
 
             file_name = datetime.datetime.now().strftime("%y%m%d-%H%M%S") + "-" + \
-                str(student.id) + "-" + str(course.id) + "-certificate.pdf"
+                ref_number + "-certificate.pdf"
             file_path = os.path.join(settings.MEDIA_ROOT, 'uploads', file_name)
             result_file = open(file_path, "w+b")
 
@@ -335,17 +350,20 @@ def download_certificate(request, pk):
 
             ref_file_path = os.path.join(
                 settings.MEDIA_URL, 'uploads', file_name)
+            
+            print(ref_file_path)
 
-            certificate_object = StudentCertificate(
-                course=course, user=student, ref_number=ref_number, file_path=ref_file_path)
+            # certificate_object = StudentCertificate(
+            #     course=course, user=student, ref_number=ref_number, file_path=ref_file_path)
 
-            certificate_object.save()
+            # certificate_object.save()
+            # print(certificate_object.ref_number)
 
             with open(file_path, 'rb') as fh:
                 response = HttpResponse(
                     fh.read(), content_type="application/pdf")
                 response['Content-Disposition'] = 'attachment; filename="' + \
-                    student.username+' certificate.pdf"'
+                    course.title+' Certificate.pdf"'
                 return response
                 # attachment
 

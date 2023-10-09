@@ -7,6 +7,9 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.conf import settings
 
+import random
+import datetime
+
 from students.models import Quiz
 
 
@@ -274,12 +277,25 @@ class StudentCertificate(models.Model):
         settings.AUTH_USER_MODEL, related_name='certificates', on_delete=models.CASCADE)
     course = models.ForeignKey(Course, related_name='certificates',
                                on_delete=models.CASCADE)
+    enrollment = models.ForeignKey(Enrollments, related_name='certificates',
+                                   on_delete=models.CASCADE, null=True)
     ref_number = models.CharField(max_length=200)
     file_path = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return '{}'.format(self.event_type)
+        return '{}'.format(self.ref_number)
+
+    def add_new_certificate(self):
+        self.ref_number = self.create_ref_number()
+        self.save()
+
+    def create_ref_number(self):
+        r_number = "{0}{1}".format(self.course_id, self.enrollment_id)
+        str_date = datetime.datetime.now().strftime("%Y%m%d")
+        ref_number = 'NYCCST-{0}-{1}'.format(str_date, r_number[::-1])
+
+        return ref_number
 
 
 class Evaluation(models.Model):
