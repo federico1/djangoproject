@@ -14,7 +14,11 @@ class User(AbstractUser):
     person_eyes_color = models.TextField(null=True, blank=True)
     primary_id_src = models.TextField(null=True, blank=True)
     primary_id_type = models.TextField(null=True, blank=True)
-    
+
+    @property
+    def full_name(self):
+        return self.first_name+" "+self.last_name
+        
     def get_unanswered_questions(self, quiz):
         
         answered_questions = self.quiz_answers \

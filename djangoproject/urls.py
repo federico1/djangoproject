@@ -71,6 +71,7 @@ urlpatterns = [
     path('communicate/', include('app_chat.urls')),
     path('dashboard/', include('app_admin.urls')),
     url(r'api/', include('app_api.urls')),
+    url(r'api/', include('app_api_v2.urls')),
     path('', include('app_public.urls')),
     path('', include('app_cart.urls')),
     path('students/', include('app_students.urls')),

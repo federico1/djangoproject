@@ -1,73 +1,85 @@
 {% extends "app_base.html" %}
 {% load staticfiles %}
 {% block title %}
-    Certificate Verification | pdhsafety.com
+Certificate Verification | pdhsafety.com
 {% endblock %}
 {% block content %}
 
-    <section class="page-header">
+<section class="page-header">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="page-header-content">
+                    <h1>Certificate Verification</h1>
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="list-inline-item">/</li>
+                        <li class="list-inline-item">
+                            Certificate Verification
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<main class="site-main page-wrapper woocommerce single single-product">
+    <section class="space-3">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="page-header-content">
-                        <h1>Certificate Verification</h1>
-                        <ul class="list-inline mb-0">
-                            <li class="list-inline-item">
-                                <a href="/">Home</a>
-                            </li>
-                            <li class="list-inline-item">/</li>
-                            <li class="list-inline-item">
-                                Certificate Verification
-                            </li>
-                        </ul>
-                    </div>
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="woocommerce-notices-wrapper"></div>
+
+                    <form class="woocommerce-form woocommerce-form-login login" id="fmVerify"
+                        action="{% url 'api_v2:view_student_certificates-verify' %}" method="get">
+
+                        {% csrf_token %}
+
+                        <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                            <label for="username">Certificate Number<span class="required">*</span>
+                            </label>
+
+                            <input type="text" class="form-control" id="txtCardNumber" name="ref_number" />
+                        </p>
+
+                        <p class="form-row">
+
+                            <button type="button" id="btnVerify"
+                                class="woocommerce-button button woocommerce-form-login__submit">
+                                Verify
+                            </button>
+
+                            <button type="button" id="btnClear" class="ml-3 btn btn-secondary">
+                                Clear
+                            </button>
+
+                        </p>
+
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 offset-md-3 verify">
+
                 </div>
             </div>
         </div>
     </section>
-
-    <main class="site-main page-wrapper woocommerce single single-product">
-        <section class="space-3">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6 offset-md-3">
-                        <div class="woocommerce-notices-wrapper"></div>
-
-                        <form class="woocommerce-form woocommerce-form-login login" id="fm" action="#" method="post">
-
-                            {% csrf_token %}
-
-                            <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                                <label for="username">Certificate Number<span class="required">*</span>
-                                </label>
-
-                                <input type="text" class="form-control" id="txtCardNumber" name="card_number"/>
-                            </p>
-
-                            <p class="form-row">
-
-                                <button type="button" id="btnVerify" class="woocommerce-button button woocommerce-form-login__submit">
-                                    Verify
-                                </button>
-
-                                <button type="button" id="btnClear" class="ml-3 btn btn-secondary">
-                                    Clear
-                                </button>
-
-                            </p>
-
-                        </form>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-        <!--shop category end-->
-    </main>
+    <!--shop category end-->
+</main>
 
 
-    {% verbatim %}
-        <script type="text/x-handlebars-template" id='detailItemTemplate'>
+{% verbatim %}
+<script type="text/x-handlebars-template" id='detailItemTemplate'>
             <div class="row">
 
                 <div class="col-md-4">
@@ -211,99 +223,318 @@
 
             </div>
         </script>
-    {% endverbatim %}
+
+<script type="text/x-handlebars-template" id='verifyCardTemplate'>
+
+        <div id="verifyCard" class=" card card-margin"  data-course="{{course}}">
+            <div class="card-header no-border">
+                <h5 class="card-title">Certificate of Training</h5>
+            </div>
+            <div class="card-body pt-0">
+                <div class="widget-49 mb-3">
+                    <div class="widget-49-title-wrapper">
+                        <div class="widget-49-date-success">
+                            <i class="fa fa-check text-green"></i>
+                        </div>
+                        <div class="widget-49-meeting-info">
+                            <span class="widget-49-pro-title">{{course}}</span>
+                           
+                        </div>
+                    </div>
+                    <ol class="widget-49-meeting-points">
+                        <li class="widget-49-meeting-item"><span>Student: {{user}}</span>
+                        </li>
+                        <li class="widget-49-meeting-item small">
+                           <span>
+                            {{#if completed_date}}
+                            Completion Date: {{completed_date}}
+                            {{else}}
+                            <span class="text-danger">Completion Date: Not Found<span>
+                            {{/if}}
+                           </span>
+                        </li>
+                        <li class="widget-49-meeting-item ref"><span>
+                            REF: {{ref_number}}
+                        </span></li>
+                    </ol>
+                   
+                </div>
+            </div>
+        </div>
+
+        <div class="text-right">
+            <button class="btn btn-sm btn-success" id="btnDownloadCard">Download Card</button>
+        </div>
+
+    </script>
+{% endverbatim %}
 
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        (function ($) {
 
-            $.SSTVerifyPage = function (options) {
+<style>
+    .verify .card-margin {
+        margin-bottom: 1.875rem;
+    }
 
-                var that = this;
+    .verify .card {
+        border: 0;
+        box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
+        -webkit-box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
+        -moz-box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
+        -ms-box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
+    }
 
-                var settings = $.extend({}, options);
+    .verify .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #ffffff;
+        background-clip: border-box;
+        border: 1px solid #e6e4e9;
+        border-radius: 0px;
+    }
 
-                var getNumber = function (cardNumber) {
+    .verify .card .card-header.no-border {
+        margin-bottom: 20px;
+    }
 
-                    var cNum = $("#txtCardNumber").val();
+    .verify .card .card-header {
+        background: none;
+        padding: 0 0.9375rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        min-height: 50px;
+    }
 
+    .verify .card-header:first-child {
+        border-radius: 0;
+    }
+
+    .verify .card-title {
+        margin-bottom: 0;
+    }
+
+    .widget-49 .widget-49-title-wrapper {
+        display: flex;
+        align-items: center;
+    }
+
+    .widget-49 .widget-49-title-wrapper .widget-49-date-success {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        background-color: #e8faf8;
+        width: 4rem;
+        height: 4rem;
+        border-radius: 50%;
+    }
+
+
+    .widget-49 .widget-49-title-wrapper .widget-49-meeting-info {
+        display: flex;
+        flex-direction: column;
+        margin-left: 1rem;
+    }
+
+    .widget-49 .widget-49-title-wrapper .widget-49-meeting-info .widget-49-pro-title {
+        color: #3c4142;
+        font-size: 17px;
+        font-weight: 600;
+    }
+
+    .widget-49 .widget-49-meeting-points {
+        font-weight: 400;
+        font-size: 13px;
+        margin-top: .5rem;
+    }
+
+    .widget-49 .widget-49-meeting-points .widget-49-meeting-item {
+        display: list-item;
+        color: #727686;
+    }
+
+    .widget-49 .widget-49-meeting-points .widget-49-meeting-item span {
+        margin-left: .5rem;
+    }
+
+    .widget-49-meeting-item.ref {
+        font-size: 12px;
+        color: #b8b8b8;
+    }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+    integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    (function ($) {
+
+        $.SSTVerifyPage = function (options) {
+
+            var that = this;
+
+            var settings = $.extend({}, options);
+
+            var initForm = function () {
+                $("#fmVerify").ajaxForm({
+                    beforeSend: function () {
+                        if (!$("#fmVerify").valid())
+                            return;
+
+                        $("#fmVerify").find("input, button").attr('disabled', true);
+                        $("#fmVerify .spinner-border").show();
+                        $(".verify").empty();
+                    },
+                    success: function (response) {
+                        if (response.status === false) {
+                            Swal.fire('We are not able find the details. Please contact support team.');
+                        }
+                        else {
+                            var source = document.getElementById("verifyCardTemplate").innerHTML;
+                            var template = Handlebars.compile(source);
+                            $(".verify").html(template(response.data));
+                        }
+                    },
+                    complete: function (xhr) {
+
+                        if (xhr.status != 200) {
+                            Swal.fire('We are not able to verify your request this time. Please contact support team.');
+                        }
+
+                        $("#fmVerify").find("input, button").attr('disabled', false);
+                        $("#fmVerify .spinner-border").hide();
+                    },
+                });
+            };
+
+            var validateForm = function () {
+                $("#fmVerify").validate({
+                    rules: {
+                        ref_number: {
+                            required: true,
+                        }
+                    },
+                });
+            };
+
+            var getNumber = function (cardNumber) {
+
+                var cNum = $("#txtCardNumber").val();
+
+                $("#fm .alert").remove();
+
+                if (cNum) {
+
+                    ShowLoadingModal("Getting info", "");
+
+                    $("#fm input").attr('disabled', true);
+                    $("#fm button").attr('disabled', true);
+
+                    $.post
+
+                } else {
+                    Swal.fire("Please provide the certificate number");
+                }
+            };
+
+            var onGetNumberResponse = function (response) {
+
+                $("#fm .spinner-border").addClass('d-none');
+                $("#fm input").attr('disabled', false);
+                $("#fm button").attr('disabled', false);
+
+                $("#fm .alert").remove();
+
+                $("#sstDetails").empty();
+
+                if (response.length > 0) {
+                    var item = response[0];
+
+                    var source = document.getElementById("detailItemTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+                    $("#sstDetails").html(template(item));
+
+                } else {
+                    var alert = $("<div />", { class: 'alert alert-primary mt-3' }).html('Card number is not valid.');
+
+                    $("#fm").append(alert);
+                }
+            };
+
+            var downloadURI = function (uri, name) {
+                var link = document.createElement("a");
+
+                link.download = name;
+                link.href = uri;
+                document.body.appendChild(link);
+                link.click();
+                //after creating link you should delete dynamic link
+                //clearDynamicLink(link); 
+            };
+
+            var registerEvent = function () {
+
+                $("div").on("click", '#btnVerify', function (e) {
+                    e.stopPropagation();
+                    if ($("#fmVerify").valid())
+                        $("#fmVerify").submit();
+                });
+
+                $("div").on("click", '#btnClear', function (e) {
+                    e.stopPropagation();
+                    $("#txtCardNumber").val(null);
                     $("#fm .alert").remove();
-
-                    if (cNum) {
-
-                        ShowLoadingModal("Getting info", "");
-
-                        $("#fm input").attr('disabled', true);
-                        $("#fm button").attr('disabled', true);
-
-                        $.get('/api/sst-cards/?format=json', {
-                            card_number: cNum
-                        }, function (response) {
-                            onGetNumberResponse(response);
-                        });
-
-                    } else {
-                        Swal.fire("Please provide the certificate number");
-                    }
-                };
-
-                var onGetNumberResponse = function (response) {
-
-                    $("#fm .spinner-border").addClass('d-none');
-                    $("#fm input").attr('disabled', false);
-                    $("#fm button").attr('disabled', false);
-
-                    $("#fm .alert").remove();
-
                     $("#sstDetails").empty();
+                    $(".verify").empty();
+                });
 
-                    if (response.length > 0) {
-                        var item = response[0];
+                $("div").on("click", '#btnDownloadCard', async function (e) {
+                    e.stopPropagation();
 
-                        var source = document.getElementById("detailItemTemplate").innerHTML;
-                        var template = Handlebars.compile(source);
-                        $("#sstDetails").html(template(item));
+                    var elem = document.querySelector("#verifyCard");
+                    var course = elem.getAttribute('data-course');
 
-                    } else {
-                        var alert = $("<div />", {class: 'alert alert-primary mt-3'}).html('Card number is not valid.');
-
-                        $("#fm").append(alert);
+                    if(!course) {
+                        course = "card-verify"
                     }
-                };
 
-                var registerEvent = function () {
+                    await html2canvas(elem, { backgroundColor: '#FFFFFF' }).then(canvas => {
 
-                    $("div").on("click", '#btnVerify', function (e) {
-                        e.stopPropagation();
-                        getNumber();
+                       var cn =  canvas.toDataURL();
+
+                       downloadURI("data:" + cn, course+".png");
                     });
 
-                    $("div").on("click", '#btnClear', function (e) {
-                        e.stopPropagation();
-                        $("#txtCardNumber").val(null);
-                        $("#fm .alert").remove();
-                        $("#sstDetails").empty();
-                    });
+                  
+                });
 
-
-                };
-
-                var init = function () {
-                    registerEvent();
-                };
-
-                init();
-
-                return this;
+                $("#fmVerify .spinner-border").hide();
 
             };
 
-        }(jQuery));
+            var init = function () {
+                registerEvent();
+                initForm();
+                validateForm();
+            };
 
-        $(document).ready(function () {
-            var messagesPage = new $.SSTVerifyPage({});
-        });
-    </script>
+            init();
+
+            return this;
+
+        };
+
+    }(jQuery));
+
+    $(document).ready(function () {
+        var messagesPage = new $.SSTVerifyPage({});
+    });
+</script>
 {% endblock %}
