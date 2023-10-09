@@ -25,7 +25,8 @@ urlpatterns = [
     path('quiz/<int:pk>/', quiz_views.take_quiz, name='student_take_quiz'),
     path('quiz-reset/<int:pk>/', quiz_views.quiz_reset, name='student_reset_quiz'),
     path('quiz-taken/', quiz_views.TakenQuizTemplateView.as_view(), name='student_taken_quiz'),
-    path('orders/', order_views.OrdersView.as_view(), name='student_orders'),
+    path('purchase-history/', order_views.PurchaseHistoryView.as_view(), name='student_purchase_history'),
+    path('purchase-invoice/<slug:ref>/<slug:item>/', order_views.InvoiceView.as_view(), name='student_purchase_invoice'),
 
     path('inbox', inbox_views.MessagesView.as_view(), name='student_messages'),
 

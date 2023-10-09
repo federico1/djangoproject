@@ -46,6 +46,9 @@ class Item(models.Model):
     class Meta:
         ordering = ['price']
 
+    def get_order_slug(self):
+        self.order.ref_id + "xx"
+
     def __str__(self):
         return self.price
 
@@ -63,9 +66,17 @@ class Payment(models.Model):
 
     class Meta:
         ordering = ['order']
+    
+    def get_gateyway(self):
+        if self.gateway == 'paypal':
+            return "Paypal"
+        elif self.gateway == 'Bank Tranfer':
+            return 'Bank Tranfer'
+        else:
+            return self.gateway
 
     def __str__(self):
-        return self.order
+        return self.gateway
 
 
 class Package(models.Model):
