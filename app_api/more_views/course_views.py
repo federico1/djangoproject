@@ -220,7 +220,7 @@ class EnrollmentViewset(viewsets.ViewSet):
         return Response(serializer.errors, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
     @action(detail=True, methods=['post'])
-    def set_completed(self, request, year, pk=None):
+    def set_completed(self, request, pk=None):
         snippet = self.get_object(pk)
         snippet.is_completed = request.data['status']
         snippet.completed_date = datetime.now()
