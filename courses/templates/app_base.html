@@ -432,6 +432,7 @@
                var settings = $.extend({}, options);
 
                var addCourseToMemory = function (dataObject) {
+                  
                   var memoryData = getMemoryData();
 
                   if (!("_ps_" in memoryData)) {
@@ -506,7 +507,9 @@
                };
 
                var registerEvent = function () {
+
                   $("div").on("click", ".link-add-cart", function (e) {
+
                      e.stopPropagation();
 
                      var dataJson = $(this).attr("data-json");

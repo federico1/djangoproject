@@ -1,5 +1,6 @@
 from django import template
 from django.conf import settings
+from django.core.serializers import serialize
 import random
 
 register = template.Library()

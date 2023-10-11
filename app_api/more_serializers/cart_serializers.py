@@ -34,18 +34,27 @@ class OrderSerializer(serializers.ModelSerializer):
         items_data = validated_data.pop('items')
         payments_data = validated_data.pop('payments')
 
-        order = Order.objects.create(**validated_data)
+        payment_status_id = Payment.PENDING
+        order_status_id = Order.PENDING
+
+        if len(payments_data) > 0 and payments_data[0]['gateway'] == 'paypal':
+            payment_status_id = Payment.COMPLETED
+            order_status_id = Order.APPROVED
+
+        order = Order.objects.create(status=order_status_id, **validated_data)
 
         for item_data in items_data:
             
+            enrollment = None
+
             if not Enrollments.objects.filter(course=item_data['course'], user=order.user).exists():
                 enrollment = Enrollments.objects.create(
                 course=item_data['course'], user=order.user)
 
-            Item.objects.create(order=order, **item_data)
+            Item.objects.create(order=order, enrollment = enrollment, **item_data)
         
         for item_data in payments_data:
-            Payment.objects.create(order=order, **item_data)
+            Payment.objects.create(order=order, status=payment_status_id, **item_data)
 
         return order
 

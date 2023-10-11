@@ -23,7 +23,7 @@ class Month(Func):
 class PaymentView(viewsets.ViewSet):
 
     @action(detail=False, methods=['get'])
-    def get_amount_sum(self, request):
+    def get_earnings(self, request):
 
         queryset = Payment.objects
 

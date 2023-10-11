@@ -16,6 +16,8 @@
 
       <link href="{% static '/sb-admin/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet" />
       <link href="{% static '/sb-admin/vendor/toastr/toastr.min.css' %}" rel="stylesheet" />
+
+      {% block head %}{% endblock %}
    </head>
 
    <body id="page-top">
@@ -125,9 +127,10 @@
             <div id="content">
                <!-- Topbar -->
                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
                   <!-- Sidebar Toggle (Topbar) -->
                   <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                     <i class="fa fa-bars"></i>
+                      <i class="fa fa-bars"></i>
                   </button>
 
                   <!-- Topbar Navbar -->
@@ -222,8 +225,7 @@
       <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.2/dist/jquery.validate.min.js"></script>
 
       <!-- Custom scripts for all pages-->
-      <script src="{% static '/sb-admin/js/sb-admin-2.min.js' %}"></script>
-
+      <script src="{% static '/sb-admin/js/sb-admin-2.js' %}"></script>
 
       <script>
          (Chart.defaults.global.defaultFontFamily = "Nunito"),
@@ -283,8 +285,6 @@
          });
       </script>
 
-      
       {% block scripts %} {% endblock %}
-      
-    </body>
+   </body>
 </html>

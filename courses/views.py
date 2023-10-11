@@ -34,7 +34,7 @@ class IndexView(TemplateResponseMixin, View):
 
         if not courses:
             courses = Course.objects.filter(
-                is_deleted=False, mark_type='popular')[:4]
+                is_deleted=False, is_free =False, mark_type='popular')[:10]
             cache.set('home_popular', courses)
 
         return self.render_to_response({

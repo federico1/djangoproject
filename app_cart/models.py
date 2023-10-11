@@ -1,22 +1,22 @@
 from django.db import models
 from django.conf import settings
-from courses.models import Course, Subject
-
-
-ORDER_STATUS = [
-    (0, 'Pending'),
-    (1, 'Active'),
-    (2, 'Rejected'),
-    (3, 'Cancelled'),
-]
-
-PAYMENT_STATUS = [
-    (0, 'Approved'),
-    (1, 'Rejected'),
-]
+from courses.models import Course, Subject, Enrollments
 
 
 class Order(models.Model):
+
+    PENDING = 0
+    APPROVED = 1
+    REJECTED = 2
+    CANCEL = 3
+
+    ORDER_STATUS = [
+        (PENDING, 'Pending'),
+        (APPROVED, 'Approved'),
+        (REJECTED, 'Rejected'),
+        (CANCEL, 'Cancelled'),
+    ]
+
     ref_id = models.CharField(max_length=200)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True,
                              related_name='orders',
@@ -37,7 +37,9 @@ class Item(models.Model):
     order = models.ForeignKey(
         Order, related_name='items', on_delete=models.CASCADE)
     course = models.ForeignKey(
-        Course, related_name='order_items',  on_delete=models.CASCADE)
+        Course, related_name='order_items', on_delete=models.CASCADE)
+    enrollment = models.ForeignKey(
+        Enrollments, related_name='order_item', on_delete=models.DO_NOTHING, null=True, blank=True)
     price = models.DecimalField(max_digits=5, decimal_places=2)
     sub_total = models.DecimalField(max_digits=5, decimal_places=2)
     qty = models.IntegerField()
@@ -54,6 +56,16 @@ class Item(models.Model):
 
 
 class Payment(models.Model):
+    PENDING = 0
+    COMPLETED = 1
+    REJECTED = 2
+
+    PAYMENT_STATUS = [
+        (PENDING, 'Pending'),
+        (COMPLETED, 'Completed'),
+        (REJECTED, 'Rejected'),
+    ]
+
     order = models.ForeignKey(
         Order, related_name='payments', on_delete=models.CASCADE)
     gateway = models.CharField(max_length=200)
@@ -66,7 +78,7 @@ class Payment(models.Model):
 
     class Meta:
         ordering = ['order']
-    
+
     def get_gateyway(self):
         if self.gateway == 'paypal':
             return "Paypal"
@@ -99,9 +111,9 @@ class PackageCourse(models.Model):
                                related_name='package_courses',
                                on_delete=models.CASCADE)
     package = models.ForeignKey(Package,
-                               related_name='courses',
-                               on_delete=models.CASCADE)
-   
+                                related_name='courses',
+                                on_delete=models.CASCADE)
+
     class Meta:
         ordering = ['package']
 

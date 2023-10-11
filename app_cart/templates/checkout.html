@@ -109,7 +109,7 @@ Checkout | pdhsafety.com
                 </button>
             </div>
             <div class="modal-body">
-                <div class="alert alert-primary small" role="alert">
+                <div class="alert alert-primary" role="alert">
                     <strong>How it works!</strong>
                     You can pay via bank transfer. We will provide you with the bank details. The good thing is you can
                     enroll in the course without making payment instantly.
@@ -198,7 +198,8 @@ Checkout | pdhsafety.com
 
 {% block scripts %}
 
-<script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID' %}"></script>
+{% comment %} <script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID' %}"></script> {% endcomment %}
+<script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID_SANDBOX' %}"></script>
 
 <script>
     (function ($) {

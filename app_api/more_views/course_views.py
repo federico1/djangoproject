@@ -237,6 +237,16 @@ class EnrollmentViewset(viewsets.ViewSet):
         serializer = course_serializers.EnrollmentSerializer(snippet)
         return Response(serializer.data)
 
+    @action(detail=False, methods=['get'])
+    def my_list(self, request, pk=None):
+
+        if request.user.is_authenticated:
+            snippets = Enrollments.objects.filter(user_id=request.user)
+            serializer = course_serializers.EnrollmentCoreSerializer(snippets, many=True)
+            return Response(serializer.data)
+        
+        return Response("AUTH", status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION) 
+
 
 class CourseFeatureApiView(APIView):
 

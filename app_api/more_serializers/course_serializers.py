@@ -40,6 +40,13 @@ class EnrollmentP2Serializer(serializers.ModelSerializer):
         return super(EnrollmentP2Serializer, self).to_representation(instance)
 
 
+class EnrollmentCoreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Enrollments
+        fields = ['id','course_id', 'user_id']
+
+
+
 
 class CourseSerializer(serializers.ModelSerializer):
     total_modules = serializers.IntegerField()
