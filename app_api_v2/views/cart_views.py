@@ -31,6 +31,8 @@ class PaymentView(viewsets.ViewSet):
         if year:
             queryset = queryset.filter(created__year=year)
         
+        queryset = queryset.filter(status=1)
+        
         queryset = (queryset.annotate(month=Month('created')).values(
             'month').annotate(total=Sum('amount_paid')).order_by())
         
