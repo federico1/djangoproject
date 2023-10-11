@@ -45,10 +45,14 @@ def SendOrderConfirmMail(request):
         ref = request.POST['ref']
 
     if ref:
-        ctx = {ref:ref}
+        ctx = {"ref":ref}
         title = "You're in! Here's your order confirmation."
+       
         html_message = get_template(
         "_mail_order_confirm.html").render(ctx)
+
+        print(html_message)
+
         send_mail(
         subject=title,
         message=" Thank you for your purchase! This email is to confirm your order with pdhsafety.com",
