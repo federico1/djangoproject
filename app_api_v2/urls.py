@@ -3,14 +3,17 @@ from django.conf.urls import url, include
 from django.urls import path
 from rest_framework import routers
 
-from .views import cart_views, student_views
+from .views import cart_views, student_views, course_views
 
 app_name = "api_v2"
 
 router = routers.DefaultRouter()
 
 router.register(r'v2/payments', cart_views.PaymentView, basename="view_payments")
+router.register(r'v2/orders', cart_views.OrderView, basename="view_orders")
 router.register(r'v2/student-certificates', student_views.StudentCertificateView, basename="view_student_certificates")
+router.register(r'v2/enrollments', course_views.EnrollmentView, basename="view_enrollments")
+
 # router.register(r'course-enrollment',
 #                 course_views.EnrollmentViewset, basename ="enrollments"),
 # router.register(r'course-assess-rating',

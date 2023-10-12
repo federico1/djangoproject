@@ -16,15 +16,6 @@ class StudentCertificateView(viewsets.ViewSet):
         queryset = StudentCertificate.objects
         ref_number = request.query_params.get('ref_number')
         
-        # serializer = student_serializers.CertificateVerficationSerializer(data=request.data)
-        # if serializer.is_valid():
-        #     user.set_password(serializer.validated_data['password'])
-        #     user.save()
-        #     return Response({'status': 'password set'})
-        # else:
-        #     return Response(serializer.errors,
-        #                     status=status.HTTP_400_BAD_REQUEST)
-
         if ref_number:
             queryset = queryset.filter(ref_number=ref_number)
         else:
