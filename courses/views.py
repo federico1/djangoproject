@@ -95,7 +95,6 @@ class CourseListView(TemplateResponseMixin, View):
                                             })
         except Subject.DoesNotExist:
             url = '/'
-            print(subject)
             if subject in obsele_subjects:
                 url = (reverse('course_list_subject', kwargs={
                        "subject": obsele_subjects[subject]}))
@@ -156,12 +155,23 @@ class CourseListViewV2(TemplateResponseMixin, View):
 class CourseDetailView(DetailView):
     model = Course
     template_name = 'courses/course/detail.html'
+    
+    def get(self, request, *args, **kwargs):
+        from django.http import Http404
+        try:
+            self.object = self.get_object()
+            context = self.get_context_data(object=self.object)
+            return self.render_to_response(context)
+        except Http404:
+            return redirect(reverse('course_list'))
 
     def get_context_data(self, **kwargs):
         context = super(CourseDetailView,
                         self).get_context_data(**kwargs)
         context['enroll_form'] = CourseEnrollForm(
             initial={'course': self.object})
+        
+        print(self.object)
         return context
 
 
