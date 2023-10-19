@@ -227,9 +227,10 @@ Invoice | pdhsafety.com
 
 {% block scripts %}
 
-{% comment %}
-<script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID' %}"></script> {% endcomment %}
-<script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID_SANDBOX' %}"></script>
+
+<script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID' %}"></script> 
+{% comment %}<script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID_SANDBOX' %}"></script>
+{% endcomment %}
 
 <style>
     #invoice {
