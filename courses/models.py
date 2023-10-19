@@ -186,6 +186,7 @@ class CourseProgress(models.Model):
         Content, on_delete=models.CASCADE, related_name='content_progress')
     is_completed = models.BooleanField(default=False)
     progress = models.IntegerField(default=0)
+    user_ip = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return str(self.content)

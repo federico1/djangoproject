@@ -25,7 +25,7 @@ from django.views.decorators.cache import cache_page, never_cache
 from django.views.decorators.vary import vary_on_cookie
 
 from app_students.forms import StudentSignupForm
-from app_students.file_utils import uploaded_file
+from app_students.file_utils import uploaded_file, get_client_ip
 from app_students.mail_utils import send_welcome_mail
 from students.decorators import student_required
 
@@ -125,6 +125,7 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
         context['next_content'] = None
         context['content_completed'] = True
         context['enrollment'] = enrollment.first()
+        context['user_ip'] = get_client_ip(self.request)
 
         course_details = []
         modules_list = course.modules.all().order_by('order')

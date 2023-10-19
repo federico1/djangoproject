@@ -7,7 +7,7 @@
 
 {% block content %}
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav id="topNavbar" class="navbar navbar-expand-lg navbar-light bg-light">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -90,9 +90,13 @@
     
                     {% endif %}
     
+                 
                 </div>
     
             </div>
+            <div class="text-center small">
+                {{request.user.username}}
+               </div>
            </div>
 
         </div>
@@ -135,6 +139,11 @@
                         </div>
             
                     </div>
+
+                    <div class="text-center small">
+                        {{request.user.username}}
+                       </div>
+                   </div>
                 </div>
             </div>
 
@@ -993,9 +1002,12 @@
                         }
                     });
 
-                    $('html, body').animate({
-                        scrollTop: $(".blog-post-item").offset().top
-                    }, 500);
+                    if($("#topNavbar").length > 0) {
+                        $('html, body').animate({
+                            scrollTop: $("#topNavbar").offset().top
+                        }, 500);
+                    }
+                  
 
                     $('.collapse').on('shown.bs.collapse', function () {
                         var id = $(this).attr('id');
@@ -1128,7 +1140,8 @@
                         var data = {
                             content: id,
                             is_completed: true,
-                            content_type: content_type
+                            content_type: content_type,
+                            user_ip:'{{user_ip}}'
                         };
 
                         if (content_type != 'video' || $("#videoFrame").length > 0) {
