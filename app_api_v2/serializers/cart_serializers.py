@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+
 class PaymentAmountGroupSerializer(serializers.Serializer):
     month = serializers.IntegerField()
     year = serializers.IntegerField()

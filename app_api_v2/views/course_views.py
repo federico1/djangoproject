@@ -15,6 +15,7 @@ class Month(Func):
     template = '%(function)s(MONTH from %(expressions)s)'
     output_field = models.IntegerField()
 
+
 class Year(Func):
     function = 'EXTRACT'
     template = '%(function)s(YEAR from %(expressions)s)'

@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from rest_framework import status
 
 from django.db import models
-from django.db.models import Func, Count, Sum
+from django.db.models import Func, Count, Sum, Q
 
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -26,6 +26,26 @@ class Year(Func):
 
 
 class OrderView(viewsets.ViewSet):
+
+    @action(detail=False, methods=['get'])
+    def get_list_datatable(self):
+
+        snippets = Order.objects
+
+        dt_length = int(self.request.query_params.get('length'))
+        dt_start = int(self.request.query_params.get('start'))
+        dt_draw = self.request.query_params.get('draw')
+        dt_search = self.request.query_params.get('search[value]')
+
+        records_total = snippets.count()
+
+        serializer = cart_serializers(snippets.order_by(
+            '-id')[dt_start:dt_start+dt_length], many=True)
+
+        return Response({'draw': dt_draw,
+                         "recordsTotal": records_total,
+                         "recordsFiltered": records_total,
+                         'data': serializer.data})
 
     @action(detail=False, methods=['get'])
     def get_group_count(self, request):

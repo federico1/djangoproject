@@ -1,0 +1,686 @@
+{% extends "app_base.html" %}
+{% load staticfiles %}
+{% load course_tags %}
+
+{% block title %}
+Invoice | pdhsafety.com
+{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="page-header-content">
+                    <h1>Your Invoice</h1>
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="list-inline-item">/</li>
+                        <li class="list-inline-item">
+                            Pay Online
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<main class="site-main woocommerce single single-product mt-5">
+    <!--shop category start-->
+    <section class="space-3">
+        <div class="container sm-center">
+
+
+            <div id="invoice">
+
+              
+                <div class="invoice overflow-auto">
+                    <div style="min-width: 600px">
+                        <header>
+                            <div class="row">
+                                <div class="col">
+                                    <a href="#">
+                                        <img src="/static/edutim/images/logo100.png" alt="Construction Safety Training"
+                                            class="img-fluid">
+                                    </a>
+                                </div>
+                                <div class="col company-details">
+                                    <h2 class="name">
+                                        <a target="_blank" href="https://pdhsafety.com/">
+                                            NYC Construction Safety Training, LLC
+                                        </a>
+                                    </h2>
+                                    <div>1809 Troy Ave, Brooklyn New York 11234</div>
+                                    <div>+914-473-6791</div>
+                                    <div>mail@pdhsafety.com</div>
+                                </div>
+                            </div>
+                        </header>
+                        <main>
+                            <div class="row contacts">
+                                <div class="col invoice-to">
+                                    <div class="text-gray-light">INVOICE TO:</div>
+                                    <h2 class="to">Robert Cuevas</h2>
+                                    <div class="address">Saddleridge Solutions LLC</div>
+                                    <div class="address">Contact: (720-793-3007)</div>
+                                    <div class="email"><a
+                                            href="mailto:robertcuevas@saddleridgesolutions.org">robertcuevas@saddleridgesolutions.org</a>
+                                    </div>
+                                </div>
+                                <div class="col invoice-details">
+                                    <h1 class="invoice-id">INVOICE</h1>
+                                    <div class="date">Invoice #: WD192023MN6X</div>
+                                    <div class="date">Invoice Date: Oct 19, 2023</div>
+                                    <div class="date">Place: 1809 Troy Ave, Brooklyn New York 11234</div>
+                                </div>
+                            </div>
+                            <table id="tbldata" border="0" cellspacing="0" cellpadding="0">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th class="text-left">Course</th>
+                                        <th class="text-right">List Price</th>
+                                        <th class="text-right">Sale Price</th>
+                                        <th class="text-right">TOTAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+
+                                    <tr>
+                                        <td class="no">01</td>
+                                        <td class="text-left">
+                                            <h3>
+                                                <a target="_blank" href="#">
+                                                    Swing Stage Competent Person Training
+                                                </a>
+                                            </h3>
+                                        </td>
+                                        <td class="unit">$29.99 </td>
+                                        <td class="qty">$29.99</td>
+                                        <td class="total">$29.99</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="no">02</td>
+                                        <td class="text-left">
+                                            <h3>
+                                                <a target="_blank" href="#">
+                                                    Swing Stage Competent Person Training
+                                                </a>
+                                            </h3>
+                                        </td>
+                                        <td class="unit">$29.99 </td>
+                                        <td class="qty">$29.99</td>
+                                        <td class="total">$29.99</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="no">03</td>
+                                        <td class="text-left">
+                                            <h3>
+                                                <a target="_blank" href="#">
+                                                    Swing Stage Competent Person Training
+                                                </a>
+                                            </h3>
+                                        </td>
+                                        <td class="unit">$29.99 </td>
+                                        <td class="qty">$29.99</td>
+                                        <td class="total">$29.99</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="no">04</td>
+                                        <td class="text-left">
+                                            <h3>
+                                                <a target="_blank" href="#">
+                                                    Swing Stage User
+                                                </a>
+                                            </h3>
+                                        </td>
+                                        <td class="unit">$24.99 </td>
+                                        <td class="qty">$24.99</td>
+                                        <td class="total">$24.99</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="no">05</td>
+                                        <td class="text-left">
+                                            <h3>
+                                                <a target="_blank" href="#">
+                                                    Swing Stage User
+                                                </a>
+                                            </h3>
+                                        </td>
+                                        <td class="unit">$24.99 </td>
+                                        <td class="qty">$24.99</td>
+                                        <td class="total">$24.99</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="no">06</td>
+                                        <td class="text-left">
+                                            <h3>
+                                                <a target="_blank" href="#">
+                                                    Swing Stage User
+                                                </a>
+                                            </h3>
+                                        </td>
+                                        <td class="unit">$24.99 </td>
+                                        <td class="qty">$24.99</td>
+                                        <td class="total">$24.99</td>
+                                    </tr>
+
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2"></td>
+                                        <td colspan="2">SUBTOTAL</td>
+                                        <td>$164.94</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="2"></td>
+                                        <td colspan="2">GRAND TOTAL</td>
+                                        <td>$164.94</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <div class="thanks">Thank you!</div>
+
+
+
+                        </main>
+
+                        <div class="toolbar hidden-print mb-2">
+                            <div class="text-right">
+                                <button id="printInvoice" class="btn btn-info"><i class="fa fa-print"></i> Print</button>
+                            </div>
+        
+                        </div>
+
+
+                        <div class="toolbar hidden-print">
+                           <div class="row">
+                            <div class="col text-center">
+                                <div id="paypal-button-container"></div>
+                            </div>
+                           </div>
+                        </div>
+
+                    
+                        <footer>
+                            Invoice was created on a computer and is valid without the signature and seal.
+                        </footer>
+                    </div>
+                    <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
+                    <div></div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!--shop category end-->
+</main>
+
+
+{% endblock %}
+
+{% block scripts %}
+
+{% comment %}
+<script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID' %}"></script> {% endcomment %}
+<script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID_SANDBOX' %}"></script>
+
+<style>
+    #invoice {
+        padding: 30px;
+    }
+
+    .invoice {
+        position: relative;
+        background-color: #FFF;
+        min-height: 680px;
+        padding: 15px
+    }
+
+    .invoice header {
+        padding: 10px 0;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #3989c6
+    }
+
+    .invoice .company-details {
+        text-align: right
+    }
+
+    .invoice .company-details .name {
+        margin-top: 0;
+        margin-bottom: 0
+    }
+
+    .invoice .contacts {
+        margin-bottom: 20px
+    }
+
+    .invoice .invoice-to {
+        text-align: left
+    }
+
+    .invoice .invoice-to .to {
+        margin-top: 0;
+        margin-bottom: 0
+    }
+
+    .invoice .invoice-details {
+        text-align: right
+    }
+
+    .invoice .invoice-details .invoice-id {
+        margin-top: 0;
+        color: #3989c6
+    }
+
+    .invoice main {
+        padding-bottom: 50px
+    }
+
+    .invoice main .thanks {
+        margin-top: -100px;
+        font-size: 2em;
+        margin-bottom: 50px
+    }
+
+    .invoice main .notices {
+        padding-left: 6px;
+        border-left: 6px solid #3989c6
+    }
+
+    .invoice main .notices .notice {
+        font-size: 1.2em
+    }
+
+    .invoice table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        margin-bottom: 20px
+    }
+
+    .invoice table td,
+    .invoice table th {
+        padding: 15px;
+        background: #eee;
+        border-bottom: 1px solid #fff
+    }
+
+    .invoice table th {
+        white-space: nowrap;
+        font-weight: 400;
+        font-size: 16px
+    }
+
+    .invoice table td h3 {
+        margin: 0;
+        font-weight: 400;
+        color: #3989c6;
+        font-size: 1.2em
+    }
+
+    .invoice table .qty,
+    .invoice table .total,
+    .invoice table .unit {
+        text-align: right;
+        font-size: 1.2em
+    }
+
+    .invoice table .no {
+        color: #fff;
+        font-size: 1.6em;
+        background: #3989c6
+    }
+
+    .invoice table .unit {
+        background: #ddd
+    }
+
+    .invoice table .total {
+        background: #3989c6;
+        color: #fff
+    }
+
+    .invoice table tbody tr:last-child td {
+        border: none
+    }
+
+    .invoice table tfoot td {
+        background: 0 0;
+        border-bottom: none;
+        white-space: nowrap;
+        text-align: right;
+        padding: 10px 20px;
+        font-size: 1.2em;
+        border-top: 1px solid #aaa
+    }
+
+    .invoice table tfoot tr:first-child td {
+        border-top: none
+    }
+
+    .invoice table tfoot tr:last-child td {
+        color: #3989c6;
+        font-size: 1.4em;
+        border-top: 1px solid #3989c6
+    }
+
+    .invoice table tfoot tr td:first-child {
+        border: none
+    }
+
+    .invoice footer {
+        width: 100%;
+        text-align: center;
+        color: #777;
+        border-top: 1px solid #aaa;
+        padding: 8px 0
+    }
+
+    @media print {
+        .invoice {
+            font-size: 11px !important;
+            overflow: hidden !important
+        }
+
+        .invoice footer {
+            position: absolute;
+            bottom: 10px;
+            page-break-after: always
+        }
+
+        .invoice>div:last-child {
+            page-break-before: always
+        }
+
+        .toolbar,
+        .thanks {
+            display: none;
+        }
+
+        header,
+        footer {
+            display: none;
+        }
+    }
+</style>
+
+<script>
+
+    (function ($) {
+        $.CartPageManager = function (options) {
+
+            var that = this;
+
+            var _totalPrice = 165;
+
+            var settings = $.extend({}, options);
+
+            var setPaypal = function () {
+                paypal.Buttons({
+                    funding: {
+                        // disallowed: [paypal.FUNDING.CREDIT]
+                    },
+                    style: {
+                        label: 'checkout'
+                    },
+                    onClick: function () {
+                    },
+                    onCancel: function () {
+                    },
+                    createOrder: function (data, actions) {
+
+                        if (_totalPrice <= 0) {
+                            return false;
+                        }
+
+                        return actions.order.create({
+                            purchase_units: [
+                                {
+                                    amount: {
+                                        value: _totalPrice
+                                    }
+                                }
+                            ]
+                        });
+                    },
+                    onApprove: function (data, actions) { // This function captures the funds from the transaction.
+                        return actions.order.capture().then(function (details) {
+
+                            if (data.orderID) {
+
+                                var payment = {
+                                    orderID: data.orderID,
+                                    details: details,
+                                    data: data
+                                };
+
+                                postOrder(payment);
+                            }
+                        });
+                    }
+                }).render('#paypal-button-container');
+
+                Swal.close();
+            };
+
+            var postOrder = function (paymentData) {
+
+                var items = [];
+                var payments = [];
+
+                var payOpts = {
+                    gateway: 'paypal',
+                    info: JSON.stringify(paymentData),
+                    total_price: _totalPrice,
+                    amount_paid: _totalPrice
+                };
+
+                payments.push(payOpts);
+
+                var orderObject = {
+                    ref_id: paymentData.orderID,
+                    user: '{{ request.user.id }}',
+                    total_amount: _totalPrice,
+                    items: '',
+                    payments: payments
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'save_temp_invoice_manaul' %}",
+                    data: JSON.stringify(orderObject),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        ShowLoadingModal("Please wait", "working on your request");
+                    },
+                    success: function (response) {
+
+                        Swal.fire({ title: 'Payment completed', text: 'Thank you for your purchase! This is to confirm your order with pdhsafety.com' }).then(function () {
+                            });
+                    },
+                    failure: function (errMsg) { }
+                });
+            };
+
+            var logEvent = function () {
+
+                setTimeout(function () {
+                    var _opts = {
+                        hitType: 'event',
+                        eventCategory: 'Checkout',
+                        eventAction: 'checkout_load',
+                        eventLabel: window.location.href,
+                        eventValue: _totalPrice
+                    };
+
+                    // ga('send', _opts);
+                }, 2000);
+
+            };
+
+            var logPayEventClick = function () {
+
+                var _opts = {
+                    hitType: 'event',
+                    eventCategory: 'Payment',
+                    eventAction: 'pay_click',
+                    eventLabel: window.location.href,
+                    eventValue: 'paypal'
+                };
+
+                /// ga('send', _opts);
+
+            };
+
+            var logCancelPayEventClick = function () {
+
+                var _opts = {
+                    hitType: 'event',
+                    eventCategory: 'PaymentCancel',
+                    eventAction: 'pay_cancel_click',
+                    eventLabel: window.location.href,
+                    eventValue: 'paypal'
+                };
+
+                //  ga('send', _opts);
+            };
+
+            var payViaBank = function () {
+
+                $("#bankTransferModal").find("button, input").attr('disabled', true);
+
+                var items = [];
+                var payments = [];
+
+                var memoryData = getMemoryData();
+
+                $(memoryData['_ps_']).each(function (ix, item) {
+
+                    var price = item.fields.discounted_price > 0 ? item.fields.discounted_price : item.fields.price;
+                    price = parseFloat(price);
+
+                    var item = {
+                        course: item.pk,
+                        price: price,
+                        sub_total: price,
+                        qty: 1
+                    };
+
+                    items.push(item);
+
+                });
+
+                var payOpts = {
+                    gateway: 'Bank Tranfer',
+                    info: JSON.stringify({ created: new Date() }),
+                    total_price: _totalPrice,
+                    amount_paid: _totalPrice
+                };
+
+                payments.push(payOpts);
+
+                var orderObject = {
+                    ref_id: createREfID(),
+                    user: '{{ request.user.id }}',
+                    total_amount: _totalPrice,
+                    items: items,
+                    payments: payments
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/orders/",
+                    data: JSON.stringify(orderObject),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        ShowLoadingModal("Please wait", "working on your request");
+                    },
+                    success: function (response) {
+
+                        if (response && response.ref_id) {
+                            sendConfirmMail(response);
+                        } else {
+                            Swal.close();
+
+                            Swal.fire({ title: 'Order failed to complete', text: 'Please refresh the page and try again.' }).then(function () {
+                                window.location.reload();
+                            });
+                        }
+                    },
+                    failure: function (errMsg) { }
+                });
+            };
+
+            var createREfID = function () {
+                return new Date().valueOf() + parseInt('{{user.id}}') + "-" + (Math.random() + 1).toString(36).substring(7).toUpperCase();
+            };
+
+            var sendConfirmMail = function (order) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/send-order-confirm-mail",
+                    data: { ref: order.ref_id },
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        ShowLoadingModal("Please wait", "working on your request");
+                    },
+                    success: function (response) {
+                        localStorage.removeItem(keyName);
+                        window.location.href = '/order/' + order.ref_id + '/';
+                    },
+                    failure: function (errMsg) {
+                        localStorage.removeItem(keyName);
+                        window.location.href = '/order/' + order.ref_id + '/';
+                    }
+                });
+
+            };
+
+            var registerEvent = function () {
+                $('html, body').animate({
+                    scrollTop: $("#tbldata").offset().top
+                }, 1500);
+            };
+
+            var init = function () {
+                registerEvent();
+                setPaypal();
+            };
+
+            init();
+
+            return this;
+
+        };
+
+    }(jQuery));
+
+    $(document).ready(function () {
+
+        var cartManager = new $.CartPageManager({});
+
+
+
+        $('#printInvoice').click(function () {
+            Popup($('.invoice')[0].outerHTML);
+            function Popup(data) {
+                window.print();
+                return true;
+            }
+        });
+    });
+</script>
+{% endblock %}
