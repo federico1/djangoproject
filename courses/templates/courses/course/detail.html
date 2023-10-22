@@ -50,7 +50,68 @@ Money Back Guarante{% endblock %}
 
 {% cache 500 coursedetails course.slug %}
 <section class="page-wrapper edutim-course-single course-single-style-3" time="{% now 'SHORT_DATETIME_FORMAT' %}">
+
+ 
+
     <div class="course-single-wrapper">
+
+        {% if not object.is_free %}
+        <div class="d-block d-sm-block d-md-none" style="position: fixed;top:0px;z-index: 111;width: 100%;background: #bfbfbf;">
+            <div class="course-price-wrapper p-1 px-4">
+             <div class="row">
+                <div class="col-8">
+                    <div class="course-price mb-0 mt-1">
+        
+                        {% if object.is_free %}
+                        <h5 class="mb-0">
+                            <span>
+                                Price: Free</span>
+                        </h5>
+                        {% elif object.discounted_price > 0 %}
+        
+                        <h5 class="mb-0">Price:
+                            <span>${{ object.discounted_price }}</span>
+                            <del class="text-muted">${{ object.price }}</del>
+                        </h5>
+        
+                        {% else %}
+                        <h5 class="mb-0">
+                            Price:
+                            <span>${{ object.price }}</span>
+                        </h5>
+                        {% endif %}
+        
+                    </div>
+                   </div>
+                  <div class="col-4">
+                    <div class="buy-btn text-right">
+                        {% if object.is_free %}
+                        {% if request.user.is_authenticated %}
+                        <a href="javascript:;" class="btn btn-main btn-block link-free-enroll">
+                            Take Free Course
+                        </a>
+                        {% else %}
+                        <a href="javascript:;" class="btn btn-main btn-block link-free-auth">
+                            Enroll Free Course
+                        </a>
+                        {% endif %}
+        
+                        {% else %}
+        
+                        <a href="javascript:;" class=" mt-0 btn btn-sm btn-main btn-block link-add-cart" data-subject="{{ subject.title }}"
+                            data-json="{{ object|jsonify }}" >
+                            Add To Cart
+                        </a>
+        
+                        {% endif %}
+        
+                    </div>
+                  </div>
+             </div>
+            </div>
+        </div>
+        {% endif %}
+
         <div class="container">
             <div class="row">
                 <div class="col-lg-8">
@@ -108,6 +169,35 @@ Money Back Guarante{% endblock %}
                     <p>
                         {{ object.overview }}
                     </p>
+                </div>
+
+                <div class="single-course-details mb-5">
+                    <h4 class="course-title">Course Modules - ({{object.modules.count}})</h4>
+
+                    {% for m in object.modules.all %}
+                    <div class="card mb-2">
+                        <div class="card-header">
+                            <a class="text-primary" data-toggle="collapse" href="#collapse{{m.id}}" role="button" aria-expanded="false" aria-controls="collapse{{m.id}}">
+                                <i class="fa">{{forloop.counter}})</i>
+                                {{ m.title }}
+                              </a>
+                        </div>
+                        <div class="card-body hide collapse " id="collapse{{m.id}}">
+                            <ul class="list-group">
+                                {% for cont in m.contents.all %}
+                                <li class="llist-group-item p-1 small mb-0 px-2">
+                                    {{forloop.counter}}) {{cont.item}}
+                                </li>
+                                {% endfor %}
+                              
+                            </ul>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+
+                  
+                   
                 </div>
 
                 {% if object.features.first.notes %}
@@ -276,26 +366,11 @@ Money Back Guarante{% endblock %}
                         </ul>
                     </div>
 
-                    <div class="course-widget course-metarials">
-                        <h4 class="course-title">Modules - ({{object.modules.count}})</h4>
-                        <ul>
-
-                            {% for m in object.modules.all %}
-                            <li>
-                                <i class="fa">{{forloop.counter}})</i>
-                                {{ m.title }}
-                            </li>
-
-                            {% endfor %}
-
-
-
-                        </ul>
-                    </div>
-
+                  
                 </div>
             </div>
         </div>
+      
     </div>
 </section>
 
@@ -304,7 +379,7 @@ Money Back Guarante{% endblock %}
 
         <div class="row">
             <div class="col text-center">
-                <img class="lazy" data-src="{% static 'images/money_back.png' %}" width="400" height="294"
+                <img class="lazy img-fluid" data-src="{% static 'images/money_back.png' %}" width="400" height="294"
                     alt="money back">
             </div>
         </div>
