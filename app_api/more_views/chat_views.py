@@ -83,7 +83,6 @@ class ConversationDetailView(APIView):
 
         conversation = Conversation.objects.filter(course=data['course']).filter(
                                                    conversation_members__member=student_id).filter(conversation_members__member=teacher_id)
-        print(conversation)
         if conversation.count() > 0:
             serializer = ConversationSerializer(conversation, many=True)
             return Response(serializer.data[0], status=status.HTTP_201_CREATED)
