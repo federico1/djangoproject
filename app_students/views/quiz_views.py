@@ -8,74 +8,83 @@ from students.decorators import student_required
 from students.forms import TakeQuizForm
 from students.models import Quiz, TakenQuiz
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 @login_required
 @student_required
 def take_quiz(request, pk):
-    quiz = get_object_or_404(Quiz, pk=pk)
 
-    student = request.user
+    try:
+        quiz = get_object_or_404(Quiz, pk=pk)
 
-    if student.taken_quizzes.filter(quiz=pk).exists():
+        student = request.user
 
-        if request.GET['ref'] is not None:
-            return redirect(request.GET['ref'] + "&type=quiz")
+        if student.taken_quizzes.filter(quiz=pk).exists():
 
-        return redirect('student_taken_quiz_list')
+            if request.GET['ref'] is not None:
+                return redirect(request.GET['ref'] + "&type=quiz")
 
-    total_questions = quiz.questions.count()
+            return redirect('student_taken_quiz_list')
 
-    if total_questions <= 0:
-        return redirect('student_taken_quiz_list')
+        total_questions = quiz.questions.count()
 
-    unanswered_questions = student.get_unanswered_questions(quiz)
-    total_unanswered_questions = unanswered_questions.count()
+        if total_questions <= 0:
+            return redirect('student_taken_quiz_list')
 
-    progress = 100 - \
-        round(((total_unanswered_questions - 1) / total_questions) * 100)
-    question = unanswered_questions.first()
+        unanswered_questions = student.get_unanswered_questions(quiz)
+        total_unanswered_questions = unanswered_questions.count()
 
-    if request.method == 'POST':
-        form = TakeQuizForm(question=question, data=request.POST)
+        progress = 100 - \
+            round(((total_unanswered_questions - 1) / total_questions) * 100)
+        question = unanswered_questions.first()
 
-        if form.is_valid():
-            with transaction.atomic():
-                student_answer = form.save(commit=False)
-                student_answer.student = student
-                student_answer.save()
-                unanswered_questions = student.get_unanswered_questions(quiz)
-                total_unanswered_questions = unanswered_questions.count()
+        if request.method == 'POST':
+            form = TakeQuizForm(question=question, data=request.POST)
 
-                rev_url = reverse('student_take_quiz', kwargs={"pk": pk})
+            if form.is_valid():
+                with transaction.atomic():
+                    student_answer = form.save(commit=False)
+                    student_answer.student = student
+                    student_answer.save()
+                    unanswered_questions = student.get_unanswered_questions(
+                        quiz)
+                    total_unanswered_questions = unanswered_questions.count()
 
-                if request.GET['ref'] is not None:
-                    rev_url = rev_url + "?ref=" + \
-                        request.GET['ref'] + '&type=quiz'
+                    rev_url = reverse('student_take_quiz', kwargs={"pk": pk})
 
-                request.user.save()
+                    if request.GET['ref'] is not None:
+                        rev_url = rev_url + "?ref=" + \
+                            request.GET['ref'] + '&type=quiz'
 
-                if unanswered_questions.exists():
-                    return redirect(rev_url)
-                else:
-                    correct_answers = student.quiz_answers.filter(
-                        answer__question__quiz=quiz, answer__is_correct=True).count()
-                    score = round(
-                        (correct_answers / total_questions) * 100.0, 2)
+                    request.user.save()
 
-                    TakenQuiz.objects.create(
-                        student=student, quiz=quiz, score=score)
+                    if unanswered_questions.exists():
+                        return redirect(rev_url)
+                    else:
+                        correct_answers = student.quiz_answers.filter(
+                            answer__question__quiz=quiz, answer__is_correct=True).count()
+                        score = round(
+                            (correct_answers / total_questions) * 100.0, 2)
 
-                    return redirect(rev_url)
-    else:
-        form = TakeQuizForm(question=question)
+                        TakenQuiz.objects.create(
+                            student=student, quiz=quiz, score=score)
 
-    return render(request, 'quiz/take_quiz_form.html', {
-        'quiz': quiz,
-        'question': question,
-        'form': form,
-        'progress': (total_questions - total_unanswered_questions) + 1,
-        'total_questions': total_questions
-    })
+                        return redirect(rev_url)
+        else:
+            form = TakeQuizForm(question=question)
+
+        return render(request, 'quiz/take_quiz_form.html', {
+            'quiz': quiz,
+            'question': question,
+            'form': form,
+            'progress': (total_questions - total_unanswered_questions) + 1,
+            'total_questions': total_questions
+        })
+    except Exception as ex:
+        return HttpResponse(ex)
 
 
 @login_required
@@ -103,6 +112,7 @@ def quiz_reset(request, pk):
         else:
             return HttpResponse(0)
     except Exception as ex:
+        logger.critical(ex)
         return HttpResponse(0)
 
 
