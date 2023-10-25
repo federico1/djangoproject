@@ -74,28 +74,45 @@ Checkout | pdhsafety.com
                         </li>
                     </ul>
 
-                    <div id="paypal-button-container" class="mt-3">              
+                    <div id="paypal-button-container" class="mt-3">
                     </div>
-
-                    <div class="text-center">
-                        OR want to pay later?
-                    </div>
-
-                    <div>
-                        <button id="btnPayBank" class="btn btn-block btn-info mb-1 d-none">Pay via Bank Transfer</button>
-                    </div>
-                  
 
                     <div id="paypalLoader">
-                        
+
                         <div class="spinner-border text-primary" role="status">
                             <span class="sr-only">Loading...</span>
-                          </div>
+                        </div>
 
                         Loading payment method. Please wait..
 
                     </div>
-                  
+
+                    <div class="alert alert-light bg-shadow" role="alert">
+
+                        <p class="text-center">
+                        <h5>You want to pay later? or Payment feature isn't working!</h5>
+                        </p>
+
+                        <p class="text-center">
+                            <button type="button" class="btn btn-info btn-paylater">Contact Us </button>
+                        </p>
+
+                        <p class="mb-0 text-muted">
+                            You can contact us to enroll in this course, We will enable it for you and you can pay
+                            later. Thanks
+                        </p>
+
+                    </div>
+
+
+                    {% comment %} <div>
+                        <button id="btnPayBank" class="btn btn-block btn-info mb-1 d-none">Pay via Bank
+                            Transfer</button>
+                    </div> {% endcomment %}
+
+
+
+
                 </div>
             </div>
         </div>
@@ -186,6 +203,42 @@ Checkout | pdhsafety.com
     </div>
 </div>
 
+<div id="contactModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Contact Us</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="fmContact" method="post" action="{%  url 'notify_system' %}">
+
+                    {% csrf_token %}
+
+                    <input type="hidden" name="title" value="Checkout Screen - Enrollment Request">
+                    <input type="hidden" name="email" value="{{request.user.email}}">
+                    <input type="hidden" name="message" value="">
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Enter your message</label>
+                        <textarea rows="5" class="form-control" placeholder="Enter your message and course name ">
+                </textarea>
+
+                        <small id="emailHelp" class="form-text text-muted">If you want to enroll for any course then
+                            please add the course name </small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSendMessage">Send Message</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% verbatim %}
 <script type="text/x-handlebars-template" id='cartItemTemplate'>
             <li class="list-group-item d-flex justify-content-between lh-condensed">
@@ -195,7 +248,7 @@ Checkout | pdhsafety.com
                 </div>
                 <span class="text-muted">${{ final_price }}</span>
             </li>
-        </script>
+    </script>
 {% endverbatim %}
 
 {% endblock %}
@@ -203,7 +256,9 @@ Checkout | pdhsafety.com
 {% block scripts %}
 
 <script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID' %}"></script>
-{% comment %} <script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID_SANDBOX' %}"></script> {% endcomment %}
+{% comment %}
+<script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID_SANDBOX' %}"></script>
+{% endcomment %}
 
 <script>
     (function ($) {
@@ -231,6 +286,8 @@ Checkout | pdhsafety.com
 
                     count = memoryData['_ps_'].length;
 
+                    var contactUsMessage = "Hi, I want to enroll in following courses. \n";
+
                     $(memoryData['_ps_']).each(function (ix, item) {
 
                         var price = item.fields.discounted_price > 0 ? item.fields.discounted_price : item.fields.price;
@@ -245,7 +302,11 @@ Checkout | pdhsafety.com
 
                         $("#itemsList").prepend(template(item));
 
+                        contactUsMessage += item.fields.title + " \n";
                     });
+
+
+                    $("#contactModal textarea").val(contactUsMessage);
 
                 };
 
@@ -283,55 +344,70 @@ Checkout | pdhsafety.com
             };
 
             var setPaypal = function () {
-                paypal.Buttons({
-                    funding: {
-                        // disallowed: [paypal.FUNDING.CREDIT]
-                    },
-                    style: {
-                        label: 'checkout'
-                    },
-                    onClick: function () {
-                        logPayEventClick();
-                    },
-                    onCancel: function () {
-                        logCancelPayEventClick();
-                    },
-                    createOrder: function (data, actions) {
+                try {
+                    paypal.Buttons({
+                        funding: {
+                            // disallowed: [paypal.FUNDING.CREDIT]
+                        },
+                        style: {
+                            label: 'checkout'
+                        },
+                        onClick: function () {
+                            logPayEventClick();
+                        },
+                        onCancel: function () {
+                            logCancelPayEventClick();
+                        },
+                        createOrder: function (data, actions) {
 
-                        if (_totalPrice <= 0) {
-                            return false;
-                        }
-
-                        return actions.order.create({
-                            purchase_units: [
-                                {
-                                    amount: {
-                                        value: _totalPrice
-                                    }
-                                }
-                            ]
-                        });
-                    },
-                    onApprove: function (data, actions) { // This function captures the funds from the transaction.
-                        return actions.order.capture().then(function (details) {
-
-                            if (data.orderID) {
-
-                                var payment = {
-                                    orderID: data.orderID,
-                                    details: details,
-                                    data: data
-                                };
-
-                                postOrder(payment);
+                            if (_totalPrice <= 0) {
+                                return false;
                             }
-                        });
-                    }
-                }).render('#paypal-button-container');
 
-                $("#paypalLoader").hide();
+                            return actions.order.create({
+                                purchase_units: [
+                                    {
+                                        amount: {
+                                            value: _totalPrice
+                                        }
+                                    }
+                                ]
+                            });
+                        },
+                        onApprove: function (data, actions) { // This function captures the funds from the transaction.
+                            return actions.order.capture().then(function (details) {
 
-                $("#btnPayBank").removeClass('d-none');
+                                if (data.orderID) {
+
+                                    var payment = {
+                                        orderID: data.orderID,
+                                        details: details,
+                                        data: data
+                                    };
+
+                                    postOrder(payment);
+                                }
+                            });
+                        }
+                    }).render('#paypal-button-container');
+
+                    $("#paypalLoader").hide();
+
+                    $("#btnPayBank").removeClass('d-none');
+                }
+                catch (ex) {
+
+                    $("#paypalLoader").hide();
+                    $("#btnPayBank").removeClass('d-none');
+
+
+                    var alertMsg = `  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>We are sorry!</strong>
+                        This time payment feature isn't working for you.
+                    </div>`;
+
+                    $("#paypal-button-container").html(alertMsg);
+                }
             };
 
             var postOrder = function (paymentData) {
@@ -411,7 +487,7 @@ Checkout | pdhsafety.com
                         eventValue: _totalPrice
                     };
 
-                   // ga('send', _opts);
+                    // ga('send', _opts);
                 }, 2000);
 
             };
@@ -426,7 +502,7 @@ Checkout | pdhsafety.com
                     eventValue: 'paypal'
                 };
 
-               /// ga('send', _opts);
+                /// ga('send', _opts);
 
             };
 
@@ -440,7 +516,7 @@ Checkout | pdhsafety.com
                     eventValue: 'paypal'
                 };
 
-              //  ga('send', _opts);
+                //  ga('send', _opts);
             };
 
             var payViaBank = function () {
@@ -527,7 +603,7 @@ Checkout | pdhsafety.com
                     },
                     success: function (response) {
                         localStorage.removeItem(keyName);
-                       window.location.href = '/order/' + order.ref_id + '/';
+                        window.location.href = '/order/' + order.ref_id + '/';
                     },
                     failure: function (errMsg) {
                         localStorage.removeItem(keyName);
@@ -535,6 +611,22 @@ Checkout | pdhsafety.com
                     }
                 });
 
+            };
+
+            var initContactForm = function () {
+                $("#fmContact").ajaxForm({
+                    beforeSend: function () {
+                        $("#fmContact").find("input, button").attr('disabled', true);
+                    },
+                    success: function (response) {
+                        if (response != 0) {
+                            Swal.fire('Your request has been sent. Thank You')
+                        }
+                        $("#fmContact").find("input, button").attr('disabled', false);
+                        $("#contactModal").modal('hide');
+                    },
+                    complete: function (xhr) { },
+                });
             };
 
             var registerEvent = function () {
@@ -547,14 +639,33 @@ Checkout | pdhsafety.com
                     payViaBank();
                 });
 
+                $(".btn-paylater").click(function () {
+                    $("#contactModal").modal('show');
+                });
+
+                $("#btnSendMessage").click(function () {
+                    var user = '{{request.user.email}}';
+
+                    var message = $("#fmContact textarea").val();
+
+                    message += "\n" + user;
+
+                    $("#fmContact input[name='message']").val(message);
+
+                    $("#fmContact").submit();
+
+
+                });
+
                 $('html, body').animate({
                     scrollTop: $(".space-3").offset().top
-                }, 3000);
+                }, 1000);
             };
 
             var init = function () {
                 registerEvent();
                 drawCartData();
+                initContactForm();
             };
 
             init();

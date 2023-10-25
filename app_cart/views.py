@@ -109,3 +109,24 @@ def SendOrderConfirmMail(request):
         result = 1
 
     return HttpResponse(result)
+
+
+def NotifySystemView(request):
+
+    result = 0
+
+    if request.POST:
+        title = request.POST['title']
+        body = request.POST['message']
+
+        send_mail(
+            subject=title,
+            message=body,
+            html_message=body,
+            from_email='mail@pdhsafety.com',
+            recipient_list=['mail@pdhsafety.com'],
+            fail_silently=False)
+
+        result = 1
+
+    return HttpResponse(result)
