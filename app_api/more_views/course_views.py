@@ -62,14 +62,23 @@ class CourseViewset(viewsets.ModelViewSet):
 
         c_order = request.query_params.get('order')
         c_limit = request.query_params.get('limit')
+        c_search_term = request.query_params.get('q')
+        c_result_type = request.query_params.get('result_type')
 
         order_field = '-id'
 
         if c_order is not None and c_order == 'asc':
             order_field = 'id'
 
+        if c_search_term is not None and c_search_term != '':
+            snippets = snippets.filter(title__icontains=str(c_search_term))
+
         if c_limit is not None:
             snippets = snippets.order_by(order_field)[:int(c_limit)]
+        
+        if c_result_type is not None and c_result_type == 'auto_search':
+            serializer = course_serializers.CourseSearchSerializer(snippets, many=True)
+            return Response(serializer.data)
 
         serializer = course_serializers.CourseCoreSerializer(snippets, many=True)
 
@@ -104,6 +113,7 @@ class CourseViewset(viewsets.ModelViewSet):
         serializer = course_serializers.CourseSerializer(snippets, many=True)
 
         return Response(serializer.data)
+
 
 class CourseTimeLogDetailView(APIView):
 

@@ -77,6 +77,13 @@ class CoursePriceSerializer(serializers.ModelSerializer):
         fields = ['id', 'price', 'is_free', 'discounted_price']
 
 
+class CourseSearchSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Course
+        fields = ['id', 'slug', 'subject', 'title', 'price']
+
+        
 class CourseTimeLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseTimeLog

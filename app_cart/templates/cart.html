@@ -113,12 +113,15 @@
                                 </tbody>
                             </table>
                             <div class="wc-proceed-to-checkout d-none">
-                                {% if request.user.is_authenticated %}
+
                                 <a href="{% url 'checkout_detail' %}"
-                                    class="checkout-button button alt wc-forward">Proceed to checkout</a>
+                                class="checkout-button button alt wc-forward">Proceed to checkout</a>
+
+                                {% comment %} {% if request.user.is_authenticated %}
+                               
                                 {% else %}
                                 <a class="checkout-button button alt wc-forward link-auth">Proceed to checkout</a>
-                                {% endif %}
+                                {% endif %} {% endcomment %}
                             </div>
                         </div>
                     </div>

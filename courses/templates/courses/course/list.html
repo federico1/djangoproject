@@ -37,7 +37,7 @@ Easy To Take Course Satisfaction Guarantee
     </div>
 </section>
 
-<section class="section-padding course">
+<section class="section-padding course pt-4">
     <div class="course-top-wrap">
         <div class="container">
 
@@ -59,25 +59,30 @@ Easy To Take Course Satisfaction Guarantee
             <div class="row mb-5">
                 <div class="col">
                     <div class="card">
-                        <div class="card-body">
-                            <p>{{subject.page_details}}</p>
+                        <div class="card-body p-1 text-center">
+                            {{subject.page_details}}
                         </div>
                     </div>
                 </div>
             </div>
             {% endif %}
 
-            <div class="row align-items-center">
-                <div class="col-lg-8">
-                    <p>Showing
+            <div class="row align-items-center bg-light py-1">
+                <div class="col-lg-6">
+                        <a href="#" class="btn btn-light rounded-0 py-2 btn-lg">
+                            Showing
                         {{ courses.count }}
-                        results</p>
+                        courses
+                        </a>
                 </div>
-
+                <div class="col-lg-2">
+                   <a href="{% url 'courses_list' %}" class="text-dark btn btn-outline-warning rounded-0 btn-block py-2 btn-lg">Clear Filters</a>
+                </div>
+                
                 <div class="col-lg-4">
                     <div class="topbar-search" id="category">
                         <form method="get" action="#">
-                            <select class="form-control" title="select cateory" aria-labelledby="category" id="ddlCategory">
+                            <select class="form-control rounded-0" title="select cateory" aria-labelledby="category" id="ddlCategory">
                                 <option value="{% url 'courses_list' %}">Choose Category</option>
                                 {% for s in subjects %}
                                 <option {% if subject == s %} selected {% endif %}

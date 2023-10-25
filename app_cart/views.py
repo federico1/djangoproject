@@ -9,6 +9,7 @@ from django.core.mail import send_mail
 from django.views.generic.base import View
 from django.shortcuts import render
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 @method_decorator(compress_page, name="dispatch")
 class CartView(generic.TemplateView):
@@ -16,7 +17,7 @@ class CartView(generic.TemplateView):
 
 
 @method_decorator(compress_page, name="dispatch")
-class CheckoutView(generic.TemplateView):
+class CheckoutView(LoginRequiredMixin, generic.TemplateView):
     template_name = "checkout.html"
 
 

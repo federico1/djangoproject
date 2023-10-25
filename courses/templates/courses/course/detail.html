@@ -404,14 +404,14 @@ Money Back Guarante{% endblock %}
 
             <div class="embed-vidoe">
                 {{#if img}}
-                <div class="img-section">
+                <div class="img-section d-none">
                     <img class="img-fluid lazy w-100" data-src="{{img}}" width="730" height="547" />
                     <button type="button" class="btn btn-danger rounded-2 btn-lg">
                         <i class="fab fa-youtube fa-lg"></i>
                     </button>
                 </div>
                 {{/if}}
-                <div class="embed-responsive embed-responsive-16by9 d-none">
+                <div class="embed-responsive embed-responsive-16by9">
                     <iframe class="embed-responsive-item" data-src="{{ src }}" allow="autoplay" allowfullscreen></iframe>
                 </div>
             </div>    
