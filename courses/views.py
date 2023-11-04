@@ -13,6 +13,10 @@ from django.views.decorators.vary import vary_on_cookie
 
 from datetime import datetime
 
+import logging
+
+logger = logging.getLogger('django')
+
 # class HomePage(generic.TemplateView):
 #     template_name = "home.html"
 
@@ -29,7 +33,6 @@ class IndexView(TemplateResponseMixin, View):
     template_name = 'index.html'
 
     def get(self, request):
-
         courses = cache.get('home_popular')
 
         if not courses:

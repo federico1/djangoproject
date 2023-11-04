@@ -84,7 +84,7 @@ def take_quiz(request, pk):
             'total_questions': total_questions
         })
     except Exception as ex:
-        logger.critical(ex)
+        logger.debug(ex)
         return HttpResponse('This time quiz feature is under maintenance. Please contact us.')
 
 

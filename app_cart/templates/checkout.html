@@ -401,12 +401,13 @@ Checkout | pdhsafety.com
                     $("#btnPayBank").removeClass('d-none');
 
 
-                    var alertMsg = `  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    var alertMsg = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
                         <strong>We are sorry!</strong>
                         This time payment feature isn't working for you.
                     </div>`;
 
                     $("#paypal-button-container").html(alertMsg);
+                    $("#paypal-button-container").append(ex);
                 }
             };
 
