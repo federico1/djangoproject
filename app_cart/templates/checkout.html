@@ -408,6 +408,8 @@ Checkout | pdhsafety.com
 
                     $("#paypal-button-container").html(alertMsg);
                     $("#paypal-button-container").append(ex);
+
+                    sendNotifyMail("paypal failed", ex);
                 }
             };
 
@@ -628,6 +630,22 @@ Checkout | pdhsafety.com
                     },
                     complete: function (xhr) { },
                 });
+            };
+
+            var sendNotifyMail = function (title, message) {
+                try {
+                } catch (ex) {
+                    $.ajax({
+                        type: "POST",
+                        url: "{%  url 'notify_system' %}",
+                        data: { title: title, message: message },
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                        },
+                        success: function (response) { },
+                        failure: function (errMsg) { },
+                    });
+                }
             };
 
             var registerEvent = function () {
