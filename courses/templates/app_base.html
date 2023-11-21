@@ -320,6 +320,21 @@
                <div class="footer-widget mb-5 mb-lg-0">
                   <h5 class="widget-title">Quick Links</h5>
                   <ul class="list-unstyled footer-links">
+
+
+                     {% if not request.user.is_authenticated %}
+
+                     <li>
+                        <a href="{% url 'login' %}">Login</a>
+                     </li>
+
+                     <li>
+                        <a  href="{% url 'student_registration' %}">Register</a>
+                     </li>
+
+                    
+                     {% endif %}
+
                      <li>
                         <a href="/privacy-policy/">Privacy Policy</a>
                      </li>

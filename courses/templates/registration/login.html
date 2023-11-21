@@ -62,9 +62,24 @@
                                                                 <input class="woocommerce-form__input woocommerce-form__input-checkbox" name="rememberme" type="checkbox" id="rememberme" value="forever"> <span>Remember me</span>
                                                             </label> -->
                             </p>
-                            <p class="woocommerce-LostPassword lost_password">
-                                <a href="{% url 'password_reset' %}">Lost your password?</a>
-                            </p>
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <p class="woocommerce-LostPassword lost_password">
+                                        <a href="{% url 'password_reset' %}">Lost your password?</a>
+                                    </p>
+                                </div>
+
+                                {% if not request.user.is_authenticated %}
+                                <div class="col-md-6">
+                                    <p class="woocommerce-LostPassword text-md-right">
+                                        <a class="text-info" href="{% url 'student_registration' %}">Create New Account</a>
+                                    </p>
+                                </div>
+                                {% endif %}
+                               
+
+                               
+                            </div>
                         </form>
                     </div>
 
