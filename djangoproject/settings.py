@@ -65,8 +65,7 @@ INSTALLED_APPS = (
     'app_api',
     'app_api_v2',
     'drf_yasg',
-    'corsheaders',
-    'captcha',
+    'corsheaders'
 )
 
 MIDDLEWARE = [
@@ -192,7 +191,3 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 
 PAYPAL_CLIENT_ID_SANDBOX = 'AfCYO-690TOTak5bLJ9lxaw-a7nY-8SBFID1X7a6Cmoyw2X4j79OMSm7ZDp_6oj218W5YKF19qqgWW0Y&currency=USD&disable-funding=paylater'
 PAYPAL_CLIENT_ID = 'AUlOGRZ6XAwhUIs2tDNy5-oTghhr9tW8NC9uCdDeh0LSMAwQVGxy4zWPyFRFmsXF1bSV7ZHVAm3mxCzu&currency=USD&disable-funding=paylater'
-
-RECAPTCHA_PUBLIC_KEY = 'MyRecaptchaKey123'
-RECAPTCHA_PRIVATE_KEY = 'MyRecaptchaPrivateKey456'
-SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
