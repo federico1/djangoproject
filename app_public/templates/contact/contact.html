@@ -102,6 +102,15 @@
                   </div>
 
                   <div class="col-lg-12">
+                     <div class="form-group">
+                        <div id="html_element"></div>
+                     </div>
+                  </div>
+
+                 
+
+
+                  <div class="col-lg-12">
                      <div class="mt-4 text-right">
                         <button class="btn btn-main" type="button" id="btnSubmit">
                            Send Message
@@ -119,6 +128,10 @@
 
 {% endblock %} {% block scripts %}
 
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+async defer>
+</script>
+
 <style>
     label.error {
         color: #bc2f2f;
@@ -129,7 +142,7 @@
 
 <script>
 
-
+   var isGoogleValid = false;
 
    (function ($) {
       $.SSTVerifyPage = function (options) {
@@ -147,6 +160,8 @@
                      Swal.fire('Your request has been sent. Thank You')
                   }
                   $("#fmContact").find("input, button").attr('disabled', false);
+
+                  window.location.reload()
                },
                complete: function (xhr) {},
             });
@@ -219,8 +234,12 @@
             $("div").on("click", "#btnSubmit", function (e) {
                e.stopPropagation();
                var isValid = $("#fmContact").valid();
-               if(isValid) {
-                  $("#fmContact").submit();
+               if(isValid && isGoogleValid) {
+                //  $("#fmContact").submit();
+               }
+
+               if(isValid&& !isGoogleValid) {
+                  Swal.fire('Please verify that you are a human!')
                }
             });
 
@@ -242,4 +261,18 @@
       var messagesPage = new $.SSTVerifyPage({});
    });
 </script>
+
+ <script type="text/javascript">
+      var onloadCallback = function() {
+        grecaptcha.render('html_element', {
+          'sitekey' : '6LeAz1EpAAAAAPhkSbrsom9WPS3GkG8x0gF4H0DO',
+          'callback' : verifyCallback,
+        });
+      };
+
+      var verifyCallback = function(response) {
+         isGoogleValid = false;
+       };
+    </script>
+
 {% endblock %}
