@@ -103,6 +103,70 @@
             </main>
 
         </div>
+
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-lg-7">
+                    <div class="section-heading center-heading mb-2">
+                        <h3 class="mb-1">Change Password</h3>
+                    </div>
+                </div>
+            </div>
+
+            <main class="site-main woocommerce single single-product">
+                <section class="space-3">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="woocommerce-notices-wrapper bg-white">
+                                    <form class="woocommerce-form woocommerce-form-login login" action="#" id="fmPassword" method="post">
+
+                                        {% csrf_token %}
+
+                                        <input type="hidden" name="id" value="{{ request.user.id }}"/>
+
+
+                                        <div class="row">
+                                            <div class="col-md-6 offset-md-3">
+                                                <div class="row">
+
+                                                    <div class="col-md-12 mb-2">
+                                                        <div class="form-group">
+                                                            <label style="float: none;" class="control-label" for="id_password">New Password</label>
+                                                            <input type="password" name="password" class="form-control" required="" id="id_password"/>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 mb-2">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="" id="chkShowPassword">
+                                                            show password
+                                                          </div>
+                                                    </div>
+                                                  
+
+                                                </div>
+                                            </div>
+
+                                         
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12 text-center">
+                                                <input type="button" id="btnSubmitPassword" class="btn btn-orange" value="Update Password"/>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+
+        </div>
     </section>
 
     <div class="d-none">
@@ -258,10 +322,62 @@
                 return this;
             };
 
+            $.PasswordManager = function (options) {
+                var that = this;
+
+                var settings = $.extend({}, options);
+
+                var registerEvent = function () {
+
+                    $("#chkShowPassword").change(function () {
+
+                        if ($(this).is(":checked")) {
+                            $("#id_password").attr('type', 'text');
+                        }
+                        else {
+                            $("#id_password").attr('type', 'password');
+                        }
+                    });
+
+
+                    $("#btnSubmitPassword").click(function () {
+                        var password = $("#id_password").val();
+                        if (!$.trim(password)) {
+                            Toast.fire({ icon: 'error', title: 'Please enter password' });
+                            return;
+                        }
+
+                        var url = '{% url "api_v2:view_student_profile-update-password" %}';
+
+                        $.ajax({
+                            url: url,
+                            method: "POST",
+                            headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+                            data: $("#fmPassword").serialize(),
+                        }).done(function (response) {
+                            Toast.fire({ icon: 'success', title: 'Password updated, please login again.' })
+                            window.location.href = '/';
+                        }).fail(function (error) {
+                            console.log(error);
+                        });
+
+
+                    });
+                };
+
+                var init = function () {
+                    registerEvent();
+                };
+
+                init();
+
+                return this;
+            };
         })(jQuery);
 
         $(document).ready(function () {
             new $.UserProfileManager({});
+            new $.PasswordManager({});
         });
     </script>
 

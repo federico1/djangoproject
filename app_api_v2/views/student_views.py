@@ -9,7 +9,6 @@ from app_api_v2.serializers import student_serializers
 
 class StudentCertificateView(viewsets.ViewSet):
 
-
     @action(detail=False, methods=['get'])
     def verify(self, request):
 
@@ -40,3 +39,18 @@ class StudentCertificateView(viewsets.ViewSet):
             })
 
 
+class StudentProfileView(viewsets.ViewSet):
+
+    @action(detail=False, methods=['post'])
+    def update_password(self, request):
+        
+        from django.contrib.auth.hashers import make_password
+
+        request.user.password = make_password(request.POST.get('password'))
+        request.user.save()
+
+        return Response({
+                'status':True,
+                'message':'success',
+                'data':0
+            })
