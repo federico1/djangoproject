@@ -19,8 +19,8 @@ def send_contact_alert(form_data):
             message=message,
             html_message=html_message,
             from_email='mail@pdhsafety.com',
-            recipient_list=['federico.roca@my.liu.edu', 'mail@pdhsafety.com'],
-            #recipient_list=['mail@pdhsafety.com'],
+            #recipient_list=['federico.roca@my.liu.edu', 'mail@pdhsafety.com'],
+            recipient_list=['mail@pdhsafety.com'],
             fail_silently=False
         )
 
