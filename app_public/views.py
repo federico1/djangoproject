@@ -40,9 +40,9 @@ class ContactView(generic.TemplateView):
             'message': request.POST['message'],
         }
 
-        result = send_contact_alert(ctx)
+        #result = send_contact_alert(ctx)
 
-        return JsonResponse({'result': result})
+        #return JsonResponse({'result': result})
 
 
 @method_decorator(compress_page, name="dispatch")
