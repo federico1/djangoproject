@@ -54,7 +54,7 @@
          </div>
 
          <div class="col-lg-8">
-            <form class="contact__form d-none" method="POST" action="./" id="fmContact">
+            <form class="contact__form" method="POST" action="./" id="fmContact">
                {% csrf_token %}
 
                <div class="row">
@@ -112,7 +112,7 @@
 
                   <div class="col-lg-12">
                      <div class="mt-4 text-right">
-                        <button class="btn btn-main" type="button" id="btnSubmit">
+                        <button class="btn btn-main" type="button" id="btnSubmit" disabled>
                            Send Message
                            <i class="fa fa-angle-right ml-2"></i>
                         </button>
@@ -152,6 +152,7 @@ async defer>
 
          var initForm = function () {
             $("#fmContact").ajaxForm({
+               url:'{% url  "post_contact_form" %}',
                beforeSend: function () {
                   $("#fmContact").find("input, button").attr('disabled', true);
                },
@@ -233,7 +234,9 @@ async defer>
          var registerEvent = function () {
             $("div").on("click", "#btnSubmit", function (e) {
                e.stopPropagation();
+
                var isValid = $("#fmContact").valid();
+
                if(isValid && isGoogleValid) {
                   $("#fmContact").submit();
                }
@@ -272,6 +275,7 @@ async defer>
 
       var verifyCallback = function(response) {
          isGoogleValid = true;
+         $("#btnSubmit").prop('disabled', false);
        };
     </script>
 

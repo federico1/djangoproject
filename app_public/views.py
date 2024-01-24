@@ -40,9 +40,9 @@ class ContactView(generic.TemplateView):
             'message': request.POST['message'],
         }
 
-        #result = send_contact_alert(ctx)
+        result = send_contact_alert(ctx)
 
-        #return JsonResponse({'result': result})
+        return JsonResponse({'result': result})
 
 
 @method_decorator(compress_page, name="dispatch")
@@ -59,7 +59,23 @@ class FaqView(generic.TemplateView):
 class PackagesView(generic.TemplateView):
     template_name = "packages/packages.html"
 
+
 @method_decorator(compress_page, name="dispatch")
 def bad_request(request):
     response = redirect('/')
     return response
+
+
+def post_contact_form(request):
+    
+    if request.method == 'POST':
+        ctx = {
+            'name': request.POST['name'],
+            'email': request.POST['email'],
+            'subject': request.POST['subject'],
+            'message': request.POST['message'],
+        }
+
+        result = send_contact_alert(ctx)
+
+        return JsonResponse({'result': result})   

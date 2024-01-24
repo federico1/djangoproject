@@ -8,3 +8,4 @@ __pycache__
 _test/
 env/
 debug.log
+debug_error.log
