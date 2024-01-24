@@ -31,18 +31,18 @@ class AboutView(generic.TemplateView):
 class ContactView(generic.TemplateView):
     template_name = "contact/contact.html"
 
-    def post(self, request, *args, **kwargs):
+    # def post(self, request, *args, **kwargs):
 
-        ctx = {
-            'name': request.POST['name'],
-            'email': request.POST['email'],
-            'subject': request.POST['subject'],
-            'message': request.POST['message'],
-        }
+    #     ctx = {
+    #         'name': request.POST['name'],
+    #         'email': request.POST['email'],
+    #         'subject': request.POST['subject'],
+    #         'message': request.POST['message'],
+    #     }
 
-        result = send_contact_alert(ctx)
+    #     result = send_contact_alert(ctx)
 
-        return JsonResponse({'result': result})
+    #     return JsonResponse({'result': result})
 
 
 @method_decorator(compress_page, name="dispatch")
