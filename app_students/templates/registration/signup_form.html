@@ -29,13 +29,31 @@
         </div>
     </section>
 
-    <main class="site-main page-wrapper woocommerce single single-product">
+    <main class="site-main page-wrapper woocommerce single single-product py-5">
         <section class="space-3">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="woocommerce-notices-wrapper"></div>
 
+                        <div class="row align-items-center">
+                            <div class="col-lg-6">
+                                <div class="section-heading">
+                                    <span class="subheading">Sign up and start learning</span>
+                                    <h3>With Professional Trainers</h3>
+                                </div>
+                            </div>
+                
+                            <div class="col-lg-6">
+
+                                <div class="section-heading">
+                                    <div class="course-btn text-lg-right">
+                                        <a href="{% url 'company_registration' %}" class="btn btn-main"><i class="fa fa-user mr-2"></i>Business Account? Join With us</a></div>
+                                </div>
+
+                              
+                            </div>
+                        </div>
                         <form class="woocommerce-form woocommerce-form-login login" role="form" action="{% url 'student_registration' %}?next={{ request.GET.next }}" id="fmRegister" method="post">
                             {{ form.errors }}
                             {% csrf_token %}

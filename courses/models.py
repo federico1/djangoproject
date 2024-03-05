@@ -21,6 +21,11 @@ class Subject(models.Model):
     meta_tags = models.TextField(default=None, null=True, blank=True)
     meta_description = models.TextField(default=None, null=True, blank=True)
     video_link = models.TextField(default=None, null=True, blank=True)
+    
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
+                              related_name='subject_created',
+                              on_delete=models.CASCADE, null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['title']

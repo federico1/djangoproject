@@ -1,0 +1,301 @@
+{% extends 'app_base.html' %} {% load i18n %} {% block title %} {% trans 'Create Business Account' %} | pdhsafety.com
+{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="page-header-content">
+                    <h1>Pdhsafety for business</h1>
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="list-inline-item">/</li>
+                        <li class="list-inline-item">Business Account Register</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<main class="site-main page-wrapper woocommerce single single-product py-5">
+    <section class="space-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="woocommerce-notices-wrapper"></div>
+
+                    <form class="woocommerce-form woocommerce-form-login login" role="form"
+                        action="{% url 'company_registration' %}?next={{ request.GET.next }}" id="fmRegister"
+                        method="post">
+                        {{ form.errors }}
+                        {% csrf_token %}
+
+                        {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    {% for field in form.visible_fields %}
+                                    <div class="col-md-6 mb-2">
+                                        <div class="form-group">
+                                            <label style="float: none" class="control-label"
+                                                for="id_{{ field.name }}">{{ field.label }}</label>
+                                            {{ field }}
+                                            <!-- <p class="help-text">{{ field.help_text }} </p> -->
+                                            {% if field.errors %}
+                                            <small class="form-text text-danger">{{ field.label }}:
+                                                {{ field.errors|striptags }}</small>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="">
+                            <p class="form-row">
+                                <label
+                                    class="woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme">
+                                    <input class="woocommerce-form__input woocommerce-form__input-checkbox"
+                                        name="rememberme" type="checkbox" id="termsCheck" value="" required />
+                                    <span>
+                                        <a class="text-muted small" href="{% url 'privacy_policy' %}">
+                                            By creating an account you are agreeing to adhere to the NYCCST Terms of
+                                            Service
+                                        </a>
+                                    </span>
+                                </label>
+                            </p>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="button" id="btnSubmit" class="btn btn-orange"
+                                    value="{% trans 'Create an account' %}" />
+                                <span class="ml-3">
+                                    {% trans "Already have an account?" %}
+                                    <a class="text-primary font-weight-bold" href="{% url 'login' %}">
+                                        {% trans 'Log in' %}</a>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row align-items-center">
+                        <div class="col-lg-12">
+                            <div class="section-heading mb-4">
+                                <span class="subheading">CUSTOMIZE TRAINING</span>
+                                <h3>How we help you?</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>
+                                We provide abundant resources to guide you in crafting your inaugural course, while our instructor dashboard and curriculum pages facilitate seamless organization.
+                            </p>
+
+
+                            <div class="about-content">
+
+                                <div class="about-text-block">
+                                    <i class="bi bi-support"></i>
+                                    <h4>Teach your way</h4>
+                                    <p>
+                                    <ul>
+                                        <li class="mb-1">
+                                            Share your course on your terms, exactly as you envision it, and retain full control over your content at all times
+                                        </li>
+                                        <li class="mb-1">
+                                            Foster the growth of proficient tech teams within secure and risk-free learning environments.
+                                        </li>
+                                    </ul>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <h4 class="mb-2">How to begin?</h4>
+
+                            <div class="about-content">
+                                <div class="about-text-block">
+                                    <i class="bi bi-list"></i>
+                                    <h4>Plan your curriculum</h4>
+                                    <p>Empower your training with Enhanced Courses, enabling seamless integration of custom content tailored to your company's specific requirements!</p>
+                                   
+                                </div>
+                                <div class="about-text-block">
+                                    <i class="bi bi-film"></i>
+                                    <h4>Course creator tool</h4>
+                                    <p>Effortlessly construct your courses using a centralized tool that breathes life into your content, providing the flexibility to incorporate multi-format materials and captivate your learners.</p>
+
+                                    <p>
+                                        <b>Multimedia
+                                            E-Learning Content</b>
+                                    </p>
+                                    <p>
+                                        Effortlessly integrate videos, upload documents, incorporate text-based content, and deploy an extensive range of quizzes in mere moments. Blend and customize your content to craft a diverse and immersive course experience tailored to cater to your learners' preferences.
+                                    </p>
+
+                                </div>
+                                <div class="about-text-block">
+                                    <i class="bi bi-monitor"></i>
+                                    <h4>Launch your course</h4>
+                                    <p>
+                                        Elevate your organization's prominence and empower learners to demonstrate their achievements and expertise by issuing branded completion certificates for your courses.
+                                    </p>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 order-md-2">Left</div>
+            </div>
+        </div>
+    </section>
+    <!--shop category end-->
+</main>
+
+<div class="d-none">
+    <form id="fmFile" action="{% url 'upload-file' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="file" id="fu" />
+    </form>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<style>
+    label.error {
+        color: #e13b3b;
+        font-size: 13px;
+    }
+
+    .errorlist {
+        margin-bottom: 10px;
+    }
+
+    .errorlist li {
+        text-transform: capitalize;
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    .errorlist li ul {
+        list-style: none;
+        margin-left: 4px;
+        color: #f05151;
+        display: inline-block;
+    }
+
+    .errorlist li ul li {
+        text-transform: initial;
+        font-weight: normal;
+        font-size: 14px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+
+        $("#fmRegister input.col-12").each(function(){
+            $(this).closest('.col-md-6').eq(0).removeClass('col-md-6').addClass('col-md-12');
+        });
+
+        $("#btnRemoveImage").click(function () {
+            $("#prevImage").attr("src", "https://via.placeholder.com/200x200.png?text=..");
+            $("#id_image").val(null);
+        });
+
+        $("#btnAddImage").click(function () {
+            $("#fu").trigger("click");
+        });
+
+        $("#btnSubmit").click(function () {
+            var isValid = $("#fmRegister").valid();
+
+            if (isValid) {
+                $("#fmRegister").submit();
+            }
+        });
+
+        $("#fu").change(function () {
+            $("#fmFile").submit();
+        });
+
+        $("#fmFile").ajaxForm({
+            beforeSend: function () {
+                ShowLoadingModal("Please wait", "Uploading image.");
+            },
+            uploadProgress: function (event, position, total, percentComplete) { },
+            success: function (response) {
+                if (response != 0) {
+                    $("#prevImage").attr("src", response);
+                    $("#id_image").val(response);
+                }
+
+                Swal.close();
+            },
+            complete: function (xhr) { },
+        });
+
+        $.validator.setDefaults({ ignore: [] });
+
+        $("#fmRegister").validate({
+            rules: {
+                first_name: {
+                    required: true,
+                },
+                last_name: {
+                    required: true,
+                },
+                email: {
+                    required: true,
+                    email: true,
+                    remote: {
+                        url: "/api/email-exist/",
+                        type: "post",
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                        },
+                    },
+                },
+                password1: {
+                    required: true,
+                },
+                password2: {
+                    required: true,
+                    equalTo: "#id_password1",
+                },
+                cell_number: {
+                    required: false,
+                },
+                terms: {
+                    required: true,
+                },
+            },
+            messages: {
+                email: {
+                    remote: "Email address already in use. Please use other email.",
+                },
+            },
+        });
+    });
+</script>
+
+{% endblock %}

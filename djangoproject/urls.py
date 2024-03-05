@@ -75,6 +75,7 @@ urlpatterns = [
     path('', include('app_public.urls')),
     path('', include('app_cart.urls')),
     path('students/', include('app_students.urls')),
+    path('business/', include('app_business.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
     path("robots.txt",TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
 ]

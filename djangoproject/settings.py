@@ -61,6 +61,7 @@ INSTALLED_APPS = (
     'app_public',
     'app_cart',
     'app_students',
+    'app_business',
     'embed_video',
     'app_api',
     'app_api_v2',

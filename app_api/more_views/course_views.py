@@ -93,6 +93,9 @@ class CourseViewset(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
+    def create(self, request):
+        pass
+    
     @action(detail=False)
     def depth(self, request):
         snippets = self.queryset

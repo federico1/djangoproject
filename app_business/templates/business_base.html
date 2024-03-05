@@ -1,0 +1,27 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head time="{% now 'jS F Y H:i:s' %}">
+   <meta charset="utf-8" />
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  
+   <title>{% block title %} Safety Training and Certification | pdhsafety.com {% endblock %}</title>
+
+
+   {% block head %}{% endblock %}
+</head>
+
+<body>
+
+   {% block content %}{% endblock %}
+
+   
+   {% block scripts %}{% endblock %}
+</body>
+
+</html>
