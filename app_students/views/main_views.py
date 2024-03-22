@@ -287,7 +287,9 @@ class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
             else:
                 context['ref_number'] = enrolled_last.certificates.first().ref_number
         
-        credits = course.features.first().credits
+        first_feature = course.features.first()
+        credits = first_feature.credits if first_feature is not None else None
+        
         context['credits'] = credits if credits is not None else ''
         context['sign_image'] = '/static/cert-files/image002.png'
 
