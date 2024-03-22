@@ -6,7 +6,6 @@ from courses.models import StudentCertificate
 from app_api_v2.serializers import student_serializers
 
 
-
 class StudentCertificateView(viewsets.ViewSet):
 
     @action(detail=False, methods=['get'])

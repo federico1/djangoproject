@@ -1,4 +1,4 @@
-{% extends "admin_base.html" %} {% block title %} - Students{% endblock %} {% block content %}
+{% extends "admin_base.html" %} {% block title %} - Students {% endblock %} {% block content %}
 
 <div>
    <div class="d-flex align-items-center justify-content-center loader mb-2">
@@ -93,6 +93,8 @@
                         <tr>
                            <th>ID</th>
                            <th>Course</th>
+                           <th>Price</th>
+                           <td>Date</td>
                            <th>Action</th>
                         </tr>
                      </thead>
@@ -265,6 +267,9 @@
          <a href="javascript:;" class="btn btn-info btn-sm link-edit-user" id="{{id}}">
             Edit
          </a>
+         <a href="javascript:;" class="btn btn-info btn-sm link-password-user" id="{{id}}">
+            Change Password
+         </a>
          <a href="javascript:;" class="btn btn-danger btn-sm link-delete-user" id="{{id}}">
             Delete
          </a>
@@ -277,9 +282,15 @@
    <tr id="{{id}}" data-enrollment-id="{{enrollment.id}}">
       <td>{{id}}</td>
       <td>{{title}}</td>
+      <td>{{price_format}}</td>
+      <td>
+         <small>Start: {{enrollment.created}}</small> <br />
+         <small>Complete: {{enrollment.completed_date}}</small>
+      </td>
       <td> <a href='#' class='badge badge-danger link-delete-enrollment' data-id='{{enrollment.id}}'>Delete</a> </td>
    </tr>
 </script>
+
 {% endverbatim %} {% endblock %} {% block scripts %}
 
 <script>
@@ -293,6 +304,11 @@
       }
 
       return new Handlebars.SafeString(r);
+   });
+
+   let waitDialog = bootbox.dialog({
+      message: '<p class="text-center mb-0"><i class="fas fa-spinfa-cog"></i> Please wait, processing request...</p>',
+      closeButton: false
    });
 
    (function ($) {
@@ -319,6 +335,7 @@
    (function ($) {
 
       $.StudentManager = function (options) {
+
          var that = this;
 
          var studentsList = [];
@@ -357,6 +374,7 @@
 
                $(".loader").parent().hide();
                $(".link-new-user").removeAttr("disabled");
+               waitDialog.modal('hide');
             });
 
             $("#usersTable").on('xhr.dt', function (e, settings, json, xhr) {
@@ -517,6 +535,7 @@
 
                   var course = coursesList.find(a => a.id == item.course);
                   course.enrollment = item;
+                  course.price_format = course.price;
 
                   var source = document.getElementById("studentCourseItemTemplate").innerHTML;
                   var template = Handlebars.compile(source);
@@ -609,6 +628,39 @@
             });
          };
 
+         var resetUserPassword = function (id, newPassword) {
+
+            var url = '{% url "api_v2:view_user_profile-admin-reset-password" %}';
+
+            waitDialog.modal('show');
+
+            $.ajax({
+               type: "POST",
+               url: url,
+               data: { user_id: id, password: newPassword },
+               //contentType: "application/json; charset=utf-8",
+               //dataType: "json",
+               beforeSend: function (xhr, settings) {
+                  xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+               },
+               success: function (response, textStatus, xhr) {
+
+                  setTimeout(() => {
+                     waitDialog.modal('hide');
+
+                     if (response.status == false) {
+                        toastr.error(response.message);
+                     }
+                     else {
+                        toastr.success("Password has been updated");
+                     }
+
+                  }, 1000);
+
+               },
+            });
+         };
+
          var registerEvent = function () {
 
             $("div").on("click", ".link-new-user", function (e) {
@@ -659,6 +711,19 @@
                      deleteUser(id);
                   }
                });
+            });
+
+            $("div").on("click", ".link-password-user", function (e) {
+               e.stopPropagation();
+
+               var id = $(this).attr("id");
+
+               bootbox.prompt('Enter new password!',
+                  function (result) {
+                     if (result) {
+                        resetUserPassword(id, result);
+                     }
+                  });
             });
 
             $("div").on("click", "#btnAssignCourse", function (e) {
