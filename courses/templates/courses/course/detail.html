@@ -51,8 +51,6 @@ Money Back Guarante{% endblock %}
 {% cache 500 coursedetails course.slug %}
 <section class="page-wrapper edutim-course-single course-single-style-3" time="{% now 'SHORT_DATETIME_FORMAT' %}">
 
- 
-
     <div class="course-single-wrapper">
 
         {% if not object.is_free %}
@@ -118,7 +116,10 @@ Money Back Guarante{% endblock %}
                     <div class="course-single-header white-text">
                         <span class="subheading">{{ subject }}</span>
                         <h3 class="single-course-title">{{ object.title }}</h3>
-                        <p>{{ object.overview |slice:"0:185" }}</p>
+                        <p class="d-none">{{ object.overview |slice:"0:185" }}</p>
+                        <p>
+                            This Certificate of Training shall not imply or suggest that OSHA Outreach Training Program training was completed or will result in in individual being certified. Students are not eligible to request and/or receive an OSHA student completion card.
+                        </p>
                         <div class="d-flex align-items-center ">
                             <div class="single-top-meta">
                                 <i class="fa fa-book"></i>
@@ -158,13 +159,7 @@ Money Back Guarante{% endblock %}
         <div class="row">
             <div class="col-lg-8">
 
-                {% if object.video %}
-                <div class="single-course-details mb-5">
-                    <div id="videoTag" data-value="{{ object.video }}"></div>
-                </div>
-                {% endif %}
-
-                <div class="single-course-details mb-5">
+                <div class="single-course-details mb-5 d-none">
                     <h4 class="course-title">Description</h4>
                     <p>
                         {{ object.overview }}
@@ -201,7 +196,7 @@ Money Back Guarante{% endblock %}
                 </div>
 
                 {% if object.features.first.notes %}
-                <div class="single-course-details mb-5">
+                <div class="single-course-details mb-5 d-none">
                     <h4 class="course-title">Course Features:</h4>
                     <div>
                         {{ object.features.first.notes | safe }}
@@ -209,7 +204,7 @@ Money Back Guarante{% endblock %}
                 </div>
                 {% endif %}
 
-                <div class="single-course-details mb-5">
+                <div class="single-course-details mb-5 d-none">
                     <h4 class="course-title">
                         Learning Outcomes:</h4>
                     <div>
@@ -217,7 +212,7 @@ Money Back Guarante{% endblock %}
                     </div>
                 </div>
 
-                <div class="single-course-details mb-5">
+                <div class="single-course-details mb-5 d-none">
                     <h4 class="course-title">
                         Completion Requirements:</h4>
                     <div>
@@ -229,13 +224,9 @@ Money Back Guarante{% endblock %}
             <div class="col-lg-4">
                 <div class="course-sidebar">
                     <div class="course-single-thumb">
-                        {% if object.image %}
-                        <img data-src="{{ object.image }}" alt="" class="img-fluid w-100 lazy" width="320"
-                            height="278" />
-                        {% else %}
+                     
                         <img data-src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg"
-                            width="320" height="278" alt="" class="img-fluid w-100 lazy" />
-                        {% endif %}
+                        width="320" height="278" alt="" class="img-fluid w-100 lazy" />
                         <div class="course-price-wrapper">
                             <div class="course-price">
 
@@ -284,14 +275,14 @@ Money Back Guarante{% endblock %}
                         </div>
                     </div>
 
-                    <div class="course-widget course-details-info">
+                    <div class="course-widget course-details-info d-none">
                         <h4 class="course-title">Credits </h4>
                         <p>
                             {{ object.features.first.schedule  |safe }}
                         </p>
                     </div>
 
-                    <div class="course-widget course-details-info">
+                    <div class="course-widget course-details-info d-none">
                         <h4 class="course-title">This Course Includes</h4>
                         <ul>
                             <li>
