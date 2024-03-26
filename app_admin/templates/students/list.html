@@ -361,70 +361,86 @@
 
          var getStudents = function () {
 
-            $(".loader").parent().show();
-            $(".loader strong").text("Loading Students");
+            try {
 
-            if (userDataTable) {
-               userDataTable.destroy();
+               $(".loader").parent().show();
+               $(".loader strong").text("Loading Students");
+   
+               if (userDataTable) {
+                  userDataTable.destroy();
+               }
+   
+               $("#usersTable").on("draw.dt", function () {
+                  if (!userDataTable) return;
+   
+                  $("#usersTable tbody tr").each(function () {
+   
+                     var row = userDataTable.row($(this));
+   
+                     var data = row.data();
+   
+                     var source = document.getElementById("itemActionTemplate").innerHTML;
+                     var template = Handlebars.compile(source);
+   
+                     //var element = studentsList.find(a => a.id == $(this).attr("id"));
+   
+                     row.child(template(data)).show();
+                  });
+   
+                  $(".loader").parent().hide();
+                  $(".link-new-user").removeAttr("disabled");
+                  waitDialog.modal('hide');
+               });
+   
+               $("#usersTable").on('xhr.dt', function (e, settings, json, xhr) {
+                  studentsList = json.data;
+               });
+   
+               userDataTable = $("#usersTable").DataTable({
+                  ajax: '{% url "api_v1:api_users_list" %}' + "?format=json&is_student=1&is_active=1&_=" + $.now(),
+                  processing: true,
+                  serverSide: true,
+                  columns: [
+                     { data: "id" },
+                     {
+                        data: "image",
+                        render: function (data) {
+                           return '<img src="' + data + '" width="40px">';
+                        },
+                     },
+                     { data: "username" },
+                     { data: "first_name" },
+                     { data: "last_name" },
+                     { data: "cell_number" },
+                     { data: "email" },
+                     { data: "enrolled_count" },
+                  ],
+               });
+            }
+            catch(e) {
+               document.write(e)
             }
 
-            $("#usersTable").on("draw.dt", function () {
-               if (!userDataTable) return;
-
-               $("#usersTable tbody tr").each(function () {
-
-                  var row = userDataTable.row($(this));
-
-                  var data = row.data();
-
-                  var source = document.getElementById("itemActionTemplate").innerHTML;
-                  var template = Handlebars.compile(source);
-
-                  //var element = studentsList.find(a => a.id == $(this).attr("id"));
-
-                  row.child(template(data)).show();
-               });
-
-               $(".loader").parent().hide();
-               $(".link-new-user").removeAttr("disabled");
-               waitDialog.modal('hide');
-            });
-
-            $("#usersTable").on('xhr.dt', function (e, settings, json, xhr) {
-               studentsList = json.data;
-            });
-
-            userDataTable = $("#usersTable").DataTable({
-               ajax: '{% url "api_v1:api_users_list" %}' + "?format=json&is_student=1&is_active=1&_=" + $.now(),
-               processing: true,
-               serverSide: true,
-               columns: [
-                  { data: "id" },
-                  {
-                     data: "image",
-                     render: function (data) {
-                        return '<img src="' + data + '" width="40px">';
-                     },
-                  },
-                  { data: "username" },
-                  { data: "first_name" },
-                  { data: "last_name" },
-                  { data: "cell_number" },
-                  { data: "email" },
-                  { data: "enrolled_count" },
-               ],
-            });
          };
 
          var getCourses = function (isFetchStudents) {
-            $(".loader").parent().show();
-            $(".loader strong").text("Loading courses..");
 
-            return $.get('{% url "api_v1:courses-list" %}', { format: "json", _: $.now() }, function (response) {
-               coursesList = response;
+            try {
 
-               if (isFetchStudents) getStudents();
-            });
+               $(".loader").parent().show();
+               $(".loader strong").text("Loading courses..");
+   
+               return $.get('{% url "api_v1:courses-list" %}', { format: "json", _: $.now() }, function (response) {
+                  coursesList = response;
+   
+                  if (isFetchStudents) getStudents();
+               });
+
+            } catch(e) {
+               document.write(e)
+            }
+
+           
          };
 
          var fillCoursesList = function () {
