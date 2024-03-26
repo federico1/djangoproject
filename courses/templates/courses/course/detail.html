@@ -193,8 +193,14 @@ Money Back Guarante{% endblock %}
                    
                 </div>
 
-                {% if object.features.first.notes %}
                 <div class="single-course-details mb-5">
+                    <div class="alert alert-info">
+                        This Certificate of Training shall not imply or suggest that OSHA Outreach Training Program training was completed or will result in in individual being certified. Students are not eligible to request and/or receive an OSHA student completion card.
+                    </div>
+                </div>
+
+                {% if object.features.first.notes %}
+                <div class="single-course-details mb-5 d-none">
                     <h4 class="course-title">Course Features:</h4>
                     <div>
                         {{ object.features.first.notes | safe }}
@@ -218,11 +224,7 @@ Money Back Guarante{% endblock %}
                     </div>
                 </div>
 
-                <div class="single-course-details mb-5">
-                    <small>
-                        This Certificate of Training shall not imply or suggest that OSHA Outreach Training Program training was completed or will result in in individual being certified. Students are not eligible to request and/or receive an OSHA student completion card.
-                    </small>
-                </div>
+             
 
             </div>
             <div class="col-lg-4">
