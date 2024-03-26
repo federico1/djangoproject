@@ -117,9 +117,7 @@ Money Back Guarante{% endblock %}
                         <span class="subheading">{{ subject }}</span>
                         <h3 class="single-course-title">{{ object.title }}</h3>
                         <p class="d-none">{{ object.overview |slice:"0:185" }}</p>
-                        <p>
-                            This Certificate of Training shall not imply or suggest that OSHA Outreach Training Program training was completed or will result in in individual being certified. Students are not eligible to request and/or receive an OSHA student completion card.
-                        </p>
+                      
                         <div class="d-flex align-items-center ">
                             <div class="single-top-meta">
                                 <i class="fa fa-book"></i>
@@ -196,7 +194,7 @@ Money Back Guarante{% endblock %}
                 </div>
 
                 {% if object.features.first.notes %}
-                <div class="single-course-details mb-5 d-none">
+                <div class="single-course-details mb-5">
                     <h4 class="course-title">Course Features:</h4>
                     <div>
                         {{ object.features.first.notes | safe }}
@@ -204,7 +202,7 @@ Money Back Guarante{% endblock %}
                 </div>
                 {% endif %}
 
-                <div class="single-course-details mb-5 d-none">
+                <div class="single-course-details mb-5">
                     <h4 class="course-title">
                         Learning Outcomes:</h4>
                     <div>
@@ -218,6 +216,12 @@ Money Back Guarante{% endblock %}
                     <div>
                         {{ object.features.first.completion_requirements  |safe }}
                     </div>
+                </div>
+
+                <div class="single-course-details mb-5">
+                    <small>
+                        This Certificate of Training shall not imply or suggest that OSHA Outreach Training Program training was completed or will result in in individual being certified. Students are not eligible to request and/or receive an OSHA student completion card.
+                    </small>
                 </div>
 
             </div>
