@@ -42,17 +42,19 @@
         // }
     });
 
+    countdownTimeStart();
+
     $.get('/api/subjects/', {}, function (response) {
         renderTopSubjects(response);
-        subjestList= response;
+        subjestList = response;
     });
 
-    $("#txtSearchSubjects").keyup(function(e){
+    $("#txtSearchSubjects").keyup(function (e) {
 
         var val = $.trim($(this).val());
 
-        if(val) {
-            var filter = subjestList.filter(a=>a.title.toLowerCase().indexOf(val) >= 0);
+        if (val) {
+            var filter = subjestList.filter(a => a.title.toLowerCase().indexOf(val) >= 0);
             renderTopSubjects(filter);
         }
         else {
@@ -61,7 +63,7 @@
 
     });
 
-    $("#btnClearSubjectSearch").click(function(e){
+    $("#btnClearSubjectSearch").click(function (e) {
 
         $("#txtSearchSubjects").val(null);
 
@@ -71,14 +73,44 @@
 
     function renderTopSubjects(dataList) {
         $("div[aria-labelledby='navbar3'] #listItems").empty();
-        $(dataList).each(function(ix , item){
+        $(dataList).each(function (ix, item) {
             var link = $("<a />", {
                 class: "dropdown-item",
-                href: '/course/subject/' + item.slug+'/',
-                text:item.title + " ("+item.course_count+" courses)"
+                href: '/course/subject/' + item.slug + '/',
+                text: item.title + " (" + item.course_count + " courses)"
             });
             $("div[aria-labelledby='navbar3'] #listItems").append(link);
-         });
+        });
+    };
+
+    function countdownTimeStart() {
+
+        var countDownDate = new Date('April 2, 2024 24:00:00').getTime();
+
+        // Update the count down every 1 second
+        var x = setInterval(function () {
+
+            // Get todays date and time
+            var now = new Date().getTime();
+
+            // Find the distance between now an the count down date
+            var distance = countDownDate - now;
+
+            // Time calculations for days, hours, minutes and seconds
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Output the result in an element with id="demo"
+            document.getElementById("disountTime").innerHTML = hours + "h "
+                + minutes + "m " + seconds + "s ";
+
+            if (distance < 0) {
+                clearInterval(x);
+                $("#discountHeader").remove();
+            }
+
+        }, 1000);
     }
 
 })(jQuery);
@@ -100,10 +132,9 @@ const Toast = Swal.mixin({
     position: 'top-right',
     iconColor: 'white',
     customClass: {
-      popup: 'colored-toast'
+        popup: 'colored-toast'
     },
     showConfirmButton: false,
     timer: 1500,
     timerProgressBar: true
-  });
-  
+});
