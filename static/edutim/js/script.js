@@ -44,7 +44,7 @@ var subjestList = [];
         // }
     });
 
-    countdownTimeStart();
+    //countdownTimeStart();
 
     $.get('/api/subjects/', {}, function (response) {
         renderTopSubjects(response);
