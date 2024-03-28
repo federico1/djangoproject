@@ -3,6 +3,8 @@
 (function ($) {
     "use strict";
 
+    var subjestList = [];
+
     $(window).scroll(function () {
         var window_top = $(window).scrollTop() + 1;
 
@@ -41,18 +43,43 @@
     });
 
     $.get('/api/subjects/', {}, function (response) {
-     $(response).each(function(ix , item){
-        var link = $("<a />", {
-            class: "dropdown-item",
-            href: '/course/subject/' + item.slug+'/',
-            text:item.title + " ("+item.course_count+" courses)"
-        });
-        $("div[aria-labelledby='navbar3']").append(link);
-     });
-
-      
+        renderTopSubjects(response);
+        subjestList= response;
     });
 
+    $("#txtSearchSubjects").keyup(function(e){
+
+        var val = $.trim($(this).val());
+
+        if(val) {
+            var filter = subjestList.filter(a=>a.title.toLowerCase().indexOf(val) >= 0);
+            renderTopSubjects(filter);
+        }
+        else {
+            renderTopSubjects(subjestList);
+        }
+
+    });
+
+    $("#btnClearSubjectSearch").click(function(e){
+
+        $("#txtSearchSubjects").val(null);
+
+        renderTopSubjects(subjestList);
+
+    });
+
+    function renderTopSubjects(dataList) {
+        $("div[aria-labelledby='navbar3'] #listItems").empty();
+        $(dataList).each(function(ix , item){
+            var link = $("<a />", {
+                class: "dropdown-item",
+                href: '/course/subject/' + item.slug+'/',
+                text:item.title + " ("+item.course_count+" courses)"
+            });
+            $("div[aria-labelledby='navbar3'] #listItems").append(link);
+         });
+    }
 
 })(jQuery);
 

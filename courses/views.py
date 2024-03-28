@@ -87,6 +87,10 @@ class CourseListView(TemplateResponseMixin, View):
                 courses = all_courses.filter(
                     owner=int(request.GET.get('teacher')))
 
+            if request.GET.get('is_premium') is not None:
+                courses = all_courses.filter(
+                    is_free=False)
+
         # instructors = User.objects.annotate(
         #                    total_courses=Count('courses_created')).filter(total_courses__gt=0)
 

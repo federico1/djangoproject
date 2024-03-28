@@ -172,7 +172,7 @@
                <form method="get" action="{% url 'courses_list' %}">
                   <div class="input-group top-search-wrap">
                      <input type="text" class="form-control rounded-0" id="textQ" name="q"
-                        placeholder="Search courses" />
+                        placeholder="What do you want to learn?" />
                      <div class="input-group-append">
 
                         <button class="btn btn-light d-none btn-loader" type="button" disabled>
@@ -215,11 +215,28 @@
                      </li>
 
                      <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="{% url 'courses_list' %}" id="navbar3" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="{% url 'courses_list' %}" id="navbar3" role="button" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
                            Courses<i class="fa fa-angle-down"></i>
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="navbar3"></div>
+                        <div class="dropdown-menu" aria-labelledby="navbar3">
+                     
+                           <div class="p-2 mb-2 bg-light">
+                     
+                              <div class="input-group mb-3">
+                                 <input type="text" id="txtSearchSubjects" class="form-control" placeholder="Search Categories" />
+                                 <div class="input-group-append">
+                                    <button class="btn btn-outline-dark" id="btnClearSubjectSearch" type="button">
+                                       <i class="fa fa-times"></i>
+                                    </button>
+                                 </div>
+                              </div>
+   
+                           </div>
+                           <div id="listItems" style="max-height: 500px;overflow: auto;">
+                           Loading..
+                           </div>
+                        </div>
                      </li>
 
                      <li class="nav-item">
@@ -687,6 +704,7 @@
       }
 
       autocomplete(document.getElementById("textQ"), []);
+      
 
    </script>
    {% block scripts %}{% endblock %}
