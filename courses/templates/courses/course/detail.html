@@ -193,11 +193,11 @@ Money Back Guarante{% endblock %}
                    
                 </div>
 
-                <div class="single-course-details mb-5">
+                {% comment %} <div class="single-course-details mb-5">
                     <div class="alert alert-info">
                         This Certificate of Training shall not imply or suggest that OSHA Outreach Training Program training was completed or will result in in individual being certified. Students are not eligible to request and/or receive an OSHA student completion card.
                     </div>
-                </div>
+                </div> {% endcomment %}
 
                 {% if object.features.first.notes %}
                 <div class="single-course-details mb-5">
