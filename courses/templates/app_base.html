@@ -150,25 +150,14 @@
 
       <div class="site-navigation main_menu">
          <nav class="navbar navbar-expand-lg">
-            <div class="container justify-content-between d-none">
-               <div class="row">
-                  <div class="col-md-6">
-                     <a class="navbar-brand" href="/" aria-label="Home">
-                        <img src="{% static 'edutim/images/logo100.png' %}" width="100" height="100"
-                           alt="Make Safety Training Happen" class="img-fluid" />
-                     </a>
-                     <span class="top-logo-tagline">Make Safety Training Happen</span>
-                  </div>
-               </div>
-            </div>
-
+         
             <div class="container justify-content-start1">
 
                <a class="navbar-brand" href="/" aria-label="Home">
                   <img src="{% static 'edutim/images/logo100.png' %}" width="100" height="100"
                      alt="Make Safety Training Happen" class="img-fluid" />
                </a>
-               <h3 class="mr-auto">Make Safety Training Happen</h3>
+               <span class="mr-auto top-logo-tagline d-none d-md-block d-lg-block d-xl-block">Make Safety Training Happen</span>
 
                <form method="get" action="{% url 'courses_list' %}">
                   <div class="input-group top-search-wrap">
