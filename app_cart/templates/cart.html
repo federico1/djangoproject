@@ -257,7 +257,9 @@
                 $(".sub-total-price").html(totalPrice);
                 $(".total-price").html(totalPrice);
 
-                $(".top-cart-count").html(count);
+                var countText = count <=0 || count > 1 ? " items ": " item";
+
+                $(".top-cart-count").html(count + countText);
 
                 if (count > 0) {
                     $(".wc-proceed-to-checkout").removeClass('d-none');

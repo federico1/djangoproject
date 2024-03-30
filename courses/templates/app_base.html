@@ -248,9 +248,9 @@
                   <ul class="header-contact-right">
                      <li>
                         <a title="Cart" href="{% url 'cart_detail' %}?time={% now "U" %}" class="header-cart" alt="My Cart" aria-label="My Cart">
-                           Cart <i class="fa fa-shopping-cart"></i>
+                            My Cart <i class="fa fa-shopping-cart"></i>
                         </a>
-                        <span class="top-cart-count">0</span>
+                        <span class="top-cart-count">0 items</span>
                      </li>
 
                   </ul>
@@ -504,7 +504,10 @@
                } else {
                   count = memoryData["_ps_"].length;
                }
-               $(".top-cart-count").html(count);
+
+               var countText = count <=0 || count > 1 ? " items ": " item";
+
+               $(".top-cart-count").html(count + countText);
             };
 
             var getMemoryData = function () {
