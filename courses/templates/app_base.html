@@ -99,7 +99,7 @@
                      </li>
                      <li>
                         <span>Email :</span>
-                        <a href="mailto:mail@pdhsafety.com">mail@pdhsafety.com</a>
+                        <a title="mail@pdhsafety.com" href="mailto:mail@pdhsafety.com">mail@pdhsafety.com</a>
                      </li>
                   </ul>
                </div>
@@ -109,34 +109,34 @@
                         <ul>
                            <li>
                               {% if request.user.is_authenticated %}
-                              <a href="#">Welcome, {{ request.user.first_name }}</a>
+                              <a title="Welcome" href="#">Welcome, {{ request.user.first_name }}</a>
                               {% else %}
                              
-                              <a href="{% url 'student_registration' %}" aria-label="Register">Student Register</a>
+                              <a title="Student Register" href="{% url 'student_registration' %}" aria-label="Register">Student Register</a>
                               {% endif %}
                            </li>
                         </ul>
                      </div>
                      <div class="header-btn">
                         {% if request.user.is_authenticated %} {% if request.user.is_teacher == True %}
-                        <a href="{% url 'teacher_dashboard' %}" class="btn btn-main btn-small"
+                        <a title="Dashboard" href="{% url 'teacher_dashboard' %}" class="btn btn-main btn-small"
                            aria-label="Teacher Dashboard">Teacher Dashboard</a>
                         {% endif %} {% if request.user.is_student == True %}
-                        <a href="{% url 'student_dashboard' %}" class="btn btn-main btn-small"
+                        <a title="Dashboard" href="{% url 'student_dashboard' %}" class="btn btn-main btn-small"
                            aria-label="Student Dashboard">Student Dashboard</a>
                            {% endif %} {% if request.user.is_business == True %}
-                           <a href="{% url 'business_dashboard' %}" class="btn btn-main btn-small"
+                           <a title="Dashboard" href="{% url 'business_dashboard' %}" class="btn btn-main btn-small"
                               aria-label="Business Dashboard">My Dashboard</a>
                         {% endif %} {% if request.user.is_superuser == True %}
-                        <a href="{% url 'admin_dashboard' %}" class="btn btn-main btn-small"
+                        <a title="Dashboard" href="{% url 'admin_dashboard' %}" class="btn btn-main btn-small"
                            aria-label="Admin Dashboard">Admin Dashboard</a>
                         {% endif %}
-                        <a href="{% url 'logout' %}?v={% now 'M-d-Y-H-i-s' %}" class="btn btn-main btn-small"
+                        <a title="Dashboard" href="{% url 'logout' %}?v={% now 'M-d-Y-H-i-s' %}" class="btn btn-main btn-small"
                            aria-label="Logout">
                            <i class="fa fa-sign-out-alt"></i>
                         </a>
                         {% else %}
-                        <a href="{% url 'login' %}" class="btn btn-main btn-small" aria-label="Login"> <i
+                        <a title="Dashboard" href="{% url 'login' %}" class="btn btn-main btn-small" aria-label="Login"> <i
                               class="fa fa-user mr-2"></i>Login </a>
                         {% endif %}
                      </div>
@@ -153,9 +153,9 @@
          
             <div class="container justify-content-start1">
 
-               <a class="navbar-brand" href="/" aria-label="Home">
+               <a title="PdhSafety" class="navbar-brand" title="Make Safety Training Happen" href="/" aria-label="Home">
                   <img src="{% static 'edutim/images/logo100.png' %}" width="100" height="100"
-                     alt="Make Safety Training Happen" class="img-fluid" />
+                     alt="Make Safety Training Happen" title="PdhSafety" class="img-fluid" />
                </a>
                <span class="mr-auto top-logo-tagline d-none d-md-block d-lg-block d-xl-block">Make Safety Training Happen</span>
 
@@ -193,7 +193,7 @@
                   <span class="fa fa-bars"></span>
                </button>
 
-               <a class="navbar-toggler ml-auto" href="{% url 'cart_detail' %}?time={% now "U" %}">
+               <a title="Cart" class="navbar-toggler ml-auto" href="{% url 'cart_detail' %}?time={% now "U" %}">
                   <span class="fa fa-shopping-cart">Cart <span class="top-cart-count"></span> </span>
                </a>
 
@@ -201,11 +201,11 @@
                <div class="collapse navbar-collapse justify-content-center" id="navbarMenu">
                   <ul class="navbar-nav">
                      <li class="nav-item">
-                        <a class="nav-link" href="/" aria-label="Home"> Home </a>
+                        <a title="Home" class="nav-link" href="/" aria-label="Home"> Home </a>
                      </li>
 
                      <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="{% url 'courses_list' %}" id="navbar3" role="button" data-toggle="dropdown"
+                        <a title="Courses" class="nav-link dropdown-toggle" href="{% url 'courses_list' %}" id="navbar3" role="button" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                            Courses<i class="fa fa-angle-down"></i>
                         </a>
@@ -230,21 +230,21 @@
                      </li>
 
                      <li class="nav-item">
-                        <a class="nav-link" href="/packages/" aria-label="Packages"> Packages </a>
+                        <a title="Packages" class="nav-link" href="/packages/" aria-label="Packages"> Packages </a>
                      </li>
 
                      <li class="nav-item">
-                        <a class="nav-link" href="/sst-verify/"> Training Verification </a>
+                        <a title="Training Verification" class="nav-link" href="/sst-verify/"> Training Verification </a>
                      </li>
 
                      <li class="nav-item">
-                        <a href="/contact/" class="nav-link"> Contact </a>
+                        <a title="Contact" href="/contact/" class="nav-link"> Contact </a>
                      </li>
                   </ul>
 
                   <ul class="header-contact-right">
                      <li>
-                        <a href="{% url 'cart_detail' %}?time={% now "U" %}" class="header-cart" alt="My Cart" aria-label="My Cart">
+                        <a title="Cart" href="{% url 'cart_detail' %}?time={% now "U" %}" class="header-cart" alt="My Cart" aria-label="My Cart">
                            Cart <i class="fa fa-shopping-cart"></i>
                         </a>
                         <span class="top-cart-count">0</span>
@@ -295,25 +295,25 @@
                   </p>
                   <ul class="list-inline footer-socials">
                      <li class="list-inline-item">
-                        <a target="_blank"
+                        <a title="facebook" target="_blank"
                            href="https://www.facebook.com/CSP-Exam-Prep-103671192415440/?ref=pages_you_manage"
                            aria-label="Facebook">
                            <i class="fab fa-facebook-f"></i>
                         </a>
                      </li>
-                     <li class="list-inline-item">
-                        <a href="https://twitter.com/FedericoRoca007" target="_blank" aria-label="Twitter">
+                     <li title="twitter" class="list-inline-item">
+                        <a title="twitter" href="https://twitter.com/FedericoRoca007" target="_blank" aria-label="Twitter">
                            <i class="fab fa-twitter"></i>
                         </a>
                      </li>
                      <li class="list-inline-item">
-                        <a target="_blank" aria-label="Linkedin"
+                        <a title="linkedin" target="_blank" aria-label="Linkedin"
                            href="https://www.linkedin.com/in/federico-roca-asp-64aa3a54/">
                            <i class="fab fa-linkedin"></i>
                         </a>
                      </li>
                      <li class="list-inline-item" aria-label="Pinterest">
-                        <a href="https://www.instagram.com/federico.roca2020/" target="_blank" aria-label="Twitter">
+                        <a title="instagram" class="pinterest" href="https://www.instagram.com/federico.roca2020/" target="_blank" aria-label="Twitter">
                            <i class="fab fa-pinterest"></i>
                         </a>
                      </li>
@@ -330,29 +330,29 @@
                      {% if not request.user.is_authenticated %}
 
                      <li>
-                        <a href="{% url 'login' %}">Login</a>
+                        <a title="Login" href="{% url 'login' %}">Login</a>
                      </li>
 
                      <li>
-                        <a  href="{% url 'student_registration' %}">Register</a>
+                        <a title="Register" href="{% url 'student_registration' %}">Register</a>
                      </li>
                      <li>
-                        <a  href="{% url 'company_registration' %}">Business Register</a>
+                        <a title="Business Register" href="{% url 'company_registration' %}">Business Register</a>
                      </li>
                     
                      {% endif %}
 
                      <li>
-                        <a href="/privacy-policy/">Privacy Policy</a>
+                        <a title="Privacy Policy" href="/privacy-policy/">Privacy Policy</a>
                      </li>
                      <li>
-                        <a href="/terms-conditions/">Terms Conditions</a>
+                        <a title="Terms Conditions" href="/terms-conditions/">Terms Conditions</a>
                      </li>
                      <li>
-                        <a href="/refund-policy/">Refund Policy</a>
+                        <a title="Refund Policy" href="/refund-policy/">Refund Policy</a>
                      </li>
                      <li>
-                        <a href="/faq/">FAQs</a>
+                        <a title="FAQs" href="/faq/">FAQs</a>
                      </li>
                   </ul>
                </div>
@@ -363,13 +363,13 @@
                   <h5 class="widget-title">Company</h5>
                   <ul class="list-unstyled footer-links">
                      <li>
-                        <a href="/about/">About us</a>
+                        <a title="About us" href="/about/">About us</a>
                      </li>
                      <li>
-                        <a href="/contact/">Contact us</a>
+                        <a title="Contact us" href="/contact/">Contact us</a>
                      </li>
                      <li>
-                        <a href="/sst-verify/">Training Verification</a>
+                        <a title="Training Verification" href="/sst-verify/">Training Verification</a>
                      </li>
                   </ul>
                </div>
@@ -391,7 +391,7 @@
                         <i class="far fa-envelope"></i>
                         <div>
                            <strong>Email Address</strong>
-                           <a href="mailto:mail@pdhsafety.com">mail@pdhsafety.com</a>
+                           <a title="mail@pdhsafety.com" href="mailto:mail@pdhsafety.com">mail@pdhsafety.com</a>
                         </div>
                      </li>
                      <li>
@@ -420,7 +420,7 @@
                   <div class="copyright text-lg-center">
                      <p>Copyright © 2021 All rights reserved | NYC Construction Safety Training, LLC</p>
                      <p>
-                        <a href="https://www.linkedin.com/in/shoaibijaz/" target="_blank">DEVELOPED BY SHAH</a>
+                        <a class="DEVELOPED BY" title="DEVELOPED BY" href="https://www.linkedin.com/in/shoaibijaz/" target="_blank">DEVELOPED BY SHAH</a>
                      </p>
                   </div>
                </div>
@@ -430,7 +430,7 @@
    </section>
 
    <div class="fixed-btm-top">
-      <a href="#top-header" class="js-scroll-trigger scroll-to-top" aria-label="Scroll Top" alt="Scroll Top">
+      <a title="Scroll Top" href="#top-header" class="js-scroll-trigger scroll-to-top" aria-label="Scroll Top" alt="Scroll Top">
          <i class="fa fa-angle-up"></i>
       </a>
    </div>

@@ -15,13 +15,13 @@
                         <form action="" class="form-search-banner">
                             <input type="text" class="form-control" id="textQ2"
                                 placeholder="What do you want to learn?">
-                            <a style="padding:16px 30px;" href="#" class="btn btn-main">Search<i
+                            <a title="Search" style="padding:16px 30px;" href="#" class="btn btn-main">Search<i
                                     class="fa fa-search ml-2"></i> </a>
                         </form>
                     </div>
                     <div class="banner-cat">
                         <span>
-                            <a class="text-white" href="#whyyouneed">Benefits of Online Construction Safety Certification?</a>
+                            <a title="Benefits of Online Construction Safety Certification?" class="text-white" href="#whyyouneed">Benefits of Online Construction Safety Certification?</a>
                         </span>
                       
                     </div>
@@ -30,7 +30,7 @@
             <div class="col-lg-5 col-xl-5">
                 <div class="banner-img3">
                     <div class="img-block p-5">
-                        <img src="{% static 'edutim/images/home.jpg' %}" alt="" class="img-fluid">
+                        <img src="{% static 'edutim/images/home.jpg' %}" title="Benefits of Online Construction Safety Certification?" alt="Benefits!" class="img-fluid">
                     </div>
                 </div>
             </div>
@@ -112,7 +112,7 @@
 
             <div class="col-lg-6">
                 <div class="course-btn text-lg-right">
-                    <a href="/courses?is_premium=1" class="btn btn-main">
+                    <a title="All Courses" href="/courses?is_premium=1" class="btn btn-main">
                         <i class="fa fa-store mr-2"></i>All Courses</a>
                 </div>
             </div>
@@ -136,10 +136,10 @@
                     <div class="row align-items-center">
                         <div class="col-lg-4">
                             <div class="course-img">
-                                <a href="{% url 'course_detail' course.slug %}">
+                                <a title="{{ course.title }}" href="{% url 'course_detail' course.slug %}">
                                     <img width="146" height="182"
                                         data-src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg"
-                                        alt="image" class="lazy img-fluid rounded-0" />
+                                        alt="image" title="{{ course.title }}" class="lazy img-fluid rounded-0" />
                                 </a>
                             </div>
                         </div>
@@ -157,7 +157,7 @@
                                 </div>
 
                                 <h4>
-                                    <a href="{% url 'course_detail' course.slug %}">
+                                    <a title="{{ course.title }}" href="{% url 'course_detail' course.slug %}">
                                         {{ course.title }}
                                     </a>
                                 </h4>
@@ -179,7 +179,7 @@
                                     </div>
 
                                     <div class="buy-btn">
-                                        <a href="{% url 'course_detail' course.slug %}"
+                                        <a title="Click to view details" href="{% url 'course_detail' course.slug %}"
                                             class="btn btn-main-2 btn-small">Details</a>
                                     </div>
                                 </div>
@@ -265,49 +265,25 @@
 
                 <div class="mb-2" id="subjectslistseop">
 
-                    <a href="/course/subject/asp-exam-prep/" class="badge badge-primary px-2 mx-2">ASP Exam Prep</a><a
-                        href="/course/subject/chst-exam-prep/" class="badge badge-primary px-2 mx-2">CHST Exam
-                        Prep</a><a href="/course/subject/competent-person-training/"
-                        class="badge badge-primary px-2 mx-2">Competent Person Training</a><a
-                        href="/course/subject/csp-exam-prep/" class="badge badge-primary px-2 mx-2">CSP Exam Prep</a><a
-                        href="/course/subject/em-385-training/" class="badge badge-primary px-2 mx-2">EM 385
-                        Training</a><a href="/course/subject/em-385-1-1-training/"
-                        class="badge badge-primary px-2 mx-2">EM-385-1-1 Training</a><a
-                        href="/course/subject/epa-hazwoper-training/" class="badge badge-primary px-2 mx-2">EPA HAZWOPER
-                        Training</a><a href="/course/subject/fall-protection-training-online/"
-                        class="badge badge-primary px-2 mx-2">Fall Protection Training</a><a
-                        href="/course/subject/fall-protection-training-free/" class="badge badge-primary px-2 mx-2">Fall
-                        Protection Training Free</a><a href="/course/subject/free-hazcom-training/"
-                        class="badge badge-primary px-2 mx-2">Free HAZCOM Training</a><a
-                        href="/course/subject/free-online-construction-safety-training-courses/"
-                        class="badge badge-primary px-2 mx-2">Free Online Construction Safety Training Courses</a><a
-                        href="/course/subject/free-osha-certification/" class="badge badge-primary px-2 mx-2">Free OSHA
-                        Certification</a><a href="/course/subject/free-osha-classes-online/"
-                        class="badge badge-primary px-2 mx-2">Free OSHA Classes Online</a><a
-                        href="/course/subject/free-safety-training-online/" class="badge badge-primary px-2 mx-2">Free
-                        Safety Training</a><a href="/course/subject/free-scaffold-training/"
-                        class="badge badge-primary px-2 mx-2">Free Scaffold Training</a><a
-                        href="/course/subject/HAZWOPER-training-online/" class="badge badge-primary px-2 mx-2">HAZWOPER
-                        Training Online</a><a href="/course/subject/osha-competent-person-training/"
-                        class="badge badge-primary px-2 mx-2">OSHA Competent Person Training</a><a
-                        href="/course/subject/osha-hazwoper-certification/" class="badge badge-primary px-2 mx-2">OSHA
-                        HAZWOPER Certification</a><a href="/course/subject/osha-scaffold-training/"
-                        class="badge badge-primary px-2 mx-2">OSHA Scaffold Training</a><a
-                        href="/course/subject/permit-required-confined-space-training/"
-                        class="badge badge-primary px-2 mx-2">Permit Required Confined Space Training</a><a
-                        href="/course/subject/supported-scaffold-certification/"
-                        class="badge badge-primary px-2 mx-2">Supported Scaffold Certification</a><a
-                        href="/course/subject/supported-scaffold-training/"
-                        class="badge badge-primary px-2 mx-2">Supported Scaffold Training</a><a
-                        href="/course/subject/suspended-scaffold-training/"
-                        class="badge badge-primary px-2 mx-2">Suspended Scaffold Training</a><a
-                        href="/course/subject/suspended-scaffold-training-online/"
-                        class="badge badge-primary px-2 mx-2">Suspended Scaffold Training Online</a><a
-                        href="/course/subject/swing-stage-certification/" class="badge badge-primary px-2 mx-2">Swing
-                        Stage Certification</a><a href="/course/subject/swing-staging-training/"
-                        class="badge badge-primary px-2 mx-2">Swing Staging Training</a><a
-                        href="/course/subject/trenching-and-excavation-safety/"
-                        class="badge badge-primary px-2 mx-2">Trenching and Excavation Safety</a>
+                    <a href="/course/subject/asp-exam-prep/" class="badge badge-primary px-2 mx-2" title="ASP Exam Prep">ASP Exam Prep</a><a href="/course/subject/chst-exam-prep/" class="badge badge-primary px-2 mx-2" title="CHST Exam
+                        Prep">CHST Exam
+                        Prep</a><a href="/course/subject/competent-person-training/" class="badge badge-primary px-2 mx-2" title="Competent Person Training">Competent Person Training</a><a href="/course/subject/csp-exam-prep/" class="badge badge-primary px-2 mx-2" title="CSP Exam Prep">CSP Exam Prep</a><a href="/course/subject/em-385-training/" class="badge badge-primary px-2 mx-2" title="EM 385
+                        Training">EM 385
+                        Training</a><a href="/course/subject/em-385-1-1-training/" class="badge badge-primary px-2 mx-2" title="EM-385-1-1 Training">EM-385-1-1 Training</a><a href="/course/subject/epa-hazwoper-training/" class="badge badge-primary px-2 mx-2" title="EPA HAZWOPER
+                        Training">EPA HAZWOPER
+                        Training</a><a href="/course/subject/fall-protection-training-online/" class="badge badge-primary px-2 mx-2" title="Fall Protection Training">Fall Protection Training</a><a href="/course/subject/fall-protection-training-free/" class="badge badge-primary px-2 mx-2" title="Fall
+                        Protection Training Free">Fall
+                        Protection Training Free</a><a href="/course/subject/free-hazcom-training/" class="badge badge-primary px-2 mx-2" title="Free HAZCOM Training">Free HAZCOM Training</a><a href="/course/subject/free-online-construction-safety-training-courses/" class="badge badge-primary px-2 mx-2" title="Free Online Construction Safety Training Courses">Free Online Construction Safety Training Courses</a><a href="/course/subject/free-osha-certification/" class="badge badge-primary px-2 mx-2" title="Free OSHA
+                        Certification">Free OSHA
+                        Certification</a><a href="/course/subject/free-osha-classes-online/" class="badge badge-primary px-2 mx-2" title="Free OSHA Classes Online">Free OSHA Classes Online</a><a href="/course/subject/free-safety-training-online/" class="badge badge-primary px-2 mx-2" title="Free
+                        Safety Training">Free
+                        Safety Training</a><a href="/course/subject/free-scaffold-training/" class="badge badge-primary px-2 mx-2" title="Free Scaffold Training">Free Scaffold Training</a><a href="/course/subject/HAZWOPER-training-online/" class="badge badge-primary px-2 mx-2" title="HAZWOPER
+                        Training Online">HAZWOPER
+                        Training Online</a><a href="/course/subject/osha-competent-person-training/" class="badge badge-primary px-2 mx-2" title="OSHA Competent Person Training">OSHA Competent Person Training</a><a href="/course/subject/osha-hazwoper-certification/" class="badge badge-primary px-2 mx-2" title="OSHA
+                        HAZWOPER Certification">OSHA
+                        HAZWOPER Certification</a><a href="/course/subject/osha-scaffold-training/" class="badge badge-primary px-2 mx-2" title="OSHA Scaffold Training">OSHA Scaffold Training</a><a href="/course/subject/permit-required-confined-space-training/" class="badge badge-primary px-2 mx-2" title="Permit Required Confined Space Training">Permit Required Confined Space Training</a><a href="/course/subject/supported-scaffold-certification/" class="badge badge-primary px-2 mx-2" title="Supported Scaffold Certification">Supported Scaffold Certification</a><a href="/course/subject/supported-scaffold-training/" class="badge badge-primary px-2 mx-2" title="Supported Scaffold Training">Supported Scaffold Training</a><a href="/course/subject/suspended-scaffold-training/" class="badge badge-primary px-2 mx-2" title="Suspended Scaffold Training">Suspended Scaffold Training</a><a href="/course/subject/suspended-scaffold-training-online/" class="badge badge-primary px-2 mx-2" title="Suspended Scaffold Training Online">Suspended Scaffold Training Online</a><a href="/course/subject/swing-stage-certification/" class="badge badge-primary px-2 mx-2" title="Swing
+                        Stage Certification">Swing
+                        Stage Certification</a><a href="/course/subject/swing-staging-training/" class="badge badge-primary px-2 mx-2" title="Swing Staging Training">Swing Staging Training</a><a href="/course/subject/trenching-and-excavation-safety/" class="badge badge-primary px-2 mx-2" title="Trenching and Excavation Safety">Trenching and Excavation Safety</a>
                 </div>
 
                 <p class="text-center">
