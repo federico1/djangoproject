@@ -276,13 +276,13 @@ Banner Area
     width: 100%;
     height: 100%;
     background: #263b5e;
-    opacity: .85;
 }
 
 .page-header .page-header-content h1 {
     color: #fff;
     font-size: 45px;
     text-transform: capitalize;
+    background: #263b5e;
 }
 
 .page-header .page-header-content ul li {
@@ -416,7 +416,8 @@ Header TopBar
 
 .header-btn .btn {
     color: #fff;
-    background: #FF1949;
+    background: #000;
+    border-color: #000;
     border-radius: 0px;
     padding: 12px 30px;
     font-size: 14px;
@@ -955,9 +956,10 @@ Features
     margin-bottom: 20px;
 }
 
-.feature-item h4 {
+.feature-item h4, .feature-item h2 {
     margin-bottom: 20px;
     transition: .4s;
+    font-size: 22px;
 }
 
 .feature-item:hover {
@@ -1201,7 +1203,7 @@ Course Block
 
 .course-price .del {
     text-decoration: line-through;
-    color: #727695;
+    color: #40414a;
     font-weight: 400;
     font-size: 20px;
 }
@@ -2838,10 +2840,8 @@ Course Page Tab Panel
 }
 
 .course-single-wrapper {
-    background: #ddd;
+    background: #263b5e;
     margin-bottom: 50px;
-    background: url("../images/bg/cta-bg.jpg");
-    background-size: cover;
     position: relative;
 }
 

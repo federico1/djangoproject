@@ -170,7 +170,7 @@ Money Back Guarante{% endblock %}
                     {% for m in object.modules.all %}
                     <div class="card mb-2">
                         <div class="card-header">
-                            <a class="text-primary" data-toggle="collapse" href="#collapse{{m.id}}" role="button" aria-expanded="false" aria-controls="collapse{{m.id}}">
+                            <a class="text-dark font-weight-bold" data-toggle="collapse" href="#collapse{{m.id}}" role="button" aria-expanded="false" aria-controls="collapse{{m.id}}">
                                 <i class="fa">{{forloop.counter}})</i>
                                 {{ m.title }}
                               </a>
@@ -275,11 +275,11 @@ Money Back Guarante{% endblock %}
                             <div class="buy-btn">
                                 {% if object.is_free %}
                                 {% if request.user.is_authenticated %}
-                                <a href="javascript:;" class="btn btn-main btn-block link-free-enroll">
+                                <a href="javascript:;" class="btn btn-main-2 btn-block link-free-enroll">
                                     Take Free Course
                                 </a>
                                 {% else %}
-                                <a href="javascript:;" class="btn btn-main btn-block link-free-auth">
+                                <a href="javascript:;" class="btn btn-main-2 btn-block link-free-auth">
                                     Enroll Free Course
                                 </a>
                                 {% endif %}
@@ -287,7 +287,7 @@ Money Back Guarante{% endblock %}
                                 {% else %}
 
                                 <a href="javascript:;" data-subject="{{ subject.title }}"
-                                    data-json="{{ object|jsonify }}" class="btn btn-main btn-block link-add-cart">
+                                    data-json="{{ object|jsonify }}" class="btn btn-main-2 btn-block link-add-cart">
                                     Add To Cart
                                 </a>
 

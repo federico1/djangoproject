@@ -5,8 +5,6 @@ var subjestList = [];
 (function ($) {
     "use strict";
 
-    
-
     $(window).scroll(function () {
         var window_top = $(window).scrollTop() + 1;
 
@@ -122,6 +120,60 @@ var subjestList = [];
             }
 
         }, 1000);
+    };
+
+    $('.testimonials-slides-2').owlCarousel({
+        loop: true,
+        dots: false,
+        nav: true,
+        margin: 10,
+        autoplayHoverPause: true,
+        autoplay: false,
+        responsiveClass: true,
+        autoplayTimeout: 4000,
+        navText: ["<i class='bi bi-arrow-left-rounded'></i>", "<i class='bi bi-arrow-right-rounded'></i>"],
+        onInitialized: addDotButtonText,
+        onResized: addDotButtonText,
+        responsive: {
+          0: {
+            items: 1
+          },
+          576: {
+            items: 2
+          },
+          768: {
+            items: 2
+          },
+          1000: {
+            items: 2
+          },
+          1200: {
+            items: 2
+          }
+        }
+      });
+
+      function addDotButtonText() {
+
+        $(".owl-nav button").each(function(){
+            let idx = $(this).index() + 1;
+
+            $(this).attr('title', 'Go to slide ' + idx + '');
+        });
+
+        // loop through each dot element
+        $('.owl-dot').each(function() {
+            // remove old text nodes
+            $(this).find('.offscreen').remove();
+    
+            // grab its (zero-based) order in the series
+            let idx = $(this).index() + 1;
+    
+            // append a span to the button containing descriptive text
+            $(this).append('<span class="offscreen">Go to slide ' + idx + '</span>');
+        });
+
+        $(".owl-nav").css('bottom', 60);
     }
 
 })(jQuery);

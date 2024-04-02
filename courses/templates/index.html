@@ -4,94 +4,93 @@
 
 {% block content %}
 
-<section class="banner-left banner-4 py-5">
+<!-- Banner Start -->
+<section class="banner-style-8 pt-5">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-md-12 col-lg-7 col-xl-7">
+            <div class="col-md-12 col-xl-7">
                 <div class="banner-content">
-                    <span class="subheading">Expert instruction</span>
-                    <h1>Safety Training and Certification</h1>
-                    <div class="form-banner">
-                        <form action="" class="form-search-banner">
-                            <input type="text" class="form-control" id="textQ2"
+                    <span class="subheading mb-2">Learn from professionals,Build skills </span>
+                    <h1>Flexible Online Safety Training and Certification</h1>
+                    <div class="form-banner mb-3">
+                        <form action="" class="form-search-banner small">
+                            <input type="text" class="form-control text-white" id="textQ2"
                                 placeholder="What do you want to learn?">
-                            <a title="Search" style="padding:16px 30px;" href="#" class="btn btn-main">Search<i
+                            <a title="Search" href="javascript:;" rel="nofollow" class="btn btn-main-2">Search<i
                                     class="fa fa-search ml-2"></i> </a>
                         </form>
                     </div>
+
                     <div class="banner-cat">
-                        <span>
-                            <a title="Benefits of Online Construction Safety Certification?" class="text-white" href="#whyyouneed">Benefits of Online Construction Safety Certification?</a>
-                        </span>
-                      
+                        <a class="text-dark font-weight-bold" title="Benefits of Online Construction Safety Certification?" href="#whyyouneed">Benefits of
+                            Online Construction Safety Certification?</a>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-5 col-xl-5">
-                <div class="banner-img3">
-                    <div class="img-block p-5">
-                        <img src="{% static 'edutim/images/home.jpg' %}" title="Benefits of Online Construction Safety Certification?" alt="Benefits!" class="img-fluid">
-                    </div>
+
+            <div class="col-xl-5">
+                <div class="banner-img p-5">
+                    <img src="{% static 'edutim/images/banner-8.png' %}" alt="" class="img-fluid">
                 </div>
             </div>
         </div> <!-- / .row -->
     </div> <!-- / .container -->
 </section>
 
-<section class="feature-4">
+<!-- Feature start -->
+<section class="feature-2 mt--100">
     <div class="container">
+        <div class="row no-gutters">
 
-        <div class="row align-items-center">
-            <div class="col-lg-12 col-md-12">
-                <div class="section-heading center-heading">
-                    <span> Access content created by over hundreds of safety professionals nationwide </span>
-                    <h2>Training Has Never Been Easier</h2>
+            <div class="col-lg-3 col-md-6">
+                <div class="feature-item feature-style-2">
+                    <div class="feature-icon">
+                        <i class="bi bi-article"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h2>Quality Education</h2>
+                        <p>
+                            #1 Trusted Training Provider
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row align-items-center">
-            <div class="col-lg-12 col-md-12">
-                <div class="row no-gutters">
-                    <div class="col-lg-4 col-md-4 col-xl-4">
-                        <div class="feature-item feature-style-4">
-                            <div class="feature-icon">
-                                <i class="bi bi-badge2"></i>
-                            </div>
-                            <div class="feature-text">
-                                <h3>
-                                    Money back guarantee
-                                </h3>
-                            </div>
-                        </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="feature-item feature-style-2">
+                    <div class="feature-icon">
+                        <i class="bi bi-headset"></i>
                     </div>
-
-                    <div class="col-lg-4 col-md-4 col-xl-4">
-                        <div class="feature-item feature-style-4">
-                            <div class="feature-icon">
-                                <i class="bi bi-headset"></i>
-                            </div>
-                            <div class="feature-text">
-                                <h3>
-                                    Great value for money
-
-                                </h3>
-                            </div>
-                        </div>
+                    <div class="feature-text">
+                        <h2>Life Time Support</h2>
+                        <p>Access 24/7 on all devices</p>
                     </div>
+                </div>
+            </div>
 
-                    <div class="col-lg-4 col-md-4 col-xl-4">
-                        <div class="h20"></div>
-                        <div class="feature-item feature-style-4">
-                            <div class="feature-icon">
-                                <i class="bi bi-rocket2"></i>
-                            </div>
-                            <div class="feature-text">
-                                <h3>
-                                    1yr access 24/7 on all devices
+            <div class="col-lg-3 col-md-6">
+                <div class="feature-item feature-style-2">
+                    <div class="feature-icon">
+                        <i class="bi bi-badge2"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h2>Value For Money</h2>
+                        <p>
+                            Money back guarantee
+                        </p>
+                    </div>
+                </div>
+            </div>
 
-                                </h3>
-                            </div>
-                        </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="feature-item feature-style-2">
+                    <div class="feature-icon">
+                        <i class="bi bi-rocket2"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h2>SAVE</h2>
+                        <p>Bulk Discounts Available!</p>
                     </div>
                 </div>
             </div>
@@ -99,8 +98,9 @@
     </div>
 </section>
 
+
 {% if courses.count > 0 %}
-<section class="section-padding popular-course-list2 pb-0 mb-3">
+<section class="section-padding popular-course-list2 pb-0 mb-3" id="bestselling">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6">
@@ -112,7 +112,7 @@
 
             <div class="col-lg-6">
                 <div class="course-btn text-lg-right">
-                    <a title="All Courses" href="/courses?is_premium=1" class="btn btn-main">
+                    <a title="All Courses" href="/courses?is_premium=1" class="btn btn-main-2">
                         <i class="fa fa-store mr-2"></i>All Courses</a>
                 </div>
             </div>
@@ -136,7 +136,7 @@
                     <div class="row align-items-center">
                         <div class="col-lg-4">
                             <div class="course-img">
-                                <a title="{{ course.title }}" href="{% url 'course_detail' course.slug %}">
+                                <a class="text-dark" title="{{ course.title }}" href="{% url 'course_detail' course.slug %}">
                                     <img width="146" height="182"
                                         data-src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg"
                                         alt="image" title="{{ course.title }}" class="lazy img-fluid rounded-0" />
@@ -205,8 +205,6 @@
                 <div class="section-heading center-heading">
                     <h5 class="mb-3">Build Your Future on a Solid Foundation: Construction Safety Training &
                         Certification Online</h5>
-
-
                 </div>
             </div>
         </div>
@@ -263,37 +261,15 @@
                     are some of our most popular courses:
                 </p>
 
-                <div class="mb-2" id="subjectslistseop">
-
-                    <a href="/course/subject/asp-exam-prep/" class="badge badge-primary px-2 mx-2" title="ASP Exam Prep">ASP Exam Prep</a><a href="/course/subject/chst-exam-prep/" class="badge badge-primary px-2 mx-2" title="CHST Exam
-                        Prep">CHST Exam
-                        Prep</a><a href="/course/subject/competent-person-training/" class="badge badge-primary px-2 mx-2" title="Competent Person Training">Competent Person Training</a><a href="/course/subject/csp-exam-prep/" class="badge badge-primary px-2 mx-2" title="CSP Exam Prep">CSP Exam Prep</a><a href="/course/subject/em-385-training/" class="badge badge-primary px-2 mx-2" title="EM 385
-                        Training">EM 385
-                        Training</a><a href="/course/subject/em-385-1-1-training/" class="badge badge-primary px-2 mx-2" title="EM-385-1-1 Training">EM-385-1-1 Training</a><a href="/course/subject/epa-hazwoper-training/" class="badge badge-primary px-2 mx-2" title="EPA HAZWOPER
-                        Training">EPA HAZWOPER
-                        Training</a><a href="/course/subject/fall-protection-training-online/" class="badge badge-primary px-2 mx-2" title="Fall Protection Training">Fall Protection Training</a><a href="/course/subject/fall-protection-training-free/" class="badge badge-primary px-2 mx-2" title="Fall
-                        Protection Training Free">Fall
-                        Protection Training Free</a><a href="/course/subject/free-hazcom-training/" class="badge badge-primary px-2 mx-2" title="Free HAZCOM Training">Free HAZCOM Training</a><a href="/course/subject/free-online-construction-safety-training-courses/" class="badge badge-primary px-2 mx-2" title="Free Online Construction Safety Training Courses">Free Online Construction Safety Training Courses</a><a href="/course/subject/free-osha-certification/" class="badge badge-primary px-2 mx-2" title="Free OSHA
-                        Certification">Free OSHA
-                        Certification</a><a href="/course/subject/free-osha-classes-online/" class="badge badge-primary px-2 mx-2" title="Free OSHA Classes Online">Free OSHA Classes Online</a><a href="/course/subject/free-safety-training-online/" class="badge badge-primary px-2 mx-2" title="Free
-                        Safety Training">Free
-                        Safety Training</a><a href="/course/subject/free-scaffold-training/" class="badge badge-primary px-2 mx-2" title="Free Scaffold Training">Free Scaffold Training</a><a href="/course/subject/HAZWOPER-training-online/" class="badge badge-primary px-2 mx-2" title="HAZWOPER
-                        Training Online">HAZWOPER
-                        Training Online</a><a href="/course/subject/osha-competent-person-training/" class="badge badge-primary px-2 mx-2" title="OSHA Competent Person Training">OSHA Competent Person Training</a><a href="/course/subject/osha-hazwoper-certification/" class="badge badge-primary px-2 mx-2" title="OSHA
-                        HAZWOPER Certification">OSHA
-                        HAZWOPER Certification</a><a href="/course/subject/osha-scaffold-training/" class="badge badge-primary px-2 mx-2" title="OSHA Scaffold Training">OSHA Scaffold Training</a><a href="/course/subject/permit-required-confined-space-training/" class="badge badge-primary px-2 mx-2" title="Permit Required Confined Space Training">Permit Required Confined Space Training</a><a href="/course/subject/supported-scaffold-certification/" class="badge badge-primary px-2 mx-2" title="Supported Scaffold Certification">Supported Scaffold Certification</a><a href="/course/subject/supported-scaffold-training/" class="badge badge-primary px-2 mx-2" title="Supported Scaffold Training">Supported Scaffold Training</a><a href="/course/subject/suspended-scaffold-training/" class="badge badge-primary px-2 mx-2" title="Suspended Scaffold Training">Suspended Scaffold Training</a><a href="/course/subject/suspended-scaffold-training-online/" class="badge badge-primary px-2 mx-2" title="Suspended Scaffold Training Online">Suspended Scaffold Training Online</a><a href="/course/subject/swing-stage-certification/" class="badge badge-primary px-2 mx-2" title="Swing
-                        Stage Certification">Swing
-                        Stage Certification</a><a href="/course/subject/swing-staging-training/" class="badge badge-primary px-2 mx-2" title="Swing Staging Training">Swing Staging Training</a><a href="/course/subject/trenching-and-excavation-safety/" class="badge badge-primary px-2 mx-2" title="Trenching and Excavation Safety">Trenching and Excavation Safety</a>
-                </div>
-
+    
                 <p class="text-center">
                     <strong>Benefits</strong>
                 </p>
                 <ul>
 
                     <li><strong>
-                        Increased Earning Potential: 
-                    </strong> Safety certifications can lead to higher wages and better job
+                            Increased Earning Potential:
+                        </strong> Safety certifications can lead to higher wages and better job
                         opportunities in the construction industry.</li>
                     <li><strong>
                             Career Advancement:
@@ -302,7 +278,8 @@
                     <li>
                         <strong>
                             Enhanced Safety Culture:
-                        </strong> A well-trained workforce reduces workplace accidents and fosters a culture of safety on construction sites.
+                        </strong> A well-trained workforce reduces workplace accidents and fosters a culture of safety
+                        on construction sites.
                     </li>
 
 
