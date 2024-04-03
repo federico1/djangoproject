@@ -3,6 +3,10 @@
 {% load course_tags %}
 {% load cache %}
 
+{% block head %}
+<meta name="robots" content="noindex">
+{% endblock %}
+
 {% block title %}
 {% if subject %} Best {{ subject.title }} Courses Online | pdhsafety.com {%else%}
 Best Safety Training and Certification Courses Online | pdhsafety.com
@@ -10,11 +14,12 @@ Best Safety Training and Certification Courses Online | pdhsafety.com
 {% endblock %}
 
 {% block meta_desc %}
+
 {% if subject %} Best Price Online {{ subject.title }}
   (Easy Access 24/7 On All Devices)
 Easy To Take Course Satisfaction Guarantee
-
 {% endif %}
+
 {% endblock %}
 
 {% block content %}

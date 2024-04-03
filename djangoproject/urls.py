@@ -32,7 +32,7 @@ from .sitemap import StaticViewSitemap, SubjectsSitemap, CourseSitemap
 
 sitemaps = {
     'static': StaticViewSitemap,
-    'subjects': SubjectsSitemap,
+    #'subjects': SubjectsSitemap,
     'course': CourseSitemap
 }
 

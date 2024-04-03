@@ -3,7 +3,7 @@ from django.shortcuts import reverse
 from courses.models import Course, Subject
 
 class StaticViewSitemap(Sitemap):
-    changefreq = "hourly"
+    changefreq = "monthly"
 
     def items(self):
         items_list = ['course_list', 'about_detail', 'privacy_policy', 'terms', 'refund', 'contact_detail', 'faq', 'sst_verify']
@@ -26,7 +26,7 @@ class SubjectsSitemap(Sitemap):
         return url if len(url)>0 and url[-1]=='/' else url + '/'
 
 class CourseSitemap(Sitemap):
-    changefreq = "hourly"
+    changefreq = "daily"
 
     def items(self):
         item = Course.objects.all()
