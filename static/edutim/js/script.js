@@ -42,8 +42,6 @@ var subjestList = [];
         // }
     });
 
-    //countdownTimeStart();
-
     $.get('/api/subjects/', {}, function (response) {
         renderTopSubjects(response);
         subjestList = response;
@@ -92,89 +90,6 @@ var subjestList = [];
         });
     };
 
-    function countdownTimeStart() {
-
-        var countDownDate = new Date('April 2, 2024 24:00:00').getTime();
-
-        // Update the count down every 1 second
-        var x = setInterval(function () {
-
-            // Get todays date and time
-            var now = new Date().getTime();
-
-            // Find the distance between now an the count down date
-            var distance = countDownDate - now;
-
-            // Time calculations for days, hours, minutes and seconds
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            // Output the result in an element with id="demo"
-            document.getElementById("disountTime").innerHTML = hours + "h "
-                + minutes + "m " + seconds + "s ";
-
-            if (distance < 0) {
-                clearInterval(x);
-                $("#discountHeader").remove();
-            }
-
-        }, 1000);
-    };
-
-    $('.testimonials-slides-2').owlCarousel({
-        loop: true,
-        dots: false,
-        nav: true,
-        margin: 10,
-        autoplayHoverPause: true,
-        autoplay: false,
-        responsiveClass: true,
-        autoplayTimeout: 4000,
-        navText: ["<i class='bi bi-arrow-left-rounded'></i>", "<i class='bi bi-arrow-right-rounded'></i>"],
-        onInitialized: addDotButtonText,
-        onResized: addDotButtonText,
-        responsive: {
-          0: {
-            items: 1
-          },
-          576: {
-            items: 2
-          },
-          768: {
-            items: 2
-          },
-          1000: {
-            items: 2
-          },
-          1200: {
-            items: 2
-          }
-        }
-      });
-
-      function addDotButtonText() {
-
-        $(".owl-nav button").each(function(){
-            let idx = $(this).index() + 1;
-
-            $(this).attr('title', 'Go to slide ' + idx + '');
-        });
-
-        // loop through each dot element
-        $('.owl-dot').each(function() {
-            // remove old text nodes
-            $(this).find('.offscreen').remove();
-    
-            // grab its (zero-based) order in the series
-            let idx = $(this).index() + 1;
-    
-            // append a span to the button containing descriptive text
-            $(this).append('<span class="offscreen">Go to slide ' + idx + '</span>');
-        });
-
-        $(".owl-nav").css('bottom', 60);
-    }
 
 })(jQuery);
 
