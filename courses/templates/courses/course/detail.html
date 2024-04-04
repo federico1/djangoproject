@@ -8,8 +8,6 @@
 
 {% block meta_desc %}{% if object.metas.first.meta_description %}{{object.metas.first.meta_description}}{%else%}Best Price Online {{ object.subject }}, Access 24/7 On All Devices. Easy To Take, Money Back Guarante{% endif %}{% endblock %}
 
-{% block meta_keywords %}{% if object.metas.first.meta_keywords %}{{object.metas.first.meta_keywords}}{%else%}{{ object.subject }},{{ object.title }}{% endif %}{% endblock %}
-
 {% block head %}
 
 {% if not object.is_free %}
