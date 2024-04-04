@@ -4,15 +4,11 @@
 {% load course %}
 {% load cache %}
 
-{% block title %} {{ object.title }} Course | pdhsafety.com {% endblock %}
+{% block title %}{% if object.metas.first.meta_title %}{{object.metas.first.meta_title}}{%else%}{{ object.title }} Course | pdhsafety.com{% endif %}{% endblock %}
 
-{% block meta_desc %} Best Price Online {{ object.subject }}, Access 24/7 On All Devices. Easy To Take,
-Money Back Guarante{% endblock %}
+{% block meta_desc %}{% if object.metas.first.meta_description %}{{object.metas.first.meta_description}}{%else%}Best Price Online {{ object.subject }}, Access 24/7 On All Devices. Easy To Take, Money Back Guarante{% endif %}{% endblock %}
 
-{% block meta_keywords %}
-{{ object.subject }},
-{{ object.title }}
-{% endblock %}
+{% block meta_keywords %}{% if object.metas.first.meta_keywords %}{{object.metas.first.meta_keywords}}{%else%}{{ object.subject }},{{ object.title }}{% endif %}{% endblock %}
 
 {% block head %}
 
@@ -49,63 +45,68 @@ Money Back Guarante{% endblock %}
 {% with subject=object.subject %}
 
 {% cache 500 coursedetails course.slug %}
-<section class="page-wrapper edutim-course-single course-single-style-3" time="{% now 'SHORT_DATETIME_FORMAT' %}">
+<section class="page-wrapper edutim-course-single course-single-style-3" data-id="{{ object.id }}"
+    time="{% now 'SHORT_DATETIME_FORMAT' %}">
 
+    {% if object.metas.first.meta_title %}
+    <h1>{{object.metas.first.meta_title}}</h1>
+    {% endif %}
     <div class="course-single-wrapper">
 
         {% if not object.is_free %}
-        <div class="d-block d-sm-block d-md-none" style="position: fixed;top:0px;z-index: 111;width: 100%;background: #bfbfbf;">
+        <div class="d-block d-sm-block d-md-none"
+            style="position: fixed;top:0px;z-index: 111;width: 100%;background: #bfbfbf;">
             <div class="course-price-wrapper p-1 px-4">
-             <div class="row">
-                <div class="col-8">
-                    <div class="course-price mb-0 mt-1">
-        
-                        {% if object.is_free %}
-                        <h5 class="mb-0">
-                            <span>
-                                Price: Free</span>
-                        </h5>
-                        {% elif object.discounted_price > 0 %}
-        
-                        <h5 class="mb-0">Price:
-                            <span>${{ object.discounted_price }}</span>
-                            <del class="text-muted">${{ object.price }}</del>
-                        </h5>
-        
-                        {% else %}
-                        <h5 class="mb-0">
-                            Price:
-                            <span>${{ object.price }}</span>
-                        </h5>
-                        {% endif %}
-        
+                <div class="row">
+                    <div class="col-8">
+                        <div class="course-price mb-0 mt-1">
+
+                            {% if object.is_free %}
+                            <h5 class="mb-0">
+                                <span>
+                                    Price: Free</span>
+                            </h5>
+                            {% elif object.discounted_price > 0 %}
+
+                            <h5 class="mb-0">Price:
+                                <span>${{ object.discounted_price }}</span>
+                                <del class="text-muted">${{ object.price }}</del>
+                            </h5>
+
+                            {% else %}
+                            <h5 class="mb-0">
+                                Price:
+                                <span>${{ object.price }}</span>
+                            </h5>
+                            {% endif %}
+
+                        </div>
                     </div>
-                   </div>
-                  <div class="col-4">
-                    <div class="buy-btn text-right">
-                        {% if object.is_free %}
-                        {% if request.user.is_authenticated %}
-                        <a href="javascript:;" class="btn btn-main btn-block link-free-enroll">
-                            Take Free Course
-                        </a>
-                        {% else %}
-                        <a href="javascript:;" class="btn btn-main btn-block link-free-auth">
-                            Enroll Free Course
-                        </a>
-                        {% endif %}
-        
-                        {% else %}
-        
-                        <a href="javascript:;" class=" mt-0 btn btn-sm btn-main btn-block link-add-cart" data-subject="{{ subject.title }}"
-                            data-json="{{ object|jsonify }}" >
-                            Add To Cart
-                        </a>
-        
-                        {% endif %}
-        
+                    <div class="col-4">
+                        <div class="buy-btn text-right">
+                            {% if object.is_free %}
+                            {% if request.user.is_authenticated %}
+                            <a href="javascript:;" class="btn btn-main btn-block link-free-enroll">
+                                Take Free Course
+                            </a>
+                            {% else %}
+                            <a href="javascript:;" class="btn btn-main btn-block link-free-auth">
+                                Enroll Free Course
+                            </a>
+                            {% endif %}
+
+                            {% else %}
+
+                            <a href="javascript:;" class=" mt-0 btn btn-sm btn-main btn-block link-add-cart"
+                                data-subject="{{ subject.title }}" data-json="{{ object|jsonify }}">
+                                Add To Cart
+                            </a>
+
+                            {% endif %}
+
+                        </div>
                     </div>
-                  </div>
-             </div>
+                </div>
             </div>
         </div>
         {% endif %}
@@ -117,7 +118,7 @@ Money Back Guarante{% endblock %}
                         <span class="subheading">{{ subject }}</span>
                         <h3 class="single-course-title">{{ object.title }}</h3>
                         <p>{{ object.overview  }}</p>
-                      
+
                         <div class="d-flex align-items-center ">
                             <div class="single-top-meta">
                                 <i class="fa fa-book"></i>
@@ -170,10 +171,11 @@ Money Back Guarante{% endblock %}
                     {% for m in object.modules.all %}
                     <div class="card mb-2">
                         <div class="card-header">
-                            <a class="text-dark font-weight-bold" data-toggle="collapse" href="#collapse{{m.id}}" role="button" aria-expanded="false" aria-controls="collapse{{m.id}}">
+                            <a class="text-dark font-weight-bold" data-toggle="collapse" href="#collapse{{m.id}}"
+                                role="button" aria-expanded="false" aria-controls="collapse{{m.id}}">
                                 <i class="fa">{{forloop.counter}})</i>
                                 {{ m.title }}
-                              </a>
+                            </a>
                         </div>
                         <div class="card-body hide collapse " id="collapse{{m.id}}">
                             <ul class="list-group">
@@ -182,27 +184,29 @@ Money Back Guarante{% endblock %}
                                     {{forloop.counter}}) {{cont.item}}
                                 </li>
                                 {% endfor %}
-                              
+
                             </ul>
                         </div>
                     </div>
 
                     {% endfor %}
 
-                  
-                   
+
+
                 </div>
 
                 {% comment %} <div class="single-course-details mb-5">
                     <div class="alert alert-info">
-                        This Certificate of Training shall not imply or suggest that OSHA Outreach Training Program training was completed or will result in in individual being certified. Students are not eligible to request and/or receive an OSHA student completion card.
+                        This Certificate of Training shall not imply or suggest that OSHA Outreach Training Program
+                        training was completed or will result in in individual being certified. Students are not
+                        eligible to request and/or receive an OSHA student completion card.
                     </div>
                 </div> {% endcomment %}
 
                 {% if object.features.first.notes %}
                 <div class="single-course-details mb-5">
                     <h4 class="course-title">Course Features:</h4>
-                  <div>
+                    <div>
                         {{ object.features.first.notes | safe }}
                     </div>
                     <div>
@@ -240,15 +244,15 @@ Money Back Guarante{% endblock %}
                     </div>
                 </div>
 
-             
+
 
             </div>
             <div class="col-lg-4">
                 <div class="course-sidebar">
                     <div class="course-single-thumb">
-                     
+
                         <img data-src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg"
-                        width="320" height="278" alt="" class="img-fluid w-100 lazy" />
+                            width="320" height="278" alt="" class="img-fluid w-100 lazy" />
                         <div class="course-price-wrapper">
                             <div class="course-price">
 
@@ -379,11 +383,11 @@ Money Back Guarante{% endblock %}
                         </ul>
                     </div>
 
-                  
+
                 </div>
             </div>
         </div>
-      
+
     </div>
 </section>
 
@@ -405,7 +409,7 @@ Money Back Guarante{% endblock %}
 
 {% verbatim %}
 <script type="text/x-handlebars-template" id="videoLocalItemTemplate">
-            <div class="embed-responsive embed-responsive-16by9">
+    <div class="embed-responsive embed-responsive-16by9">
                 <video class="embed-responsive-item">
                     <source src="{{ src }}" type="video/mp4"/>
                     Your browser does not support the video tag.
@@ -415,7 +419,7 @@ Money Back Guarante{% endblock %}
 
 <script type="text/x-handlebars-template" id="videoEmbedItemTemplate">
 
-            <div class="embed-vidoe">
+    <div class="embed-vidoe">
                 {{#if img}}
                 <div class="img-section d-none">
                     <img class="img-fluid lazy w-100" data-src="{{img}}" width="730" height="547" />
@@ -470,7 +474,8 @@ Money Back Guarante{% endblock %}
                 var urlParts = window.location.href.indexOf('#register=success');
 
                 if (urlParts >= 0) {
-                    Swal.fire('Account Created!', 'You have successfully created a new account.', 'success');
+                    Swal.fire('Account Created!', 'You have successfully created a new account.',
+                    'success');
                 }
 
                 history.pushState("", document.title, window.location.pathname + window.location.search);
@@ -497,15 +502,26 @@ Money Back Guarante{% endblock %}
                         var courseURL = "{% url 'student_courses' %}?id={{ course.id }}";
 
                         if (xhr.status == 201) {
-                            Toast.fire({ icon: 'success', title: 'You have successfully enrolled to this course' });
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'You have successfully enrolled to this course'
+                            });
                             window.location.href = courseURL;
                         } else if (xhr.status == 226) {
                             $(".link-free-enroll").hide();
-                            Swal.fire({ icon: 'warning', title: 'Note!', text: 'You have been already enrolled in this course!' });
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Note!',
+                                text: 'You have been already enrolled in this course!'
+                            });
                             window.location.href = courseURL;
                         } else if (xhr.status == 203) {
                             $(".link-free-enroll").hide();
-                            Swal.fire({ icon: 'error', title: 'Note!', text: 'You are not allowed to take this class.' });
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Note!',
+                                text: 'You are not allowed to take this class.'
+                            });
                         }
                     }
                 });
@@ -534,8 +550,7 @@ Money Back Guarante{% endblock %}
 
                             if (videoSrc.indexOf('?') >= 0) {
                                 videoSrc = videoSrc + "&autoplay=1"
-                            }
-                            else {
+                            } else {
                                 videoSrc = videoSrc + "?autoplay=1";
                             }
 
@@ -583,9 +598,12 @@ Money Back Guarante{% endblock %}
 
                     Swal.fire(opts).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = "{% url 'login' %}?next=" + "{{ request.path }}";
+                            window.location.href = "{% url 'login' %}?next=" +
+                                "{{ request.path }}";
                         } else if (result.isDenied) {
-                            window.location.href = "{% url 'student_registration' %}?next=" + "{{ request.path }}";
+                            window.location.href =
+                                "{% url 'student_registration' %}?next=" +
+                                "{{ request.path }}";
                         }
                     });
 
@@ -602,7 +620,8 @@ Money Back Guarante{% endblock %}
                     $(this).addClass('d-none');
                     $(this).parent().find(".embed-responsive").removeClass('d-none');
 
-                    var src = $(this).parent().find(".embed-responsive iframe").eq(0).attr('data-src');
+                    var src = $(this).parent().find(".embed-responsive iframe").eq(0).attr(
+                        'data-src');
 
                     $(this).parent().find(".embed-responsive iframe").attr('src', src);
                 });

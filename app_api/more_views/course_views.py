@@ -282,7 +282,6 @@ class CourseFeatureApiView(APIView):
         if serializer.is_valid():
 
             course_id = serializer.validated_data['course']
-
             snippets = CourseFeature.objects.filter(course_id=course_id)
 
             for item in snippets:

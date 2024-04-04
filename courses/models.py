@@ -60,6 +60,7 @@ class Course(models.Model):
     video = models.TextField(default=None, null=True)
     is_free = models.BooleanField(default=True)
     is_approved = models.BooleanField(default=True)
+    is_noindex = models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)
     price = models.DecimalField(max_digits=6,
                                 decimal_places=2, default=None, null=True)
@@ -235,6 +236,24 @@ class CourseFeature(models.Model):
 
     def __str__(self):
         return '{}'.format(self.course.id)
+
+
+class CourseMeta(models.Model):
+    course = models.ForeignKey(Course,
+                               related_name='metas',
+                               on_delete=models.CASCADE)
+    meta_title = models.TextField(blank=True, null=True)
+    meta_keywords = models.TextField(blank=True, null=True)
+    meta_description = models.TextField(blank=True, null=True)
+    meta_robots = models.TextField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['pk']
+        db_table = "courses_meta"
+
+    def __str__(self):
+        return '{}'.format(self.course.id)
+
 
 
 class Attendance(models.Model):
