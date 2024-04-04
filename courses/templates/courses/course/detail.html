@@ -48,9 +48,6 @@
 <section class="page-wrapper edutim-course-single course-single-style-3" data-id="{{ object.id }}"
     time="{% now 'SHORT_DATETIME_FORMAT' %}">
 
-    {% if object.metas.first.meta_title %}
-    <h1>{{object.metas.first.meta_title}}</h1>
-    {% endif %}
     <div class="course-single-wrapper">
 
         {% if not object.is_free %}
