@@ -229,6 +229,7 @@ class CourseFeature(models.Model):
     language = models.TextField(blank=True, null=True)
     certificate_status = models.TextField(blank=True, null=True)
     credits = models.TextField(blank=True, null=True)
+    details_long = models.TextField(blank=True, null=True)
 
     class Meta:
         ordering = ['pk']
