@@ -206,7 +206,7 @@
 
                 {% if object.features.first.notes and object.features.first.notes.strip %}
                 <div class="single-course-details mb-5">
-                    <p class="course-title font-weight-bold text-dark">Course Features:</p>
+                    {% comment %} <p class="course-title font-weight-bold text-dark">Course Features:</p> {% endcomment %}
                     <div>
                         {{ object.features.first.notes | safe }}
                     </div>
@@ -231,8 +231,8 @@
 
                 {% if object.features.first.outcomes and object.features.first.outcomes.strip %}
                 <div class="single-course-details mb-5">
-                    <p class="course-title font-weight-bold text-dark">
-                        Learning Outcomes:</p>
+                    {% comment %} <p class="course-title font-weight-bold text-dark">
+                        Learning Outcomes:</p> {% endcomment %}
                     <div>
                         {{ object.features.first.outcomes  |safe }}
                     </div>

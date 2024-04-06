@@ -29,7 +29,7 @@ class CourseSitemap(Sitemap):
     changefreq = "daily"
 
     def items(self):
-        item = Course.objects.all()
+        item = Course.objects.filter(is_deleted=False, is_noindex=False).all()
         return item
 
     def location(self, obj):
