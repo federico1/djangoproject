@@ -61,7 +61,7 @@ class CourseListView(TemplateResponseMixin, View):
                     total_courses=Count('courses'))
                 cache.set('all_subjects', subjects)
 
-            all_courses = Course.objects.annotate(
+            all_courses = Course.objects.filter(is_deleted=False).annotate(
                 total_modules=Count('modules'))
 
             if subject:
@@ -167,6 +167,9 @@ class CourseDetailView(DetailView):
         from django.http import Http404
         try:
             self.object = self.get_object()
+            if self.object.is_deleted == True:
+                return redirect(reverse('course_list'))
+
             context = self.get_context_data(object=self.object)
             return self.render_to_response(context)
         except Http404:
