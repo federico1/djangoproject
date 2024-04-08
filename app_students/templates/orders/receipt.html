@@ -7,7 +7,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>Invoice</title>
+    <title>Receipt</title>
     <!-- MDB icon -->
     <link rel="icon" type="image/png" href="{% static 'edutim/images/logo5.png' %}" />
 
@@ -226,15 +226,15 @@
                 <main>
                     <div class="row contacts">
                         <div class="col invoice-to">
-                            <div class="text-gray-light">INVOICE TO:</div>
+                            <div class="text-gray-light">SOLD TO:</div>
                             <h2 class="to">{{request.user.first_name}} {{request.user.last_name}}</h2>
                             <div class="address">{{request.user.address}}</div>
                             <div class="email"><a href="mailto:{{request.user.email}}">{{request.user.email}}</a></div>
                         </div>
                         <div class="col invoice-details">
-                            <h1 class="invoice-id">INVOICE</h1>
-                            <div class="date">Invoice #: {{order.ref_id}}</div>
-                            <div class="date">Invoice Date: {{order.created|date:"M d, Y"}}</div>
+                            <h1 class="invoice-id">RECEIPT (Paid)</h1>
+                            <div class="date">Order #: {{order.ref_id}}</div>
+                            <div class="date">Order Date: {{order.created|date:"M d, Y"}}</div>
                             <div class="date">Place: 189 Valentine Ln Yonkers, New York 10705</div>
                         </div>
                     </div>
@@ -290,7 +290,7 @@
                     
                 </main>
                 <footer>
-                    Invoice was created on a computer and is valid without the signature and seal.
+                    Receipt was created on a computer and is valid without the signature and seal.
                 </footer>
             </div>
             <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->

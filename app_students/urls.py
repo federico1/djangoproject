@@ -30,6 +30,7 @@ urlpatterns = [
     path('quiz-taken/', quiz_views.TakenQuizTemplateView.as_view(), name='student_taken_quiz'),
     path('purchase-history/', order_views.PurchaseHistoryView.as_view(), name='student_purchase_history'),
     path('purchase-invoice/<slug:ref>/<slug:item>/', order_views.InvoiceView.as_view(), name='student_purchase_invoice'),
+    path('purchase-receipt/<slug:ref>/<slug:item>/', order_views.ReceiptView.as_view(), name='student_purchase_receipt'),
 
     path('inbox', inbox_views.MessagesView.as_view(), name='student_messages'),
 
