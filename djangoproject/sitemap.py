@@ -15,7 +15,7 @@ class StaticViewSitemap(Sitemap):
 
 
 class SubjectsSitemap(Sitemap):
-    changefreq = "hourly"
+    changefreq = "weekly"
 
     def items(self):
         subject_list = Subject.objects.all()
