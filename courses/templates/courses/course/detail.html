@@ -4,7 +4,7 @@
 {% load course %}
 {% load cache %}
 
-{% block title %}{% if object.metas.first.meta_title %}{{object.metas.first.meta_title}}| pdhsafety.com{%else%}{{ object.title }} Course | pdhsafety.com{% endif %}{% endblock %}
+{% block title %}{% if object.metas.first.meta_title %}{{object.metas.first.meta_title}} | pdhsafety.com{%else%}{{ object.title }} Course | pdhsafety.com{% endif %}{% endblock %}
 
 {% block meta_desc %}{% if object.metas.first.meta_description %}{{object.metas.first.meta_description}}{%else%}Best Price Online {{ object.subject }}, Access 24/7 On All Devices. Easy To Take, Money Back Guarante{% endif %}{% endblock %}
 
