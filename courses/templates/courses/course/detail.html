@@ -112,7 +112,9 @@
                     <div class="course-single-header white-text">
                         <span class="subheading">{{ subject }}</span>
                         <h1 class="single-course-title text-white">{{ object.title }}</h1>
+                        {% if object.overview %}
                         <p>{{ object.overview  }}</p>
+                        {% endif %}
 
                         <div class="d-flex align-items-center ">
                             <div class="single-top-meta">
