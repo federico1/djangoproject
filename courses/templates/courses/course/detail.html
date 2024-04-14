@@ -10,6 +10,13 @@
 
 {% block head %}
 
+{% if object.features.first.header and object.features.first.header.strip %}
+{{ object.features.first.header  |safe }}
+{%else%}
+<link rel="canonical" href="https://pdhsafety.com{{ request.path }}" />
+{% endif %}
+
+
 {% if not object.is_free %}
 
 <!-- Begin Inspectlet Asynchronous Code -->

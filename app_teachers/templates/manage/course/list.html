@@ -29,10 +29,10 @@
             <div class="row align-items-center mb-2">
 
 
-                <div class="col-md-4 offset-md-1">
+                <div class="col-md-6 offset-md-1">
                     <div class="topbar-search">
-                        <form method="get" action=".">
-                            <input type="text" name="q" placeholder="Search courses" class="form-control"/>
+                        <form id="courses" method="get" action=".">
+                            <input type="text" id="txtCoursesQ" name="q" placeholder="Search courses" class="form-control"/>
                             <label>
                                 <i class="fa fa-search"></i>
                             </label>
@@ -135,7 +135,9 @@
                                             <a href="{% url 'teacher_course_detail' course.id %}" class="badge badge-success px-3 py-1">
                                                 View Course
                                             </a>
-
+                                            <a target="_blank" href="{% url 'course_detail' course.slug %}" class="badge badge-success px-3 py-1">
+                                                Open Course
+                                            </a>
                                             <a class="badge badge-danger px-3 py-1" href="{% url 'course_delete' course.id %}">
                                                 Delete Course
                                             </a>
@@ -1125,6 +1127,13 @@
 
                 $("#copyModal form").submit();
             });
+
+            $('#txtCoursesQ').keypress(function (e) {
+                if (e.which == 13) {
+                  $('form#courses').submit();
+                  return false;    //<---- Add this line
+                }
+              });
 
             $("#copyModal form").ajaxForm({
                 beforeSubmit: function () {

@@ -230,6 +230,7 @@ class CourseFeature(models.Model):
     certificate_status = models.TextField(blank=True, null=True)
     credits = models.TextField(blank=True, null=True)
     details_long = models.TextField(blank=True, null=True)
+    header = models.TextField(blank=True, null=True)
 
     class Meta:
         ordering = ['pk']

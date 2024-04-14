@@ -17,7 +17,6 @@
    <title>{% block title %}Safety Training and Certification | pdhsafety.com{% endblock %}</title>
 
    <link rel="icon" type="image/png" href="{% static 'edutim/images/logo100.png' %}" />
-   <link rel="canonical" href="https://pdhsafety.com{{ request.path }}" />
 
    <link rel="dns-prefetch" href="https://www.googletagmanager.com/" />
    <link href="https://www.googletagmanager.com/gtag/js?id=UA-190250545-1" rel="preload" as="script" />
@@ -84,7 +83,9 @@
       gtag("config", "G-K1L4WGV6EM");
    </script>
 
-   {% block head %}{% endblock %}
+   {% block head %}
+   <link rel="canonical" href="https://pdhsafety.com{{ request.path }}" />
+   {% endblock %}
 </head>
 
 <body id="top-header">
