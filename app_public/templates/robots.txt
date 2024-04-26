@@ -1,4 +1,14 @@
 User-agent: *
-Allow: /
+Disallow: 
+Disallow: /cgi-bin/
+Disallow: /api/
+Disallow: /admin/
+Disallow: /admin/
+Disallow: /teachers/
+Disallow: /quiz/
+Disallow: /dashboard/
+Disallow: /communicate/
+Disallow: /business/
+Disallow: /students/
 
 Sitemap: https://pdhsafety.com/sitemap.xml
