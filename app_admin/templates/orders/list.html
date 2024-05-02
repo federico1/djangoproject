@@ -1,1 +1,209 @@
-ss
+{% extends "admin_base.html" %} {% block title %} - Students {% endblock %} {% block content %}
+
+<noscript>
+   <style type="text/css">
+       .pagecontainer {display:none;}
+   </style>
+   <div class="noscriptmsg">
+   You don't have javascript enabled.  Good luck with that.
+   </div>
+</noscript>
+
+
+<div class="pagecontainer">
+   <div>
+      <div class="d-flex align-items-center justify-content-center loader mb-2">
+         <div class="spinner-border text-primary mr-2" role="status" aria-hidden="true"></div>
+         <span class="badge badge-secondary px-2"><strong>Loading...</strong></span>
+      </div>
+   </div>
+   
+   <div class="card shadow mb-4">
+      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+         <h6 class="m-0 font-weight-bold text-primary">Courses Purchased</h6>
+         
+      </div>
+      <div class="card-body">
+         <div class="table-responsive">
+            <table class="table table-bordered" id="listTable" width="100%" cellspacing="0">
+               <thead>
+                  <tr>
+                     <th>#</th>
+                     <th>IMG</th>
+                     <th>Student</th>
+                     <th>Courses</th>
+                     <th>Amount</th>
+                     <th>Date</th>
+                  </tr>
+               </thead>
+               <tbody></tbody>
+            </table>
+         </div>
+      </div>
+   </div>
+   
+</div>
+
+
+{% verbatim %}
+<script type="text/x-handlebars-template" id='listItemTemplate'>
+
+    <tr id="{{id}}">
+        <td>{{number}}</td>
+        <td> <img src="" /> </td>
+        <td> {{user.first_name}} {{user.last_name}} </td>
+        <td>
+           {{#each items}}
+    <p>{{course.title}}</p>
+  {{/each}}
+
+        </td>
+        <td>
+        $ {{total_amount}}
+      </td>
+      <td>
+          {{created}}
+       </td>
+    </tr>
+</script>
+{% endverbatim %}
+
+{% endblock %}
+
+
+ {% block scripts %}
+
+<script>
+
+   Handlebars.registerHelper("get_name", function (options) {
+      var r = this.username;
+
+      if (this.first_name && this.last_name) {
+         r = this.first_name + " " + this.last_name;
+      } else if (this.email) {
+         r = this.email;
+      }
+
+      return new Handlebars.SafeString(r);
+   });
+
+   let waitDialog = bootbox.dialog({
+      message: '<p class="text-center mb-0"><i class="fas fa-spinfa-cog"></i> Please wait, processing request...</p>',
+      closeButton: false
+   });
+
+ 
+
+   (function ($) {
+
+      $.StudentManager = function (options) {
+
+         var that = this;
+
+         var studentsList = [];
+         var userDataTable;
+         var studentCoursetDT;
+
+         var coursesList = [];
+
+         var settings = $.extend({}, options);
+
+         var getOrders = function () {
+
+            try {
+
+               $(".loader").parent().show();
+               $(".loader strong").text("Loading Students");
+   
+               if (userDataTable) {
+                  userDataTable.destroy();
+               }
+   
+               $("#listTable").on("draw.dt", function () {
+                  if (!userDataTable) return;
+   
+                  $("#listTable tbody tr").each(function () {
+   
+                     var row = userDataTable.row($(this));
+   
+                     var data = row.data();
+   
+                    // var source = document.getElementById("itemActionTemplate").innerHTML;
+                    // var template = Handlebars.compile(source);
+   
+                     //var element = studentsList.find(a => a.id == $(this).attr("id"));
+   
+                    // row.child(template(data)).show();
+                  });
+   
+                  $(".loader").parent().hide();
+                  waitDialog.modal('hide');
+               });
+   
+               userDataTable = $("#listTable").DataTable({
+                  ajax: '{% url "api_backend_v1:view_backend_orders-get-list" %}' + "?format=json&_=" + $.now(),
+                  processing: true,
+                  serverSide: true,
+                  columns: [
+                     { data: "id" },
+                     {
+                        data: "image",
+                        render: function (data, display, row) {
+                           return '<img src="' + row.user.image + '" width="40px">';
+                        },
+                     },
+                     {
+                        data: "first_name",
+                        render: function (data, display, row) {
+                           return row.user.first_name + " " + row.user.last_name;
+                        },
+                     },
+                     {
+                        data: "items",
+                        render: function (data, display, row) {
+                           var ids = row.items.map(function(v){return v.course.title;});
+                           return ids.join();
+                        }
+                       
+                     },
+                     {
+                        data: "total_amount",
+                        render: function (data, display, row) {
+                           return '$ ' + data;
+                        }
+                     },
+                     {
+                        data: "created",
+                        render: function (data, display, row) {
+                           return moment(data).format('MMMM Do YYYY, h:mm');
+                        }
+                     }
+                  ],
+               });
+
+             
+            }
+            catch(e) {
+               document.write(e)
+            }
+
+         };
+
+   
+         var init = function () {
+           // registerEvent();
+            getOrders();
+         };
+
+         init();
+
+         return this;
+      };
+   })(jQuery);
+
+   $(document).ready(function () {
+      var studentManager = new $.StudentManager({});
+   });
+</script>
+
+{% endblock %}

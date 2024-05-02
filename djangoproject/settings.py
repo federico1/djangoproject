@@ -66,7 +66,8 @@ INSTALLED_APPS = (
     'app_api',
     'app_api_v2',
     'drf_yasg',
-    'corsheaders'
+    'corsheaders',
+    'app_api_backend_v1'
 )
 
 MIDDLEWARE = [
