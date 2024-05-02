@@ -113,15 +113,16 @@
             try {
 
                $(".loader").parent().show();
-               $(".loader strong").text("Loading Students");
+               $(".loader strong").text("Loading courses");
    
                if (userDataTable) {
                   userDataTable.destroy();
                }
    
                $("#listTable").on("draw.dt", function () {
+                  console.log(userDataTable, '1');
                   if (!userDataTable) return;
-   
+                  console.log(userDataTable);
                   // $("#listTable tbody tr").each(function () {
    
                   //    var row = userDataTable.row($(this));
