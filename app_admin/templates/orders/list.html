@@ -122,22 +122,23 @@
                $("#listTable").on("draw.dt", function () {
                   if (!userDataTable) return;
    
-                  $("#listTable tbody tr").each(function () {
+                  // $("#listTable tbody tr").each(function () {
    
-                     var row = userDataTable.row($(this));
+                  //    var row = userDataTable.row($(this));
    
-                     var data = row.data();
+                  //    var data = row.data();
    
-                    // var source = document.getElementById("itemActionTemplate").innerHTML;
-                    // var template = Handlebars.compile(source);
+                  //   // var source = document.getElementById("itemActionTemplate").innerHTML;
+                  //   // var template = Handlebars.compile(source);
    
-                     //var element = studentsList.find(a => a.id == $(this).attr("id"));
+                  //    //var element = studentsList.find(a => a.id == $(this).attr("id"));
    
-                    // row.child(template(data)).show();
-                  });
+                  //   // row.child(template(data)).show();
+                  // });
    
                   $(".loader").parent().hide();
                   waitDialog.modal('hide');
+                  console.log(1);
                });
    
                userDataTable = $("#listTable").DataTable({
