@@ -27,7 +27,6 @@ def send_contact_alert(form_data):
         return 1
 
     except Exception as ex:
-        print(ex)
         post_firebase(form_data)
         return 0
 
@@ -38,5 +37,4 @@ def post_firebase(form_data):
         x = requests.post(url, json = form_data)
 
     except Exception as ex:
-        print(ex)
         return 0

@@ -8,5 +8,4 @@ register = template.Library()
 @register.filter
 def get_enroll(qs, student_user):
     qs = qs.get(user=student_user)
-    print(qs)
     return qs

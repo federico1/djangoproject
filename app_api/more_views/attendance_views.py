@@ -52,7 +52,6 @@ def ApproveAttendance(request):
     if request.method == 'POST':
         data_object = Attendance.objects.get(pk=request.data['id'])
         data_object.is_approved = request.data['is_approved']
-        print(data_object.is_approved)
         data_object.save()
 
         result = 1

@@ -108,7 +108,6 @@ class PackageCourseApiView(APIView):
         dataArray = request.POST['tasks']  
         serializer = PackageCourseSerializer(data=json.loads(dataArray), many=True)
         if serializer.is_valid():
-            print(serializer.data)
             serializer.save()
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -128,7 +127,7 @@ class PackageSubjectApiView(APIView):
         subjectId = int(request.POST['subject'])
         method = request.POST['method']
         result = 0
-        print(subjectId)
+
         packageObject = Package.objects.get(pk=packageId)
         
         if method == 'add':

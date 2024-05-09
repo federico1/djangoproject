@@ -381,14 +381,11 @@ def download_certificate(request, pk):
 
             ref_file_path = os.path.join(
                 settings.MEDIA_URL, 'uploads', file_name)
-            
-            print(ref_file_path)
 
             # certificate_object = StudentCertificate(
             #     course=course, user=student, ref_number=ref_number, file_path=ref_file_path)
 
             # certificate_object.save()
-            # print(certificate_object.ref_number)
 
             with open(file_path, 'rb') as fh:
                 response = HttpResponse(

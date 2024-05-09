@@ -105,7 +105,6 @@ class CourseListView(TemplateResponseMixin, View):
             if subject in obsele_subjects:
                 url = (reverse('course_list_subject', kwargs={
                        "subject": obsele_subjects[subject]}))
-                print(url)
             return redirect(url)
 
 
@@ -148,11 +147,9 @@ class CourseListViewV2(TemplateResponseMixin, View):
                                             })
         except Subject.DoesNotExist:
             url = '/'
-            print(subject)
             if subject in obsele_subjects:
                 url = (reverse('course_list_subject', kwargs={
                        "subject": obsele_subjects[subject]}))
-                print(url)
             return redirect(url)
 
 
@@ -181,7 +178,6 @@ class CourseDetailView(DetailView):
         context['enroll_form'] = CourseEnrollForm(
             initial={'course': self.object})
         
-        print(self.object)
         return context
 
 
