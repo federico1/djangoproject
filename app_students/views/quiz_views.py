@@ -22,7 +22,9 @@ def take_quiz(request, pk):
 
         student = request.user
 
-        if student.taken_quizzes.filter(quiz=pk).exists():
+        is_quiz_exist = student.taken_quizzes.filter(quiz=pk).exists()
+
+        if is_quiz_exist:
 
             if request.GET['ref'] is not None:
                 return redirect(request.GET['ref'] + "&type=quiz")
@@ -36,6 +38,13 @@ def take_quiz(request, pk):
 
         unanswered_questions = student.get_unanswered_questions(quiz)
         total_unanswered_questions = unanswered_questions.count()
+
+        if not is_quiz_exist and total_unanswered_questions <=0:
+            answers = student.quiz_answers.filter(answer__question__quiz=quiz)
+            for ans in answers:
+                ans.delete()
+            unanswered_questions = student.get_unanswered_questions(quiz)
+            total_unanswered_questions = unanswered_questions.count()
 
         progress = 100 - \
             round(((total_unanswered_questions - 1) / total_questions) * 100)

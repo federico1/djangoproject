@@ -126,6 +126,7 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
         context['content_completed'] = True
         context['enrollment'] = enrollment.first()
         context['user_ip'] = get_client_ip(self.request)
+        context['course_tree'] = None
 
         course_details = []
         modules_list = course.modules.all().order_by('order')
@@ -173,18 +174,19 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
         if 'module_id' in self.kwargs and self.request.GET.get('content'):
 
             content_id = int(self.request.GET.get('content'))
+            module_id = int(self.kwargs['module_id'])
             context['module'] = course.modules.get(id=self.kwargs['module_id'])
 
             if self.request.GET.get('type') == 'quiz':
                 context['active_content'] = [x for
-                                             x in course_details if x['object'].id == content_id and x['type'] == 'quiz'][0]
+                                             x in course_details if x['object'].id == content_id and x['module'].id == module_id and x['type'] == 'quiz'][0]
             else:
                 context['active_content'] = [x for
                                              x in course_details if x['object'].id == content_id and x['type'] == 'content'][0]
 
             if self.request.GET.get('type') == 'quiz':
                 current_index = [ix for ix, x in enumerate(
-                    course_details) if x['object'].id == content_id and x['type'] == 'quiz'][0]
+                    course_details) if x['object'].id == content_id and x['module'].id == module_id and x['type'] == 'quiz'][0]
             else:
                 current_index = [ix for ix, x in enumerate(
                     course_details) if x['object'].id == content_id and x['type'] == 'content'][0]
@@ -209,9 +211,12 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
                 score = t_q.score
 
             context['active_content'] = {'type': 'quiz',
-                                         'object': course.quiz, 'score': score, 'module': None, 'complete': True if course.quiz.id in taken_quizzes else False}
+                                         'object': course.quiz, 'score': score, 'module': context['module'], 'complete': True if course.quiz.id in taken_quizzes else False}
+
+        context['course_tree'] = course_details
 
         return context
+
 
     def render_to_response(self, context, **response_kwargs):
 

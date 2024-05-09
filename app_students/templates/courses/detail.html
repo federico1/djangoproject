@@ -152,6 +152,11 @@
                 <div class="col-md-8">
                     <div class="blog-post-item">
                         <div class="row">
+{% comment %} 
+                            {% for m in course_tree %}
+                            <div class="col-12">{{forloop.counter0}} {{m.object}} {{m.type}} {{m.complete}}</div> <br>
+                            {% endfor %} {% endcomment %}
+
                             {% if module == None %}
                                 {% if request.GET.type == 'quiz' and object.quiz is not None %}
                                     <div class="col-md-12 mb-30">
@@ -285,9 +290,9 @@
                                     <li class="cat-item">
                                         <div class="myCollapsible">
                                             <div>
-                                                <a href="javascript:;" class="accordion-button" data-toggle="collapse" data-target="#collapseOne-{{ m.id }}" aria-expanded='{% if m == module %}true{% endif %}'>
+                                                <a href="javascript:;" class="accordion-button d-flex" data-toggle="collapse" data-target="#collapseOne-{{ m.id }}" aria-expanded='{% if m == module %}true{% endif %}'>
                                                     <i class="fa {% if m == module %} fa-angle-down {% else %} fa-angle-right {% endif %}"></i>
-                                                    {{ m.title }}
+                                                    <span>{{ m.title |lower }}</span>
                                                 </a>
                                             </div>
                                             <div class="clearfix"></div>
@@ -300,17 +305,17 @@
                                                         <li class="content-item py-1 pl-2 {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}active{% endif %}" data-progress="{{ content.has_progress }}">
                                                             {% if content.id in completed_contents or active_content.object.id  == content.id %}
 
-                                                                <a class="lesson content-{{ content.id }} {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}pin{% endif %}" href="{% url 'student_course_detail_module' object.id m.id %}?content={{ content.id }}">
+                                                                <a class="d-flex lesson content-{{ content.id }} {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}pin{% endif %}" href="{% url 'student_course_detail_module' object.id m.id %}?content={{ content.id }}">
 
                                                                     <i title=" {{ content.content_type }}" class="fa {{ content.content_type }}"></i>
-                                                                    {{ item.title }}
-
+                                                                  
+                                                                    <span>{{ item.title|lower }}</span>
                                                                 </a>
 
                                                             {% else %}
-                                                                <a href="javascript:;">
+                                                                <a class="d-flex" href="javascript:;">
                                                                     <i title=" {{ content.content_type }}" class="fa {{ content.content_type }}"></i>
-                                                                    {{ item.title }}
+                                                                    <span>{{ item.title|lower }}</span>
                                                                 </a>
                                                             {% endif %}
 
@@ -321,7 +326,7 @@
 
                                                     {% if m.quiz != None and m.quiz_id in taken_quizzes and m.quiz.questions.count > 0 %}
 
-                                                        <li class="content-item py-1 pl-2 complete" data-progress="True">
+                                                        <li u-id="{{m.quiz_id}}{{m.id}}" class="content-item py-1 pl-2 complete {% if active_content.object.id  == m.quiz_id and active_content.module.id == m.id %}active{% endif %}" data-progress="True">
                                                             <a class="complete" href="{% url 'student_course_detail_module' object.id m.id %}?content={{ m.quiz_id }}&type=quiz">
                                                                 <i class="fa fa-question"></i>
                                                                 Take Quiz
@@ -928,6 +933,14 @@
 
             background: #20a041;
             border: 1px solid #20a041;
+        }
+
+        .blog-sidebar .widget.widget_categories ul li a i {
+            margin-top:10px;
+        }
+
+        .blog-sidebar .widget.widget_categories ul li a span {
+            text-transform: capitalize;
         }
     </style>
 
