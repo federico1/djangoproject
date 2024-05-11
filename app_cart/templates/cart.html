@@ -163,7 +163,7 @@
       </td>
 
       <td class="product-name" data-title="Product">
-         <a href="#">{{fields.title}}</a>
+         <a href="{{course_link}}">{{fields.title}}</a>
       </td>
 
       <td class="product-price" data-title="Price">
@@ -307,6 +307,7 @@
       
       }
 </style>
+
 <script>
     (function ($) {
 
@@ -350,6 +351,12 @@
                             ) + ".jpg";
                         }
 
+                        item.course_link = '/course/' + item.fields.slug;
+
+                        if(!item.fields.slug|| item.fields.slug === "") {
+                            item.course_link = "#";
+                        }
+                        
                         var source = document.getElementById("cartItemTemplate").innerHTML;
                         var template = Handlebars.compile(source);
 
