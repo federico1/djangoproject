@@ -515,6 +515,20 @@
                         var courseURL = "{% url 'student_courses' %}?id={{ course.id }}";
 
                         if (xhr.status == 201) {
+
+                            gtag("event", "add_to_cart", {
+                                currency: "USD",
+                                value: 0.00,
+                                items: [
+                                  {
+                                    item_id: "{{ object.id }}",
+                                    item_name: "{{ object.title }}",
+                                    price: 0.00,
+                                    quantity: 1
+                                  }
+                                ]
+                              });
+
                             Toast.fire({
                                 icon: 'success',
                                 title: 'You have successfully enrolled to this course'

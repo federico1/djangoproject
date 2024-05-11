@@ -535,19 +535,32 @@
             };
 
             var logEvent = function (product) {
-               var _opts = {
-                  hitType: "event",
-                  eventCategory: "Cart",
-                  eventAction: "add_to_cart",
-                  eventLabel: window.location.href,
-                  eventValue: product.pk,
-               };
+               // var _opts = {
+               //    hitType: "event",
+               //    eventCategory: "Cart",
+               //    eventAction: "add_to_cart",
+               //    eventLabel: window.location.href,
+               //    eventValue: product.pk,
+               // };
 
-               gtag('event', 'click', {
-                  'app_name': 'pdhsafety',
-                  'event_label': "add_to_cart",
-                  'value': product.pk
-               });
+               // gtag('event', 'click', {
+               //    'app_name': 'pdhsafety',
+               //    'event_label': "add_to_cart",
+               //    'value': product.pk
+               // });
+
+               gtag("event", "add_to_cart", {
+                  currency: "USD",
+                  value: parseFloat(product.fields.price),
+                  items: [
+                    {
+                      item_id: product.pk,
+                      item_name: product.fields.title,
+                      price: parseFloat(product.fields.price),
+                      quantity: 1
+                    }
+                  ]
+                });
             };
 
             var registerEvent = function () {
@@ -566,7 +579,7 @@
                         parsedData.subject = subject;
                      }
 
-                     addCourseToMemory(parsedData);
+                    // addCourseToMemory(parsedData);
                      logEvent(parsedData);
                   }
                });
