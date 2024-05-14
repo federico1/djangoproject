@@ -14,23 +14,25 @@ class StaticViewSitemap(Sitemap):
         return reverse(item)
 
 
+class CourseSitemap(Sitemap):
+    changefreq = "daily"
+
+    def items(self):
+        item = Course.objects.filter(is_deleted=False, is_noindex=False).order_by('is_free').all()
+        return item
+
+    def location(self, obj):
+        url = obj.get_absolute_url()
+        return url if len(url)>0 and url[-1]=='/' else url + '/'
+
+
+
 class SubjectsSitemap(Sitemap):
     changefreq = "weekly"
 
     def items(self):
         subject_list = Subject.objects.all()
         return subject_list
-
-    def location(self, obj):
-        url = obj.get_absolute_url()
-        return url if len(url)>0 and url[-1]=='/' else url + '/'
-
-class CourseSitemap(Sitemap):
-    changefreq = "daily"
-
-    def items(self):
-        item = Course.objects.filter(is_deleted=False, is_noindex=False).all()
-        return item
 
     def location(self, obj):
         url = obj.get_absolute_url()
