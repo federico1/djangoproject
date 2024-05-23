@@ -35,6 +35,9 @@ and (-webkit-min-device-pixel-ratio: 1) {
     .top-search-wrap  {
         width: 420px;
      }
+     .subjects-child-dropdown {
+      min-width: 300px !important;
+     }
 }
 
 /* ----------- Retina Screens ----------- */
@@ -46,12 +49,25 @@ and (min-resolution: 192dpi) {
     .top-search-wrap  {
         width: 420px;
      }
+
+     .subjects-child-dropdown {
+      min-width: 300px !important;
+     }
 }
 
  @media only screen and (max-width: 600px) {
     .site-navigation h3 {
       font-size: 12px;
     }
+
+    .top-search-wrap  {
+      width: 360px;
+   }
+
+   .subjects-child-dropdown {
+    width: 100% !important;
+   }
+
   }
 
   @media only screen and (max-width: 280px) {

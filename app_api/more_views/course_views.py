@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, action
 from django.http import Http404
-from django.db.models import Count
+from django.db.models import Count, Sum, Q, F
 from datetime import datetime
 from django.conf import settings
 from django.core.cache import cache
@@ -33,7 +33,12 @@ class SubjectDetailView(APIView):
 
         if not snippets:
             snippets = Subject.objects.all()
+            # snippets = Subject.objects.annotate(free_count=(Count('id', filter=Q(courses__is_free=True))),
+            #                                     paid_count=(Count('id', filter=Q(courses__is_free=False)))).order_by('-paid_count', 'free_count')
             cache.set('api_all_subjects', snippets)
+
+        # paid_subjects = Subject.objects.filter(courses__is_free=False).annotate(courses_count=Count('id')).order_by('-courses_count')
+        # free_subjects = Subject.objects.filter(courses__is_free=True).annotate(courses_count=Count('id')).order_by('-courses_count')
 
         serializer = course_serializers.SubjectSerializer(snippets, many=True)
 
@@ -41,7 +46,8 @@ class SubjectDetailView(APIView):
 
     def put(self, request, format=None):
         subject_object = self.get_object(request.data['id'])
-        serializer = course_serializers.SubjectSerializer(subject_object, data=request.data)
+        serializer = course_serializers.SubjectSerializer(
+            subject_object, data=request.data)
 
         if serializer.is_valid():
             serializer.save()
@@ -52,7 +58,7 @@ class SubjectDetailView(APIView):
 
 class CourseViewset(viewsets.ModelViewSet):
     """ details of function"""
-    
+
     queryset = Course.objects.all()
     serializer_class = course_serializers.CourseSerializer
 
@@ -75,12 +81,14 @@ class CourseViewset(viewsets.ModelViewSet):
 
         if c_limit is not None:
             snippets = snippets.order_by(order_field)[:int(c_limit)]
-        
+
         if c_result_type is not None and c_result_type == 'auto_search':
-            serializer = course_serializers.CourseSearchSerializer(snippets, many=True)
+            serializer = course_serializers.CourseSearchSerializer(
+                snippets, many=True)
             return Response(serializer.data)
 
-        serializer = course_serializers.CourseCoreSerializer(snippets, many=True)
+        serializer = course_serializers.CourseCoreSerializer(
+            snippets, many=True)
 
         return Response(serializer.data)
 
@@ -95,7 +103,7 @@ class CourseViewset(viewsets.ModelViewSet):
 
     def create(self, request):
         pass
-    
+
     @action(detail=False)
     def depth(self, request):
         snippets = self.queryset
@@ -220,7 +228,7 @@ class EnrollmentViewset(viewsets.ViewSet):
             else:
                 return Response(serializer.data, status=status.HTTP_226_IM_USED)
         elif request.user.is_superuser == True and serializer.is_valid():
-            
+
             if not Enrollments.objects.filter(course=request.data['course'], user=request.data['user']).exists():
 
                 serializer.save()
@@ -255,10 +263,11 @@ class EnrollmentViewset(viewsets.ViewSet):
 
         if request.user.is_authenticated:
             snippets = Enrollments.objects.filter(user_id=request.user)
-            serializer = course_serializers.EnrollmentCoreSerializer(snippets, many=True)
+            serializer = course_serializers.EnrollmentCoreSerializer(
+                snippets, many=True)
             return Response(serializer.data)
-        
-        return Response("AUTH", status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION) 
+
+        return Response("AUTH", status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
 
 class CourseFeatureApiView(APIView):
@@ -397,35 +406,37 @@ class CourseRatingViewSet(viewsets.ModelViewSet):
     serializer_class = course_serializers.RatingSerializer
 
     def create(self, request, *args, **kwargs):
-       
+
         data = request.data
         if isinstance(data, list):
             serializer = self.get_serializer(data=request.data, many=True)
         else:
             serializer = self.get_serializer(data=request.data)
-            
+
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED,
-                    headers=headers)
+                        headers=headers)
 
     @action(detail=False, methods=['get'])
     def is_rated(self, request):
 
         course = request.GET["course"]
         user = request.GET["user"]
-        is_course_rated = AssessRating.objects.filter(course=course, student=user).exists()
+        is_course_rated = AssessRating.objects.filter(
+            course=course, student=user).exists()
 
         return Response(is_course_rated,
-                            status=status.HTTP_200_OK)
+                        status=status.HTTP_200_OK)
 
 
 class DumpCourse(APIView):
 
     def get(self, request, format=None):
         snippets = Course.objects
-        serializer = course_serializers.CourseDepthSerializer(snippets, many=True)
+        serializer = course_serializers.CourseDepthSerializer(
+            snippets, many=True)
 
         return Response(serializer.data)
 
