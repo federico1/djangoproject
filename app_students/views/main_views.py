@@ -24,7 +24,7 @@ from xhtml2pdf.config.httpconfig import httpConfig
 from django.views.decorators.cache import cache_page, never_cache
 from django.views.decorators.vary import vary_on_cookie
 
-from app_students.forms import StudentSignupForm, CompanySignupForm
+from app_students.forms import StudentSignupForm
 from app_students.file_utils import uploaded_file, get_client_ip
 from app_students.mail_utils import send_welcome_mail
 from students.decorators import student_required
@@ -307,26 +307,6 @@ class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
 
         return super(CertificateTemplateDetailView, self).render_to_response(context, **response_kwargs)
 
-@method_decorator(never_cache, name="dispatch")
-class CompanyRegistrationView(CreateView):
-    model = User
-    template_name = 'registration/signup_company_form.html'
-    form_class = CompanySignupForm
-
-    def get_context_data(self, **kwargs):
-        kwargs['user_type'] = 'company'
-        return super().get_context_data(**kwargs)
-
-    def form_valid(self, form):
-
-        result = super(CompanyRegistrationView, self).form_valid(form)
-        cd = form.cleaned_data
-        user = authenticate(username=cd['email'], password=cd['password1'])
-        login(self.request, user)
-
-        #send_welcome_mail(cd)
-
-        return result
 
     def get_success_url(self):
 

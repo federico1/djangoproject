@@ -1,9 +1,12 @@
 from django.urls import path
-from . import views
-#from django.conf import settings
+from .views import dashboard_views, public_views
+
 
 urlpatterns = [
     path('dashboard/',
-         views.HomeView.as_view(),
+         dashboard_views.HomeView.as_view(),
          name='business_dashboard'),
+     path('account-register/', public_views.RegisterBusinessUserView.as_view(),
+         name='business_user_register'),
 ]
+

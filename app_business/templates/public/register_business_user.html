@@ -1,10 +1,11 @@
-{% extends 'app_base.html' %}
-{% load i18n %}
+{% extends 'app_base.html' %} {% load i18n %}
 
 {% block title %}
-  {% trans 'Sign up as ' %}
-  {{ user_type }}
-  | pdhsafety.com
+  {% trans 'Create Business Account' %}| pdhsafety.com
+{% endblock %}
+
+{% block meta_desc %}
+  {% trans 'meta data' %}
 {% endblock %}
 
 {% block content %}
@@ -13,13 +14,13 @@
       <div class="row justify-content-center">
         <div class="col-lg-8">
           <div class="page-header-content">
-            <h1>Create Student Account</h1>
+            <h1>Pdhsafety for business</h1>
             <ul class="list-inline mb-0">
               <li class="list-inline-item">
                 <a href="/">Home</a>
               </li>
               <li class="list-inline-item">/</li>
-              <li class="list-inline-item">Student Register</li>
+              <li class="list-inline-item">Business Account Register</li>
             </ul>
           </div>
         </div>
@@ -31,39 +32,24 @@
     <section class="space-3">
       <div class="container">
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-6">
             <div class="woocommerce-notices-wrapper"></div>
 
-            <div class="row align-items-center">
-              <div class="col-lg-6">
-                <div class="section-heading">
-                  <span class="subheading">Sign up and start learning</span>
-                  <h3>With Professional Trainers</h3>
-                </div>
-              </div>
-
-              <div class="col-lg-6">
-                <div class="section-heading">
-                  <div class="course-btn text-lg-right">
-                    <a href="{% url 'business_user_register' %}" class="btn btn-main"><i class="fa fa-user mr-2"></i> Business Account? Join With us</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <form class="woocommerce-form woocommerce-form-login login" role="form" action="{% url 'student_registration' %}?next={{ request.GET.next }}" id="fmRegister" method="post">
+            <form class="woocommerce-form woocommerce-form-login login" role="form" action="{% url 'business_user_register' %}?next={{ request.GET.next }}" id="fmRegister" method="post">
               {{ form.errors }}
               {% csrf_token %}
+
               {% for hidden in form.hidden_fields %}
                 {{ hidden }}
               {% endfor %}
 
               <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-12">
                   <div class="row">
                     {% for field in form.visible_fields %}
                       <div class="col-md-6 mb-2">
                         <div class="form-group">
-                          <label style="float: none;" class="control-label" for="id_{{ field.name }}">{{ field.label }}</label>
+                          <label style="float: none" class="control-label" for="id_{{ field.name }}">{{ field.label }}</label>
                           {{ field }}
                           <!-- <p class="help-text">{{ field.help_text }} </p> -->
                           {% if field.errors %}
@@ -76,13 +62,6 @@
                       </div>
                     {% endfor %}
                   </div>
-                </div>
-                <div class="col-md-4 text-center mt-4">
-                  <img src="https://via.placeholder.com/200x200.png?text=.." id="prevImage" alt="image" style="max-height: 200px;" class="img-thumbnail" />
-                  <p class="mt-2">
-                    <a href="javascript:;" id="btnAddImage" class="btn btn-primary btn-sm" role="button">Upload Image</a>
-                    <a href="javascript:;" id="btnRemoveImage" class="btn btn-danger btn-sm" role="button"><i class="fa fa-trash-alt"></i></a>
-                  </p>
                 </div>
               </div>
 
@@ -109,6 +88,42 @@
               </div>
             </form>
           </div>
+
+          <div class="col-md-6">
+            <div class="row align-items-center">
+              <div class="col-lg-12">
+                <div class="section-heading mb-4">
+                  <span class="subheading">BUSINESS ACCOUNT</span>
+                  <h3>How we help you?</h3>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <p>Is it time to train your employees? Sign up for a pdhsafety.com business account today! We offer a powerful Learning Management System (LMS) and special discounts for bulk purchases.</p>
+
+                <p>From small groups to large teams, NYC Construction Safety Training (PdhSafety.com) simplifies safety compliance. Easily assign courses, track progress, and verify completions for a safer, more productive jobsite.</p>
+                <div class="about-content">
+                  <div class="about-text-block">
+                    <i class="bi bi-list"></i>
+                    <h4>Advance LMS</h4>
+                    <p>We are offering 100% online and mobile-friendly courses.</p>
+                    <p>Our easy-to-use platform offers a centralized dashboard to track, assign, and manage training for your entire team. Benefit from a library of over 300+ expert-developed courses designed to minimize workplace hazards and boost employee awareness.</p>
+                    <p>Enjoy cost savings with group discounts, flexible payment options, and dedicated support from our safety specialists.</p>
+                    <p>Let's build a stronger safety culture together. Sign up today!</p>
+                  </div>
+                </div>
+
+                <div class="about-content">
+                  <div class="about-text-block">
+                    <i class="bi bi-monitor"></i>
+                    <h4>Launch your course</h4>
+                    <p>Elevate your organization's prominence and empower learners to demonstrate their achievements and expertise by issuing branded completion certificates for your courses.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -122,6 +137,7 @@
     </form>
   </div>
 {% endblock %}
+
 {% block scripts %}
   <style>
     label.error {
@@ -155,6 +171,10 @@
 
   <script>
     $(document).ready(function () {
+      $('#fmRegister input.col-12').each(function () {
+        $(this).closest('.col-md-6').eq(0).removeClass('col-md-6').addClass('col-md-12')
+      })
+    
       $('#btnRemoveImage').click(function () {
         $('#prevImage').attr('src', 'https://via.placeholder.com/200x200.png?text=..')
         $('#id_image').val(null)

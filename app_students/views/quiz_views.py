@@ -10,7 +10,7 @@ from students.models import Quiz, TakenQuiz
 
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('django')
 
 
 @login_required
@@ -93,7 +93,7 @@ def take_quiz(request, pk):
             'total_questions': total_questions
         })
     except Exception as ex:
-        logger.debug(ex)
+        logger.error(ex, exc_info=True)
         return HttpResponse('This time quiz feature is under maintenance. Please contact us.')
 
 
@@ -122,7 +122,7 @@ def quiz_reset(request, pk):
         else:
             return HttpResponse(0)
     except Exception as ex:
-        logger.critical(ex)
+        logger.error(ex, exc_info=True)
         return HttpResponse(0)
 
 

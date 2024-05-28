@@ -233,7 +233,7 @@
                      </li>
 
                      <li class="nav-item">
-                        <a title="Packages" class="nav-link" href="/packages/" aria-label="Packages"> Packages </a>
+                        <a title="Business Account Register" class="nav-link" href="{% url 'business_user_register' %}" aria-label="Business"> Business Account </a>
                      </li>
 
                      <li class="nav-item">
@@ -341,7 +341,7 @@
                         <a title="Register" href="{% url 'student_registration' %}">Register</a>
                      </li>
                      <li>
-                        <a title="Business Register" href="{% url 'company_registration' %}">Business Register</a>
+                        <a title="Business Register" href="{% url 'business_user_register' %}">Business Account</a>
                      </li>
                     
                      {% endif %}

@@ -20,7 +20,7 @@ Best Safety Training and Certification Courses Online | pdhsafety.com
 
 {% cache 500 courses subject.slug if subject else all %}
 
-<section class="page-header" data-time='{{page_time}}'>
+<section class="page-header" data-time="{{page_time}}">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -117,7 +117,9 @@ Best Safety Training and Certification Courses Online | pdhsafety.com
                 <div class="course-block">
                     <div class="course-img">
                         <a class="text-dark" href="{% url 'course_detail' course.slug %}">
-                            <img width="348" height="281" data-src="{% static 'edutim/images/courses/course-' %}{% random_int 1 12 %}.jpg" alt="image"
+                            <img width="348" height="281" 
+                            data-src="{% static 'edutim/images/courses/NYC Construction Safety Training v2.jpg' %}"
+                             alt="image"
                                 class="img-fluid lazy" />
                         </a>
                         {% if course.features.first.skill_level %}

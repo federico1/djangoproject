@@ -15,6 +15,7 @@ class User(AbstractUser):
     person_eyes_color = models.TextField(null=True, blank=True)
     primary_id_src = models.TextField(null=True, blank=True)
     primary_id_type = models.TextField(null=True, blank=True)
+    company_name = models.TextField(null=True, blank=True)
 
     @property
     def full_name(self):

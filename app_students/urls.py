@@ -22,9 +22,6 @@ urlpatterns = [
     path('course/<int:pk>/certificate/download',
          main_views.download_certificate, name='student_course_certificate_download'),
 
-     path('company/register/', main_views.CompanyRegistrationView.as_view(),
-         name='company_registration'),
-
     path('quiz/<int:pk>/', quiz_views.take_quiz, name='student_take_quiz'),
     path('quiz-reset/<int:pk>/', quiz_views.quiz_reset, name='student_reset_quiz'),
     path('quiz-taken/', quiz_views.TakenQuizTemplateView.as_view(), name='student_taken_quiz'),
