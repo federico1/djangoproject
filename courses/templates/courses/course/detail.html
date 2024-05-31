@@ -309,7 +309,9 @@
                                 </a>
 
                                 {% endif %}
-
+                                <div class="font-weight-bold mt-2">
+                                    You will be awarded a certificate instantly.
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -366,8 +368,10 @@
                                     <span>
                                         <i class="fa fa-certificate"></i>Certificate :
                                     </span>
-                                    {{ object.features.first.certificate_status }}
+                                    {{ object.features.first.certificate_status }}:
+                                  
                                 </div>
+                              
                             </li>
                             {% endif %}
 
