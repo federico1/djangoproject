@@ -96,7 +96,7 @@ class CourseListView(TemplateResponseMixin, View):
 
             return self.render_to_response({'subjects': subjects,
                                             'subject': subject,
-                                            'courses': courses,
+                                            'courses': courses.order_by('is_free'),
                                             'instructors': None,
                                             'page_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                                             })

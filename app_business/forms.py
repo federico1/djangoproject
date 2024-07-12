@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
 
-from students.models import User
+from students.models import User, Student
 
 
 class BusinessUserSignupForm(UserCreationForm):
@@ -36,11 +36,12 @@ class BusinessUserSignupForm(UserCreationForm):
     def save(self, commit=True):
         cleaned_data = super(BusinessUserSignupForm, self).clean()
         user = super().save(commit=False)
-        user.is_student = False
+        user.is_student = True
         user.is_teacher = False
         user.is_super = False
         user.is_business = True
         user.username = user.email
         user.set_password(cleaned_data['password1'])
         user.save()
+        student = Student.objects.create(user=user)
         return user

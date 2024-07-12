@@ -11,10 +11,19 @@ Best Safety Training and Certification Courses Online | pdhsafety.com
 
 {% block meta_desc %}
 
-{% if subject %} Best Price Online Courses - {{ subject.title }} (Easy Access 24/7 On All Devices) Easy To Take Course Satisfaction Guarantee.
+{% if subject %} 
+
+{% if subject.meta_description %}
+{{subject.meta_description}}
+{% else %}
+Best Price Online Courses - {{ subject.title }} (Easy Access 24/7 On All Devices) Easy To Take Course Satisfaction Guarantee.
+{% endif %}
+
 {% endif %}
 
 {% endblock %}
+
+{% block meta_keywords %}{{subject.meta_tags}}{% endblock %}
 
 {% block content %}
 

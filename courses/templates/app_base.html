@@ -94,7 +94,7 @@
       <div class="header-top">
          <div class="container">
             <div class="row align-items-center">
-               <div class="col-lg-6 col-md-6">
+               <div class="col-lg-4 col-md-4">
                  
 
                   <ul class="header-contact">
@@ -107,7 +107,7 @@
                         <a class="text-white" title="mail@pdhsafety.com" href="mailto:mail@pdhsafety.com">mail@pdhsafety.com</a>
                      </li>
                   </ul>
-                  <div class="header-socials">
+                  <div class="header-socials header-socials-v2">
                      <ul>
                          <li><a title="facebook" target="_blank" href="https://www.facebook.com/people/NYC-Construction-Safety-Training/61561593072255/"><i class="fab fa-facebook-f"></i></a></li>
                          <li><a title="x" target="_blank" href="https://x.com/nyc_safety"><i class="fab fa-twitter"></i></a></li>
@@ -116,7 +116,7 @@
                      </ul>
                  </div>
                </div>
-               <div class="col-lg-6 col-md-6">
+               <div class="col-lg-8 col-md-8">
                   <div class="header-right float-right">
                      <div class="header-socials">
                         <ul>
@@ -132,19 +132,19 @@
                      </div>
                      <div class="header-btn">
                         {% if request.user.is_authenticated %} {% if request.user.is_teacher == True %}
-                        <a title="Dashboard" href="{% url 'teacher_dashboard' %}" class="btn btn-main btn-small"
+                        <a title="Dashboard" href="{% url 'teacher_dashboard' %}" class="mb-1 btn btn-main btn-small"
                            aria-label="Teacher Dashboard">Teacher Dashboard</a>
                         {% endif %} {% if request.user.is_student == True %}
-                        <a title="Dashboard" href="{% url 'student_dashboard' %}" class="btn btn-main btn-small"
+                        <a title="Dashboard" href="{% url 'student_dashboard' %}" class="mb-1 btn btn-main btn-small"
                            aria-label="Student Dashboard">Student Dashboard</a>
                            {% endif %} {% if request.user.is_business == True %}
-                           <a title="Dashboard" href="{% url 'business_dashboard' %}" class="btn btn-main btn-small"
+                           <a title="Dashboard" href="{% url 'business_dashboard' %}" class="d-none mb-1 btn btn-main btn-small"
                               aria-label="Business Dashboard">My Dashboard</a>
                         {% endif %} {% if request.user.is_superuser == True %}
-                        <a title="Dashboard" href="{% url 'admin_dashboard' %}" class="btn btn-main btn-small"
+                        <a title="Dashboard" href="{% url 'admin_dashboard' %}" class="mb-1 btn btn-main btn-small"
                            aria-label="Admin Dashboard">Admin Dashboard</a>
                         {% endif %}
-                        <a title="Dashboard" href="{% url 'logout' %}?v={% now 'M-d-Y-H-i-s' %}" class="btn btn-main btn-small"
+                        <a title="Dashboard" href="{% url 'logout' %}?v={% now 'M-d-Y-H-i-s' %}" class="mb-1 btn btn-main btn-small"
                            aria-label="Logout">
                            <i class="fa fa-sign-out-alt"></i>
                         </a>
