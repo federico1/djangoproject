@@ -1,107 +1,143 @@
-{% extends "teacher_base.html" %}
+{% extends 'teacher_base.html' %}
 
 {% block title %}
-    {% if object %}
-        Edit content
-        {{ object.title }}
-    {% else %}
-        Add a new content
-    {% endif %}
+  {% if object %}
+    Edit content
+    {{ object.title }}
+  {% else %}
+    Add a new content
+  {% endif %}
 {% endblock %}
 
 {% block content %}
+  <section class="section-padding popular-course-slider bg-feature pt-5">
+    <div class="container">
+      <div class="row align-items-center justify-content-center">
+        <div class="col-lg-7">
+          <div class="section-heading center-heading">
+            <a href="{% url 'module_content_list' request.resolver_match.kwargs.module_id %}" class="subheading">
+              <i class="fa fa-arrow-alt-circle-left"></i>
+              Back To Module
+            </a>
 
-    <section class="section-padding popular-course-slider bg-feature pt-5">
-        <div class="container">
-            <div class="row align-items-center justify-content-center">
-                <div class="col-lg-7">
-                    <div class="section-heading center-heading">
-
-                        <a href="{% url 'module_content_list' request.resolver_match.kwargs.module_id %}" class="subheading">
-                            <i class="fa fa-arrow-alt-circle-left"></i>
-                            Back To Module
-                        </a>
-
-                        <h3>
-                            {% if object %}
-                                Edit content "{{ object.title }}"
-                            {% else %}
-                                Add a new content
-                            {% endif %}
-                        </h3>
-
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <section class="feature-3">
-                        <div class="container">
-                            <div class="row no-gutters">
-                                <div class="col-md-8 offset-md-2">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <form action="" method="post" enctype="multipart/form-data">
-
-                                                {% csrf_token %}
-
-                                                <div class="row">
-                                                    {% for field in form.visible_fields %}
-
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label style="float: none;" class="control-label" for="id_{{ field.name }}">{{ field.label }}</label>
-
-                                                                {{ field }}
-                                                                <!-- <p class="help-text">{{ field.help_text }} </p> -->
-                                                                {% if field.errors %}
-                                                                    <small class="form-text text-danger">{{ field.label }}:
-                                                                        {{ field.errors|striptags }}</small>
-                                                                {% endif %}
-
-                                                            </div>
-                                                        </div>
-
-                                                    {% endfor %}
-
-                                                </div>
-
-
-                                                <p>
-                                                    <button type="submit" class="btn btn-info mb-3" value="">Save Content</button>
-                                                </p>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            </div>
+            <h3>
+              {% if object %}
+                Edit content "{{ object.title }}"
+              {% else %}
+                Add a new content
+              {% endif %}
+            </h3>
+          </div>
         </div>
-    </section>
+      </div>
 
+      <div class="row">
+        <div class="col-lg-12">
+          <section class="feature-3">
+            <div class="container">
+              <div class="row no-gutters">
+                <div class="col-md-8 offset-md-2 mb-4">
+                  <div class="card">
+                    <div class="card-body">
+                      <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="row">
+                          {% for field in form.visible_fields %}
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label style="float: none;" class="control-label" for="id_{{ field.name }}">{{ field.label }}</label>
+
+                                {{ field }}
+                                <!-- <p class="help-text">{{ field.help_text }} </p> -->
+                                {% if field.errors %}
+                                  <small class="form-text text-danger">
+                                    {{ field.label }}:
+                                    {{ field.errors|striptags }}
+                                  </small>
+                                {% endif %}
+                              </div>
+                            </div>
+                          {% endfor %}
+                        </div>
+
+                        <p>
+                          <button type="submit" class="btn btn-info mb-3" value="">Save Content</button>
+                        </p>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-8 offset-md-2">
+                  <div class="card">
+                     <div class="card-header">
+                        <div>For IFRAME ONLY</div>
+                    </div>
+                    <div class="card-body">
+                      <form id="fmFile" action="{% url 'file_upload_content' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="file" name="file" id="fu" class="mb-2" />
+                        <input type="hidden" name="course_id" value="{{ module_object.course.id }}" />
+                        <input type="hidden" name="module_id" value="{{ module_object.id }}" />
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="file_name" id="file_name" placeholder="File Name">
+                          </div>
+                          
+                        <button type="submit" class="btn btn-dark mb-3" value="">Upload File</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
 {% endblock %}
-
 
 {% block scripts %}
 
-    <script>
+  <script>
 
-        $(document).ready(function () {
-            $(".container input, select, textarea").addClass('form-control');
-            $(".container textarea").css('height', 70);
+    $(document).ready(function () {
+      $('.container input, select, textarea').addClass('form-control')
+      $('.container textarea').css('height', 70)
+    
+      if ($('#id_content').length > 0) {
+      }
 
-            if ($("#id_content").length > 0) {}
+      fileUploader();
+    })
+    
+    $('html, body').animate(
+      {
+        scrollTop: $('.card').offset().top - 200
+      },
+      1000
+    );
+    
+    const fileUploader = () => {
 
-        });
+      $('#fu').change(function () {
+        //$('#fmFile').submit()
+        //const inputFile = document.getElementById('fu');
+        //document.getElementById('file_name').value = inputFile.files.item(0).name;
+      })
+    
+      $('#fmFile').ajaxForm({
+        beforeSend: function () {
+        },
+        uploadProgress: function (event, position, total, percentComplete) {},
+        success: function (response) {
+          $("#id_site_url").val(response);
+        },
+        complete: function (xhr) {}
+      })
+    };
 
-
-        $('html, body').animate({
-            scrollTop: $(".card").offset().top - 200
-        }, 1000);
-    </script>
+  </script>
 {% endblock %}

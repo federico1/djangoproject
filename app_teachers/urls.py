@@ -59,4 +59,7 @@ urlpatterns = [
     path('students/',
          views.Students.as_view(),
          name='teacher_students'),
+    path('file-upload-content/',
+         views.file_uploadC_content,
+         name='file_upload_content'),
 ]

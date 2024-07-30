@@ -148,7 +148,9 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
     def get(self, request, module_id, model_name, id=None):
         form = self.get_form(self.model, instance=self.obj)
         return self.render_to_response({'form': form,
-                                        'object': self.obj})
+                                        'object': self.obj,
+                                        'module_object':Module.objects.get(pk=module_id)
+                                        })
 
     def post(self, request, module_id, model_name, id=None):
         form = self.get_form(self.model,
@@ -361,3 +363,41 @@ def ModuleCopy(request):
         result = module_object.id
 
     return HttpResponse(result, content_type='text/plain')
+
+
+def file_uploadC_content(request):
+    
+    import os
+    import time
+    from django.conf import settings
+
+    result = ""
+    
+    if request.method == 'POST' and request.FILES['file']:
+
+        file_name = request.POST.get('file_name')
+        course_id = request.POST.get('course_id')
+        module_id = request.POST.get('module_id')
+
+        file = request.FILES['file']
+
+        if file_name == "":
+            rf = time.strftime("%Y%m%d-%H%M%S")
+            file_name = file.name
+            name, ext = os.path.splitext(file_name)
+            file_name = "{name}_{uid}{ext}".format(name=name, uid=rf, ext=ext)
+
+        directory = os.path.join(settings.MEDIA_ROOT, 'courses', course_id, module_id)
+        
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        directory = os.path.join(directory, file_name)    
+
+        with open(directory, 'wb+') as destination:
+            for chunk in file.chunks():
+                destination.write(chunk)
+
+        result = os.path.join(settings.MEDIA_URL, 'courses', course_id, module_id, file_name).replace("\\", "/")
+
+    return HttpResponse(result)
