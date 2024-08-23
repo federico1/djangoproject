@@ -507,7 +507,7 @@
 
                Toast.fire({ icon: "success", title: "Course has been added to cart." });
 
-               window.location.href = '{% url "cart_detail" %}?time='+$.now();
+               window.location.href = '{% url "cart_detail" %}?time=' + $.now();
             };
 
             var onChangeCart = function () {
@@ -521,7 +521,7 @@
                   count = memoryData["_ps_"].length;
                }
 
-               var countText = count <=0 || count > 1 ? " items ": " item";
+               var countText = count <= 0 || count > 1 ? " items " : " item";
 
                $(".top-cart-count").html(count + countText);
             };
@@ -543,32 +543,45 @@
             };
 
             var logEvent = function (product) {
-               // var _opts = {
-               //    hitType: "event",
-               //    eventCategory: "Cart",
-               //    eventAction: "add_to_cart",
-               //    eventLabel: window.location.href,
-               //    eventValue: product.pk,
-               // };
+               try {
+                  const fields = product.fields;
 
-               // gtag('event', 'click', {
-               //    'app_name': 'pdhsafety',
-               //    'event_label': "add_to_cart",
-               //    'value': product.pk
-               // });
+                  const discounted_price = fields.discounted_price;
+                  const price = parseFloat(fields.price);
+                  const discounted_price_value = discounted_price ? parseFloat(discounted_price) : 0.00;
 
-               gtag("event", "add_to_cart", {
-                  currency: "USD",
-                  value: parseFloat(product.fields.price),
-                  items: [
-                    {
-                      item_id: product.pk,
-                      item_name: product.fields.title,
-                      price: parseFloat(product.fields.price),
-                      quantity: 1
-                    }
-                  ]
-                });
+                  const itemObject = {
+                     item_id: product.pk,
+                     item_name: fields.title,
+                     affiliation: product.subject,
+                     discount: discounted_price_value > 0 ? (price - discounted_price).toFixed(2) : discounted_price_value,
+                     index: 0,
+                     item_brand: product.subject,
+                     item_list_id: product.subject,
+                     item_list_name: product.subject_slug,
+                     item_variant: 'Premium_Course',
+                     location_id: "ChIJEWeHU0PywokRO83ywHyX8q8",
+                     price: discounted_price_value > 0 ? discounted_price_value : price,
+                     quantity: 1
+                  };
+
+                  itemObject.discount = parseFloat(itemObject.discount);
+
+                  const eventObject = {
+                     currency: "USD",
+                     value: itemObject.price,
+                     items: [
+                        itemObject
+                     ]
+                  };
+
+                  gtag("event", "add_to_cart", eventObject);
+
+                  console.log(eventObject)
+
+               } catch (error) {
+                  console.log('logEvent', error);
+               }
             };
 
             var registerEvent = function () {
@@ -579,6 +592,7 @@
 
                   var dataJson = $(this).attr("data-json");
                   var subject = $(this).attr("data-subject");
+                  var subjectSlug = $(this).attr("data-subject-slug");
 
                   if (dataJson) {
                      var parsedData = JSON.parse(dataJson);
@@ -586,9 +600,13 @@
                      if (subject) {
                         parsedData.subject = subject;
                      }
+                     if (subjectSlug) {
+                        parsedData.subject_slug = subjectSlug;
+                     }
+
                      logEvent(parsedData);
-                    addCourseToMemory(parsedData);
-                    
+                     addCourseToMemory(parsedData);
+
                   }
                });
             };
@@ -643,18 +661,18 @@
                   /*create a DIV element for each matching element:*/
                   b = document.createElement("DIV");
                   /*make the matching letters bold:*/
-                 // b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                  // b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
                   b.innerHTML += arr[i].title;
                   /*insert a input field that will hold the current array item's value:*/
                   b.innerHTML += "<input type='hidden' value='" + arr[i].slug + "'>";
-                 
+
                   /*execute a function when someone clicks on the item value (DIV element):*/
-                  
+
                   b.addEventListener("click", function (e) {
                      /*insert the value for the autocomplete text field:*/
                      inp.value = this.getElementsByTagName("input")[0].value;
                      Swal.showLoading();
-                     window.location.href = '/course/'+inp.value;
+                     window.location.href = '/course/' + inp.value;
                      /*close the list of autocompleted values,
                      (or any other open lists of autocompleted values:*/
                      closeAllLists();
@@ -729,7 +747,7 @@
       }
 
       autocomplete(document.getElementById("textQ"), []);
-      
+
 
    </script>
    {% block scripts %}{% endblock %}

@@ -121,14 +121,16 @@ Best Price Online Courses - {{ subject.title }} (Easy Access 24/7 On All Devices
                 <input type="hidden" name="id" value="{{ course.id }}" />
                 <input type="hidden" name="title" value="{{ course.title }}" />
                 <input type="hidden" name="subject" value="{{ subject }}" />
+                <input type="hidden" name="subject_slug" value="{{ subject.slug }}" />
                 <input type="hidden" name="price" value="{{ course.price }}" />
                 <input type="hidden" name="discounted_price" value="{{ course.discounted_price }}" />
                 <input type="hidden" name="modules" value="{{ course.total_modules }}" />
+                <input type="hidden" name="is_free" value="{{ course.is_free }}" />
 
 
                 <div class="course-block">
                     <div class="course-img">
-                        <a class="text-dark" href="{% url 'course_detail' course.slug %}">
+                        <a class="text-dark course-link" data-id="{{course.id}}" href="{% url 'course_detail' course.slug %}">
                             <img width="348" height="281" 
                             data-src="{% static 'edutim/images/courses/course-' %}{% random_int 1 5 %}.jpg"
                              alt="image"
@@ -153,7 +155,7 @@ Best Price Online Courses - {{ subject.title }} (Easy Access 24/7 On All Devices
                         </div>
 
                         <h2>
-                            <a href="{% url 'course_detail' course.slug %}">
+                            <a class="course-link" data-id="{{course.id}}" href="{% url 'course_detail' course.slug %}">
                                 {{ course.title }}
                             </a>
                         </h2>
@@ -191,8 +193,8 @@ Best Price Online Courses - {{ subject.title }} (Easy Access 24/7 On All Devices
                             </div>
 
                             <div class="buy-btn">
-                                <a href="{% url 'course_detail' course.slug %}"
-                                    class="btn btn-main-2 btn-small">Details</a>
+                                <a data-id="{{course.id}}" href="{% url 'course_detail' course.slug %}"
+                                    class="btn btn-main-2 btn-small course-link">Details</a>
                             </div>
                         </div>
                     </div>
@@ -276,73 +278,76 @@ Best Price Online Courses - {{ subject.title }} (Easy Access 24/7 On All Devices
 {% block scripts %}
 
 <style>
+    .sp-badge {
 
+        position: relative;
+        letter-spacing: 0.08em;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        transition: transform 0.3s ease;
+        text-align: center;
+        filter: drop-shadow(0.25em 0.7em 0.95em rgba(0, 0, 0, 0.8));
+        font-size: calc(11px + 14 * ((100vw - 420px) / (860)));
+        margin-bottom: 70px;
+    }
 
-.sp-badge {
+    @media screen and (max-width: 420px) {
+        .sp-badge {
+            font-size: 11px;
+        }
+    }
 
-    position: relative;
-    letter-spacing: 0.08em;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    transition: transform 0.3s ease;
-    text-align: center;
-    filter: drop-shadow(0.25em 0.7em 0.95em rgba(0, 0, 0, 0.8));
-    font-size: calc(11px + 14 * (( 100vw - 420px ) / (860)));
-    margin-bottom: 70px;
-}
-@media screen and (max-width: 420px) {
-  .sp-badge  {
-    font-size: 11px;
-  }
-}
-@media screen and (min-width: 1280px) {
-  .sp-badge  {
-    font-size: 25px;
-  }
-}
+    @media screen and (min-width: 1280px) {
+        .sp-badge {
+            font-size: 25px;
+        }
+    }
 
-.sp-badge :hover {
-  color: #fff;
-  text-decoration: none;
- 
-}
-.sp-badge :hover::before {
-  opacity: 0.9;
-}
-.sp-badge svg {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: block;
-  z-index: 0;
-  width: 10em;
-  height: 10em;
-}
-.sp-badge  span {
-  display: block;
-  background: #111;
-  border-radius: 0.4em;
-  padding: 0.4em 1em;
-  z-index: 1;
-  min-width: 11em;
-  border: 1px solid;
-  text-transform: uppercase;
-}
+    .sp-badge :hover {
+        color: #fff;
+        text-decoration: none;
 
-@media only screen and (min-width: 768px) {
-    .course-img {
-        min-height:281px;
-        max-height:281px;
-        margin-bottom: 10px;
+    }
+
+    .sp-badge :hover::before {
+        opacity: 0.9;
+    }
+
+    .sp-badge svg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: block;
+        z-index: 0;
+        width: 10em;
+        height: 10em;
+    }
+
+    .sp-badge span {
+        display: block;
+        background: #111;
+        border-radius: 0.4em;
+        padding: 0.4em 1em;
+        z-index: 1;
+        min-width: 11em;
+        border: 1px solid;
+        text-transform: uppercase;
+    }
+
+    @media only screen and (min-width: 768px) {
+        .course-img {
+            min-height: 281px;
+            max-height: 281px;
+            margin-bottom: 10px;
         }
 
         .course-img img {
-            width:100%;
-            max-height:100%;
+            width: 100%;
+            max-height: 100%;
             position: absolute;
             top: 0;
             bottom: 0;
@@ -350,14 +355,12 @@ Best Price Online Courses - {{ subject.title }} (Easy Access 24/7 On All Devices
             right: 0;
             margin: auto;
         }
-  }
-
-
-
-
+    }
 </style>
 
 <script>
+
+    let gtag_View_item_list_Object = {};
 
     $(document).ready(function () {
 
@@ -366,12 +369,22 @@ Best Price Online Courses - {{ subject.title }} (Easy Access 24/7 On All Devices
             window.location.href = val;
         });
 
+        $("div").on("click", ".course-link", function (e) {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+
+            var id = $(this).attr('data-id');
+            setGtag_select_item(id);
+        });
+
         var videoLink = $("#iframeVideo").attr('data-src');
 
-        if(videoLink) {
-            var link = 'https://www.youtube.com/embed/'+getId(videoLink);
+        if (videoLink) {
+            var link = 'https://www.youtube.com/embed/' + getId(videoLink);
             $("#iframeVideo").attr('src', link);
         }
+
+        setGtag_View_item_list();
     });
 
     function getId(url) {
@@ -384,5 +397,90 @@ Best Price Online Courses - {{ subject.title }} (Easy Access 24/7 On All Devices
             return 'error';
         }
     };
+
+    function setGtag_View_item_list() {
+        try {
+            const item_list_id = '{% if subject %} {{ subject.slug }} {%else%} all_courses {% endif %}'.trim();
+            const item_list_name = '{% if subject %} {{ subject.title }} {%else%} All Courses {% endif %}'.replace(/&amp;/g, '&').trim();
+
+            var eventObject = {
+                item_list_id: item_list_id.trim(),
+                item_list_name: item_list_name.trim(),
+                items: []
+            };
+
+            var items = [];
+
+            $(".course-item").each(function (ix) {
+
+                const id = $(this).find("input[name='id']").val().trim();
+                const title = $(this).find("input[name='title']").val().trim();
+                const subject = $(this).find("input[name='subject']").val().trim();
+                const subject_slug = $(this).find("input[name='subject_slug']").val().trim();
+                const price = parseFloat($(this).find("input[name='price']").val().trim());
+                const discounted_price = $(this).find("input[name='discounted_price']").val().trim();
+                const is_free = $(this).find("input[name='is_free']").val().trim();
+                const discounted_price_value = discounted_price ? parseFloat(discounted_price) : 0.00;
+
+                if (is_free !== 'True') {
+                    const itemObject = {
+                        item_id: id,
+                        item_name: title,
+                        affiliation: subject,
+                        discount: discounted_price_value> 0?(price-discounted_price):discounted_price_value,
+                        index: ix,
+                        item_brand: subject,
+                        item_list_id: subject,
+                        item_list_name: subject_slug,
+                        item_variant: is_free === 'True' ? 'Free_Course' : 'Premium_Course',
+                        location_id: "ChIJEWeHU0PywokRO83ywHyX8q8",
+                        price: discounted_price_value > 0? discounted_price_value:price,
+                        quantity: 1
+                    };
+
+                    items.push(itemObject);
+                }
+
+            });
+
+            eventObject.items = items;
+
+            gtag_View_item_list_Object = eventObject;
+
+            if (items.length > 0) {
+                gtag("event", "view_item_list", gtag_View_item_list_Object);
+            }
+
+            console.log(gtag_View_item_list_Object)
+        } catch (error) {
+            console.log('setGtag_View_item_list', error);
+        }
+    };
+
+    function setGtag_select_item(itemId) {
+        try {
+
+            var item = gtag_View_item_list_Object.items.find(a => a.item_id === itemId);
+
+            if (!item) return;
+
+            if (item.is_free !== 'True') {
+
+                const eventObject = {
+                    item_list_id: item.item_list_id,
+                    item_list_name: item.item_list_name,
+                    items: [
+                        item
+                    ]
+                };
+
+                gtag("event", "select_item", eventObject);
+            }
+
+        } catch (error) {
+            console.log('setGtag_select_item', error);
+        }
+    };
+
 </script>
 {% endblock %}

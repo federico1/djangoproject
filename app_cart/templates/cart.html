@@ -353,10 +353,10 @@
 
                         item.course_link = '/course/' + item.fields.slug;
 
-                        if(!item.fields.slug|| item.fields.slug === "") {
+                        if (!item.fields.slug || item.fields.slug === "") {
                             item.course_link = "#";
                         }
-                        
+
                         var source = document.getElementById("cartItemTemplate").innerHTML;
                         var template = Handlebars.compile(source);
 
@@ -371,7 +371,7 @@
                 $(".sub-total-price").html(totalPrice);
                 $(".total-price").html(totalPrice);
 
-                var countText = count <=0 || count > 1 ? " items ": " item";
+                var countText = count <= 0 || count > 1 ? " items " : " item";
 
                 $(".top-cart-count").html(count + countText);
 
@@ -385,6 +385,8 @@
                 if (isAUTH) {
                     validateCourseEnrolled();
                 }
+
+                setGtag_view_cart(memoryData['_ps_'], parseFloat(totalPrice));
             };
 
             var removeCartItem = function (id) {
@@ -453,29 +455,76 @@
 
                 $.get(url, {}, function (response) {
 
-                    $(".cart_item").each(function(){
+                    $(".cart_item").each(function () {
                         var id = $(this).attr('data-id');
                         var courseName = $(this).find('.product-name').text();
 
-                        if(id && id > 0) {
-                            var enrolled = response.find(a=>a.course_id == id);
-                            if(enrolled) {
-                               
+                        if (id && id > 0) {
+                            var enrolled = response.find(a => a.course_id == id);
+                            if (enrolled) {
+
                                 removeCartItem(id);
-                                
-                                var dv = $("<div />", {class:'alert alert-warning mt-3'});
+
+                                var dv = $("<div />", { class: 'alert alert-warning mt-3' });
                                 dv.html('You are already enrolled in this course: ' + courseName)
                                 $("#post-6").append(dv)
                             }
                         }
                     });
 
-                   
+
 
                     Swal.close();
                 })
 
-            }
+            };
+
+            var setGtag_view_cart = function (cartItems, total) {
+                try {
+                    const items = [];
+
+                    cartItems.forEach(product => {
+
+                        const fields = product.fields;
+
+                        const discounted_price = fields.discounted_price;
+                        const price = parseFloat(fields.price);
+                        const discounted_price_value = discounted_price ? parseFloat(discounted_price) : 0.00;
+
+                        const itemObject = {
+                            item_id: product.pk,
+                            item_name: fields.title,
+                            affiliation: product.subject,
+                            discount: discounted_price_value > 0 ? (price - discounted_price).toFixed(2) : discounted_price_value,
+                            index: 0,
+                            item_brand: product.subject,
+                            item_list_id: product.subject,
+                            item_list_name: product.subject_slug,
+                            item_variant: 'Premium_Course',
+                            location_id: "ChIJEWeHU0PywokRO83ywHyX8q8",
+                            price: discounted_price_value > 0 ? discounted_price_value : price,
+                            quantity: 1
+                        };
+
+                        itemObject.discount = parseFloat(itemObject.discount);
+
+                        items.push(itemObject);
+                    });
+
+                    const eventObject = {
+                        currency: "USD",
+                        value: total,
+                        items: items
+                    };
+
+                    gtag("event", "view_cart", eventObject);
+
+                    console.log(eventObject)
+
+                } catch (error) {
+                    console.log('setGtag_view_cart', error);
+                }
+            };
 
             var registerEvent = function () {
 

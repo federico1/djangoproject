@@ -257,6 +257,7 @@ Checkout | pdhsafety.com
 {% block scripts %}
 
 <script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID' %}"></script>
+
 {% comment %}
 <script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID_SANDBOX' %}"></script>
 {% endcomment %}
@@ -271,6 +272,8 @@ Checkout | pdhsafety.com
             var _totalPrice;
 
             var keyName = '__nyc_cart__data__';
+
+            var gtagCheckoutEventObject = {};
 
             var settings = $.extend({}, options);
 
@@ -320,8 +323,9 @@ Checkout | pdhsafety.com
                     window.location.href = '/';
                 }
 
+                setGtag_begin_checkout(memoryData['_ps_'], parseFloat(totalPrice));
                 setPaypal();
-                logEvent();
+
             };
 
             var getMemoryData = function () {
@@ -393,8 +397,9 @@ Checkout | pdhsafety.com
                     }).render('#paypal-button-container');
 
                     $("#paypalLoader").hide();
-
                     $("#btnPayBank").removeClass('d-none');
+
+                    setGtag_add_payment_info();
                 }
                 catch (ex) {
 
@@ -467,6 +472,7 @@ Checkout | pdhsafety.com
                     success: function (response) {
 
                         if (response && response.ref_id) {
+                            setGtag_purchase(response.ref_id);
                             sendConfirmMail(response);
                         } else {
                             Swal.close();
@@ -478,22 +484,6 @@ Checkout | pdhsafety.com
                     },
                     failure: function (errMsg) { }
                 });
-            };
-
-            var logEvent = function () {
-
-                setTimeout(function () {
-                    var _opts = {
-                        hitType: 'event',
-                        eventCategory: 'Checkout',
-                        eventAction: 'checkout_load',
-                        eventLabel: window.location.href,
-                        eventValue: _totalPrice
-                    };
-
-                    // ga('send', _opts);
-                }, 2000);
-
             };
 
             var logPayEventClick = function () {
@@ -597,23 +587,34 @@ Checkout | pdhsafety.com
 
             var sendConfirmMail = function (order) {
 
-                $.ajax({
-                    type: "POST",
-                    url: "/send-order-confirm-mail",
-                    data: { ref: order.ref_id },
-                    beforeSend: function (xhr, settings) {
-                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                        ShowLoadingModal("Please wait", "working on your request");
-                    },
-                    success: function (response) {
-                        localStorage.removeItem(keyName);
-                        window.location.href = '/order/' + order.ref_id + '/';
-                    },
-                    failure: function (errMsg) {
-                        localStorage.removeItem(keyName);
-                        window.location.href = '/order/' + order.ref_id + '/';
-                    }
-                });
+                try {
+                    $.ajax({
+                        type: "POST",
+                        url: "/send-order-confirm-mail",
+                        data: { ref: order.ref_id },
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                            ShowLoadingModal("Please wait", "working on your request");
+                        },
+                        success: function (response) {
+                            localStorage.removeItem(keyName);
+                            window.location.href = '/order/' + order.ref_id + '/';
+                        },
+                        failure: function (errMsg) {
+                            localStorage.removeItem(keyName);
+                            window.location.href = '/order/' + order.ref_id + '/';
+                        },
+                        complete:function() {
+                            localStorage.removeItem(keyName);
+                            window.location.href = '/order/' + order.ref_id + '/';
+                        }
+                    });
+                }
+                catch (error) {
+                    console.log(error, 'email');
+                    localStorage.removeItem(keyName);
+                    window.location.href = '/order/' + order.ref_id + '/';
+                }
 
             };
 
@@ -646,6 +647,94 @@ Checkout | pdhsafety.com
                         success: function (response) { },
                         failure: function (errMsg) { },
                     });
+                }
+            };
+
+            var setGtag_begin_checkout = function (cartItems, total) {
+                try {
+                    const items = [];
+
+                    cartItems.forEach(product => {
+                        const fields = product.fields;
+
+                        const discounted_price = fields.discounted_price;
+                        const price = parseFloat(fields.price);
+                        const discounted_price_value = discounted_price ? parseFloat(discounted_price) : 0.00;
+
+                        const itemObject = {
+                            item_id: product.pk,
+                            item_name: fields.title,
+                            affiliation: product.subject,
+                            discount: discounted_price_value > 0 ? (price - discounted_price).toFixed(2) : discounted_price_value,
+                            index: 0,
+                            item_brand: product.subject,
+                            item_list_id: product.subject,
+                            item_list_name: product.subject_slug,
+                            item_variant: 'Premium_Course',
+                            location_id: "ChIJEWeHU0PywokRO83ywHyX8q8",
+                            price: discounted_price_value > 0 ? discounted_price_value : price,
+                            quantity: 1
+                        };
+
+                        itemObject.discount = parseFloat(itemObject.discount);
+
+                        items.push(itemObject);
+                    });
+
+                    const eventObject = {
+                        currency: "USD",
+                        value: total,
+                        items: items
+                    };
+
+                    gtag("event", "begin_checkout", eventObject);
+
+                    gtagCheckoutEventObject = eventObject;
+
+                    console.log('begin_checkout', eventObject)
+
+                } catch (error) {
+                    console.log('setGtag_begin_checkout', error);
+                }
+            };
+
+            var setGtag_add_payment_info = function () {
+                try {
+
+                    const eventObject = {
+                        currency: "USD",
+                        value: gtagCheckoutEventObject.value,
+                        payment_type: "Paypal",
+                        items: gtagCheckoutEventObject.items
+                    };
+
+                    gtag("event", "add_payment_info", eventObject);
+
+                    console.log(eventObject, 'add_payment_info')
+
+                } catch (error) {
+                    console.log('setGtag_add_payment_info', error);
+                }
+            };
+
+            var setGtag_purchase = function (transaction_id) {
+                try {
+
+                    const eventObject = {
+                        currency: "USD",
+                        value: gtagCheckoutEventObject.value,
+                        transaction_id: transaction_id,
+                        tax: 0,
+                        shipping: 0,
+                        items: gtagCheckoutEventObject.items
+                    };
+
+                    gtag("event", "purchase", eventObject);
+
+                    console.log(eventObject, 'setGtag_purchase')
+
+                } catch (error) {
+                    console.log('setGtag_purchase', error);
                 }
             };
 

@@ -100,7 +100,7 @@
                             {% else %}
 
                             <a title="Add To Cart" href="javascript:;" class=" mt-0 btn btn-sm btn-main-2 btn-block link-add-cart"
-                                data-subject="{{ subject.title }}" data-json="{{ object|jsonify }}">
+                                data-subject="{{ subject.title }}"  data-subject-slug="{{ subject.slug }}" data-json="{{ object|jsonify }}">
                                 Add To Cart
                             </a>
 
@@ -277,14 +277,14 @@
 
                                 <h6 class="h1">
                                     Price:
-                                    <span>${{ object.discounted_price }}</span>
+                                    <span class="final_price">${{ object.discounted_price }}</span>
                                     <del class="text-muted">${{ object.price }}</del>
                                 </h6>
 
                                 {% else %}
                                 <h6 class="h1">
                                     Price:
-                                    <span>${{ object.price }}</span>
+                                    <span class="final_price">${{ object.price }}</span>
                                 </h6>
                                 {% endif %}
 
@@ -304,7 +304,7 @@
                                 {% else %}
 
                                 <a href="javascript:;" data-subject="{{ subject.title }}"
-                                    data-json="{{ object|jsonify }}" class="btn btn-main-2 btn-block link-add-cart">
+                                    data-json="{{ object|jsonify }}"  data-subject-slug="{{ subject.slug }}" class="btn btn-main-2 btn-block link-add-cart">
                                     Add To Cart
                                 </a>
 
@@ -410,7 +410,6 @@
 
 <section class="team section-padding bg-grey py-3 mb-4">
     <div class="container">
-
         <div class="row">
             <div class="col text-center">
                 <img class="lazy img-fluid" data-src="{% static 'images/money_back.png' %}" width="400" height="294"
@@ -492,7 +491,7 @@
 
                 if (urlParts >= 0) {
                     Swal.fire('Account Created!', 'You have successfully created a new account.',
-                    'success');
+                        'success');
                 }
 
                 history.pushState("", document.title, window.location.pathname + window.location.search);
@@ -524,14 +523,14 @@
                                 currency: "USD",
                                 value: 0.00,
                                 items: [
-                                  {
-                                    item_id: "{{ object.id }}",
-                                    item_name: "{{ object.title }}",
-                                    price: 0.00,
-                                    quantity: 1
-                                  }
+                                    {
+                                        item_id: "{{ object.id }}",
+                                        item_name: "{{ object.title }}",
+                                        price: 0.00,
+                                        quantity: 1
+                                    }
                                 ]
-                              });
+                            });
 
                             Toast.fire({
                                 icon: 'success',
@@ -613,7 +612,54 @@
                 var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
                 var match = url.match(regExp);
                 return (match && match[7].length == 11) ? match[7] : false;
-            }
+            };
+
+            var setGtag_view_item = function () {
+
+                try {
+                    const isFree = '{{object.is_free}}' === 'True' ? true : false;
+
+                    if (isFree) return;
+
+                    const value = parseFloat($(".final_price").text().replace("$", ""));
+
+                    const subject = $(".course-single-header .subheading").text().trim();
+                    const discounted_price = '{{object.discounted_price}}';
+                    const price = parseFloat('{{object.price}}'.trim());
+                    const discounted_price_value = discounted_price ? parseFloat(discounted_price) : 0.00;
+
+                    const itemObject = {
+                        item_id: '{{object.id}}'.trim(),
+                        item_name: $(".single-course-title").text().trim(),
+                        affiliation: subject,
+                        discount: discounted_price_value > 0 ? (price - discounted_price).toFixed(2) : discounted_price_value,
+                        index: 0,
+                        item_brand: subject,
+                        item_list_id: subject,
+                        item_list_name: '{{object.subject.slug}}',
+                        item_variant: 'Premium_Course',
+                        location_id: "ChIJEWeHU0PywokRO83ywHyX8q8",
+                        price: discounted_price_value > 0 ? discounted_price_value : price,
+                        quantity: 1
+                    };
+
+                    itemObject.discount = parseFloat(itemObject.discount);
+
+                    const eventObject = {
+                        currency: "USD",
+                        value: value,
+                        items: [
+                            itemObject
+                        ]
+                    };
+
+                    gtag("event", "view_item", eventObject);
+
+                    console.log(eventObject)
+                } catch (error) {
+                    console.log('setGtag_view_item', error);
+                }
+            };
 
             var registerEvent = function () {
 
@@ -674,6 +720,7 @@
                 registerEvent();
                 loadMessage();
                 videoEmbeder();
+                setGtag_view_item();
             };
 
             init();
