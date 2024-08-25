@@ -76,6 +76,7 @@ Checkout | pdhsafety.com
                     </ul>
 
                     <div id="paypal-button-container" class="mt-3">
+                        <h5 class="text-center py-2">Secured by Paypal</h5>
                     </div>
 
                     <div id="paypalLoader">
@@ -85,7 +86,6 @@ Checkout | pdhsafety.com
                         </div>
 
                         Loading payment method. Please wait..
-
                     </div>
 
                     <div class="alert alert-light bg-shadow" role="alert">
@@ -415,6 +415,7 @@ Checkout | pdhsafety.com
                     $("#paypal-button-container").html(alertMsg);
                     $("#paypal-button-container").append(ex);
 
+                    console.log(ex, 'ex');
                     sendNotifyMail("paypal failed", ex);
                 }
             };
@@ -636,7 +637,6 @@ Checkout | pdhsafety.com
 
             var sendNotifyMail = function (title, message) {
                 try {
-                } catch (ex) {
                     $.ajax({
                         type: "POST",
                         url: "{%  url 'notify_system' %}",
@@ -647,6 +647,9 @@ Checkout | pdhsafety.com
                         success: function (response) { },
                         failure: function (errMsg) { },
                     });
+                    
+                } catch (ex) {
+                   
                 }
             };
 
@@ -782,7 +785,6 @@ Checkout | pdhsafety.com
             return this;
 
         };
-
 
     }(jQuery));
 

@@ -1,120 +1,158 @@
-{% extends "app_base.html" %} {% load staticfiles %} {% block title %} | Order Completed {% endblock %} {% block content %}
+{% extends 'app_base.html' %} {% load staticfiles %}
 
-<main class="site-main woocommerce single single-product mt-5">
-    <!--shop category start-->
-    <section class="space-3">
-        <div class="container sm-center">
-            <div class="row">
-                <div class="col">
-                    <div class="home-courses cart-page mb-2">
-                        <div class="container">
-                            <div class="row">
-                                <!-- BEGIN INVOICE -->
-                                <div class="col-md-12">
-                                    <div class="grid invoice">
-                                        <div class="grid-body">
-                                            <div class="invoice-title">
-                                                <div class="row">
-                                                    <div class="col-md-12 text-center">
-                                                        <h4> Construction Safety Training</h4>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <div class="row">
-                                                    <div class="col-md-12 text-center">
-                                                        <h5>Invoice # {{ref}}</h5>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <address>
-                                                    <strong>Invoiced From</strong><br>
-                                                    Construction Safety Training, LLC.<br>
-                                                    mail@pdhsafety.com<br>
-                                                    <abbr title="Phone">P:</abbr> 914-473-6791
-                                                </address>
-                                                </div>
-                                                <div class="col-md-6 text-right">
-                                                    <address>
-                                                    <strong>Invoiced To:</strong><br>
-                                                    {{request.user.first_name}} {{request.user.last_name}}<br>
-                                                    {{request.user.email}}<br>
-                                                    <abbr title="Phone">P:</abbr> {{request.user.cell_number}}
-                                                </address>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <address>
-                                                    <strong>Payment Method:</strong><br>
-                                                    <span id="labelPaymentMethod">PayPal</span>
-                                                    <br>
-                                                </address>
-                                                </div>
-                                                <div class="col-md-6 text-right">
-                                                    <address>
-                                                    <strong>Order Date:</strong><br>
-                                                    {% now "SHORT_DATE_FORMAT" %}
-                                                </address>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <h3>ORDER SUMMARY</h3>
-                                                    <table class="table table-striped" id="tblItems">
-                                                        <thead>
-                                                            <tr class="line">
-                                                                <td><strong>#</strong></td>
-                                                                <td class="text-center"><strong>COURSE</strong></td>
-                                                                <td class="text-right"><strong>PRICE</strong></td>
-                                                                <td class="text-right"><strong>SUBTOTAL</strong></td>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12 text-right identity">
-                                                    <p>Subtotal : <span class="sub_total">$00</span>
-                                                        <br><strong>Total Price : <span class="total_price">$00</span></strong>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- END INVOICE -->
-                            </div>
-                            <div class="row">
-                                <div class="col text-right">
-                                    <button type="button" class="btn btn-primary" id="btnPrint">Print Invoice</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--shop category end-->
-</main>
+{% block title %}
+  | Order Completed
+{% endblock %}
 
-
-{% endblock %} {% block scripts %} {% verbatim %}
-
-<style>
-    @media print {
-        header, .footer, #btnPrint {
-          display:none;
-        }
-        /* ... the rest of the rules ... */
+{% block head %}
+  <!-- Begin Inspectlet Asynchronous Code -->
+  <script type="text/javascript">
+    ;(function () {
+      window.__insp = window.__insp || []
+      __insp.push(['wid', 1713537870])
+      var ldinsp = function () {
+        if (typeof window.__inspld != 'undefined') return
+        window.__inspld = 1
+        var insp = document.createElement('script')
+        insp.type = 'text/javascript'
+        insp.async = true
+        insp.id = 'inspsync'
+        insp.src = ('https:' == document.location.protocol ? 'https' : 'http') + '://cdn.inspectlet.com/inspectlet.js?wid=1713537870&r=' + Math.floor(new Date().getTime() / 3600000)
+        var x = document.getElementsByTagName('script')[0]
+        x.parentNode.insertBefore(insp, x)
       }
-</style>
-<script type="text/x-handlebars-template" id='cartItemTemplate'>
+      setTimeout(ldinsp, 0)
+    })()
+  </script>
+  <!-- End Inspectlet Asynchronous Code -->
+{% endblock %}
+
+{% block content %}
+  <main class="site-main woocommerce single single-product mt-5">
+    <!-- shop category start -->
+    <section class="space-3">
+      <div class="container sm-center">
+        <div class="row">
+          <div class="col">
+            <div class="home-courses cart-page mb-2">
+              <div class="container">
+                <div class="row">
+                  <!-- BEGIN INVOICE -->
+                  <div class="col-md-12">
+                    <div class="grid invoice">
+                      <div class="grid-body">
+                        <div class="invoice-title">
+                          <div class="row">
+                            <div class="col-md-12 text-center">
+                              <h4>Construction Safety Training</h4>
+                            </div>
+                          </div>
+                          <br />
+                          <div class="row">
+                            <div class="col-md-12 text-center">
+                              <h5>Invoice # {{ ref }}</h5>
+                            </div>
+                          </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                          <div class="col-md-6">
+                            <address>
+                              <strong>Invoiced From</strong><br />
+                              Construction Safety Training, LLC.<br />
+                              mail@pdhsafety.com<br />
+                              <abbr title="Phone">P:</abbr> 914-473-6791
+                            </address>
+                          </div>
+                          <div class="col-md-6 text-right">
+                            <address>
+                              <strong>Invoiced To:</strong><br />
+                              {{ request.user.first_name }} {{ request.user.last_name }}<br />
+                              {{ request.user.email }}<br />
+                              <abbr title="Phone">P:</abbr> {{ request.user.cell_number }}
+                            </address>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <address>
+                              <strong>Payment Method:</strong><br />
+                              <span id="labelPaymentMethod">PayPal</span>
+                              <br />
+                            </address>
+                          </div>
+                          <div class="col-md-6 text-right">
+                            <address>
+                              <strong>Order Date:</strong><br />
+                              {% now 'SHORT_DATE_FORMAT' %}
+                            </address>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <h3>ORDER SUMMARY</h3>
+                            <table class="table table-striped" id="tblItems">
+                              <thead>
+                                <tr class="line">
+                                  <td>
+                                    <strong>#</strong>
+                                  </td>
+                                  <td class="text-center">
+                                    <strong>COURSE</strong>
+                                  </td>
+                                  <td class="text-right">
+                                    <strong>PRICE</strong>
+                                  </td>
+                                  <td class="text-right">
+                                    <strong>SUBTOTAL</strong>
+                                  </td>
+                                </tr>
+                              </thead>
+                              <tbody></tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 text-right identity">
+                            <p>
+                              Subtotal : <span class="sub_total">$00</span>
+                              <br /><strong>Total Price : <span class="total_price">$00</span></strong>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- END INVOICE -->
+                </div>
+                <div class="row">
+                  <div class="col text-right">
+                    <button type="button" class="btn btn-primary" id="btnPrint">Print Invoice</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- shop category end -->
+  </main>
+{% endblock %} {% block scripts %}
+  
+{% verbatim %}
+
+  <style>
+    @media print {
+      header,
+      .footer,
+      #btnPrint {
+        display: none;
+      }
+      /* ... the rest of the rules ... */
+    }
+  </style>
+  <script type="text/x-handlebars-template" id="cartItemTemplate">
     <tr>
         <td>{{number}}</td>
         <td><strong>{{course.title}}</strong></td>
@@ -123,8 +161,7 @@
     </tr>
 
 </script>
-{% endverbatim %}
-
+  {% endverbatim %}
 
 <script>
     (function($) {
@@ -189,7 +226,7 @@
         var cartManager = new $.CartPageManager({});
     });
 </script>
-<style>
+  <style>
     .invoice {
         padding: 30px;
     }
