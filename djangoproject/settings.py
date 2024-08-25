@@ -44,6 +44,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = (
+        'courses',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -52,7 +53,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
     'rest_framework',
-    'courses',
     'app_teachers',
     'students',
     'app_quiz',
@@ -187,11 +187,13 @@ LOGGING = {
     },
 }
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.ionos.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'mail@pdhsafety.com'
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 PAYPAL_CLIENT_ID_SANDBOX = 'AfCYO-690TOTak5bLJ9lxaw-a7nY-8SBFID1X7a6Cmoyw2X4j79OMSm7ZDp_6oj218W5YKF19qqgWW0Y&currency=USD&disable-funding=paylater'
 PAYPAL_CLIENT_ID = 'AUlOGRZ6XAwhUIs2tDNy5-oTghhr9tW8NC9uCdDeh0LSMAwQVGxy4zWPyFRFmsXF1bSV7ZHVAm3mxCzu&currency=USD&disable-funding=paylater'
