@@ -10,5 +10,6 @@ Disallow: /dashboard/
 Disallow: /communicate/
 Disallow: /business/
 Disallow: /students/
+Disallow: /*?time=*
 
 Sitemap: https://pdhsafety.com/sitemap.xml
