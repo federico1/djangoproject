@@ -273,6 +273,11 @@
       </div>
 
       <div class="col text-right">
+
+         <a href="{{impersonateLink}}" target="_blank" class="btn btn-dark btn-sm link-login-as" id="{{id}}">
+            Login as
+         </a>
+
          <a href="javascript:;" class="btn btn-dark btn-sm link-course-user" id="{{id}}">
             Courses
          </a>
@@ -354,8 +359,9 @@
          var studentsList = [];
          var userDataTable;
          var studentCoursetDT;
-
          var coursesList = [];
+
+         var impersonateUserBaseLink = '{% url "impersonate_user" 804 %}';
 
          var settings = $.extend({}, options);
 
@@ -378,6 +384,8 @@
                      var row = userDataTable.row($(this));
    
                      var data = row.data();
+
+                     data.impersonateLink = impersonateUserBaseLink.replace("804", data.id);
    
                      var source = document.getElementById("itemActionTemplate").innerHTML;
                      var template = Handlebars.compile(source);

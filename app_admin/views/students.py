@@ -1,7 +1,9 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
 from django.views import generic
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
-
+from django.contrib.auth import logout, authenticate, login
+from students.models import User
 
 class SuperuserRequiredMixin(UserPassesTestMixin, LoginRequiredMixin):
     def test_func(self):
@@ -30,3 +32,12 @@ class AssessmentView(SuperuserRequiredMixin, generic.TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super(AssessmentView, self).get_context_data(*args, **kwargs)
         return context
+
+
+
+class ImpersonateUserView(SuperuserRequiredMixin, generic.View):
+    def get(self, request, pk):
+        logout(self.request)
+        user = User.objects.get(pk=pk)
+        login(self.request, user)
+        return HttpResponseRedirect("/")
