@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.decorators.cache import cache_page, never_cache
 from .views import dashboard_views, employee_views, public_views, course_views
 
 
@@ -10,7 +11,8 @@ urlpatterns = [
          employee_views.EmployeesTemplateView.as_view(),
          name='business_employees'),
     path('employees-manage/',
-         employee_views.EmployeesManageView.as_view(),
+         never_cache(cache_page(0)
+                     (employee_views.EmployeesManageView.as_view())),
          name='business_employees_manage'),
     path('employees/manage/<id>/',
          employee_views.SingleEmployeeManageView.as_view(),
@@ -33,7 +35,6 @@ urlpatterns = [
     path('purchased-courses-manage/',
          course_views.MyCoursesManageView.as_view(),
          name='business_my_courses_manage'),
-     path('account-register/', public_views.RegisterBusinessUserView.as_view(),
+    path('account-register/', public_views.RegisterBusinessUserView.as_view(),
          name='business_user_register'),
 ]
-

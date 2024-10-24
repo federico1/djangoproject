@@ -26,8 +26,8 @@ class EmployeesManageView(View):
     def get(self, request):
         fs = ['id', 'owner', 'student', 'student__first_name', 'student__email',
               'student__last_name', 'student__image', 'student__company_name', 'student__designation', 'created']
-        fs = ['id']
-        qs = BusinessEmployee.objects.filter(owner=request.user).values(*fs)
+        qs = BusinessEmployee.objects.filter(owner=request.user)
+        qs = qs.filter(is_deleted=False).values(*fs)
             #Q(is_deleted=False) & Q(owner=request.user)).values(*fs)
         return JsonResponse({"data": list(qs), 'owner':request.user.id}, safe=False)
 
