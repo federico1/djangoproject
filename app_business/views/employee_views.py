@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.views.decorators.cache import never_cache
+from django.utils.decorators import method_decorator
 
 from app_business.models import BusinessEmployee, BusinessCourses
 from students.models import User, Student
@@ -11,7 +13,7 @@ from courses.models import Enrollments
 import json
 import datetime
 
-
+@method_decorator([never_cache], name='dispatch')
 class EmployeesTemplateView(generic.TemplateView):
     template_name = 'business_employees/index.html'
 
@@ -21,7 +23,7 @@ class EmployeesTemplateView(generic.TemplateView):
 
         return context
 
-
+@method_decorator([never_cache], name='dispatch')
 class EmployeesManageView(View):
     def get(self, request):
         fs = ['id', 'owner', 'student', 'student__first_name', 'student__email',
@@ -105,7 +107,7 @@ class EmployeesManageView(View):
         except Exception as ex:
             return JsonResponse({'result': None, 'error': True, 'ex': ex})
 
-
+@method_decorator([never_cache], name='dispatch')
 class SingleEmployeeManageView(View):
     def get(self, request, id):
         template_name = 'business_employees/details.html'
