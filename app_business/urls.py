@@ -8,11 +8,11 @@ urlpatterns = [
          dashboard_views.HomeView.as_view(),
          name='business_dashboard'),
     path('employees/',
-         never_cache(cache_page(0)
+         never_cache(cache_page(10)
                      (employee_views.EmployeesTemplateView.as_view())),
          name='business_employees'),
     path('employees-manage/',
-         never_cache(cache_page(0)
+         never_cache(cache_page(10)
                      (employee_views.EmployeesManageView.as_view())),
          name='business_employees_manage'),
     path('employees/manage/<id>/',
