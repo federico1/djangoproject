@@ -1,0 +1,591 @@
+{% extends 'business_base.html' %} {% load staticfiles %} {% block title %} My Employees {% endblock %}
+{% block content %}
+
+<section class="section-padding course-grid pt-5">
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-lg-7">
+                <div class="section-heading center-heading">
+                    <h3>Employees</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-12 text-right">
+                <button class="btn btn-success" id="btnAddNew">Add New</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered bg-white" id="tblProducts">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Designation</th>
+                            <th>Create</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Loading data..</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--course-->
+</section>
+
+<div id="userModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Manage Employee Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer text-left">
+                <button type="button" class="btn btn-success" id="btnSaveUser">Save Changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-none">
+    <form id="fmFile" action="{% url 'upload-file' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="file" id="fu" accept="image/*" />
+    </form>
+</div>
+
+{% verbatim %}
+<script type="text/x-handlebars-template" id="studentFormTemplate">
+    <form>
+
+      <input type="hidden" name="id" id="id" value="{{id}}" />
+      <input type="hidden" name="user_id" id="user_id" value="{{user_id}}" />
+      <input type="hidden" name="image" id="id_image" value="{{image}}" />
+      <input type="hidden" id="originalemail" value="{{email}}" />
+
+      <div class="row">
+
+         <div class="col-md-8">
+
+            <div class="row mb-3">
+               <div class="col">
+                  <input type="text" class="form-control" value="{{first_name}}" id="first_name" name="first_name" placeholder="First name" />
+               </div>
+               <div class="col">
+                  <input type="text" class="form-control" value="{{last_name}}" id="last_name" name="last_name" placeholder="Last name" />
+               </div>
+            </div>
+            <div class="row mb-3">
+               <div class="col">
+                  <input type="text" class="form-control" value="{{email}}" id="email" name="email" placeholder="Email" />
+               </div>
+            </div>
+            <div class="row mb-3">
+               <div class="col">
+                  <input type="text" class="form-control" value="{{designation}}" id="designation" name="designation" placeholder="Designation" />
+               </div>
+               <div class="col d-none">
+                  <input
+                     type="text"
+                     class="form-control"
+                     readonly
+                     value="{{company_name}}"
+                     id="company_name"
+                     name="company_name"
+                     placeholder="Company"
+                  />
+               </div>
+            </div>
+            {{#if is_use_password}}
+            <div class="row mb-3">
+               <div class="col">
+                  <input type="password" class="form-control" id="password" name="password" placeholder="Password" />
+               </div>
+            </div>
+            {{/if}}
+
+         </div>
+
+         <div class="col-md-4 text-center mt-3">
+
+            {{#if image}}
+               <img src="{{image}}" id="prevImage" alt="image" style="max-height: 200px;" class="img-thumbnail" />
+
+            {{else}}
+               <img
+                  src="https://via.placeholder.com/200x200.png?text=.."
+                  id="prevImage"
+                  alt="image"
+                  style="max-height: 200px;"
+                  class="img-thumbnail"
+               />
+            {{/if}}
+
+            <p class="mt-2">
+               <a href="javascript:;" id="btnAddImage" class="btn btn-primary btn-sm" role="button">
+                  Upload Image
+               </a>
+
+               <a href="javascript:;" id="btnRemoveImage" class="btn btn-danger btn-sm" role="button">
+                  Remove
+               </a>
+            </p>
+
+            <div class="progress" style="height:3px;">
+               <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+
+         </div>
+
+      </div>
+
+      <div class="spinner-border text-primary mb-2 d-none" role="status">
+         <span class="sr-only">Loading...</span>
+      </div>
+
+   </form>
+</script>
+
+<script type="text/x-handlebars-template" id="studentListItemTemplate">
+    <tr>
+        <td>
+            {{number}}
+        </td>
+        <td>
+            {{first_name}} 
+            {{last_name}}
+        </td>
+        <td>
+            {{email}}
+        </td>
+        <td>
+            {{designation}}
+        </td>
+        <td>
+            {{created}}
+        </td>
+        <td>
+            <a class="btn btn-dark btn-sm" href="{{manage_url}}">
+               Courses
+            </a>
+            <button class="btn btn-info btn-sm link-edit-student" data-id="{{id}}">
+               Edit
+            </button>
+            <button class="btn btn-primary btn-sm link-password-student" data-id="{{user_id}}">
+                Password
+             </button>
+            <button class="btn btn-danger btn-sm link-delete-student" data-id="{{id}}">
+              Delete
+            </button>
+        </td>
+    </tr>
+</script>
+
+
+{% endverbatim %}
+
+{% endblock %}
+
+{% block scripts %}
+
+<style>
+    form label.error {
+        color: #dc3535;
+    }
+
+    form input.form-control {
+        background-color: #fff !important;
+    }
+</style>
+
+<script type="application/javascript">
+    var studentsList = [];
+    (function ($) {
+        $.StudentsManager = function (options) {
+
+
+            var currentUserCompany = '{{request.user.company_name}}';
+
+            var settings = $.extend({}, options);
+
+            var getStudents = function () {
+
+                $.get(
+                    '{% url "business_employees_manage" %}', {
+                },
+                    function (response) {
+                        studentsList = response.data.map(a => {
+                            return {
+                                id: a.id,
+                                user_id: a.student,
+                                image: a.student__image,
+                                first_name: a.student__first_name,
+                                last_name: a.student__last_name,
+                                email: a.student__email,
+                                company_name: a.student__company_name,
+                                designation: a.student__designation,
+                                created: a.created
+                            }
+                        });
+
+                        drawStudentsList();
+                    }
+                );
+            };
+
+            var drawStudentsList = function () {
+
+                $("#tblProducts tbody").empty();
+
+                $(studentsList).each(function (index, item) {
+
+                    var source = document.getElementById("studentListItemTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+
+                    item.number = index + 1;
+                    item.created = moment(item.created).calendar();
+                    item.manage_url = '{% url "business_employee_detail" "010101" %}'.replace('010101', item.id)
+
+                    $("#tblProducts tbody").append(template(item));
+
+                });
+            };
+
+            var initForm = function () {
+                $('#userModal form').validate({
+                    rules: {
+                        first_name: {
+                            required: true
+                        },
+                        last_name: {
+                            required: true
+                        },
+                        email: {
+                            required: true,
+                            email: true,
+                            remote: {
+                                param: {
+                                    url: 'api/email-exist/',
+                                    type: 'post',
+                                    beforeSend: function (xhr, settings) {
+                                        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}')
+                                    },
+                                },
+                                depends: function (element) {
+
+                                    var userId = $("#userModal #user_id").val();
+                                    var orgMail = $('#originalemail').val();
+
+                                    if (!userId || userId <= 0 || !orgMail) return true;
+
+                                    return $(element).val() !== $('#originalemail').val();
+                                },
+                            }
+                        },
+                        password: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        email: {
+                            remote: 'Email address already in use. Please use other email.'
+                        }
+                    }
+                })
+            };
+
+            var saveUser = function () {
+
+                var isValid = $("#userModal form").valid();
+                if (!isValid) return;
+
+                $("#userModal .spinner-border").removeClass("d-none");
+                $("#userModal form .alert").remove();
+
+                var data = $("#userModal form").eq(0).serializeObject();
+                var url = '{% url "business_employees_manage" %}';
+
+                $("#userModal").find("button, input").attr("disabled", true);
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (response, textStatus, xhr) {
+
+                        $("#userModal").modal("hide");
+
+                        if (response.result) {
+
+                            if (data.id > 0) {
+                                Toast.fire({ icon: 'success', title: 'Employee has been updated' });
+                            } else {
+                                Toast.fire({ icon: 'success', title: 'Employee has been added' });
+                            }
+
+                            getStudents();
+                        }
+                        else {
+
+                            Swal.fire({
+                                icon: "error",
+                                title: "There was a problem processing your request.",
+                                text: "Please refresh the page an try again!",
+                            });
+
+                        }
+                    },
+                    complete: function (xhr, textStatus) {
+                        if (xhr.status == 400) {
+                            $("#userModal form .alert").remove();
+
+                            $("#userModal form").append(
+                                $("<div />", {
+                                    class: "alert alert-warning",
+                                }).html(xhr.responseText)
+                            );
+                        }
+
+                        $("#userModal .spinner-border").addClass("d-none");
+                        $("#userModal").find("input,button").attr("disabled", false);
+                    },
+                    failure: function (errMsg) {
+                        $("#userModal").modal("hide");
+                        $("#userModal .spinner-border").addClass("d-none");
+                        $("#userModal").find("input,button").attr("disabled", false);
+                        Swal.fire({
+                            icon: "error",
+                            title: "There was a problem processing your request.",
+                            text: "Please refresh the page an try again!",
+                        });
+                    },
+                });
+            };
+
+            var deleteUser = function (id) {
+
+                Swal.showLoading();
+
+                var data = { id: id, op_delete: true };
+                var url = '{% url "business_employees_manage" %}';
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (response, textStatus, xhr) {
+
+                        Swal.close();
+
+                        if (response.result) {
+                            Toast.fire({ icon: 'success', title: 'Employee has been deleted' });
+                            getStudents();
+                        }
+                        else {
+
+                            Swal.fire({
+                                icon: "error",
+                                title: "There was a problem processing your request.",
+                                text: "Please refresh the page an try again!",
+                            });
+
+                        }
+                    },
+
+                });
+            };
+
+            var changePassword = function (user_id, newPassword) {
+
+                Swal.showLoading();
+
+                var data = { user_id: user_id, op_password: true, password:newPassword };
+                var url = '{% url "business_employees_manage" %}';
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (response, textStatus, xhr) {
+
+                        Swal.close();
+
+                        if (response.result) {
+                            Toast.fire({ icon: 'success', title: 'Employee password has been updated' });
+                            getStudents();
+                        }
+                        else {
+
+                            Swal.fire({
+                                icon: "error",
+                                title: "There was a problem processing your request.",
+                                text: "Please refresh the page an try again!",
+                            });
+
+                        }
+                    },
+
+                });
+            };
+
+            var registerEvent = function () {
+
+                $("div").on("click", "#btnAddNew", function (e) {
+                    e.stopPropagation();
+
+                    $("#userModal").removeAttr("data-id");
+
+                    $("#userModal").modal({
+                        show: true,
+                        backdrop: "static",
+                    });
+                });
+
+                $("div").on("click", "#btnSaveUser", function (e) {
+                    e.stopPropagation();
+
+                    saveUser();
+
+                });
+
+                $("div").on("click", "#btnRemoveImage", function (e) {
+                    e.stopPropagation();
+
+                    $('#prevImage').attr('src',
+                        'https://via.placeholder.com/200x200.png?text=..')
+                    $('#id_image').val(null)
+                });
+
+                $("div").on("click", "#btnAddImage", function (e) {
+                    e.stopPropagation();
+
+                    $('#fu').trigger('click')
+                });
+
+                $('#fu').change(function () {
+                    $('#fmFile').submit()
+                })
+
+                $("div").on("click", ".link-edit-student", function (e) {
+                    e.stopPropagation();
+                    var id = $(this).attr("data-id");
+
+                    $("#userModal").attr("data-id", id);
+
+                    $("#userModal").modal({
+                        show: true,
+                        backdrop: "static",
+                    });
+                });
+
+                $("div").on("click", ".link-delete-student", function (e) {
+                    e.stopPropagation();
+                    var id = $(this).attr("data-id");
+
+                    Swal.fire({
+                        title: "Are you sure?",
+                        text: "You won't be able to revert this!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes, delete it!"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            deleteUser(id);
+                        }
+                    });
+
+                });
+
+                $("div").on("click", ".link-password-student", function (e) {
+                    e.stopPropagation();
+                    var id = $(this).attr("data-id");
+
+                    Swal.fire({
+                        title: "Change Password!",
+                        text: "",
+                        input: 'text',
+                        showCancelButton: true
+                    }).then((result) => {
+                        if (result.value) {
+                           changePassword(id, result.value);
+                        }
+                    });
+
+                });
+
+
+
+                $('#fmFile').ajaxForm({
+                    beforeSend: function () {
+                        ShowLoadingModal('Please wait', 'Uploading image.')
+                    },
+                    uploadProgress: function (event, position, total, percentComplete) { },
+                    success: function (response) {
+                        if (response != 0) {
+                            $('#prevImage').attr('src', response)
+                            $('#id_image').val(response)
+                        }
+
+                        Swal.close()
+                    },
+                    complete: function (xhr) { }
+                })
+
+                $("#userModal").on("shown.bs.modal", function (e) {
+                    var id = $("#userModal").attr("data-id");
+
+                    var element = studentsList.find(a => a.id == id);
+
+                    if (!element) {
+                        element = { company_name: currentUserCompany, is_use_password: true };
+                    }
+                    else {
+                        element.is_use_password = false
+                    }
+
+                    var source = document.getElementById("studentFormTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+                    $("#userModal .modal-body").html(template(element));
+
+                    initForm();
+
+                });
+            };
+
+            var init = function () {
+                registerEvent();
+                getStudents();
+            };
+
+            init();
+
+            return this;
+        };
+    })(jQuery);
+
+    $(document).ready(function () {
+        new $.StudentsManager({});
+    });
+</script>
+{% endblock %}

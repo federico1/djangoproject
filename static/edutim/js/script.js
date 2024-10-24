@@ -79,14 +79,6 @@ var subjestList = [];
             });
             $("div[aria-labelledby='navbar3'] #listItems").append(link);
 
-            // var arrr =[2,14,15,18,27,30,37,40,50,52,54,58,60,61,62,65,73,74,77,80,91,93,95,96,97,100,101];
-
-            // if(arrr.indexOf(item.id)>=0) {
-            //     var slug = '/course/subject/' + item.slug + '/';
-
-            //     $("#subjectslistseop").append('<a href="'+slug+'" class="badge badge-primary px-2 mx-2">'+item.title+'</a>')
-            // }
-
         });
     };
 

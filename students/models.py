@@ -11,11 +11,10 @@ class User(AbstractUser):
     cell_number = models.CharField(max_length=20, null=True, blank=True)
     image = models.TextField(null=True, blank=True)
     address = models.TextField(null=True, blank=True)
-    person_height = models.TextField(null=True, blank=True)
-    person_eyes_color = models.TextField(null=True, blank=True)
-    primary_id_src = models.TextField(null=True, blank=True)
-    primary_id_type = models.TextField(null=True, blank=True)
+    designation = models.TextField(null=True, blank=True)
     company_name = models.TextField(null=True, blank=True)
+    personal_id = models.TextField(null=True, blank=True)
+    company_id = models.TextField(null=True, blank=True)
 
     @property
     def full_name(self):

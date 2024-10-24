@@ -1,0 +1,374 @@
+{% extends 'business_base.html' %} {% load staticfiles %}
+{% load course_tags %}
+
+{% block title %} My Checkout {% endblock %}
+{% block content %}
+
+<main class="site-main woocommerce single single-product page-wrapper">
+    <!--shop category start-->
+    <section class="space-3">
+        <div class="container">
+            <div class="row">
+                <section id="primary" class="content-area col-lg-12">
+                    <main id="main" class="site-main" role="main">
+                        <article id="post-8" class="post-8 page type-page status-publish hentry">
+                            <div class="entry-content">
+                                <div class="woocommerce">
+
+                                    <div class="checkout woocommerce-checkout row">
+
+
+                                        <div class="col-md-7">
+                                            <div id="order_review" class="d-block woocommerce-checkout-review-order">
+                                                <h3 id="order_review_heading">Your order</h3>
+                                                <table id="tblProducts"
+                                                    class="shop_table woocommerce-checkout-review-order-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="product-name">Course</th>
+                                                            <th class="product-total">Total</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    </tbody>
+                                                    <tfoot>
+
+                                                        <tr class="cart-subtotal">
+                                                            <th>Subtotal</th>
+                                                            <td><span class="woocommerce-Price-amount amount">
+                                                                    <span class="woocommerce-Price-currencySymbol">
+                                                                        $</span>
+                                                                    <span data-title="subtotal">00.00</span>
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr class="order-total">
+                                                            <th>Total</th>
+                                                            <td><strong><span class="woocommerce-Price-amount amount">
+                                                                        <span class="woocommerce-Price-currencySymbol">
+                                                                            $</span>
+                                                                        <span data-title="total">00.00</span>
+                                                                    </span></strong>
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+
+
+
+                                            </div>
+                                            <div>
+                                                <a class="font-weight-bold" href="{% url 'business_my_cart' %}">
+                                                    <i class="fa fa-backward"></i>
+                                                    Back to Cart</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-5">
+                                            <div id="paypal-button-container"></div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div><!-- .entry-content -->
+
+                        </article><!-- #post-## -->
+
+                    </main><!-- #main -->
+                </section>
+            </div>
+        </div>
+    </section>
+    <!--shop category end-->
+</main>
+
+
+{% verbatim %}
+
+<script type="text/x-handlebars-template" id="courseListItemTemplate">
+
+    <tr class="cart_item">
+        <td class="product-name">
+            {{course.title}}
+            <strong class="product-quantity">× {{qty}}</strong>
+        </td>
+        <td class="product-total">
+            <span class="woocommerce-Price-amount amount"><span
+                    class="woocommerce-Price-currencySymbol">$</span>{{qty_price}}</span>
+        </td>
+    </tr>
+
+   
+</script>
+
+{% endverbatim %} {% endblock %}
+
+{% block scripts %}
+
+<script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID_SANDBOX' %}"></script>
+
+{% comment %}
+
+<script src="https://www.paypal.com/sdk/js?client-id={% settings_value 'PAYPAL_CLIENT_ID' %}"></script>
+{% endcomment %}
+
+<script type="application/javascript">
+    (function ($) {
+        $.PageManager = function (options) {
+
+            var subjestList = [];
+            var coursesList = [];
+
+            var keyName = "__nyc_cart__bs__";
+
+            var totalPrice = 0;
+
+            var settings = $.extend({}, options);
+
+            var getCourses = function () {
+                try {
+                    $("#tblProducts tbody").html("Loading courses..");
+
+
+                    $.get('{% url "api_v1:courses-list" %}', {
+                        format: "json",
+                        paid_only: true
+                    }, function (response) {
+                        coursesList = response;
+                        getCartData();
+                    });
+                } catch (e) {
+                    document.write(e);
+                }
+            };
+
+            var getCartData = function () {
+
+                var data = getMemoryData();
+
+                totalPrice = 0;
+
+                $("#tblProducts tbody").empty();
+                $("#paypal-button-container").empty();
+                $("span[data-title='subtotal']").empty();
+                $("span[data-title='total']").empty();
+
+                $(data).each(function (index, item) {
+                    var source = document.getElementById("courseListItemTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+
+                    var row = {
+                        number: index + 1
+                    };
+
+                    row.course = coursesList.find(a => a.id == item.id);
+                    row.qty = item.qty;
+
+                    if (row.course.discounted_price > 0) {
+                        row.qty_price = row.course.discounted_price * item.qty;
+                    }
+                    else {
+                        row.qty_price = row.course.price * item.qty;
+                    }
+
+                    row.qty_price = parseFloat(row.qty_price).toFixed(2);
+
+                    totalPrice += parseFloat(row.qty_price);
+
+                    $("#tblProducts tbody").append(template(row));
+                });
+
+                if (data.length <= 0) {
+                    window.location.href = "{% url 'business_buy_courses' %}";
+                }
+                else {
+                    totalPrice = totalPrice.toFixed(2);
+                    $("span[data-title='subtotal']").html(totalPrice);
+                    $("span[data-title='total']").html(totalPrice);
+                    setPaypal();
+                }
+
+            };
+
+            var getMemoryData = function () {
+
+                try {
+                    var memoryData = localStorage.getItem(keyName);
+
+                    var parsedMemoryData = [];
+
+                    if (memoryData) {
+                        parsedMemoryData = JSON.parse(memoryData);
+                    }
+
+                    return parsedMemoryData;
+                } catch (error) {
+                    return [];
+                }
+            };
+
+            var setPaypal = function () {
+                try {
+                    paypal.Buttons({
+                        funding: {
+                            // disallowed: [paypal.FUNDING.CREDIT]
+                        },
+                        style: {
+                            label: 'checkout'
+                        },
+                        onClick: function () {
+                        },
+                        onCancel: function () {
+                        },
+                        createOrder: function (data, actions) {
+
+                            if (totalPrice <= 0) {
+                                return false;
+                            }
+
+                            return actions.order.create({
+                                purchase_units: [
+                                    {
+                                        amount: {
+                                            value: totalPrice
+                                        }
+                                    }
+                                ]
+                            });
+                        },
+                        onApprove: function (data, actions) { // This function captures the funds from the transaction.
+                            return actions.order.capture().then(function (details) {
+
+                                if (data.orderID) {
+
+                                    var payment = {
+                                        orderID: data.orderID,
+                                        details: details,
+                                        data: data
+                                    };
+
+                                    postOrder(payment);
+                                }
+                            });
+                        }
+                    }).render('#paypal-button-container');
+                }
+                catch (ex) {
+
+                    var alertMsg = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>We are sorry!</strong>
+                        This time payment feature isn't working for you.
+                    </div>`;
+
+                    $("#paypal-button-container").html(alertMsg);
+                    $("#paypal-button-container").append(ex);
+
+                    sendNotifyMail("paypal failed - " + '{{request.user.id}}', ex);
+                }
+            };
+
+            var postOrder = function (paymentData) {
+
+                var items = [];
+                var payments = [];
+
+                var memoryData = getMemoryData();
+
+                $(memoryData).each(function (index, item) {
+
+                    var row = {
+                        number: index + 1
+                    };
+
+                    row.course = coursesList.find(a => a.id == item.id);
+                    row.qty = item.qty;
+                    row.item_price = row.course.price;
+
+                    if (row.course.discounted_price > 0) {
+                        row.qty_price = row.course.discounted_price * item.qty;
+                    }
+                    else {
+                        row.qty_price = row.course.price * item.qty;
+                    }
+
+                    row.qty_price = parseFloat(row.qty_price).toFixed(2);
+
+                    var item = {
+                        course: item.id,
+                        price: row.item_price,
+                        sub_total: row.qty_price,
+                        qty: item.qty
+                    };
+
+                    items.push(item);
+                });
+
+                var payOpts = {
+                    gateway: 'paypal',
+                    info: JSON.stringify(paymentData),
+                    total_price: totalPrice,
+                    amount_paid: totalPrice
+                };
+
+                payments.push(payOpts);
+
+                var orderObject = {
+                    ref_id: paymentData.orderID,
+                    user: '{{ request.user.id }}',
+                    total_amount: totalPrice,
+                    items: items,
+                    payments: payOpts
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: '{% url "business_my_checkout_post_order" %}',
+                    data: JSON.stringify(orderObject),
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        ShowLoadingModal("Please wait", "working on your request");
+                    },
+                    success: function (response) {
+
+                        if (response.result) {
+                            Toast.fire({ icon: 'success', title: 'You have purchased the courses successfully.' });
+                            localStorage.removeItem(keyName);
+                            window.location.href = '{% url "business_my_courses" %}'
+                        }
+                        else {
+                            Swal.close();
+
+                            Swal.fire({ title: 'Order failed to complete', text: 'Please refresh the page and try again.' }).then(function () {
+                                window.location.reload();
+                            });
+                        }
+
+
+                    },
+                    failure: function (errMsg) { }
+                });
+            };
+
+            var registerEvent = function () {
+
+            };
+
+            var init = function () {
+                registerEvent();
+                getCourses();
+            };
+
+            init();
+
+            return this;
+        };
+    })(jQuery);
+
+    $(document).ready(function () {
+        new $.PageManager({});
+    });
+</script>
+{% endblock %}

@@ -22,8 +22,6 @@ class BusinessUserSignupForm(UserCreationForm):
     password2 = forms.CharField(label=_(
         'Password verification'), widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
-    # company_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
-
     field_order = ['username', 'first_name', 'last_name',
                    'email', 'company_name', 'password1', 'password2']
 
@@ -36,12 +34,11 @@ class BusinessUserSignupForm(UserCreationForm):
     def save(self, commit=True):
         cleaned_data = super(BusinessUserSignupForm, self).clean()
         user = super().save(commit=False)
-        user.is_student = True
+        user.is_student = False
         user.is_teacher = False
         user.is_super = False
         user.is_business = True
         user.username = user.email
         user.set_password(cleaned_data['password1'])
         user.save()
-        student = Student.objects.create(user=user)
         return user

@@ -1,0 +1,306 @@
+{% extends 'business_base.html' %} {% load staticfiles %} {% block title %} My Cart {% endblock %}
+{% block content %}
+
+<section class="section-padding course-grid pt-3">
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-lg-7">
+                <div class="section-heading center-heading">
+                    <h3>My Cart</h3>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-8">
+                <table class="table bg-white" id="tblProducts">
+                    <thead>
+                        <tr>
+                            <th width="10%">#</th>
+                            <th>Course</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Subtotal</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center font-weight-bold">
+                                Loading courses
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr />
+                <div>
+                    <button type="button" class="btn btn-light btn-clear-cart text-danger">
+                        <i class="fa fa-eraser"></i>
+                        Clear Cart</button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="cart-collaterals">
+                    <div class="cart_totals ">
+                        <h2>Cart totals</h2>
+                        <table cellspacing="0" class="shop_table shop_table_responsive">
+                            <tbody>
+                                <tr class="cart-subtotal">
+                                    <th>Subtotal</th>
+                                    <td data-title="Subtotal"><span class="woocommerce-Price-amount amount">
+                                            <span class="woocommerce-Price-currencySymbol">$</span>
+                                            <span>00.00</span>
+                                        </span></td>
+                                </tr>
+                                <tr class="order-total">
+                                    <th>Total</th>
+                                    <td data-title="Total"><strong><span class="woocommerce-Price-amount amount">
+                                                <span class="woocommerce-Price-currencySymbol">$</span>
+                                                <span>00.00</span>
+                                            </span></strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="wc-proceed-to-checkout">
+                            <a href="{% url 'business_my_checkout' %}" class="checkout-button button alt wc-forward">
+                                Proceed to checkout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- course -->
+</section>
+
+{% verbatim %}
+
+<script type="text/x-handlebars-template" id="courseListItemTemplate">
+    <tr>
+      <td>
+         {{number}}
+      </td>
+      <td>
+       
+         <a target="_blank" href="/course/{{course.slug}}">
+            {{course.title}}
+          </a>
+      </td>
+      <td>
+       <input type="number" min="1" class="input-qty form-control" style="width: 90px;" data-id="{{course.id}}" value="{{qty}}">
+      </td>
+      <td>
+        ${{item_price}}
+
+       </td>
+      <td>
+       ${{qty_price}}
+
+      </td>
+      <td>
+       
+         <button class="btn btn-danger btn-sm link-remove-cart-item" data-id="{{course.id}}">
+            <i class="fa fa-times"></i>
+          </button>
+      </td>
+   </tr>
+</script>
+
+{% endverbatim %} {% endblock %} {% block scripts %}
+
+<script type="application/javascript">
+    (function ($) {
+        $.PageManager = function (options) {
+
+            var subjestList = [];
+            var coursesList = [];
+
+            var keyName = "__nyc_cart__bs__";
+            var checkoutLink = '{% url "business_my_checkout" %}';
+
+            var settings = $.extend({}, options);
+
+            var getCourses = function () {
+                try {
+                    $("#tblProducts tbody").html("Loading courses..");
+
+
+                    $.get('{% url "api_v1:courses-list" %}', {
+                        format: "json",
+                        paid_only: true
+                    }, function (response) {
+                        coursesList = response;
+                        getCartData();
+                    });
+                } catch (e) {
+                    document.write(e);
+                }
+            };
+
+            var getCartData = function () {
+
+                var data = getMemoryData();
+
+                var totalPrice = 0;
+
+                $("#tblProducts tbody").empty();
+                $(".cart_totals td[data-title='Subtotal'] span:nth-child(2)").empty();
+                $(".cart_totals td[data-title='Total'] span:nth-child(2)").empty();
+
+                $(data).each(function (index, item) {
+                    var source = document.getElementById("courseListItemTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+
+                    var row = {
+                        number: index + 1
+                    };
+
+                    row.course = coursesList.find(a => a.id == item.id);
+                    row.qty = item.qty;
+                    row.item_price =  row.course.price;
+
+                    if (row.course.discounted_price > 0) {
+                        row.qty_price = row.course.discounted_price * item.qty;
+                        row.item_price =  row.course.discounted_price;
+
+                    }
+                    else {
+                        row.qty_price = row.course.price * item.qty;
+                    }
+
+                    row.qty_price = parseFloat(row.qty_price).toFixed(2);
+
+                    totalPrice += parseFloat(row.qty_price);
+
+                    $("#tblProducts tbody").append(template(row));
+                });
+
+                if (data.length <= 0) {
+                    $("#tblProducts tbody").html('<td colspan="5"><div class="p-2 text-center font-weight-bold text-info">No courses found</div></td>');
+                    $(".cart_totals").hide();
+                }
+                else {
+                    $(".cart_totals td[data-title='Subtotal'] span:nth-child(2)").html(totalPrice.toFixed(2));
+                    $(".cart_totals td[data-title='Total'] span:nth-child(2)").html(totalPrice.toFixed(2));
+                }
+
+            };
+
+            var getMemoryData = function () {
+
+                try {
+                    var memoryData = localStorage.getItem(keyName);
+
+                    var parsedMemoryData = [];
+
+                    if (memoryData) {
+                        parsedMemoryData = JSON.parse(memoryData);
+                    }
+
+                    return parsedMemoryData;
+                } catch (error) {
+                    return [];
+                }
+            };
+
+            var registerEvent = function () {
+
+                $("div").on("click", ".btn-clear-cart", function (e) {
+                    e.stopPropagation();
+
+                    localStorage.removeItem(keyName);
+
+                    getCartData();
+
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Cart cleared',
+                    });
+
+                });
+
+                $("div").on("keypress", ".input-qty", function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+
+                $("div").on("click", ".link-remove-cart-item", function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    var id = $(this).attr('data-id');
+
+                    var data = getMemoryData();
+
+                    data = data.filter(a => a.id != id);
+
+                    localStorage.setItem(keyName, JSON.stringify(data));
+
+                    getCartData();
+
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Cart item removed.',
+                    });
+
+                });
+
+                $("div").on("change", ".input-qty", function (e) {
+
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    var value = $(this).val();
+                    var id = $(this).attr('data-id');
+
+                    if (!value || value == '' || value <= 0) {
+                        $(this).val(1);
+                    }
+
+                    var data = getMemoryData();
+
+                    value = $(this).val();
+
+                    var item = data.find(a => a.id == id);
+
+                    item.qty = value;
+
+                    localStorage.setItem(keyName, JSON.stringify(data));
+
+                    getCartData();
+
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Cart item updated.',
+                    });
+
+                });
+
+                $("div").on("click", ".btn-checkout", function (e) {
+
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    window.location.href = checkoutLink;
+                });
+            };
+
+            var init = function () {
+                registerEvent();
+                getCourses();
+            };
+
+            init();
+
+            return this;
+        };
+    })(jQuery);
+
+    $(document).ready(function () {
+        new $.PageManager({});
+    });
+</script>
+{% endblock %}

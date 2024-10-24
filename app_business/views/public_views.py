@@ -13,7 +13,7 @@ from app_business.notifications import mail_welcome_bussiness_user
 @method_decorator(compress_page, name="dispatch")
 class RegisterBusinessUserView(CreateView):
     model = User
-    template_name = 'public/register_business_user.html'
+    template_name = 'business_public/register_business_user.html'
     form_class = BusinessUserSignupForm
 
     def get_context_data(self, **kwargs):

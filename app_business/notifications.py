@@ -14,7 +14,7 @@ def mail_welcome_bussiness_user(form_data):
         'email': form_data['email'],
         'username': form_data['email']}
 
-        html_message = get_template("public/_mail_bussines_signup_confirm.html").render(ctx)
+        html_message = get_template("business_public/_mail_bussines_signup_confirm.html").render(ctx)
 
         send_mail(
             subject='Your account at Construction Safety Training, LLC',

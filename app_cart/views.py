@@ -7,13 +7,22 @@ from django.template.loader import get_template
 from django.core.mail import send_mail
 
 from django.views.generic.base import View
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 @method_decorator(compress_page, name="dispatch")
 class CartView(generic.TemplateView):
     template_name = "cart.html"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.is_business == True:
+            return redirect(reverse_lazy('business_dashboard') + '?source=cart')
+
+        return super().dispatch(request, *args, **kwargs)
 
 
 @method_decorator(compress_page, name="dispatch")

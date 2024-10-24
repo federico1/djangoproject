@@ -1,0 +1,134 @@
+{% extends 'business_base.html' %} {% load staticfiles %}
+{% load course_tags %}
+
+{% block title %} Purchased Courses {% endblock %}
+
+{% block content %}
+
+<section class="section-padding course-grid pt-5">
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-lg-7">
+                <div class="section-heading center-heading">
+                    <h3>Purchased Courses</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-12 text-right">
+                <a class="btn btn-success" href="{% url 'business_buy_courses' %}">Buy More Courses</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered bg-white" id="tblProducts">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Course</th>
+                            <th>Status</th>
+                            <th>Purchased Date</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--course-->
+</section>
+
+
+{% verbatim %}
+
+<script type="text/x-handlebars-template" id="courseListItemTemplate">
+
+    <tr class="cart_item">
+        <td>{{number}} </td>
+        <td class="product-name">
+            <a href="/course/{{course__slug}}" target="_blank">{{course__title}}</a>
+        </td>
+        <td>
+            {{#ifCond is_assigned '==' 0 }}
+           <span class="badge badge-success">Free to Assign</span>
+             {{/ifCond}}
+
+             {{#ifCond is_assigned '=='1 }}
+           <span  class="badge badge-danger">Assigned</span>
+             {{/ifCond}}
+        </td>
+        <td>
+            {{created}}
+        </td>
+    </tr>
+
+   
+</script>
+
+{% endverbatim %} {% endblock %}
+
+{% block scripts %}
+
+
+<script type="application/javascript">
+    (function ($) {
+        $.PageManager = function (options) {
+
+            var coursesList = [];
+
+            var settings = $.extend({}, options);
+
+            var getPurchasedCourses = function () {
+
+                try {
+                    $("#tblProducts tbody").html("Loading courses..");
+
+                    $.get('{% url "business_my_courses_manage" %}', {
+                        format: "json",
+                        paid_only: true
+                    }, function (response) {
+                        coursesList = response.data;
+                        drawCoursesList();
+                    });
+                } catch (e) {
+                }
+
+            };
+
+            var drawCoursesList = function (coursesArray) {
+
+                $("#tblProducts tbody").empty();
+
+                $(coursesList).each(function (index, item) {
+                    var source = document.getElementById("courseListItemTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+
+                    item.number = index + 1;
+                    item.status = item.is_assigned == 'true'? 0: 1;
+                    item.created = moment(item.created).calendar();
+                    $("#tblProducts tbody").append(template(item));
+                });
+
+            };
+
+            var registerEvent = function () {
+
+            };
+
+            var init = function () {
+                registerEvent();
+                getPurchasedCourses();
+            };
+
+            init();
+
+            return this;
+        };
+    })(jQuery);
+
+    $(document).ready(function () {
+        new $.PageManager({});
+    });
+</script>
+{% endblock %}

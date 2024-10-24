@@ -1,0 +1,322 @@
+{% extends 'business_base.html' %} {% load staticfiles %} {% block title %} Employee Details {% endblock %}
+{% block content %}
+
+
+<section class="section-padding pt-2">
+    <div class="container">
+
+        <div class="mb-4 bg-light p-2">
+            <h5> Employee Basic information</h5>
+            <hr />
+            <div class="d-flex">
+                <div class="mr-2">
+                    <span class="font-weight-bold">
+                        Name:
+                    </span> {{business_employee.student.first_name}} &nbsp;
+                    {{business_employee.student.last_name}}
+                </div>
+                <div>
+                    <span class="font-weight-bold">
+                        Email:
+                    </span> {{business_employee.student.email}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <h5> Courses</h3>
+            </div>
+            <div class="col-md-6 text-right">
+                <a class="btn btn-info" href="{% url 'business_employees' %}">Back</a>
+                <button class="btn btn-success" id="btnAddNewCourse">Add New Course</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered bg-white" id="tblCourses">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Course</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--course-->
+</section>
+
+<div id="myCoursesModal" class="modal left" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Purchased Courses</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered bg-white" id="tblMyCourses">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Course</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{% verbatim %}
+<script type="text/x-handlebars-template" id="studentCourseListItemTemplate">
+    <tr>
+        <td>
+            {{number}}
+        </td>
+        <td>
+            <a href="/course/{{course__slug}}" target="_blank">{{course__title}}</a>
+        </td>
+        <td>
+            {{#if is_completed}}
+            <span class="badge badge-success">Completed</span>
+           {{else}}
+           <span class="badge badge-warning">IN-Progress</span>
+            {{/if}}
+        </td>
+    </tr>
+</script>
+
+<script type="text/x-handlebars-template" id="courseListItemTemplate">
+
+    <tr class="cart_item" id="bsc-{{id}}">
+        <td>{{number}} </td>
+        <td class="product-name">
+            <a href="/course/{{course__slug}}" target="_blank">{{course__title}}</a>
+        </td>
+        <td>
+           <button class="btn btn-sm btn-success link-assign-course" data-id="{{id}}" data-course="{{course}}">
+            Assign
+           </button>
+        </td>
+    </tr>
+
+   
+</script>
+
+{% endverbatim %}
+
+{% endblock %}
+
+{% block scripts %}
+
+<style>
+    .modal.left.fade.show .modal-dialog {
+        right: 0;
+    }
+
+    .modal.left .modal-dialog {
+        position: fixed;
+        right: 0;
+        margin: auto;
+        width: 500px;
+        height: 100%;
+        -webkit-transform: translate3d(0%, 0, 0);
+        -ms-transform: translate3d(0%, 0, 0);
+        -o-transform: translate3d(0%, 0, 0);
+        transform: translate3d(0%, 0, 0);
+    }
+
+    .modal.left .modal-content {
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .modal.right.fade .modal-dialog {
+        left: -320px;
+        -webkit-transition: opacity 0.3s linear, left 0.3s ease-out;
+        -moz-transition: opacity 0.3s linear, left 0.3s ease-out;
+        -o-transition: opacity 0.3s linear, left 0.3s ease-out;
+        transition: opacity 0.3s linear, left 0.3s ease-out;
+    }
+</style>
+
+<script type="application/javascript">
+
+var coursesList = [];
+
+    (function ($) {
+        $.PageManager = function (options) {
+
+          
+
+            var settings = $.extend({}, options);
+
+            var getPurchasedCourses = function () {
+
+                try {
+                    $("#tblMyCourses tbody").html("Loading courses..");
+
+                    $.get('{% url "business_my_courses_manage" %}', {
+                        format: "json",
+                        paid_only: true
+                    }, function (response) {
+                        coursesList = response.data;
+                        drawCoursesList();
+                    });
+                } catch (e) {
+                }
+
+            };
+
+            var drawCoursesList = function (coursesArray) {
+
+                $("#tblMyCourses tbody").empty();
+
+                var list = coursesList.filter(a => !a.is_assigned);
+
+                $(list).each(function (index, item) {
+                    var source = document.getElementById("courseListItemTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+
+                    item.number = index + 1;
+
+                    $("#tblMyCourses tbody").append(template(item));
+                });
+
+            };
+
+            var drawStudentCoursesList = function (coursesData) {
+
+                $("#tblCourses tbody").empty();
+
+                $(coursesData).each(function (index, item) {
+
+                    var source = document.getElementById("studentCourseListItemTemplate").innerHTML;
+                    var template = Handlebars.compile(source);
+
+                    item.number = index + 1;
+
+                    $("#tblCourses tbody").append(template(item));
+                });
+
+                if (coursesData.length <= 0) {
+                    $("#tblCourses tbody").html('<div class="text-danger">No course added yet</div>');
+                }
+            };
+
+            var getStudentCourses = function () {
+
+                var data = { op_name: 'get_student_courses', student_id: '{{business_employee.student.id}}' };
+                var url = '{% url "business_employee_detail" business_employee.id %}';
+
+                $("#tblCourses tbody").html('loading courses');
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (response, textStatus, xhr) {
+                        drawStudentCoursesList(response.data);
+                    },
+
+                });
+            };
+
+            var assignCourse = function (courseId, businessCourseId) {
+
+                ShowLoadingModal("Please wait", "working on your request");
+
+                var data = {
+                    op_name: 'assign_course',
+                    course_id: courseId,
+                    business_course_id: businessCourseId,
+                    student_id: '{{business_employee.student.id}}'
+                };
+                var url = '{% url "business_employee_detail" business_employee.id %}';
+
+                $("#tblCourses tbody").html('loading courses');
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (response, textStatus, xhr) {
+                        Swal.close();
+
+                        if (response.result) {
+                            $("tr#bsc-"+businessCourseId).remove();
+                            Toast.fire({ icon: 'success', title: 'You have assigned the course successfully.' });
+                            getStudentCourses();
+                        }
+                    },
+
+                });
+            };
+
+            var registerEvent = function () {
+
+                $("div").on("click", "#btnAddNewCourse", function (e) {
+                    e.stopPropagation();
+
+                    getPurchasedCourses();
+
+                    $("#myCoursesModal").modal({
+                        show: true,
+                        backdrop: "static",
+                    });
+                });
+
+                $("div").on("click", ".link-assign-course", function (e) {
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+
+                    var id = $(this).attr("data-id");
+                    var course = $(this).attr("data-course");
+
+                    Swal.fire({
+                        title: "Do you want to assign this course?",
+                        showCancelButton: true,
+                        confirmButtonText: "Assign",
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            assignCourse(course, id);
+                        }
+                    });
+
+                });
+
+            };
+
+            var init = function () {
+                registerEvent();
+                getStudentCourses();
+            };
+
+            init();
+
+            return this;
+        };
+    })(jQuery);
+
+    $(document).ready(function () {
+        new $.PageManager({});
+    });
+</script>
+{% endblock %}

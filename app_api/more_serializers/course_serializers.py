@@ -46,8 +46,6 @@ class EnrollmentCoreSerializer(serializers.ModelSerializer):
         fields = ['id','course_id', 'user_id']
 
 
-
-
 class CourseSerializer(serializers.ModelSerializer):
     total_modules = serializers.IntegerField()
     course_enrolled = EnrollmentSerializer(many=True)
@@ -67,7 +65,7 @@ class CourseCoreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['id', 'slug', 'subject', 'title', 'overview', 'quiz', 'price']
+        fields = ['id', 'slug', 'subject', 'title', 'overview', 'quiz', 'price', 'discounted_price']
 
 
 class CoursePriceSerializer(serializers.ModelSerializer):

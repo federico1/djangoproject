@@ -70,6 +70,7 @@ class CourseViewset(viewsets.ModelViewSet):
         c_limit = request.query_params.get('limit')
         c_search_term = request.query_params.get('q')
         c_result_type = request.query_params.get('result_type')
+        paid_only = request.query_params.get('paid_only')
 
         order_field = '-id'
 
@@ -78,6 +79,9 @@ class CourseViewset(viewsets.ModelViewSet):
 
         if c_search_term is not None and c_search_term != '':
             snippets = snippets.filter(title__icontains=str(c_search_term))
+
+        if paid_only is not None:
+            snippets = snippets.filter(is_free = False)
 
         if c_limit is not None:
             snippets = snippets.order_by(order_field)[:int(c_limit)]

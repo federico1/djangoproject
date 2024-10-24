@@ -138,7 +138,7 @@
                         <a title="Dashboard" href="{% url 'student_dashboard' %}" class="mb-1 btn btn-main btn-small"
                            aria-label="Student Dashboard">Student Dashboard</a>
                            {% endif %} {% if request.user.is_business == True %}
-                           <a title="Dashboard" href="{% url 'business_dashboard' %}" class="d-none mb-1 btn btn-main btn-small"
+                           <a title="Dashboard" href="{% url 'business_dashboard' %}" class="mb-1 btn btn-main btn-small"
                               aria-label="Business Dashboard">My Dashboard</a>
                         {% endif %} {% if request.user.is_superuser == True %}
                         <a title="Dashboard" href="{% url 'admin_dashboard' %}" class="mb-1 btn btn-main btn-small"
@@ -241,10 +241,16 @@
                            </div>
                         </div>
                      </li>
-
+                     {% if request.user.is_authenticated %}
                      <li class="nav-item">
-                        <a title="Business Account Register" class="nav-link" href="{% url 'business_user_register' %}" aria-label="Business"> Business Account </a>
+                        <a title="Accoutn Dashboard" class="nav-link" href="{% url 'business_dashboard' %}" aria-label="Business"> My Dashboard </a>
                      </li>
+
+                   {% else %}
+                   <li class="nav-item">
+                     <a title="Business Account Register" class="nav-link" href="{% url 'business_user_register' %}" aria-label="Business"> Business Account </a>
+                  </li>
+                     {% endif %}
 
                      <li class="nav-item">
                         <a title="Training Verification" class="nav-link" href="/sst-verify/"> Training Verification </a>
