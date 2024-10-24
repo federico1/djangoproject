@@ -16,26 +16,34 @@ urlpatterns = [
                      (employee_views.EmployeesManageView.as_view())),
          name='business_employees_manage'),
     path('employees/manage/<id>/',
-         employee_views.SingleEmployeeManageView.as_view(),
+         never_cache(cache_page(10)
+                     (employee_views.SingleEmployeeManageView.as_view())),
          name='business_employee_detail'),
     path('buy-courses/',
-         course_views.BuyCoursesTemplateView.as_view(),
+         never_cache(cache_page(10)
+                     (course_views.BuyCoursesTemplateView.as_view())),
          name='business_buy_courses'),
     path('my-cart/',
-         course_views.MyCartTemplateView.as_view(),
+         never_cache(cache_page(10)
+                     (course_views.MyCartTemplateView.as_view())),
          name='business_my_cart'),
     path('my-checkout/',
-         course_views.CheckoutTemplateView.as_view(),
+         never_cache(cache_page(10)
+                     (course_views.CheckoutTemplateView.as_view())),
          name='business_my_checkout'),
     path('my-checkout-post-order/',
-         course_views.CheckoutPostOrderView.as_view(),
+         never_cache(cache_page(10)
+                     (course_views.CheckoutPostOrderView.as_view())),
          name='business_my_checkout_post_order'),
     path('purchased-courses/',
-         course_views.MyCoursesTemplateView.as_view(),
+         never_cache(cache_page(10)
+                     (course_views.MyCoursesTemplateView.as_view())),
          name='business_my_courses'),
     path('purchased-courses-manage/',
-         course_views.MyCoursesManageView.as_view(),
+         never_cache(cache_page(10)
+                     (course_views.MyCoursesManageView.as_view())),
          name='business_my_courses_manage'),
-    path('account-register/', public_views.RegisterBusinessUserView.as_view(),
+    path('account-register/', never_cache(cache_page(10)
+                                          (public_views.RegisterBusinessUserView.as_view())),
          name='business_user_register'),
 ]

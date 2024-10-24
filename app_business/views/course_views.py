@@ -1,8 +1,9 @@
 from django.views import generic
 from django.views import View
 from django.http import JsonResponse
-from django.contrib.auth.hashers import make_password
 from django.db.models import Q
+from django.views.decorators.cache import never_cache
+from django.utils.decorators import method_decorator
 
 import json
 
@@ -11,6 +12,7 @@ from app_cart.models import Order, Item, Payment
 from app_business.models import BusinessCourses
 
 
+@method_decorator([never_cache], name='dispatch')
 class BuyCoursesTemplateView(generic.TemplateView):
     template_name = 'business_courses/buy.html'
 
@@ -21,6 +23,7 @@ class BuyCoursesTemplateView(generic.TemplateView):
         return context
 
 
+@method_decorator([never_cache], name='dispatch')
 class MyCartTemplateView(generic.TemplateView):
     template_name = 'business_courses/cart.html'
 
@@ -31,6 +34,7 @@ class MyCartTemplateView(generic.TemplateView):
         return context
 
 
+@method_decorator([never_cache], name='dispatch')
 class CheckoutTemplateView(generic.TemplateView):
     template_name = 'business_courses/checkout.html'
 
@@ -41,6 +45,7 @@ class CheckoutTemplateView(generic.TemplateView):
         return context
 
 
+@method_decorator([never_cache], name='dispatch')
 class CheckoutPostOrderView(View):
 
     def post(self, request, *args, **kwargs):
@@ -72,6 +77,7 @@ class CheckoutPostOrderView(View):
             return JsonResponse({'result': None, 'error': True, 'ex': ex})
 
 
+@method_decorator([never_cache], name='dispatch')
 class MyCoursesTemplateView(generic.TemplateView):
     template_name = 'business_courses/my_courses.html'
 
@@ -82,6 +88,7 @@ class MyCoursesTemplateView(generic.TemplateView):
         return context
 
 
+@method_decorator([never_cache], name='dispatch')
 class MyCoursesManageView(View):
     def get(self, request):
         fs = ['id', 'user', 'course', 'course__title', 'course__slug',
