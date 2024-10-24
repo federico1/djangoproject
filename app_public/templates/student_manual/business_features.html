@@ -1,0 +1,99 @@
+{% extends "app_base.html" %} {% load staticfiles %}
+{% block title %} Business Account Features | pdhsafety.com
+{% endblock%}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="page-header-content">
+                    <h1>Business Account</h1>
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="list-inline-item">/</li>
+                        <li class="list-inline-item">Features & Demo</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<main class="site-main page-wrapper woocommerce single single-product">
+    <section class="space-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-content mb-4">
+                        <h3>
+                            How we help you?
+                        </h3>
+                        <p>
+                            Sign up for a pdhsafety.com business account today! We offer a powerful Learning Management
+                            System (LMS) and special discounts for bulk purchases.
+                        </p>
+                        <p>
+                            From small groups to large teams, NYC Construction Safety Training (PdhSafety.com)
+                            simplifies safety compliance. Easily assign courses, track progress, and verify completions
+                            for a safer, more productive jobsite.
+                        </p>
+                        <p>
+                            <a title="Business Register" href="{% url 'business_user_register' %}">Create Business Account</a>  
+                        </p>
+                        <h3 class="mb-2">
+                            Demo: How to create/register for business account!
+                        </h3>
+                        <div class="mb-3">
+                            <div style="padding:53.13% 0 0 0;position:relative;"><iframe
+                                    src="https://player.vimeo.com/video/1023077106?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                                    frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write"
+                                    style="position:absolute;top:0;left:0;width:100%;height:100%;"
+                                    title="Pdhsafety - How to create business account"></iframe></div>
+                            <script src="https://player.vimeo.com/api/player.js"></script>
+                        </div>
+                        <h3 class="mb-2">
+                            Demo: How to add employee/student!
+                        </h3>
+                        <div class="mb-3">
+                            <div style="padding:53.13% 0 0 0;position:relative;"><iframe
+                                    src="https://player.vimeo.com/video/1023080346?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                                    frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write"
+                                    style="position:absolute;top:0;left:0;width:100%;height:100%;"
+                                    title="Pdhsafety - How to add employee"></iframe></div>
+                            <script src="https://player.vimeo.com/api/player.js"></script>
+                        </div>
+                        <h3 class="mb-2">
+                            Demo: How to buy a course!
+                        </h3>
+                        <div class="mb-3">
+                            <div style="padding:53.13% 0 0 0;position:relative;"><iframe
+                                    src="https://player.vimeo.com/video/1023081083?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                                    frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write"
+                                    style="position:absolute;top:0;left:0;width:100%;height:100%;"
+                                    title="Pdhsafety - How to buy a course"></iframe></div>
+                            <script src="https://player.vimeo.com/api/player.js"></script>
+                        </div>
+                        <h3 class="mb-2">
+                            Demo: How to assign a course to employee!
+                        </h3>
+                        <div class="mb-3">
+                            <div style="padding:53.13% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1023081522?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Assign Course"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--shop category end-->
+</main>
+
+{% endblock %} {% block scripts %}
+
+<script>
+    $(document).ready(function () { });
+</script>
+{% endblock %}

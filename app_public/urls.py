@@ -1,6 +1,6 @@
 from django.urls import path
 from django.views.decorators.cache import cache_page, never_cache
-from .views import PrivacyPolicyView, AboutView, ContactView, FaqView, PackagesView, RefundView, TermsView, post_contact_form
+from .views import PrivacyPolicyView, AboutView, ContactView, FaqView, PackagesView, RefundView, TermsView, BusinessAccountFeaturesView, post_contact_form
 from .more_views.views_sst import SSTVerifyView
 
 urlpatterns = [
@@ -31,6 +31,10 @@ urlpatterns = [
     path('packages/',
          never_cache(cache_page(60*60)(PackagesView.as_view())),
          name='packages'),
+    path('business-account-features/',
+         BusinessAccountFeaturesView.as_view(),
+         name='business_account_features'),
+
     path(r'handle-ct-fm/',
          post_contact_form, name='post_contact_form'),
 ]

@@ -61,6 +61,11 @@ class PackagesView(generic.TemplateView):
 
 
 @method_decorator(compress_page, name="dispatch")
+class BusinessAccountFeaturesView(generic.TemplateView):
+    template_name = "student_manual/business_features.html"
+
+
+@method_decorator(compress_page, name="dispatch")
 def bad_request(request):
     response = redirect('/')
     return response
