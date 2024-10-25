@@ -5,7 +5,9 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.decorators.cache import never_cache
 from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
+from app_business.decorators import business_role_required
 from app_business.models import BusinessEmployee, BusinessCourses
 from students.models import User, Student
 from courses.models import Enrollments
@@ -13,7 +15,9 @@ from courses.models import Enrollments
 import json
 import datetime
 
-@method_decorator([never_cache], name='dispatch')
+decorators = [never_cache, login_required, business_role_required]
+
+@method_decorator(decorators, name='dispatch')
 class EmployeesTemplateView(generic.TemplateView):
     template_name = 'business_employees/index.html'
 
@@ -23,7 +27,7 @@ class EmployeesTemplateView(generic.TemplateView):
 
         return context
 
-@method_decorator([never_cache], name='dispatch')
+@method_decorator(decorators, name='dispatch')
 class EmployeesManageView(View):
     def get(self, request):
         fs = ['id', 'owner', 'student', 'student__first_name', 'student__email',
@@ -107,7 +111,7 @@ class EmployeesManageView(View):
         except Exception as ex:
             return JsonResponse({'result': None, 'error': True, 'ex': ex})
 
-@method_decorator([never_cache], name='dispatch')
+@method_decorator(decorators, name='dispatch')
 class SingleEmployeeManageView(View):
     def get(self, request, id):
         template_name = 'business_employees/details.html'
