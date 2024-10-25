@@ -221,8 +221,8 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
         if 'not_found' in context:
             return redirect('course_list')
 
-        if context['module'] and (context['prev_completed'] == False or context['active_content'] == None):
-            return redirect('student_course_detail', self.get_object().id)
+        # if context['module'] and (context['prev_completed'] == False or context['active_content'] == None):
+        #     return redirect('student_course_detail', self.get_object().id)
 
         return super(CourseDetailView, self).render_to_response(context, **response_kwargs)
 

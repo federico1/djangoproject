@@ -1,1513 +1,1411 @@
-{% extends "student_base.html" %}
-{% load i18n %}
-{% load staticfiles %}
-{% block title %}
-    {{ object.title }}
-{% endblock %}
+{% extends 'student_base.html' %} {% load i18n %} {% load staticfiles %} {% block title %}
+{{ object.title }}
+{% endblock %} 
 
 {% block content %}
+<nav id="topNavbar" class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+        aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation"><span
+            class="navbar-toggler-icon"></span></button>
+    <a class="navbar-brand ml-3" href="{% url 'student_dashboard' %}"><img src="{% static 'edutim/images/logo5.png' %}"
+            width="55" alt="Construction Safety Training" class="img-fluid" /></a>
 
-    <nav id="topNavbar" class="navbar navbar-expand-lg navbar-light bg-light">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand ml-3" href="{% url 'student_dashboard' %}">
-            <img src="{% static 'edutim/images/logo5.png' %}" width="55" alt="Construction Safety Training" class="img-fluid">
-        </a>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+                <a class="nav-link font-weight-bold" href="#">
+                    {{ object.title }}
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
 
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                    <a class="nav-link font-weight-bold" href="#">{{ object.title }}
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-
-                <li class="nav-item dropdown active">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarp" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Your Progress<i class="fa fa-angle-down"></i>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarp">
-                        <a class="dropdown-item d-none" href="#">
-                            <div>
-                                <div class="d-flex justify-content-center" id="timer">
-                                    <h3 class="time-output" id="hours">00</h3>
-                                    <h3 class="colon" id="colon-one">:</h3>
-                                    <h3 class="time-output" id="minutes">00</h3>
-                                    <h3 class="colon" id="colon-two">:</h3>
-                                    <h3 class="time-output" id="seconds">00</h3>
-                                    <h3 class="time-end" id="end"></h3>
-                                </div>
+            <li class="nav-item dropdown active">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarp" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">Your Progress<i class="fa fa-angle-down"></i></a>
+                <div class="dropdown-menu" aria-labelledby="navbarp">
+                    <a class="dropdown-item d-none" href="#">
+                        <div>
+                            <div class="d-flex justify-content-center" id="timer">
+                                <h3 class="time-output" id="hours">00</h3>
+                                <h3 class="colon" id="colon-one">:</h3>
+                                <h3 class="time-output" id="minutes">00</h3>
+                                <h3 class="colon" id="colon-two">:</h3>
+                                <h3 class="time-output" id="seconds">00</h3>
+                                <h3 class="time-end" id="end"></h3>
                             </div>
-                        </a>
-                        <a class="dropdown-item text-center" href="#">
-                            <div class="font-weight-bold" id="progressCompletedContents"></div>
-                        </a>
-                    </div>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link font-weight-bold" href="{% url 'student_courses' %}">
-                       My Courses
+                        </div>
                     </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link font-weight-bold" href="{% url 'student_dashboard' %}">
-                      Dashboard
+                    <a class="dropdown-item text-center" href="#">
+                        <div class="font-weight-bold" id="progressCompletedContents"></div>
                     </a>
-                </li>
+                </div>
+            </li>
 
-            </ul>
-           
-           <div class="d-none d-sm-block">
+            <li class="nav-item">
+                <a class="nav-link font-weight-bold" href="{% url 'student_courses' %}">My Courses</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link font-weight-bold" href="{% url 'student_dashboard' %}">Dashboard</a>
+            </li>
+        </ul>
+
+        <div class="d-none d-sm-block">
             <div class="d-flex flex-row justify-content-center">
-                <button class="btn btn-success link-talk-teacher" href="javascript:;">
-                    Talk to a trainer</button>
-    
+                <button class="btn btn-success link-talk-teacher" href="javascript:;">Talk to a trainer</button>
+
                 <div class="mx-3">
                     {% if module != None and next_content != None %}
-    
-                        {% if next_content.type == 'quiz' %}
-    
-                            <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}&type=quiz" class="btn btn-primary">Next Chapter (Quiz) >>
-                            </a>
-    
-                        {% elif next_content.type == 'content' %}
-    
-                            <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}" class="btn btn-primary">Next Chapter >>
-                            </a>
-    
-                        {% endif %}
-    
+                    {% if next_content.type == 'quiz' %}
+                    <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}&type=quiz"
+                        class="btn btn-primary">Next Chapter (Quiz) >></a>
+                    {% elif next_content.type == 'content' %}
+                    <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}"
+                        class="btn btn-primary">Next Chapter >></a>
                     {% endif %}
-    
-                    {% if module == None %}
-    
-                        <a href="javascript:;" class="btn btn-primary link-start-course">
-                            Start Course >>
-                        </a>
-    
+                    {% endif %} {% if module == None %}
+                    <a href="javascript:;" class="btn btn-primary link-start-course">Start Course >></a>
                     {% endif %}
-    
-                 
                 </div>
-    
             </div>
-            <div class="text-center small">
-                {{request.user.username}}
-               </div>
-           </div>
-
+            <div class="text-center small">{{ request.user.username }}</div>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <div>
-        <div class="container-fluid mt-2">
+<div>
+    <div class="container-fluid mt-2">
+        <div class="row mb-2 d-block d-sm-none">
+            <div class="col">
+                <div class="d-flex flex-row justify-content-center">
+                    <button class="btn btn-success link-talk-teacher" href="javascript:;">Talk to a trainer</button>
 
-            <div class="row mb-2 d-block d-sm-none">
-                <div class="col">
-                    <div class="d-flex flex-row justify-content-center">
-                        <button class="btn btn-success link-talk-teacher" href="javascript:;">
-                            Talk to a trainer</button>
-            
-                        <div class="mx-3">
-                            {% if module != None and next_content != None %}
-            
-                                {% if next_content.type == 'quiz' %}
-            
-                                    <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}&type=quiz" class="btn btn-primary">Next Chapter (Quiz) >>
-                                    </a>
-            
-                                {% elif next_content.type == 'content' %}
-            
-                                    <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}" class="btn btn-primary">Next Chapter >>
-                                    </a>
-            
-                                {% endif %}
-            
-                            {% endif %}
-            
-                            {% if module == None %}
-            
-                                <a href="javascript:;" class="btn btn-primary link-start-course">
-                                    Start Course >>
-                                </a>
-            
-                            {% endif %}
-            
-                        </div>
-            
-                    </div>
-
-                    <div class="text-center small">
-                        {{request.user.username}}
-                       </div>
-                   </div>
-                </div>
-            </div>
-
-            <div class="row">
-              
-                <div class="col-md-8">
-                    <div class="blog-post-item">
-                        <div class="row">
-{% comment %} 
-                            {% for m in course_tree %}
-                            <div class="col-12">{{forloop.counter0}} {{m.object}} {{m.type}} {{m.complete}}</div> <br>
-                            {% endfor %} {% endcomment %}
-
-                            {% if module == None %}
-                                {% if request.GET.type == 'quiz' and object.quiz is not None %}
-                                    <div class="col-md-12 mb-30">
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Quiz</th>
-                                                    <th>Score</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                                <tr>
-                                                    <td>
-                                                        {{ active_content.object }}
-                                                    </td>
-                                                    <td>
-                                                        {% if active_content.complete == True %}
-                                                            {{ active_content.score }}
-                                                        {% else %}
-                                                            Not Taken
-                                                        {% endif %}
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <td colspan="2">
-                                                        {% if active_content.complete == True %}
-                                                            <a href="{% url 'student_reset_quiz' active_content.object.id %}?ref={{ request.get_full_path }}" class="btn btn-primary">Retake Quiz
-                                                            </a>
-                                                        {% else %}
-                                                            <a href="{% url 'student_take_quiz' active_content.object.id %}?ref={{ request.get_full_path }}" class="btn btn-primary">Take Quiz
-                                                            </a>
-                                                        {% endif %}
-                                                    </td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                {% else %}
-                                    <div class="col-md-12">
-
-                                        <div class="p-2">
-                                            <p>
-                                                {{ object.overview|safe }}
-                                            </p>
-                                        </div>
-
-                                    </div>
-                                {% endif %}
-
-                            {% endif %}
-
-
-                            {% if module != None %}
-
-                                {% for content in module.contents.all %}
-
-                                    {% if active_content.object.id  == content.id and active_content.type == 'content' %}
-
-                                        <div class="col-md-12">
-                                            {% with item=content.item %}
-                                            <div id="contentSection" class="p-2" data-id="{{ content.id }}" data-type="{{ content.content_type }}" data-completed="{{ active_content.complete }}">
-                                                {{ item.render }}
-                                            </div>
-                                            {% endwith %}
-                                        </div>
-
-                                    {% endif %}
-
-                                {% endfor %}
-
-                                {% if active_content.type == 'quiz' %}
-                                    <div class=" col-md-12">
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Quiz</th>
-                                                    <th>Score</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                                <tr>
-                                                    <td>
-                                                        {{ active_content.object }}
-                                                    </td>
-                                                    <td>
-                                                        {% if active_content.complete == True %}
-                                                            {{ active_content.score }}
-                                                        {% else %}
-                                                            Not Taken
-                                                        {% endif %}
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <td colspan="2">
-                                                        {% if active_content.complete == True %}
-                                                            <a href="{% url 'student_reset_quiz' active_content.object.id %}?ref={{ request.get_full_path }}" class="btn btn-primary">Retake Quiz
-                                                            </a>
-                                                        {% else %}
-                                                            <a href="{% url 'student_take_quiz' active_content.object.id %}?ref={{ request.get_full_path }}" class="btn btn-primary">Take Quiz
-                                                            </a>
-                                                        {% endif %}
-                                                    </td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                {% endif %}
-
-                            {% endif %}
-
-
-                        </div>
-                    </div>
-
-
-                </div>
-                <div class="col-md-4">
-                    <div class="blog-sidebar">
-                        <div class="widget widget_categories">
-                            <ul>
-
-                                {% for m in object.modules.all %}
-                                    <li class="cat-item">
-                                        <div class="myCollapsible">
-                                            <div>
-                                                <a href="javascript:;" class="accordion-button d-flex" data-toggle="collapse" data-target="#collapseOne-{{ m.id }}" aria-expanded='{% if m == module %}true{% endif %}'>
-                                                    <i class="fa {% if m == module %} fa-angle-down {% else %} fa-angle-right {% endif %}"></i>
-                                                    <span>{{ m.title |lower }}</span>
-                                                </a>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <div id="collapseOne-{{ m.id }}" class="collapse mt-3 {% if m == module %} show {% endif %}" aria-labelledby="headingOne-{{ m.id }}">
-                                                <ul>
-                                                    {% for content in m.contents.all %}
-
-                                                        {% with item=content.item %}
-
-                                                        <li class="content-item py-1 pl-2 {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}active{% endif %}" data-progress="{{ content.has_progress }}">
-                                                            {% if content.id in completed_contents or active_content.object.id  == content.id %}
-
-                                                                <a class="d-flex lesson content-{{ content.id }} {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id  == content.id %}pin{% endif %}" href="{% url 'student_course_detail_module' object.id m.id %}?content={{ content.id }}">
-
-                                                                    <i title=" {{ content.content_type }}" class="fa {{ content.content_type }}"></i>
-                                                                  
-                                                                    <span>{{ item.title|lower }}</span>
-                                                                </a>
-
-                                                            {% else %}
-                                                                <a class="d-flex" href="javascript:;">
-                                                                    <i title=" {{ content.content_type }}" class="fa {{ content.content_type }}"></i>
-                                                                    <span>{{ item.title|lower }}</span>
-                                                                </a>
-                                                            {% endif %}
-
-                                                        </li>
-
-                                                        {% endwith %}
-                                                    {% endfor %}
-
-                                                    {% if m.quiz != None and m.quiz_id in taken_quizzes and m.quiz.questions.count > 0 %}
-
-                                                        <li u-id="{{m.quiz_id}}{{m.id}}" class="content-item py-1 pl-2 complete {% if active_content.object.id  == m.quiz_id and active_content.module.id == m.id %}active{% endif %}" data-progress="True">
-                                                            <a class="complete" href="{% url 'student_course_detail_module' object.id m.id %}?content={{ m.quiz_id }}&type=quiz">
-                                                                <i class="fa fa-question"></i>
-                                                                Take Quiz
-                                                            </a>
-                                                        </li>
-
-                                                    {% elif m.quiz != None and m.quiz.questions.count > 0 %}
-                                                        <li class="content-item py-1 pl-2" data-progress="True">
-                                                            <a href="javascript:;">
-                                                                <i title="Quiz" class="fa fa-question"></i>
-                                                                Take Quiz
-                                                            </a>
-                                                        </li>
-                                                    {% endif %}
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                {% endfor %}
-
-                                {% if object.quiz and object.quiz.id in taken_quizzes %}
-
-                                    <li class="cat-item  {% if not enrollment.is_completed %} d-none {% endif %}">
-                                        <a href="{% url 'student_course_detail' object.id %}?content={{ object.quiz.id }}&type=quiz" class="btn btn-block btn-success text-white text-center link-final-quiz-taken">
-                                            Final Quiz
-                                        </a>
-                                    </li>
-
-                                {% elif object.quiz %}
-                                    <li class="cat-item {% if not enrollment.is_completed %} d-none {% endif %}">
-                                        <a href="{% url 'student_course_detail' object.id %}?content={{ object.quiz.id }}&type=quiz&final=true" class="btn btn-block btn-info text-white text-center link-final-quiz">
-                                            Take Final Quiz
-                                        </a>
-                                    </li>
-                                {% endif %}
-                            </ul>
-                        </div>
-
-
+                    <div class="mx-3">
+                        {% if module != None and next_content != None %}
+                        {% if next_content.type == 'quiz' %}
+                        <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}&type=quiz"
+                            class="btn btn-primary">Next Chapter (Quiz) >></a>
+                        {% elif next_content.type == 'content' %}
+                        <a href="{% url 'student_course_detail_module' object.id next_content.module.id %}?content={{ next_content.object.id }}"
+                            class="btn btn-primary">Next Chapter >></a>
+                        {% endif %}
+                        {% endif %} {% if module == None %}
+                        <a href="javascript:;" class="btn btn-primary link-start-course">Start Course >></a>
+                        {% endif %}
                     </div>
                 </div>
 
+                <div class="text-center small">{{ request.user.username }}</div>
             </div>
         </div>
     </div>
-
-    <div id="ratingModal" class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
-                        Please give your assessment about "{{ object }}" learning an event.
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="#" method="post" id="fmRating">
-
-                        <input type="hidden" name="course" value="{{ object.id }}"/>
-                        <input type="hidden" name="student" value="{{ request.user.id }}"/>
-
-                        <table class="table table-bordered text-center table-sm">
+    {% comment %} {% for m in course_tree %}
+    <p class="d-none1 content-tree-item" data-complete="{{m.complete}}" data-type="{{m.type}}">
+        
+        {{ forloop.counter0 }} {{ m.object }}
+        {{m.object.id}}
+        {{ m.type }} {{ m.complete }}</p>
+    {% endfor %}  {% endcomment %}
+    <div class="row">
+        <div class="col-md-8">
+            <div class="blog-post-item">
+                <div class="row"> 
+                    {% if module == None %}
+                    {% if request.GET.type == 'quiz' and object.quiz is not None %}
+                    <div class="col-md-12 mb-30">
+                        <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Strongly Disagree</th>
-                                    <th>Disagree Somewhat</th>
-                                    <th>Neutral</th>
-                                    <th>Agree Somewhat</th>
-                                    <th>Strongly Agreee</th>
+                                    <th>Quiz</th>
+                                    <th>Score</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>3</td>
-                                <td>4</td>
-                                <td>5</td>
+                                <tr>
+                                    <td>{{ active_content.object }}</td>
+                                    <td>
+                                        {% if active_content.complete == True %}
+                                        {{ active_content.score }}
+                                        {% else %}
+                                        Not Taken
+                                        {% endif %}
+                                    </td>
+                                </tr>
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2">
+                                        {% if active_content.complete == True %}
+                                        <a href="{% url 'student_reset_quiz' active_content.object.id %}?ref={{ request.get_full_path }}"
+                                            class="btn btn-primary">Retake Quiz</a>
+                                        {% else %}
+                                        <a href="{% url 'student_take_quiz' active_content.object.id %}?ref={{ request.get_full_path }}"
+                                            class="btn btn-primary">Take Quiz</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </tfoot>
                         </table>
+                    </div>
+                    {% else %}
+                    <div class="col-md-12">
+                        <div class="p-2">
+                            <p>{{ object.overview|safe }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endif %} 
+                    <!--  end if module == None -->
+                    
+                    {% if module != None %}
 
-                        <table class="table table-striped" id="tblRatings">
-
+                    {% for content in module.contents.all %}
+                    {% if active_content.object.id == content.id and active_content.type == 'content' %}
+                    <div class="col-md-12">
+                        {% with item=content.item %}
+                        <div id="contentSection" class="p-2" data-id="{{ content.id }}"
+                            data-type="{{ content.content_type }}" data-completed="{{ active_content.complete }}">
+                            {{ item.render }}</div>
+                        {% endwith %}
+                    </div>
+                    {% endif %}
+                    {% endfor %}  <!--  end for content in module.contents.all -->
+                    
+                    {% if active_content.type == 'quiz' %}
+                    <div class="col-md-12">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Quiz</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
                             <tbody>
-                                <tr title="The learning event meet my expectations">
+                                <tr>
+                                    <td>{{ active_content.object }}</td>
                                     <td>
-                                        The learning event meet my expectations.
-                                    </td>
-                                    <td>
-                                        <div class="number">1</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">2</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">3</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">4</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">5</div>
+                                        {% if active_content.complete == True %}
+                                        {{ active_content.score }}
+                                        {% else %}
+                                        Not Taken
+                                        {% endif %}
                                     </td>
                                 </tr>
-
-
-                                <tr title="The subject matter was well organized.">
-                                    <td>
-                                        The subject matter was well organized.
-                                    </td>
-                                    <td>
-                                        <div class="number">1</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">2</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">3</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">4</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">5</div>
-                                    </td>
-                                </tr>
-
-                                <tr title="The materials and handouts were helpful.">
-                                    <td>
-                                        The materials and handouts were helpful.
-                                    </td>
-                                    <td>
-                                        <div class="number">1</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">2</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">3</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">4</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">5</div>
-                                    </td>
-                                </tr>
-
-                                <tr title="The learning event achieved the defined learning outcomes.">
-                                    <td>
-                                        The learning event achieved the defined learning outcomes.
-                                    </td>
-                                    <td>
-                                        <div class="number">1</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">2</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">3</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">4</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">5</div>
-                                    </td>
-                                </tr>
-
-                                <tr title="I liked how the facilitators presented and delivered the content.">
-                                    <td>
-                                        I liked how the facilitators presented and delivered the content.
-                                    </td>
-                                    <td>
-                                        <div class="number">1</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">2</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">3</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">4</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">5</div>
-                                    </td>
-                                </tr>
-
-                                <tr title="The facilitators seemed knowledgeable about the subject matter.">
-                                    <td>
-                                        The facilitators seemed knowledgeable about the subject matter.
-                                    </td>
-                                    <td>
-                                        <div class="number">1</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">2</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">3</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">4</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">5</div>
-                                    </td>
-                                </tr>
-
-                                <tr title="The facilitators conveyed a positive and respectful attitude toward the participants.">
-                                    <td>
-                                        The facilitators conveyed a positive and respectful attitude toward
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                the participants.
-                                    </td>
-                                    <td>
-                                        <div class="number">1</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">2</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">3</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">4</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">5</div>
-                                    </td>
-                                </tr>
-
-                                <tr title="I had the opportunity to provide feedback on how to apply my new skills on the job.">
-                                    <td>
-                                        I had the opportunity to provide feedback on how to apply my new
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                skills on the job.
-                                    </td>
-                                    <td>
-                                        <div class="number">1</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">2</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">3</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">4</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">5</div>
-                                    </td>
-                                </tr>
-
-                                <tr title="I was given clear direction on how to implement my action items.">
-                                    <td>
-                                        I was given clear direction on how to implement my action items.
-                                    </td>
-                                    <td>
-                                        <div class="number">1</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">2</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">3</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">4</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">5</div>
-                                    </td>
-                                </tr>
-
-                                <tr title="I was provided with guidance and support to access training course.">
-                                    <td>
-                                        I was provided with guidance and support to access training course.
-                                    </td>
-                                    <td>
-                                        <div class="number">1</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">2</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">3</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">4</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">5</div>
-                                    </td>
-                                </tr>
-
-                                <tr title="The learning event met my learning style.">
-                                    <td>
-                                        The learning event met my learning style.
-                                    </td>
-                                    <td>
-                                        <div class="number">1</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">2</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">3</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">4</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">5</div>
-                                    </td>
-                                </tr>
-
-                                <tr title="The learning environment and facilities were appropriate for this event.">
-                                    <td>
-                                        The learning environment and facilities were appropriate for this
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                event.
-                                    </td>
-                                    <td>
-                                        <div class="number">1</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">2</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">3</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">4</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">5</div>
-                                    </td>
-                                </tr>
-
-                                <tr title="I would recommend this learning event to my colleagues.">
-                                    <td>
-                                        I would recommend this learning event to my colleagues.
-                                    </td>
-                                    <td>
-                                        <div class="number">1</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">2</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">3</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">4</div>
-                                    </td>
-                                    <td>
-                                        <div class="number">5</div>
-                                    </td>
-                                </tr>
-
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2">
+                                        {% if active_content.complete == True %}
+                                        <a href="{% url 'student_reset_quiz' active_content.object.id %}?ref={{ request.get_full_path }}"
+                                            class="btn btn-primary">Retake Quiz</a>
+                                        {% else %}
+                                        <a href="{% url 'student_take_quiz' active_content.object.id %}?ref={{ request.get_full_path }}"
+                                            class="btn btn-primary">Take Quiz</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </tfoot>
                         </table>
+                    </div>
+                    {% endif %}
 
-                    </form>
-
+                    {% endif %} <!--  if module != None -->
                 </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="blog-sidebar">
+                <div class="widget widget_categories">
+                  
+                    <ul>
+                        {% for m in object.modules.all %}
+                        <li class="cat-item">
+                            <div class="myCollapsible">
+                                <div>
+                                    <a href="javascript:;" class="accordion-button d-flex" data-toggle="collapse"
+                                        data-target="#collapseOne-{{ m.id }}"
+                                        aria-expanded="{% if m == module %}true{% endif %}">
+                                        <i class="fa {% if m == module %}fa-angle-down{% else %}fa-angle-right{% endif %}">
+                                        </i>
+                                        <span>{{ m.title|lower }}</span>
+                                    </a>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div id="collapseOne-{{ m.id }}"
+                                    class="collapse mt-3 {% if m == module %} show {% endif %}"
+                                    aria-labelledby="headingOne-{{ m.id }}">
+                                    <ul>
+                                        {% for content in m.contents.all %}
+                                        {% with item=content.item %}
+                                        <li class="content-item py-1 pl-2 {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id == content.id %}active{% endif %}"
+                                            data-progress="{{ content.has_progress }}">
+                                            {% if content.id in completed_contents or active_content.object.id == content.id %}
+                                            <a class="d-flex lesson content-{{ content.id }} {% if content.id in completed_contents %}complete{% endif %} {% if active_content.object.id == content.id %}pin{% endif %}"
+                                                href="{% url 'student_course_detail_module' object.id m.id %}?content={{ content.id }}">
+                                                <i title=" {{ content.content_type }}"
+                                                    class="fa {{ content.content_type }}"></i>
 
-                <div class="modal-footer">
-                    <button class="btn btn-success" id="btnSaveRaing">Submit Response</button>
+                                                <span>{{ item.title|lower }}</span>
+                                            </a>
+                                            {% else %}
+                                            <a class="d-flex" href="{% url 'student_course_detail_module' object.id m.id %}?content={{ content.id }}">
+                                                <i title=" {{ content.content_type }}"
+                                                    class="fa {{ content.content_type }}"></i>
+                                                <span>{{ item.title|lower }}</span>
+                                            </a>
+                                            {% endif %}
+                                        </li>
+                                        {% endwith %}
+                                        {% endfor %}  <!-- for content in m.contents.all -->
+                                        
+                                        {% if m.quiz != None and m.quiz_id in taken_quizzes and m.quiz.questions.count > 0 %}
+                                        <li u-id="{{ m.quiz_id }}{{ m.id }}"
+                                            class="content-item py-1 pl-2 complete {% if active_content.object.id == m.quiz_id and active_content.module.id == m.id %}active{% endif %}"
+                                            data-progress="True">
+                                            <a class="complete"
+                                                href="{% url 'student_course_detail_module' object.id m.id %}?content={{ m.quiz_id }}&type=quiz">
+                                                <i class="fa fa-question"></i>
+                                                Take Quiz
+                                            </a>
+                                        </li>
+                                        {% elif m.quiz != None and m.quiz.questions.count > 0 %}
+                                        <li class="content-item py-1 pl-2" data-progress="True">
+                                            <a href="{% url 'student_course_detail_module' object.id m.id %}?content={{ m.quiz_id }}&type=quiz">
+                                                <i title="Quiz" class="fa fa-question"></i>
+                                                Take Quiz
+                                            </a>
+                                        </li>
+                                        {% endif %} <!-- f m.quiz != None and m.quiz_id in taken_quizzes and
+                                            m.quiz.questions.count > 0 -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}  <!-- for m in object.modules.all -->
+                        
+                        {% if object.quiz and object.quiz.id in taken_quizzes %}
+                        <li class="cat-item {% if not enrollment.is_completed %} d-none {% endif %}">
+                            <a href="{% url 'student_course_detail' object.id %}?content={{ object.quiz.id }}&type=quiz"
+                                class="btn btn-block btn-success text-white text-center link-final-quiz-taken">Final
+                                Quiz</a>
+                        </li>
+                        {% elif object.quiz %}
+                        <li class="cat-item {% if not enrollment.is_completed %} d-none {% endif %}">
+                            <a href="{% url 'student_course_detail' object.id %}?content={{ object.quiz.id }}&type=quiz&final=true"
+                                class="btn btn-block btn-info text-white text-center link-final-quiz">Take Final
+                                Quiz</a>
+                        </li>
+                        {% endif %} <!-- if object.quiz and object.quiz.id in taken_quizzes -->
+                    </ul>
                 </div>
-
             </div>
         </div>
     </div>
+</div>
 
-    <div id="chatModal" class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="d-flex flex-row">
-                        <div>
-                            <img src="{{ object.owner.image }}" height="20" alt=""/>
-                        </div>
-                        <h5 class="modal-title">
-                            Talk to
-                            {{ object.owner }}
-                        </h5>
-                    </div>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
+<div id="ratingModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Please give your assessment about "{{ object }}" learning an event.</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form action="#" method="post" id="fmRating">
+                    <input type="hidden" name="course" value="{{ object.id }}" />
+                    <input type="hidden" name="student" value="{{ request.user.id }}" />
 
+                    <table class="table table-bordered text-center table-sm">
+                        <thead>
+                            <tr>
+                                <th>Strongly Disagree</th>
+                                <th>Disagree Somewhat</th>
+                                <th>Neutral</th>
+                                <th>Agree Somewhat</th>
+                                <th>Strongly Agreee</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                            <td>5</td>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-striped" id="tblRatings">
+                        <tbody>
+                            <tr title="The learning event meet my expectations">
+                                <td>The learning event meet my expectations.</td>
+                                <td>
+                                    <div class="number">1</div>
+                                </td>
+                                <td>
+                                    <div class="number">2</div>
+                                </td>
+                                <td>
+                                    <div class="number">3</div>
+                                </td>
+                                <td>
+                                    <div class="number">4</div>
+                                </td>
+                                <td>
+                                    <div class="number">5</div>
+                                </td>
+                            </tr>
+
+                            <tr title="The subject matter was well organized.">
+                                <td>The subject matter was well organized.</td>
+                                <td>
+                                    <div class="number">1</div>
+                                </td>
+                                <td>
+                                    <div class="number">2</div>
+                                </td>
+                                <td>
+                                    <div class="number">3</div>
+                                </td>
+                                <td>
+                                    <div class="number">4</div>
+                                </td>
+                                <td>
+                                    <div class="number">5</div>
+                                </td>
+                            </tr>
+
+                            <tr title="The materials and handouts were helpful.">
+                                <td>The materials and handouts were helpful.</td>
+                                <td>
+                                    <div class="number">1</div>
+                                </td>
+                                <td>
+                                    <div class="number">2</div>
+                                </td>
+                                <td>
+                                    <div class="number">3</div>
+                                </td>
+                                <td>
+                                    <div class="number">4</div>
+                                </td>
+                                <td>
+                                    <div class="number">5</div>
+                                </td>
+                            </tr>
+
+                            <tr title="The learning event achieved the defined learning outcomes.">
+                                <td>The learning event achieved the defined learning outcomes.</td>
+                                <td>
+                                    <div class="number">1</div>
+                                </td>
+                                <td>
+                                    <div class="number">2</div>
+                                </td>
+                                <td>
+                                    <div class="number">3</div>
+                                </td>
+                                <td>
+                                    <div class="number">4</div>
+                                </td>
+                                <td>
+                                    <div class="number">5</div>
+                                </td>
+                            </tr>
+
+                            <tr title="I liked how the facilitators presented and delivered the content.">
+                                <td>I liked how the facilitators presented and delivered the content.</td>
+                                <td>
+                                    <div class="number">1</div>
+                                </td>
+                                <td>
+                                    <div class="number">2</div>
+                                </td>
+                                <td>
+                                    <div class="number">3</div>
+                                </td>
+                                <td>
+                                    <div class="number">4</div>
+                                </td>
+                                <td>
+                                    <div class="number">5</div>
+                                </td>
+                            </tr>
+
+                            <tr title="The facilitators seemed knowledgeable about the subject matter.">
+                                <td>The facilitators seemed knowledgeable about the subject matter.</td>
+                                <td>
+                                    <div class="number">1</div>
+                                </td>
+                                <td>
+                                    <div class="number">2</div>
+                                </td>
+                                <td>
+                                    <div class="number">3</div>
+                                </td>
+                                <td>
+                                    <div class="number">4</div>
+                                </td>
+                                <td>
+                                    <div class="number">5</div>
+                                </td>
+                            </tr>
+
+                            <tr
+                                title="The facilitators conveyed a positive and respectful attitude toward the participants.">
+                                <td>The facilitators conveyed a positive and respectful attitude toward the
+                                    participants.</td>
+                                <td>
+                                    <div class="number">1</div>
+                                </td>
+                                <td>
+                                    <div class="number">2</div>
+                                </td>
+                                <td>
+                                    <div class="number">3</div>
+                                </td>
+                                <td>
+                                    <div class="number">4</div>
+                                </td>
+                                <td>
+                                    <div class="number">5</div>
+                                </td>
+                            </tr>
+
+                            <tr
+                                title="I had the opportunity to provide feedback on how to apply my new skills on the job.">
+                                <td>I had the opportunity to provide feedback on how to apply my new skills on the job.
+                                </td>
+                                <td>
+                                    <div class="number">1</div>
+                                </td>
+                                <td>
+                                    <div class="number">2</div>
+                                </td>
+                                <td>
+                                    <div class="number">3</div>
+                                </td>
+                                <td>
+                                    <div class="number">4</div>
+                                </td>
+                                <td>
+                                    <div class="number">5</div>
+                                </td>
+                            </tr>
+
+                            <tr title="I was given clear direction on how to implement my action items.">
+                                <td>I was given clear direction on how to implement my action items.</td>
+                                <td>
+                                    <div class="number">1</div>
+                                </td>
+                                <td>
+                                    <div class="number">2</div>
+                                </td>
+                                <td>
+                                    <div class="number">3</div>
+                                </td>
+                                <td>
+                                    <div class="number">4</div>
+                                </td>
+                                <td>
+                                    <div class="number">5</div>
+                                </td>
+                            </tr>
+
+                            <tr title="I was provided with guidance and support to access training course.">
+                                <td>I was provided with guidance and support to access training course.</td>
+                                <td>
+                                    <div class="number">1</div>
+                                </td>
+                                <td>
+                                    <div class="number">2</div>
+                                </td>
+                                <td>
+                                    <div class="number">3</div>
+                                </td>
+                                <td>
+                                    <div class="number">4</div>
+                                </td>
+                                <td>
+                                    <div class="number">5</div>
+                                </td>
+                            </tr>
+
+                            <tr title="The learning event met my learning style.">
+                                <td>The learning event met my learning style.</td>
+                                <td>
+                                    <div class="number">1</div>
+                                </td>
+                                <td>
+                                    <div class="number">2</div>
+                                </td>
+                                <td>
+                                    <div class="number">3</div>
+                                </td>
+                                <td>
+                                    <div class="number">4</div>
+                                </td>
+                                <td>
+                                    <div class="number">5</div>
+                                </td>
+                            </tr>
+
+                            <tr title="The learning environment and facilities were appropriate for this event.">
+                                <td>The learning environment and facilities were appropriate for this event.</td>
+                                <td>
+                                    <div class="number">1</div>
+                                </td>
+                                <td>
+                                    <div class="number">2</div>
+                                </td>
+                                <td>
+                                    <div class="number">3</div>
+                                </td>
+                                <td>
+                                    <div class="number">4</div>
+                                </td>
+                                <td>
+                                    <div class="number">5</div>
+                                </td>
+                            </tr>
+
+                            <tr title="I would recommend this learning event to my colleagues.">
+                                <td>I would recommend this learning event to my colleagues.</td>
+                                <td>
+                                    <div class="number">1</div>
+                                </td>
+                                <td>
+                                    <div class="number">2</div>
+                                </td>
+                                <td>
+                                    <div class="number">3</div>
+                                </td>
+                                <td>
+                                    <div class="number">4</div>
+                                </td>
+                                <td>
+                                    <div class="number">5</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-success" id="btnSaveRaing">Submit Response</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="chatModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="d-flex flex-row">
                     <div>
-                        <form method="post" id="fmChat" action="{% url 'api_v1:api_messages' %}">
+                        <img src="{{ object.owner.image }}" height="20" alt="" />
+                    </div>
+                    <h5 class="modal-title">Talk to {{ object.owner }}</h5>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <form method="post" id="fmChat" action="{% url 'api_v1:api_messages' %}">
+                        {% csrf_token %}
 
-                            {% csrf_token %}
+                        <input type="hidden" name="sent" value="{{ request.user.id }}" />
+                        <input type="hidden" name="conversation" value="" />
 
-                            <input type="hidden" name="sent" value="{{ request.user.id }}"/>
-                            <input type="hidden" name="conversation" value=""/>
-
-                            <div class="row">
-                                <div class="col">
-                                    <div class="input-group mb-3">
-                                        <input type="text" class="form-control bg-white" name="content" placeholder="send a message to {{ object.owner }}"/>
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-success" type="submit">Send</button>
-                                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control bg-white" name="content"
+                                        placeholder="send a message to {{ object.owner }}" />
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-success" type="submit">Send</button>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </form>
+                </div>
 
-                        </form>
-                    </div>
-
-                    <div class="message-box">
-                        <p>loading ..</p>
-                        <div class="row">
-                            <div class="col">
-                                <div class="msg_history"></div>
-                            </div>
+                <div class="message-box">
+                    <p>loading ..</p>
+                    <div class="row">
+                        <div class="col">
+                            <div class="msg_history"></div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
+</div>
 
-    {% verbatim %}
-        <script type="text/x-handlebars-template" id="msgRcvItemTemplate">
-            <div class="incoming_msg msg-item" data-id="{{ id }}">
-                <div class="incoming_msg_img">
-                    <img src="{{ sent.image }}" class="img-fluid" alt="{{ sent.first_name }}"/></div>
-                <div class="received_msg">
-                    <div class="received_withd_msg">
-                        <p>{{ content }}</p>
-                        <span class="time_date">
-                            {{ sent.first_name }}
-                            -
-                            {{ time }}</span>
-                    </div>
-                </div>
-            </div>
-        </script>
+{% verbatim %}
+<script type="text/x-handlebars-template" id="msgRcvItemTemplate">
+   <div class="incoming_msg msg-item" data-id="{{id}}">
+      <div class="incoming_msg_img">
+         <img src="{{sent.image}}" class="img-fluid" alt="{{sent.first_name}}" /></div>
+      <div class="received_msg">
+         <div class="received_withd_msg">
+            <p>{{content}}</p>
+            <span class="time_date">
+               {{sent.first_name}}
+               -
+               {{time}}</span>
+         </div>
+      </div>
+   </div>
+</script>
 
-        <script type="text/x-handlebars-template" id="msgSentItemTemplate">
-            <div class="outgoing_msg msg-item" data-id="{{ id }}">
-                <div class="sent_msg">
-                    <p>{{ content }}</p>
-                    <span class="time_date">
-                        {{ sent.first_name }}
-                        -
-                        {{ time }}
-                    </span>
-                </div>
-            </div>
-        </script>
+<script type="text/x-handlebars-template" id="msgSentItemTemplate">
+   <div class="outgoing_msg msg-item" data-id="{{id}}">
+      <div class="sent_msg">
+         <p>{{content}}</p>
+         <span class="time_date">
+            {{sent.first_name}}
+            -
+            {{time}}
+         </span>
+      </div>
+   </div>
+</script>
 
-    {% endverbatim %}
-{% endblock %}
+{% endverbatim %}
+{% endblock %} {% block scripts %}
+<style>
+    .cat-item .collapse {
+        border: 1px solid #dfdfdf;
+    }
 
-{% block scripts %}
+    .accordion-button[aria-expanded="true"] {
+        font-weight: bold;
+        text-decoration: overline;
+    }
 
-    <style>
+    .content-item.complete i {
+        color: #0ee114;
+    }
 
-        .cat-item .collapse {
-            border: 1px solid #dfdfdf;
-        }
+    .content-item.active {
+        background: #f7f7f7;
+    }
 
-        .accordion-button[aria-expanded='true'] {
-            font-weight: bold;
-            text-decoration: overline;
-        }
+    .blog-sidebar .widget.widget_categories ul li a {
+        text-align: left;
+    }
 
-        .content-item.complete i {
-            color: #0ee114;
-        }
+    .fa.text:before {
+        content: "\f039";
+    }
 
-        .content-item.active {
-            background: #f7f7f7;
-        }
+    .fa.file:before {
+        content: "\f1c1";
+    }
 
-        .blog-sidebar .widget.widget_categories ul li a {
+    .fa.image:before {
+        content: "\f03e";
+    }
 
-            text-align: left;
-        }
+    .fa.video:before {
+        content: "\f03d";
+    }
 
-        .fa.text:before {
-            content: "\f039";
-        }
+    .fa.frame:before {
+        content: "\f51b";
+    }
 
-        .fa.file:before {
-            content: "\f1c1";
-        }
+    .msg_history {
+        min-height: 400px;
+        overflow-y: auto;
+        padding: 25px;
+    }
 
-        .fa.image:before {
-            content: "\f03e";
-        }
+    .msg_history .incoming_msg_img {
+        display: inline-block;
+        width: 6%;
+    }
 
-        .fa.video:before {
-            content: "\f03d";
-        }
+    .msg_history .received_msg {
+        display: inline-block;
+        padding: 0 0 0 10px;
+        vertical-align: top;
+        width: 92%;
+    }
 
-        .fa.frame:before {
-            content: "\f51b";
-        }
+    .msg_history .received_withd_msg p {
+        background: #ebebeb none repeat scroll 0 0;
+        border-radius: 3px;
+        color: #646464;
+        font-size: 14px;
+        margin: 0;
+        padding: 5px 10px 5px 12px;
+        width: 100%;
+    }
 
-        .msg_history {
-            min-height: 400px;
-            overflow-y: auto;
-            padding: 25px;
-        }
+    .msg_history .time_date {
+        color: #747474;
+        display: block;
+        font-size: 12px;
+        margin: 8px 0 0;
+    }
 
-        .msg_history .incoming_msg_img {
-            display: inline-block;
-            width: 6%;
-        }
-        .msg_history .received_msg {
-            display: inline-block;
-            padding: 0 0 0 10px;
-            vertical-align: top;
-            width: 92%;
-        }
-        .msg_history .received_withd_msg p {
-            background: #ebebeb none repeat scroll 0 0;
-            border-radius: 3px;
-            color: #646464;
-            font-size: 14px;
-            margin: 0;
-            padding: 5px 10px 5px 12px;
-            width: 100%;
-        }
-        .msg_history .time_date {
-            color: #747474;
-            display: block;
-            font-size: 12px;
-            margin: 8px 0 0;
-        }
-        .msg_history .received_withd_msg {
-            width: 57%;
-        }
-        .msg_history .mesgs {
-            float: left;
-            padding: 30px 15px 0 25px;
-            width: 60%;
-        }
+    .msg_history .received_withd_msg {
+        width: 57%;
+    }
 
-        .msg_history .sent_msg p {
-            background: #05728f none repeat scroll 0 0;
-            border-radius: 3px;
-            font-size: 14px;
-            margin: 0;
-            color: #fff;
-            padding: 5px 10px 5px 12px;
-            width: 100%;
-        }
-        .msg_history .outgoing_msg {
-            overflow: hidden;
-            margin: 26px 0;
-        }
-        .msg_history .sent_msg {
-            float: right;
-            width: 46%;
-        }
+    .msg_history .mesgs {
+        float: left;
+        padding: 30px 15px 0 25px;
+        width: 60%;
+    }
 
-        #chatModal .modal-dialog {
-            height: 100%;
-        }
-        #chatModal .modal-content {
-            height: 90%;
-        }
-        #chatModal .modal-body {
-            height: 100%;
-            overflow: hidden;
-        }
+    .msg_history .sent_msg p {
+        background: #05728f none repeat scroll 0 0;
+        border-radius: 3px;
+        font-size: 14px;
+        margin: 0;
+        color: #fff;
+        padding: 5px 10px 5px 12px;
+        width: 100%;
+    }
 
-        #chatModal .message-box {
-            height: 100%;
-            overflow: scroll;
-        }
+    .msg_history .outgoing_msg {
+        overflow: hidden;
+        margin: 26px 0;
+    }
 
-        #ratingModal td div {
-            background: #000;
-            color: #fff;
-            text-align: center;
-            border: 1px solid #000;
-            cursor: pointer;
-            padding: 0 10px;
-            font-size: 12px;
-        }
+    .msg_history .sent_msg {
+        float: right;
+        width: 46%;
+    }
 
-        #ratingModal td div:hover {
+    #chatModal .modal-dialog {
+        height: 100%;
+    }
 
-            background: #20a041;
-            border: 1px solid #20a041;
-        }
+    #chatModal .modal-content {
+        height: 90%;
+    }
 
-        #ratingModal td div.number.active {
+    #chatModal .modal-body {
+        height: 100%;
+        overflow: hidden;
+    }
 
-            background: #20a041;
-            border: 1px solid #20a041;
-        }
+    #chatModal .message-box {
+        height: 100%;
+        overflow: scroll;
+    }
 
-        .blog-sidebar .widget.widget_categories ul li a i {
-            margin-top:10px;
-        }
+    #ratingModal td div {
+        background: #000;
+        color: #fff;
+        text-align: center;
+        border: 1px solid #000;
+        cursor: pointer;
+        padding: 0 10px;
+        font-size: 12px;
+    }
 
-        .blog-sidebar .widget.widget_categories ul li a span {
-            text-transform: capitalize;
-        }
-    </style>
+    #ratingModal td div:hover {
+        background: #20a041;
+        border: 1px solid #20a041;
+    }
 
-    <link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js" integrity="sha512-4ze/a9/4jqu+tX9dfOqJYSvyYd5M6qum/3HpCLr+/Jqf0whc37VUbkpNGHR7/8pSnCFw47T1fmIpwBV7UySh3g==" crossorigin="anonymous"></script>
-    <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
+    #ratingModal td div.number.active {
+        background: #20a041;
+        border: 1px solid #20a041;
+    }
 
-    <script type="application/javascript">
+    .blog-sidebar .widget.widget_categories ul li a i {
+        margin-top: 10px;
+    }
 
-        (function ($) {
+    .blog-sidebar .widget.widget_categories ul li a span {
+        text-transform: capitalize;
+    }
+</style>
 
-            $("header").hide();
+<link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"
+    integrity="sha512-4ze/a9/4jqu+tX9dfOqJYSvyYd5M6qum/3HpCLr+/Jqf0whc37VUbkpNGHR7/8pSnCFw47T1fmIpwBV7UySh3g=="
+    crossorigin="anonymous"></script>
+<script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
 
-            $.CourseDetailManager = function (options) {
-                var that = this;
+<script type="application/javascript">
+    (function ($) {
+        $("header").hide();
 
-                var settings = $.extend({}, options);
+        $.CourseDetailManager = function (options) {
+            var that = this;
 
-                var embedFile = function () {
+            var settings = $.extend({}, options);
 
-                    if ($(".file-item").length > 0) {
+            var embedFile = function () {
+                if ($(".file-item").length > 0) {
+                    var href = $(".file-item").eq(0).attr("href");
 
-                        var href = $(".file-item").eq(0).attr('href');
+                    if (href) {
+                        if (href.toLowerCase().indexOf(".png") >= 0) {
+                            var img = $("<img />", {
+                                src: href,
+                                class: "img-fluid",
+                            });
 
-                        if (href) {
+                            $(".file-item").eq(0).replaceWith(img);
+                        } else if (href.toLowerCase().indexOf(".pdf") >= 0) {
+                            var pdfDiv = $("<div />", {
+                                id: "pdfViewer",
+                            });
 
-                            if (href.toLowerCase().indexOf(".png") >= 0) {
+                            pdfDiv.css({
+                                width: "100%",
+                                "min-height": 600,
+                            });
 
-                                var img = $("<img />", {
-                                    src: href,
-                                    class: 'img-fluid'
-                                });
+                            $(".file-item").eq(0).replaceWith(pdfDiv);
 
-                                $(".file-item").eq(0).replaceWith(img);
+                            var options = {
+                                height: "580px",
+                                width: "100%",
+                                pdfOpenParams: {
+                                    view: "FitV",
+                                    page: "1",
+                                },
+                            };
 
-                            } else if (href.toLowerCase().indexOf(".pdf") >= 0) {
-
-                                var pdfDiv = $("<div />", {id: 'pdfViewer'});
-
-                                pdfDiv.css({width: '100%', 'min-height': 600});
-
-                                $(".file-item").eq(0).replaceWith(pdfDiv);
-
-                                var options = {
-                                    height: "580px",
-                                    width: '100%',
-                                    pdfOpenParams: {
-                                        view: 'FitV',
-                                        page: '1'
-                                    }
-                                };
-
-                                PDFObject.embed(href, "#pdfViewer", options);
-                            }
+                            PDFObject.embed(href, "#pdfViewer", options);
                         }
                     }
-
-                };
-
-
-                var registerEvent = function () {
-
-                    $("div").on("click", '.link-start-course', function (e) {
-                        e.stopPropagation();
-
-                        var link = $(".lesson.content-item.complete a").last();
-
-                        if (link.length > 0) {
-                            link[0].click();
-                        } else {
-                            $(".content-item.active a").eq(0)[0].click();
-                        }
-                    });
-
-                    if($("#topNavbar").length > 0) {
-                        $('html, body').animate({
-                            scrollTop: $("#topNavbar").offset().top
-                        }, 500);
-                    }
-                  
-
-                    $('.collapse').on('shown.bs.collapse', function () {
-                        var id = $(this).attr('id');
-                        var link = $("a[data-target='#" + id + "']");
-                        link.find("i").removeClass('fa-angle-right').addClass('fa-angle-down');
-                    });
-
-                    $('.collapse').on('hidden.bs.collapse', function () {
-
-                        var id = $(this).attr('id');
-                        var link = $("a[data-target='#" + id + "']");
-                        link.find("i").removeClass('fa-angle-down').addClass('fa-angle-right');
-
-                    });
-
-
-                };
-
-                var init = function () {
-                    registerEvent();
-                    embedFile();
-
-                };
-
-                init();
-
-                return this;
+                }
             };
 
-            $.TimeTracker = function (options) {
+            var registerEvent = function () {
+                $("div").on("click", ".link-start-course", function (e) {
+                    e.stopPropagation();
 
-                var that = this;
+                    var lessonsCount = $(".content-item").length
+                    if(lessonsCount<=0) return;
 
-                var totalSeconds = 0;
-                var lastSavedTime = 0;
-                var tabFocused = true;
+                    if(!$(".content-item").eq(0).hasClass('complete')) {
+                        $(".content-item.active a").eq(0)[0].click();
+                        return;
+                    }
 
-                var settings = $.extend({}, options);
+                    for(var iCounter=0;iCounter<lessonsCount;iCounter++) {
+                        var lessonItem = $(".content-item").eq(iCounter);
 
-                var getTimeLog = function () {
+                        if(!lessonItem.hasClass('complete')) {
+                            var prevItem = $(".content-item").eq(iCounter-1);
+                            if(prevItem.hasClass('complete')) {
+                                prevItem.find("a.lesson")[0].click();
+                                break;
+                            }
+                        }
+                       
+                    }
 
-                    $.get('/api/courses_time_logs/', {
-                        course: '{{ object.id }}'
-                    }, function (response) {
+                });
 
+                if ($("#topNavbar").length > 0) {
+                    $("html, body").animate(
+                        {
+                            scrollTop: $("#topNavbar").offset().top,
+                        },
+                        500
+                    );
+                }
+
+                $(".collapse").on("shown.bs.collapse", function () {
+                    var id = $(this).attr("id");
+                    var link = $("a[data-target='#" + id + "']");
+                    link.find("i").removeClass("fa-angle-right").addClass("fa-angle-down");
+                });
+
+                $(".collapse").on("hidden.bs.collapse", function () {
+                    var id = $(this).attr("id");
+                    var link = $("a[data-target='#" + id + "']");
+                    link.find("i").removeClass("fa-angle-down").addClass("fa-angle-right");
+                });
+            };
+
+            var init = function () {
+                registerEvent();
+                embedFile();
+            };
+
+            init();
+
+            return this;
+        };
+
+        $.TimeTracker = function (options) {
+            var that = this;
+
+            var totalSeconds = 0;
+            var lastSavedTime = 0;
+            var tabFocused = true;
+
+            var settings = $.extend({}, options);
+
+            var getTimeLog = function () {
+                $.get(
+                    "/api/courses_time_logs/",
+                    {
+                        course: "{{ object.id }}",
+                    },
+                    function (response) {
                         if (response && response.length > 0) {
                             totalSeconds = response[response.length - 1].total_seconds;
                         }
 
                         timeCounter();
+                    }
+                );
+            };
 
-                    });
+            var saveTimeLog = function () {
+                var data = {
+                    course: "{{ object.id }}",
+                    total_seconds: totalSeconds,
                 };
 
-                var saveTimeLog = function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/api/courses_time_logs/",
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                        $("#timer h3").css("color", "#27c714");
+                    },
+                    success: function (response) {
+                        $("#timer h3").removeAttr("style");
+                    },
+                    failure: function (errMsg) { },
+                });
+            };
+
+            var timeCounter = function () {
+                setInterval(() => {
+                    if (tabFocused) {
+                        totalSeconds += 1;
+
+                        lastSavedTime = lastSavedTime + 1;
+
+                        if (lastSavedTime >= 55) {
+                           // saveTimeLog();
+                            lastSavedTime = 0;
+                        }
+
+                        secondsToHms(totalSeconds);
+                    }
+                }, 1000);
+            };
+
+            var pad = function (str, max) {
+                str = str.toString();
+                return str.length < max ? pad("0" + str, max) : str;
+            };
+
+            var secondsToHms = function (d) {
+                d = Number(d);
+                var h = Math.floor(d / 3600);
+                var m = Math.floor((d % 3600) / 60);
+                var s = Math.floor((d % 3600) % 60);
+
+                $("#hours").html(pad(h, 2));
+                $("#minutes").html(pad(m, 2));
+                $("#seconds").html(pad(s, 2));
+            };
+
+            var checkContentCompleted = function () {
+                if ($("#contentSection").length > 0) {
+
+                    var id = $("#contentSection").attr("data-id");
+                    var content_type = $("#contentSection").attr("data-type");
+                    var is_completed = $("#contentSection").attr("data-completed");
+
+                    if (is_completed != "False") {
+                        return;
+                    }
 
                     var data = {
-                        course: '{{ object.id }}',
-                        total_seconds: totalSeconds
+                        content: id,
+                        is_completed: true,
+                        content_type: content_type,
+                        user_ip: "{{user_ip}}",
                     };
 
-                    $.ajax({
-                        type: "POST",
-                        url: "/api/courses_time_logs/",
-                        data: JSON.stringify(data),
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        beforeSend: function (xhr, settings) {
-                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                            $("#timer h3").css('color', '#27c714');
-                        },
-                        success: function (response) {
-                            $("#timer h3").removeAttr('style');
-                        },
-                        failure: function (errMsg) {}
+                    if (content_type != "video" || $("#videoFrame").length > 0) {
+                        updateContentStatus(data);
+                    } else if (content_type == "video" && $("#myVideo[completed='true']").length > 0) {
+                        updateContentStatus(data);
+                    }
+                }
+            };
+
+            var updateContentStatus = function (data) {
+                $.ajax({
+                    type: "POST",
+                    url: "/api/add-content-progress/",
+                    data: data,
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (response) {
+                        if (response.id > 0) {
+                            $(".next-item-link").removeClass("d-none");
+                            $(".content-" + data.content)
+                                .parent()
+                                .addClass("complete");
+                            $("#contentSection[data-id='" + data.content + "']").attr("data-completed", "True");
+                            updateCompletedContentCount();
+                        }
+                    },
+                    failure: function (errMsg) { },
+                });
+            };
+
+            var updateCompletedContentCount = function () {
+                var completedCount = $(".content-item.complete").length;
+                var totalContent = $(".content-item").length;
+
+                $("#progressCompletedContents").html("Completed: " + completedCount + "/" + totalContent);
+
+                if (completedCount == totalContent) {
+                    updateEnrollmentStatus();
+                }
+            };
+
+            var updateEnrollmentStatus = function () {
+
+                if ("{{ enrollment.is_completed }}" == "False" && $(".link-final-quiz").length > 0) {
+                    $(".link-final-quiz").eq(0).parent().removeClass("d-none");
+                    return;
+                }
+
+                if ("{{ enrollment.is_completed }}" == "True") {
+                   // var frm = new $.FindRatingManager({});
+                  // completedPopup();
+                    return;
+                }
+
+                var id = "{{ enrollment.id }}";
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/course-enrollment/" + id + "/set_completed/",
+                    data: JSON.stringify({
+                        status: true,
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                        ShowLoadingModal("Please wait", "updating status");
+                    },
+                    success: function (response, textStatus, xhr) {
+                        Swal.close();
+                        completedPopup();
+                       // var frm = new $.FindRatingManager({});
+                    },
+                });
+            };
+
+            var completedPopup = function() {
+                Swal.fire({
+                    title: "<strong>Congratulation</strong>",
+                    icon: "success",
+                    html: `
+                      You have completed the course.
+                    `,
+                    showCloseButton: true,
+                    showCancelButton: true,
+                    focusConfirm: false,
+                    confirmButtonText: `Download Certificate`,
+                    cancelButtonText: `Close`,
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                     window.location.href = "{% url 'student_course_certificate' enrollment.course_id %}";
+                    } 
+                  });
+            };
+
+            var registerEvent = function () {
+                document.addEventListener("visibilitychange", event => {
+                    if (document.visibilityState == "visible") {
+                        tabFocused = true;
+                    } else {
+                        tabFocused = false;
+                    }
+                });
+                updateCompletedContentCount();
+            };
+
+            var init = function () {
+                registerEvent();
+               // getTimeLog();
+                checkContentCompleted();
+            };
+
+            init();
+
+            return this;
+        };
+
+        $.ChatManager = function (options) {
+            var that = this;
+
+            var messagesList = [];
+
+            var settings = $.extend({}, options);
+
+            var getMessages = function () {
+                $(".message-box p").eq(0).html("Loading messages");
+
+                var cId = $("#fmChat input[name='conversation']").val();
+
+                $.get(
+                    "{% url 'api_v1:api_messages' %}",
+                    {
+                        conversation: cId,
+                        type: "last10",
+                    },
+                    function (response) {
+                        messagesList = response;
+                        drawAllMessages();
+                    }
+                );
+            };
+
+            var createRoom = function () {
+                var data = {
+                    course: "{{ object.id }}",
+                    title: "{{ object.title }}",
+                    teacher: "{{ object.owner.id }}",
+                    student: "{{ request.user.id }}",
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'api_v1:api_conversations' %}",
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                        ShowLoadingModal("Please wait", "Preparing channel");
+                    },
+                    success: function (response) {
+                        if (response && response.id > 0) {
+                            $("#fmChat input[name='conversation']").val(response.id);
+                            getMessages();
+                        }
+
+                        Swal.close();
+                    },
+                    failure: function (errMsg) { },
+                });
+            };
+
+            var initForm = function () {
+                $("#fmChat").ajaxForm({
+                    beforeSend: function () {
+                        $("#fmChat input, button").attr("disabled", true);
+                        $(".message-box p").eq(0).html("Sending");
+                    },
+                    success: function (response) {
+                        $("#fmChat input[name='content']").val(null);
+
+                        $(".message-box p").eq(0).html("Sent");
+
+                        getMessages();
+                    },
+                    complete: function (xhr) {
+                        // $("#fmChat input, button").attr('disabled', false);
+                    },
+                });
+            };
+
+            var drawAllMessages = function () {
+                $(messagesList).each(function (index, item) {
+                    var messageItem = $(".msg-item[data-id='" + item.id + "']");
+
+                    if (messageItem.length <= 0) {
+                        var source = document.getElementById("msgRcvItemTemplate").innerHTML;
+
+                        if (item.sent.id == "{{ request.user.id }}") {
+                            source = document.getElementById("msgSentItemTemplate").innerHTML;
+                        }
+
+                        var template = Handlebars.compile(source);
+
+                        item.time = moment(item.created).calendar();
+                        $(".msg_history").append(template(item));
+                    }
+                });
+
+                $("#fmChat input, button").attr("disabled", false);
+
+                $(".message-box p").eq(0).html("");
+
+                setTimeout(function () {
+                    $(".message-box").scrollTop($(".message-box")[0].scrollHeight);
+                }, 1000);
+            };
+
+            var registerEvent = function () {
+                $("div").on("click", ".link-talk-teacher", function (e) {
+                    e.stopPropagation();
+                    $("#chatModal").modal({
+                        show: true,
+                        backdrop: "static",
                     });
+                });
+
+                $("#chatModal").on("shown.bs.modal", function (e) {
+                    var conversationId = $("#fmChat input[name='conversation']").val();
+
+                    if (!conversationId) {
+                        createRoom();
+                    }
+                });
+            };
+
+            var init = function () {
+                registerEvent();
+                initForm();
+            };
+
+            init();
+
+            return this;
+        };
+
+        $.FindRatingManager = function (options) {
+            var that = this;
+
+            var settings = $.extend({}, options);
+
+            var checkAlreadyRated = function () {
+                var data = {
+                    course: "{{ object.id }}",
+                    user: "{{ request.user.id }}",
                 };
 
-                var timeCounter = function () {
-
-                    setInterval(() => {
-
-                        if (tabFocused) {
-
-                            totalSeconds += 1;
-
-                            lastSavedTime = lastSavedTime + 1;
-
-                            if (lastSavedTime >= 55) {
-                                saveTimeLog();
-                                lastSavedTime = 0;
-                            }
-
-                            secondsToHms(totalSeconds);
-                        }
-                    }, 1000);
-
+                var url = {
+                    url: "/api/course-assess-rating/is_rated",
+                    cache: false,
                 };
+                $.get(url, data, function (response) {
+                    if (response == false) {
+                        $("#ratingModal").modal({
+                            show: true,
+                            backdrop: "static",
+                        });
+                    }
+                });
+            };
 
-                var pad = function (str, max) {
-                        str = str.toString();
-                        return str.length<max ? pad("0" + str, max) : str;
-                };
+            var postRating = function () {
+                var isValidData = true;
+                var formData = [];
 
-                var secondsToHms = function (d) {
-                    d = Number(d);
-                    var h = Math.floor(d / 3600);
-                    var m = Math.floor(d % 3600 / 60);
-                    var s = Math.floor(d % 3600 % 60);
+                $("#tblRatings tr").each(function (ix) {
+                    var key_name = $(this).attr("title");
+                    var key_value = 0;
 
-                    $("#hours").html(pad(h, 2));
-                    $("#minutes").html(pad(m, 2));
-                    $("#seconds").html(pad(s, 2));
+                    var numberElement = $(this).find(".number.active");
 
-                };
+                    if (numberElement.length > 0) {
+                        key_value = $.trim(numberElement.text());
 
-                var checkContentCompleted = function () {
-                    
-                    if ($("#contentSection").length> 0
-                    ) {
+                        var data = $("#fmRating").serializeObject();
 
-                        var id = $("#contentSection").attr('data-id');
-                        var content_type = $("#contentSection").attr('data-type');
-                        var is_completed = $("#contentSection").attr('data-completed');
+                        data = $.extend(
+                            {
+                                key_name: key_name,
+                                key_value: key_value,
+                                student: "{{ request.user.id }}",
+                            },
+                            data
+                        );
 
-                        if (is_completed != 'False') {
-                            return;
-                        }
+                        formData.push(data);
+                        isValidData = true;
+                    } else {
+                        formData = [];
+                        isValidData = false;
 
-                        var data = {
-                            content: id,
-                            is_completed: true,
-                            content_type: content_type,
-                            user_ip:'{{user_ip}}'
-                        };
+                        $(this).css("background", "#e38585");
 
-                        if (content_type != 'video' || $("#videoFrame").length > 0) {
-                            updateContentStatus(data);
-                        } else if (content_type == 'video' && $("#myVideo[completed='true']").length > 0) {
-                            updateContentStatus(data);
-                        }
+                        Toast.fire({
+                            icon: "warning",
+                            title: "You have missed some rating questions.",
+                        });
 
-                    };
+                        return false;
+                    }
+                });
 
-                };
-
-                var updateContentStatus = function (data) {
-
+                if (formData.length > 0 && isValidData) {
                     $.ajax({
                         type: "POST",
-                        url: "/api/add-content-progress/",
-                        data: data,
-                        beforeSend: function (xhr, settings) {
-                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                        },
-                        success: function (response) {
-                            if (response.id > 0) {
-                                $(".next-item-link").removeClass('d-none');
-                                $(".content-" + data.content).parent().addClass('complete');
-                                $("#contentSection[data-id='" + data.content + "']").attr('data-completed', 'True');
-                                updateCompletedContentCount();
-                            }
-                        },
-                        failure: function (errMsg) {}
-                    });
-
-                };
-
-                var updateCompletedContentCount = function () {
-                    var completedCount = $(".content-item.complete").length;
-                    var totalContent = $(".content-item").length;
-
-                    $("#progressCompletedContents").html('Completed: ' + completedCount + "/" + totalContent);
-
-                    if (completedCount == totalContent) {
-                        updateEnrollmentStatus();
-                    }
-                };
-
-                var updateEnrollmentStatus = function () {
-
-                    if ("{{ enrollment.is_completed }}" == 'False' && $(".link-final-quiz").length > 0) {
-
-                        $(".link-final-quiz").eq(0).parent().removeClass('d-none');
-
-                        return;
-                    }
-
-                    if ("{{ enrollment.is_completed }}" == 'True') {
-                        var frm = new $.FindRatingManager({});
-                        return;
-                    }
-
-                    var id = "{{ enrollment.id }}";
-
-                    $.ajax({
-                        type: "POST",
-                        url: "/api/course-enrollment/" + id + "/set_completed/",
-                        data: JSON.stringify(
-                            {status: true}
-                        ),
+                        url: "/api/course-assess-rating/",
+                        data: JSON.stringify(formData),
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         beforeSend: function (xhr, settings) {
                             xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
-                            ShowLoadingModal("Please wait", "updating status");
-                        },
-                        success: function (response, textStatus, xhr) {
-                            Swal.close();
-                            var frm = new $.FindRatingManager({});
-                        }
-                    });
-                };
-
-                var registerEvent = function () {
-                    document.addEventListener("visibilitychange", event => {
-                        if (document.visibilityState == "visible") {
-                            tabFocused = true;
-                        } else {
-                            tabFocused = false;
-                        }
-                    });
-                    updateCompletedContentCount();
-                };
-
-                var init = function () {
-                    registerEvent();
-                    getTimeLog();
-                    checkContentCompleted();
-                };
-
-                init();
-
-                return this;
-            };
-
-            $.ChatManager = function (options) {
-
-                var that = this;
-
-                var messagesList = [];
-
-                var settings = $.extend({}, options);
-
-                var getMessages = function () {
-
-                    $(".message-box p").eq(0).html('Loading messages');
-
-                    var cId = $("#fmChat input[name='conversation']").val();
-
-                    $.get("{% url 'api_v1:api_messages' %}", {
-                        conversation: cId,
-                        type: 'last10'
-                    }, function (response) {
-                        messagesList = response;
-                        drawAllMessages();
-                    });
-                };
-
-                var createRoom = function () {
-
-                    var data = {
-                        course: '{{ object.id }}',
-                        title:'{{ object.title }}',
-                        teacher:'{{ object.owner.id }}',
-                        student:'{{ request.user.id }}'
-                    };
-
-                    $.ajax({
-                        type: "POST",
-                        url: "{% url 'api_v1:api_conversations' %}",
-                        data: JSON.stringify(data),
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        beforeSend: function (xhr, settings) {
-                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                            ShowLoadingModal("Please wait", "Preparing channel");
                         },
                         success: function (response) {
-                            if (response && response.id > 0) {
-                                $("#fmChat input[name='conversation']").val(response.id);
-                                getMessages();
-                            }
-
-                            Swal.close();
+                            $("#ratingModal").modal("hide");
+                            Swal.fire("Thank you!", "You response has been recorded!", "success");
                         },
-                        failure: function (errMsg) {}
+                        failure: function (errMsg) { },
                     });
-                };
-
-                var initForm = function () {
-
-                    $("#fmChat").ajaxForm({
-                        beforeSend: function () {
-                            $("#fmChat input, button").attr('disabled', true);
-                            $(".message-box p").eq(0).html('Sending');
-                        },
-                        success: function (response) {
-
-                            $("#fmChat input[name='content']").val(null);
-
-                            $(".message-box p").eq(0).html('Sent');
-
-                            getMessages();
-                        },
-                        complete: function (xhr) { // $("#fmChat input, button").attr('disabled', false);
-                        }
-                    });
-
-                };
-
-                var drawAllMessages = function () {
-
-                    $(messagesList).each(function (index, item) {
-
-                        var messageItem = $(".msg-item[data-id='" + item.id + "']");
-
-                        if (messageItem.length<= 0) {
-                            var source = document.getElementById("msgRcvItemTemplate").innerHTML;
-
-                            if (item.sent.id == '{{ request.user.id }}') {
-                                source = document.getElementById("msgSentItemTemplate").innerHTML;
-                            }
-
-                            var template = Handlebars.compile(source);
-
-                            item.time = moment(item.created).calendar();
-                            $(".msg_history").append(template(item));
-                        }
-
-                    });
-
-                    $("#fmChat input, button").attr('disabled', false);
-
-                    $(".message-box p").eq(0).html('');
-
-                    setTimeout(function () {
-                        $('.message-box').scrollTop($('.message-box')[0].scrollHeight);
-                    }, 1000);
-
-                };
-
-                var registerEvent = function () {
-
-                    $("div").on("click", '.link-talk-teacher', function (e) {
-                        e.stopPropagation();
-                        $("#chatModal").modal({'show': true, 'backdrop': 'static'});
-                    });
-
-                    $('#chatModal').on('shown.bs.modal', function (e) {
-                        var conversationId = $("#fmChat input[name='conversation']").val();
-
-                        if (! conversationId) {
-                            createRoom();
-                        }
-
-                    });
-
-                };
-
-                var init = function () {
-                    registerEvent();
-                    initForm();
-                };
-
-                init();
-
-                return this;
+                }
             };
 
-            $.FindRatingManager = function (options) {
+            var registerEvent = function () {
+                $("div").on("click", "#btnSaveRaing", function (e) {
+                    e.stopPropagation();
+                    postRating();
+                });
 
-                var that = this;
+                $("div.number").click(function () {
+                    $(this).parent().parent().find(".number").removeClass("active");
+                    $(this).addClass("active");
+                    $(this).closest("tr").eq(0).removeAttr("style");
+                });
 
-                var settings = $.extend({}, options);
-
-                var checkAlreadyRated = function () {
-                    var data = {
-                        course: "{{ object.id }}", user: "{{ request.user.id }}"
-                    };
-
-                    var url = {url: '/api/course-assess-rating/is_rated', cache: false};
-                    $.get(url, data, function (response) {
-                        if (response == false) {
-                            $('#ratingModal').modal({show: true, backdrop: 'static'});
-                        }
-                    });
-                };
-
-                var postRating = function () {
-
-                    var isValidData = true;
-                    var formData = [];
-
-                    $("#tblRatings tr").each(function (ix) {
-
-                        var key_name = $(this).attr('title');
-                        var key_value = 0;
-
-                        var numberElement = $(this).find(".number.active");
-
-                        if (numberElement.length> 0) {
-
-                            key_value = $.trim(numberElement.text());
-
-                            var data = $("#fmRating").serializeObject();
-
-                            data = $.extend({
-                                'key_name': key_name,
-                                'key_value': key_value,
-                                'student':"{{ request.user.id }}"
-                            }, data);
-
-                            formData.push(data);
-                            isValidData = true;
-
-                        } else {
-
-                            formData = [];
-                            isValidData = false;
-
-                            $(this).css('background', '#e38585');
-
-                            Toast.fire({icon: 'warning', title: 'You have missed some rating questions.'});
-
-                            return false;
-                        }
-
-
-                    });
-
-                    if (formData.length > 0 && isValidData) {
-
-                        $.ajax({
-                            type: "POST",
-                            url: "/api/course-assess-rating/",
-                            data: JSON.stringify(formData),
-                            contentType: "application/json; charset=utf-8",
-                            dataType: "json",
-                            beforeSend: function (xhr, settings) {
-                                xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                            },
-                            success: function (response) {
-                                $('#ratingModal').modal('hide');
-                                Swal.fire('Thank you!', 'You response has been recorded!', 'success');
-                            },
-                            failure: function (errMsg) {}
-                        });
-                    }
-
-
-                };
-
-                var registerEvent = function () {
-
-                    $("div").on("click", '#btnSaveRaing', function (e) {
-                        e.stopPropagation();
-                        postRating();
-                    });
-
-                    $("div.number").click(function () {
-                        $(this).parent().parent().find(".number").removeClass('active');
-                        $(this).addClass('active');
-                        $(this).closest('tr').eq(0).removeAttr('style');
-                    });
-
-                    $('#ratingModal').on('shown.bs.modal', function (e) {});
-
-                };
-
-                var init = function () {
-                    registerEvent();
-                    checkAlreadyRated();
-                };
-
-                init();
-
-                return this;
+                $("#ratingModal").on("shown.bs.modal", function (e) { });
             };
 
+            var init = function () {
+                registerEvent();
+                checkAlreadyRated();
+            };
 
-        })(jQuery);
+            init();
 
-        $(document).ready(function () {
-            new $.CourseDetailManager({});
-            new $.TimeTracker({});
-            new $.ChatManager({});
-        });
-    </script>
+            return this;
+        };
+    })(jQuery);
+
+    $(document).ready(function () {
+        new $.CourseDetailManager({});
+        new $.TimeTracker({});
+        new $.ChatManager({});
+    });
+</script>
 {% endblock %}
