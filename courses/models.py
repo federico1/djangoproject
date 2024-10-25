@@ -183,21 +183,6 @@ class Cluster(models.Model):
         return '\n'.join([u.username for u in self.users.all()])
 
 
-class CourseProgress(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             related_name='courses_progress',
-                             on_delete=models.SET_NULL, null=True)
-    created = models.DateTimeField(auto_now_add=True)
-    content = models.ForeignKey(
-        Content, on_delete=models.CASCADE, related_name='content_progress')
-    is_completed = models.BooleanField(default=False)
-    progress = models.IntegerField(default=0)
-    user_ip = models.TextField(null=True, blank=True)
-
-    def __str__(self):
-        return str(self.content)
-
-
 class CourseTimeLog(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              related_name='courses_time_spent',
@@ -288,8 +273,9 @@ class Enrollments(models.Model):
         settings.AUTH_USER_MODEL, related_name='my_enrolled', on_delete=models.CASCADE)
     course = models.ForeignKey(Course, related_name='course_enrolled',
                                on_delete=models.CASCADE)
-
     is_completed = models.BooleanField(default=False)
+    is_expired = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
     completed_date = models.DateTimeField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -363,3 +349,20 @@ class AssessRating(models.Model):
 
     def __str__(self):
         return '{}'.format(self.key_name)
+
+
+class CourseProgress(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             related_name='courses_progress',
+                             on_delete=models.SET_NULL, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    content = models.ForeignKey(
+        Content, on_delete=models.CASCADE, related_name='content_progress')
+    enrollment = models.ForeignKey(
+        Enrollments, on_delete=models.CASCADE, related_name='enrolled_courses_progress', null=True)
+    is_completed = models.BooleanField(default=False)
+    progress = models.IntegerField(default=0)
+    user_ip = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return str(self.content)

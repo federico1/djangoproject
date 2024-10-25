@@ -130,6 +130,7 @@ class SingleEmployeeManageView(View):
                 enrollments = Enrollments.objects.filter(
                     user_id=request.POST['student_id']).values(*fs)
                 return JsonResponse({"data": list(enrollments), 'result': True, 'error': False}, safe=False)
+                
             elif 'op_name' in request.POST and request.POST['op_name'] == 'assign_course':
 
                 student_id = request.POST['student_id']

@@ -226,7 +226,6 @@ class EnrollmentViewset(viewsets.ViewSet):
         if request.user.is_authenticated and request.user.is_student == True and serializer.is_valid():
 
             if not Enrollments.objects.filter(course=request.data['course'], user=self.request.user).exists():
-
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
