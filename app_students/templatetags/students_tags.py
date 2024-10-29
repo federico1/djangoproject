@@ -7,5 +7,10 @@ register = template.Library()
 
 @register.filter
 def get_enroll(qs, student_user):
-    qs = qs.get(user=student_user)
+    qs = qs.filter(user=student_user).first()
+    return qs
+
+@register.filter
+def filter_enroll(qs, student_user):
+    qs = qs.filter(user=student_user)
     return qs

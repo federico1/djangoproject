@@ -385,14 +385,17 @@
    
                      var data = row.data();
 
-                     data.impersonateLink = impersonateUserBaseLink.replace("804", data.id);
+                     if(data) {
+                        data.impersonateLink = impersonateUserBaseLink.replace("804", data.id);
    
-                     var source = document.getElementById("itemActionTemplate").innerHTML;
-                     var template = Handlebars.compile(source);
-   
-                     //var element = studentsList.find(a => a.id == $(this).attr("id"));
-   
-                     row.child(template(data)).show();
+                        var source = document.getElementById("itemActionTemplate").innerHTML;
+                        var template = Handlebars.compile(source);
+      
+                        //var element = studentsList.find(a => a.id == $(this).attr("id"));
+      
+                        row.child(template(data)).show();
+                     }
+                     
                   });
    
                   $(".loader").parent().hide();

@@ -1028,6 +1028,9 @@
             };
 
             var checkContentCompleted = function () {
+
+                if('{{enrollment.is_completed}}' == 'True') return;
+                
                 if ($("#contentSection").length > 0) {
 
                     var id = $("#contentSection").attr("data-id");
