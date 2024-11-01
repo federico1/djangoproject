@@ -49,7 +49,6 @@ class UserDetailView(APIView):
         dt_draw = self.request.query_params.get('draw')
         dt_search = self.request.query_params.get('search[value]')
 
-
         if dt_search:
             snippets = snippets.filter(Q(email__icontains=dt_search) | Q(first_name__icontains=dt_search) | Q(
                 last_name__icontains=dt_search) | Q(username__icontains=dt_search))

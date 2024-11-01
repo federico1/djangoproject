@@ -2,10 +2,12 @@
 
 <noscript>
    <style type="text/css">
-       .pagecontainer {display:none;}
+      .pagecontainer {
+         display: none;
+      }
    </style>
    <div class="noscriptmsg">
-   You don't have javascript enabled.  Good luck with that.
+      You don't have javascript enabled. Good luck with that.
    </div>
 </noscript>
 
@@ -17,7 +19,7 @@
          <span class="badge badge-secondary px-2"><strong>Loading...</strong></span>
       </div>
    </div>
-   
+
    <div class="card shadow mb-4">
       <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
          <h6 class="m-0 font-weight-bold text-primary">Students</h6>
@@ -38,6 +40,7 @@
                      <th>Last Name</th>
                      <th>Phone</th>
                      <th>Email</th>
+                     <th>Type</th>
                      <th>Courses</th>
                   </tr>
                </thead>
@@ -46,7 +49,7 @@
          </div>
       </div>
    </div>
-   
+
 </div>
 
 <div id="userModal" class="modal" tabindex="-1" role="dialog">
@@ -149,6 +152,7 @@
       <td>{{last_name}}</td>
       <td>{{cell_number}}</td>
       <td>{{email}}</td>
+      <td>{{user_type}}</td>
 
    </tr>
 </script>
@@ -371,44 +375,44 @@
 
                $(".loader").parent().show();
                $(".loader strong").text("Loading Students");
-   
+
                if (userDataTable) {
                   userDataTable.destroy();
                }
-   
+
                $("#usersTable").on("draw.dt", function () {
                   if (!userDataTable) return;
-   
+
                   $("#usersTable tbody tr").each(function () {
-   
+
                      var row = userDataTable.row($(this));
-   
+
                      var data = row.data();
 
-                     if(data) {
+                     if (data) {
                         data.impersonateLink = impersonateUserBaseLink.replace("804", data.id);
-   
+
                         var source = document.getElementById("itemActionTemplate").innerHTML;
                         var template = Handlebars.compile(source);
-      
+
                         //var element = studentsList.find(a => a.id == $(this).attr("id"));
-      
+
                         row.child(template(data)).show();
                      }
-                     
+
                   });
-   
+
                   $(".loader").parent().hide();
                   $(".link-new-user").removeAttr("disabled");
                   waitDialog.modal('hide');
                });
-   
+
                $("#usersTable").on('xhr.dt', function (e, settings, json, xhr) {
                   studentsList = json.data;
                });
-   
+
                userDataTable = $("#usersTable").DataTable({
-                  ajax: '{% url "api_v1:api_users_list" %}' + "?format=json&is_student=1&is_active=1&_=" + $.now(),
+                  ajax: '{% url "api_v1:api_users_list" %}' + "?format=json&is_active=1&_=" + $.now(),
                   processing: true,
                   serverSide: true,
                   columns: [
@@ -424,11 +428,17 @@
                      { data: "last_name" },
                      { data: "cell_number" },
                      { data: "email" },
+                     {
+                        data: "is_student",
+                        render: function (data) {
+                           return data.is_business == 'true'? 'Business':'Student'
+                        },
+                     },
                      { data: "enrolled_count" },
                   ],
                });
             }
-            catch(e) {
+            catch (e) {
                document.write(e)
             }
 
@@ -440,18 +450,18 @@
 
                $(".loader").parent().show();
                $(".loader strong").text("Loading courses..");
-   
+
                return $.get('{% url "api_v1:courses-list" %}', { format: "json", _: $.now() }, function (response) {
                   coursesList = response;
-   
+
                   if (isFetchStudents) getStudents();
                });
 
-            } catch(e) {
+            } catch (e) {
                document.write(e)
             }
 
-           
+
          };
 
          var fillCoursesList = function () {

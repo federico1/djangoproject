@@ -8,7 +8,7 @@ Disallow: /teachers/
 Disallow: /quiz/
 Disallow: /dashboard/
 Disallow: /communicate/
-Disallow: /business/
+Disallow: /business/dashboard/
 Disallow: /students/
 Disallow: /*?time=*
 
