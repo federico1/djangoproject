@@ -430,8 +430,16 @@
                      { data: "email" },
                      {
                         data: "is_student",
-                        render: function (data) {
-                           return data.is_business == 'true'? 'Business':'Student'
+                        render: function (data, dislay, row) {
+    
+                           if (row.is_business == true) {
+                              return 'Business';
+                           }
+                           else if (row.is_teacher == true) {
+                              return 'Teacher';
+                           }
+
+                           return 'Student';
                         },
                      },
                      { data: "enrolled_count" },
