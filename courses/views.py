@@ -65,7 +65,6 @@ class CourseListView(TemplateResponseMixin, View):
                 total_modules=Count('modules'))
 
             if subject:
-                # get_object_or_404(Subject, slug=subject)
                 subject = subjects.get(slug=subject)
                 key = 'subject_{}_courses'.format(subject.id)
                 courses = cache.get(key)
@@ -90,15 +89,18 @@ class CourseListView(TemplateResponseMixin, View):
             if request.GET.get('is_premium') is not None:
                 courses = all_courses.filter(
                     is_free=False)
+            
+            subject_packages = None
 
-        # instructors = User.objects.annotate(
-        #                    total_courses=Count('courses_created')).filter(total_courses__gt=0)
-
+            if subject:
+                subject_packages = subject.package_set.filter(is_deleted=False)
+            
             return self.render_to_response({'subjects': subjects,
                                             'subject': subject,
                                             'courses': courses.order_by('is_free'),
                                             'instructors': None,
-                                            'page_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                            'page_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                                            'subject_packages':subject_packages
                                             })
         except Subject.DoesNotExist:
             url = '/'
