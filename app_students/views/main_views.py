@@ -10,7 +10,7 @@ from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import get_template
 from django.conf import settings
 from django import template
@@ -38,6 +38,11 @@ class StudentRegistrationView(CreateView):
     template_name = 'registration/signup_form.html'
     form_class = StudentSignupForm
 
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse_lazy('course_list'))
+        return super().get(request, *args, **kwargs)
+    
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'student'
         return super().get_context_data(**kwargs)

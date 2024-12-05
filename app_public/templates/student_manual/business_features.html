@@ -41,9 +41,11 @@
                             simplifies safety compliance. Easily assign courses, track progress, and verify completions
                             for a safer, more productive jobsite.
                         </p>
+                        {% if not request.user.is_authenticated %}
                         <p>
                             <a title="Business Register" href="{% url 'business_user_register' %}">Create Business Account</a>  
                         </p>
+                        {% endif %}
                         <h3 class="mb-2">
                             Demo: How to create/register for business account!
                         </h3>
