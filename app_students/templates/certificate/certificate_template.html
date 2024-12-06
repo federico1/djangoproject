@@ -1,292 +1,330 @@
 {% load staticfiles %}
 <html>
-   <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
-      <meta name="Generator" content="Microsoft Word 14 (filtered)" />
-      <title>Certificate of Training - {{ student_name }}</title>
-      <style>
 
-         /* Font Definitions */
-         @font-face {
-             font-family: Cambria;
-             panose-1: 2 4 5 3 5 4 6 3 2 4;
-         }
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
+    <meta name="Generator" content="Microsoft Word 14 (filtered)" />
+    <title>Certificate of Training - {{ student_name }}</title>
+    <style>
+        /* Font Definitions */
+        @font-face {
+            font-family: Cambria;
+            panose-1: 2 4 5 3 5 4 6 3 2 4;
+        }
 
-         /* Style Definitions */
-         p.MsoNormal,
-         li.MsoNormal,
-         div.MsoNormal {
-             margin: 0 0 0.0001pt;
-             font-size: 10.0pt;
-             font-family: "Cambria", "serif";
-         }
+        /* Style Definitions */
+        p.MsoNormal,
+        li.MsoNormal,
+        div.MsoNormal {
+            margin: 0 0 0.0001pt;
+            font-size: 10.0pt;
+            font-family: "Cambria", "serif";
+        }
 
-         h1 {
-             margin: 12.0pt 0 3.0pt 0.3in;
-             text-indent: -0.3in;
-             page-break-after: avoid;
-             font-size: 16.0pt;
-             font-family: "Cambria", "serif";
-         }
+        h1 {
+            margin: 12.0pt 0 3.0pt 0.3in;
+            text-indent: -0.3in;
+            page-break-after: avoid;
+            font-size: 16.0pt;
+            font-family: "Cambria", "serif";
+        }
 
-         p.MsoHeader,
-         li.MsoHeader,
-         div.MsoHeader {
-             mso-style-link: "Header Char";
-             margin: 0 0 0.0001pt;
-             font-size: 10.0pt;
-             font-family: "Cambria", "serif";
-         }
+        p.MsoHeader,
+        li.MsoHeader,
+        div.MsoHeader {
+            mso-style-link: "Header Char";
+            margin: 0 0 0.0001pt;
+            font-size: 10.0pt;
+            font-family: "Cambria", "serif";
+        }
 
-         p.MsoFooter,
-         li.MsoFooter,
-         div.MsoFooter {
-             mso-style-link: "Footer Char";
-             margin: 0 0 0.0001pt;
-             font-size: 10.0pt;
-             font-family: "Cambria", "serif";
-         }
+        p.MsoFooter,
+        li.MsoFooter,
+        div.MsoFooter {
+            mso-style-link: "Footer Char";
+            margin: 0 0 0.0001pt;
+            font-size: 10.0pt;
+            font-family: "Cambria", "serif";
+        }
 
-         p.MsoCaption,
-         li.MsoCaption,
-         div.MsoCaption {
-             margin: 6.0pt 0;
-             font-size: 12.0pt;
-             font-family: "Cambria", "serif";
-             font-style: italic;
-         }
+        p.MsoCaption,
+        li.MsoCaption,
+        div.MsoCaption {
+            margin: 6.0pt 0;
+            font-size: 12.0pt;
+            font-family: "Cambria", "serif";
+            font-style: italic;
+        }
 
-         p.MsoList,
-         li.MsoList,
-         div.MsoList {
-             margin: 0 0 7.0pt;
-             line-height: 120%;
-             font-size: 10.0pt;
-             font-family: "Cambria", "serif";
-         }
+        p.MsoList,
+        li.MsoList,
+        div.MsoList {
+            margin: 0 0 7.0pt;
+            line-height: 120%;
+            font-size: 10.0pt;
+            font-family: "Cambria", "serif";
+        }
 
-         p.MsoBodyText,
-         li.MsoBodyText,
-         div.MsoBodyText {
-             margin: 0 0 7.0pt;
-             line-height: 120%;
-             font-size: 10.0pt;
-             font-family: "Cambria", "serif";
-         }
+        p.MsoBodyText,
+        li.MsoBodyText,
+        div.MsoBodyText {
+            margin: 0 0 7.0pt;
+            line-height: 120%;
+            font-size: 10.0pt;
+            font-family: "Cambria", "serif";
+        }
 
-         p.MsoSubtitle,
-         li.MsoSubtitle,
-         div.MsoSubtitle {
-             margin: 0 0 3.0pt;
-             text-align: center;
-             font-size: 12.0pt;
-             font-family: "Cambria", "serif";
-         }
+        p.MsoSubtitle,
+        li.MsoSubtitle,
+        div.MsoSubtitle {
+            margin: 0 0 3.0pt;
+            text-align: center;
+            font-size: 12.0pt;
+            font-family: "Cambria", "serif";
+        }
 
-         a:link,
-         span.MsoHyperlink {
-             color: blue;
-             text-decoration: underline;
-         }
+        a:link,
+        span.MsoHyperlink {
+            color: blue;
+            text-decoration: underline;
+        }
 
-         a:visited,
-         span.MsoHyperlinkFollowed {
-             color: #954F72;
-             text-decoration: underline;
-         }
+        a:visited,
+        span.MsoHyperlinkFollowed {
+            color: #954F72;
+            text-decoration: underline;
+        }
 
-         p.MsoAcetate,
-         li.MsoAcetate,
-         div.MsoAcetate {
-             margin: 0 0 0.0001pt;
-             font-size: 8.0pt;
-             font-family: "Tahoma", "sans-serif";
-         }
+        p.MsoAcetate,
+        li.MsoAcetate,
+        div.MsoAcetate {
+            margin: 0 0 0.0001pt;
+            font-size: 8.0pt;
+            font-family: "Tahoma", "sans-serif";
+        }
 
-         span.BalloonTextChar {
-             mso-style-name: "Balloon Text Char";
-             font-family: "Tahoma", "sans-serif";
-         }
+        span.BalloonTextChar {
+            mso-style-name: "Balloon Text Char";
+            font-family: "Tahoma", "sans-serif";
+        }
 
-         span.SubtitleChar {
-             mso-style-name: "Subtitle Char";
-             font-family: "Cambria", "serif";
-         }
+        span.SubtitleChar {
+            mso-style-name: "Subtitle Char";
+            font-family: "Cambria", "serif";
+        }
 
-         span.TitleChar {
-             mso-style-name: "Title Char";
-             font-family: "Cambria", "serif";
-             font-weight: bold;
-         }
+        span.TitleChar {
+            mso-style-name: "Title Char";
+            font-family: "Cambria", "serif";
+            font-weight: bold;
+        }
 
-         span.Heading1Char {
-             mso-style-name: "Heading 1 Char";
-             font-family: "Cambria", "serif";
-             font-weight: bold;
-         }
+        span.Heading1Char {
+            mso-style-name: "Heading 1 Char";
+            font-family: "Cambria", "serif";
+            font-weight: bold;
+        }
 
-         span.fn {
-             mso-style-name: fn;
-         }
+        span.fn {
+            mso-style-name: fn;
+        }
 
-         span.street-address {
-             mso-style-name: street-address;
-         }
+        span.street-address {
+            mso-style-name: street-address;
+        }
 
-         span.locality {
-             mso-style-name: locality;
-         }
+        span.locality {
+            mso-style-name: locality;
+        }
 
-         span.region {
-             mso-style-name: region;
-         }
+        span.region {
+            mso-style-name: region;
+        }
 
-         span.postal-code {
-             mso-style-name: postal-code;
-         }
+        span.postal-code {
+            mso-style-name: postal-code;
+        }
 
-         span.tel {
-             mso-style-name: tel;
-         }
+        span.tel {
+            mso-style-name: tel;
+        }
 
-         p.Heading,
-         li.Heading,
-         div.Heading {
-             mso-style-name: Heading;
-             margin: 12.0pt 0 3.0pt;
-             text-align: center;
-             font-size: 16.0pt;
-             font-family: "Cambria", "serif";
-             font-weight: bold;
-         }
+        p.Heading,
+        li.Heading,
+        div.Heading {
+            mso-style-name: Heading;
+            margin: 12.0pt 0 3.0pt;
+            text-align: center;
+            font-size: 16.0pt;
+            font-family: "Cambria", "serif";
+            font-weight: bold;
+        }
 
-         p.Index,
-         li.Index,
-         div.Index {
-             mso-style-name: Index;
-             margin: 0 0 0.0001pt;
-             font-size: 10.0pt;
-             font-family: "Cambria", "serif";
-         }
+        p.Index,
+        li.Index,
+        div.Index {
+            mso-style-name: Index;
+            margin: 0 0 0.0001pt;
+            font-size: 10.0pt;
+            font-family: "Cambria", "serif";
+        }
 
-         p.TableContents,
-         li.TableContents,
-         div.TableContents {
-             mso-style-name: "Table Contents";
-             margin: 0 0 0.0001pt;
-             font-size: 10.0pt;
-             font-family: "Cambria", "serif";
-         }
+        p.TableContents,
+        li.TableContents,
+        div.TableContents {
+            mso-style-name: "Table Contents";
+            margin: 0 0 0.0001pt;
+            font-size: 10.0pt;
+            font-family: "Cambria", "serif";
+        }
 
-         p.TableHeading,
-         li.TableHeading,
-         div.TableHeading {
-             mso-style-name: "Table Heading";
-             margin: 0 0 0.0001pt;
-             text-align: center;
-             font-size: 10.0pt;
-             font-family: "Cambria", "serif";
-             font-weight: bold;
-         }
+        p.TableHeading,
+        li.TableHeading,
+        div.TableHeading {
+            mso-style-name: "Table Heading";
+            margin: 0 0 0.0001pt;
+            text-align: center;
+            font-size: 10.0pt;
+            font-family: "Cambria", "serif";
+            font-weight: bold;
+        }
 
-         span.HeaderChar {
-             mso-style-name: "Header Char";
-             mso-style-link: Header;
-         }
+        span.HeaderChar {
+            mso-style-name: "Header Char";
+            mso-style-link: Header;
+        }
 
-         span.FooterChar {
-             mso-style-name: "Footer Char";
-             mso-style-link: Footer;
-         }
+        span.FooterChar {
+            mso-style-name: "Footer Char";
+            mso-style-link: Footer;
+        }
 
-         .MsoChpDefault {
-             font-size: 10.0pt;
-         }
+        .MsoChpDefault {
+            font-size: 10.0pt;
+        }
 
-         /* Page Definitions */
-         @page WordSection1 {
-             size: 11.0in 8.5in;
-             margin: 0.25in 0.5in;
-            
-         }
+        /* Page Definitions */
+        @page WordSection1 {
+            size: 11.0in 8.5in;
+            margin: 0.25in 0.5in;
 
-         div.WordSection1 {
-             page: WordSection1;
-             border:4px solid #000;
-         }
+        }
 
-         /* List Definitions */
-         ol {
-             margin-bottom: 0;
-         }
+        div.WordSection1 {
+            page: WordSection1;
+            border: 4px solid #000;
+        }
 
-         ul {
-             margin-bottom: 0;
-         }
-  
-      </style>
-   </head>
+        /* List Definitions */
+        ol {
+            margin-bottom: 0;
+        }
 
-   <body lang="EN-US" link="blue" vlink="#954F72">
-      <div class="WordSection1">
-         <table
-            align="center"
-            class="MsoNormalTable"
-            border="0"
-            cellspacing="0"
-            cellpadding="0"
-            style="border-collapse: collapse; margin: 43pt auto 0 auto"
-         >
+        ul {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+
+<body lang="EN-US" link="blue" vlink="#954F72">
+    <div class="WordSection1">
+        <table align="center" class="MsoNormalTable" border="0" cellspacing="0" cellpadding="0"
+            style="border-collapse: collapse; margin: 43pt auto 0 auto">
             <tr style="page-break-inside: avoid; height: 518.55pt">
-               <td width="757" valign="top" style="width:668.1pt; padding: 0in 5.4pt 0in 5.4pt; height: 518.55pt">
-                  <p class="MsoNormal" align="center" style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
-                  <p class="MsoNormal" align="center" style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
-                  <p class="Heading">
-                     <span style="font-size: 48pt">Certificate of Training </span>
-                     <br />
-                     <br />
+                <td width="757" valign="top" style="width:668.1pt; padding: 0in 5.4pt 0in 5.4pt; height: 518.55pt">
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
+                    <p class="Heading">
+                        <span style="font-size: 48pt">Certificate of Completion </span>
+                    </p>
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">
+                        <span style="font-size: 20pt;"> Presented by</span>
+                    </p>
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">
+                        <b>
+                            <span style="font-size: 24pt;">NYC Construction Safety Training LLC</span>
+                        </b>
+                    </p>
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">
 
-                     Presented by
-                  </p>
-                  <p class="MsoNormal" align="center" style="text-align: center">&nbsp;</p>
-                  <p class="MsoNormal" align="center" style="margin-right: 0.75pt; text-align: center; background: white">
-                     <b>
-                        <span style="font-size: 24pt;">NYC Construction Safety Training LLC</span>
-                     </b>
-                  </p>
-                  <p class="Heading">
-                     <em>
-                        <span style="font-size: 15pt;">In Recognition of Attendance and Achievement</span>
-                     </em>
-                  </p>
-                  <p class="MsoNormal" align="center" style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
-                  <p class="MsoNormal" align="center" style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
+                        <span style="font-size: 18pt;">This is to certify that</span>
 
-                  <p class="MsoNormal" align="center" style="margin-right: 0.75pt; text-align: center; line-height: 150%; background: white;margin-bottom:20px;">
-                     <b>
-                        <span style="font-size: 20pt; line-height: 150%; color: green">{{ student_name }}</span>
-                     </b>
-                  </p>
-                  <h1 align="center" style="text-align: center; font-size: 30pt;margin-bottom: 10px;">{{ object.title }}</h1>
+                    </p>
 
-                  <p class="MsoNormal" align="center" style="text-align: center; margin-bottom: 10px">
-                     <span style="font-size: 14pt"> {{ credits }}</span>
-                  </p>
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; line-height: 150%; background: white;margin-bottom:20px;">
+                        <b>
+                            <span style="font-size: 22pt; line-height: 150%; color: green">{{ student_name }}</span>
+                        </b>
+                    </p>
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">
+                        <span style="font-size: 18pt;">has successfully completed the course</span>
+                    </p>
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
 
-                  <p class="MsoNormal" align="center" style="text-align: center;margin-bottom: 10px;">
-                     <span style="font-size: 18pt; color: maroon"> Completion Date {{ completed_date }}</span>
-                  </p>
-                  <p class="MsoNormal" align="center" style="text-align: center">
-                    <span style="font-size: 10pt;"> REF: {{ ref_number }}</span>
-                 </p>
-                  <p class="MsoNormal" align="center" style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
-                  <p class="MsoNormal" align="center" style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
-                  <p class="MsoNormal" align="center" style="margin-right: 0.75pt; text-align: center; background: white">
-                     <b>
-                        <span style="font-size: 20pt;">&nbsp;</span>
-                     </b>
-                  </p>
-                  <p class="MsoNormal" align="center" style="margin-right: 0.75pt; text-align: center; background: white">
+                    <h1 align="center" style="text-align: center; font-size: 30pt;margin-bottom: 10px;">
+                        {{ object.title }}
+                    </h1>
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
+
+                    <!-- <p class="MsoNormal" align="center" style="text-align: center; margin-bottom: 10px">
+                        <span style="font-size: 14pt"> {{ credits }}</span>
+                    </p> -->
+
+                    <p class="MsoNormal" align="center" style="text-align: center;">
+                        <span style="font-size: 18pt;"> Completion Date: {{ completed_date }}</span>
+                    </p>
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
+
+
+                    <p class="MsoNormal" align="center" style="text-align: center;">
+                        <span style="font-size: 15pt;"> Certificate ID: {{ ref_number }}</span>
+                    </p>
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
+                    <p class="MsoNormal" align="center" style="text-align: center;">
+
+                        <img width="150" height="150" id="Picture1 10"
+                            src="https://pdhsafety.com/static/edutim/images/logo5.png" />
+                    </p>
+                    <p class="MsoNormal" align="center"
+                    style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
+                    
+                    <p class="MsoNormal" align="center" style="text-align: center;">
+                        <span style="font-size: 15pt;"> https://pdhsafety.com/</span>
+                    </p>
+
+
+                 
+                    
+                    <!-- <p class="MsoNormal" align="center" style="margin-right: 0.75pt; text-align: center; background: white">
                      <b>
                         <span style="font-size: 20pt;">Federico Roca CHST ASP</span>
                      </b>
@@ -299,21 +337,23 @@
                  
                   <p class="MsoNormal" align="center" style="text-align: center">
                      <img width="313" height="93" id="Picture 9" src="{{ sign_image }}" />
-                  </p>
-                  <p class="MsoNormal" align="center" style="text-align: center">&nbsp;</p>
-                  <p class="MsoNormal" align="center" style="text-align: center">&nbsp;</p>
-                  <p class="MsoNormal" align="center" style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
-                  <p class="MsoNormal" align="center" style="text-align: center;padding-bottom:20px;">
-                     <img width="200" height="200" id="Picture1 10" src="https://pdhsafety.com/static/edutim/images/logo5.png" />
-                  </p>
+                  </p> -->
+                 
+                  
+                    <p class="MsoNormal" align="center"
+                        style="margin-right: 0.75pt; text-align: center; background: white">&nbsp;</p>
 
-                  <p class="MsoNormal" align="center" style="text-align: center;padding-bottom:20px;font-size:10pt;">
-                    This Certificate of Training shall not imply or suggest that OSHA Outreach Training Program training was completed or will result in in individual being certified. Students are not eligible to request and/or receive an OSHA student completion card.
-                </p>
-               </td>
+
+                    <p class="MsoNormal" align="center" style="text-align: center;padding-bottom:20px;font-size:10pt;">
+                        This Certificate of Training shall not imply or suggest that OSHA Outreach Training Program
+                        training was completed or will result in in individual being certified. Students are not
+                        eligible to request and/or receive an OSHA student completion card.
+                    </p>
+                </td>
             </tr>
-         </table>
-        
-      </div>
-   </body>
+        </table>
+
+    </div>
+</body>
+
 </html>
