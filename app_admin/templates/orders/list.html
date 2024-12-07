@@ -13,12 +13,6 @@
 
 
 <div class="pagecontainer">
-   <div>
-      <div class="d-flex align-items-center justify-content-center loader mb-2">
-         <div class="spinner-border text-primary mr-2" role="status" aria-hidden="true"></div>
-         <span class="badge badge-secondary px-2"><strong>Loading...</strong></span>
-      </div>
-   </div>
 
    <div class="card shadow mb-4">
       <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -112,8 +106,8 @@
 
             try {
 
-               $(".loader").parent().show();
-               $(".loader strong").text("Loading courses");
+               // $(".loader").parent().show();
+               // $(".loader strong").text("Loading courses");
 
                if (userDataTable) {
                   userDataTable.destroy();
@@ -136,15 +130,18 @@
                   //   // row.child(template(data)).show();
                   // });
 
-                  $(".loader").parent().hide();
-                  waitDialog.modal('hide');
-                  $('.dataTables_processing').hide();
+                  // $(".loader").parent().hide();
+                  //waitDialog.modal('hide');
+                  //$('.dataTables_processing').hide();
                });
 
                userDataTable = $("#listTable").DataTable({
                   ajax: '{% url "api_backend_v1:view_backend_orders-get-list" %}' + "?format=json&_=" + $.now(),
                   processing: true,
                   serverSide: true,
+                  drawCallback: function () {
+                     waitDialog.modal('hide');
+                  },
                   columns: [
                      { data: "id" },
                      {
@@ -185,7 +182,7 @@
 
             }
             catch (e) {
-              console.log('e', e);
+               console.log('e', e);
             }
 
          };
