@@ -2,10 +2,12 @@
 
 <noscript>
    <style type="text/css">
-       .pagecontainer {display:none;}
+      .pagecontainer {
+         display: none;
+      }
    </style>
    <div class="noscriptmsg">
-   You don't have javascript enabled.  Good luck with that.
+      You don't have javascript enabled. Good luck with that.
    </div>
 </noscript>
 
@@ -17,11 +19,11 @@
          <span class="badge badge-secondary px-2"><strong>Loading...</strong></span>
       </div>
    </div>
-   
+
    <div class="card shadow mb-4">
       <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
          <h6 class="m-0 font-weight-bold text-primary">Courses Purchased</h6>
-         
+
       </div>
       <div class="card-body">
          <div class="table-responsive">
@@ -41,7 +43,7 @@
          </div>
       </div>
    </div>
-   
+
 </div>
 
 
@@ -71,7 +73,7 @@
 {% endblock %}
 
 
- {% block scripts %}
+{% block scripts %}
 
 <script>
 
@@ -91,8 +93,6 @@
       message: '<p class="text-center mb-0"><i class="fas fa-spinfa-cog"></i> Please wait, processing request...</p>',
       closeButton: false
    });
-
- 
 
    (function ($) {
 
@@ -114,34 +114,33 @@
 
                $(".loader").parent().show();
                $(".loader strong").text("Loading courses");
-   
+
                if (userDataTable) {
                   userDataTable.destroy();
                }
-   
+
                $("#listTable").on("draw.dt", function () {
-                  console.log(userDataTable, '1');
                   if (!userDataTable) return;
-                  console.log(userDataTable);
+
                   // $("#listTable tbody tr").each(function () {
-   
+
                   //    var row = userDataTable.row($(this));
-   
+
                   //    var data = row.data();
-   
+
                   //   // var source = document.getElementById("itemActionTemplate").innerHTML;
                   //   // var template = Handlebars.compile(source);
-   
+
                   //    //var element = studentsList.find(a => a.id == $(this).attr("id"));
-   
+
                   //   // row.child(template(data)).show();
                   // });
-   
+
                   $(".loader").parent().hide();
                   waitDialog.modal('hide');
-                  console.log(1);
+                  $('.dataTables_processing').hide();
                });
-   
+
                userDataTable = $("#listTable").DataTable({
                   ajax: '{% url "api_backend_v1:view_backend_orders-get-list" %}' + "?format=json&_=" + $.now(),
                   processing: true,
@@ -163,10 +162,10 @@
                      {
                         data: "items",
                         render: function (data, display, row) {
-                           var ids = row.items.map(function(v){return v.course.title;});
+                           var ids = row.items.map(function (v) { return v.course.title; });
                            return ids.join();
                         }
-                       
+
                      },
                      {
                         data: "total_amount",
@@ -183,17 +182,17 @@
                   ],
                });
 
-             
+
             }
-            catch(e) {
-               document.write(e)
+            catch (e) {
+              console.log('e', e);
             }
 
          };
 
-   
+
          var init = function () {
-           // registerEvent();
+            // registerEvent();
             getOrders();
          };
 
