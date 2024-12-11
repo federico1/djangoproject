@@ -1,4 +1,4 @@
-{% extends "admin_base.html" %} {% block title %} - Students {% endblock %} {% block content %}
+{% extends "admin_base.html" %} {% block title %} - Orders {% endblock %} {% block content %}
 
 <noscript>
    <style type="text/css">
@@ -42,25 +42,21 @@
 
 
 {% verbatim %}
-<script type="text/x-handlebars-template" id='listItemTemplate'>
+<script type="text/x-handlebars-template" id="itemActionTemplate">
+   <div class="row">
+      <div class="col student-courses" pk="{{id}}">
 
-    <tr id="{{id}}">
-        <td>{{number}}</td>
-        <td> <img src="" /> </td>
-        <td> {{user.first_name}} {{user.last_name}} </td>
-        <td>
-           {{#each items}}
-    <p>{{course.title}}</p>
-  {{/each}}
+      </div>
 
-        </td>
-        <td>
-        $ {{total_amount}}
-      </td>
-      <td>
-          {{created}}
-       </td>
-    </tr>
+      <div class="col text-right">
+
+         <a href="javascript:;" class="btn btn-dark btn-sm link-view-details" id="{{id}}">
+            View Details
+         </a>
+
+      
+      </div>
+   </div>
 </script>
 {% endverbatim %}
 
@@ -106,9 +102,6 @@
 
             try {
 
-               // $(".loader").parent().show();
-               // $(".loader strong").text("Loading courses");
-
                if (userDataTable) {
                   userDataTable.destroy();
                }
@@ -116,23 +109,20 @@
                $("#listTable").on("draw.dt", function () {
                   if (!userDataTable) return;
 
-                  // $("#listTable tbody tr").each(function () {
+                  $("#listTable tbody tr").each(function () {
 
-                  //    var row = userDataTable.row($(this));
+                     var row = userDataTable.row($(this));
 
-                  //    var data = row.data();
+                     var data = row.data();
 
-                  //   // var source = document.getElementById("itemActionTemplate").innerHTML;
-                  //   // var template = Handlebars.compile(source);
+                     var source = document.getElementById("itemActionTemplate").innerHTML;
+                     var template = Handlebars.compile(source);
 
-                  //    //var element = studentsList.find(a => a.id == $(this).attr("id"));
+                     var element = studentsList.find(a => a.id == $(this).attr("id"));
 
-                  //   // row.child(template(data)).show();
-                  // });
+                     row.child(template(data)).show();
+                  });
 
-                  // $(".loader").parent().hide();
-                  //waitDialog.modal('hide');
-                  //$('.dataTables_processing').hide();
                });
 
                userDataTable = $("#listTable").DataTable({
@@ -179,7 +169,6 @@
                   ],
                });
 
-
             }
             catch (e) {
                console.log('e', e);
@@ -187,9 +176,25 @@
 
          };
 
+         var registerEvent = function () {
+
+            $("div").on("click", ".link-view-details", function (e) {
+               e.stopPropagation();
+
+               var id = $(this).attr("id");
+
+               var url = "{% url 'admin_order_details' 0 %}";
+
+              window.open(url.replace('0/', id), '_blank').focus();
+
+            });
+
+      
+           
+         };
 
          var init = function () {
-            // registerEvent();
+            registerEvent();
             getOrders();
          };
 

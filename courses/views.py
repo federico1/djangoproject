@@ -2,7 +2,7 @@ from django.views import generic
 from django.views.generic.detail import DetailView
 from django.shortcuts import get_object_or_404, redirect, reverse
 from django.views.generic.base import TemplateResponseMixin, View
-from django.db.models import Count
+from django.db.models import Count, Q
 from .models import Subject, Course
 from students.forms import CourseEnrollForm
 from django.core.cache import cache
@@ -10,9 +10,10 @@ from django.utils.decorators import method_decorator
 from compression_middleware.decorators import compress_page
 from django.views.decorators.cache import cache_page, never_cache
 from django.views.decorators.vary import vary_on_cookie
-
 from datetime import datetime
+from functools import reduce
 
+import operator
 import logging
 
 logger = logging.getLogger('django')
@@ -79,8 +80,12 @@ class CourseListView(TemplateResponseMixin, View):
                     cache.set('all_courses', courses)
 
             if request.GET.get('q') is not None:
-                courses = all_courses.filter(
-                    title__icontains=str(request.GET.get('q')))
+                search_term = str(request.GET.get('q')).strip()
+                if search_term:
+                    keywords = search_term.split()
+                    phrase_query = Q(title__icontains=search_term)
+                    keyword_query = reduce(operator.or_,[Q(title__icontains=word) for word in keywords])
+                    courses = all_courses.filter(phrase_query | keyword_query)
 
             if request.GET.get('teacher') is not None:
                 courses = all_courses.filter(

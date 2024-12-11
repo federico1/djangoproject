@@ -13,3 +13,11 @@ class OrdersView(SuperuserRequiredMixin, generic.TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super(OrdersView, self).get_context_data(*args, **kwargs)
         return context
+
+
+class OrderDetailsView(SuperuserRequiredMixin, generic.TemplateView):
+    template_name = 'orders/details.html'
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super(OrderDetailsView, self).get_context_data(*args, **kwargs)
+        return context
