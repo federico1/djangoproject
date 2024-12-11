@@ -224,6 +224,10 @@ class EnrollmentViewset(viewsets.ViewSet):
         serializer = course_serializers.EnrollmentSerializer(data=data)
 
         if request.user.is_authenticated and request.user.is_student == True and serializer.is_valid():
+            course = Course.objects.get(pk=request.data['course'])
+
+            if course.is_free == False:
+                return Response(serializer.data, status=status.HTTP_502_BAD_GATEWAY)
 
             if not Enrollments.objects.filter(course=request.data['course'], user=self.request.user).exists():
                 serializer.save()

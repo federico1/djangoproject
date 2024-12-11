@@ -536,7 +536,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "/api/course-enrollment/",
+                    url: '{% url "api_v1:enrollments-list" %}',
                     data: JSON.stringify(formData),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
