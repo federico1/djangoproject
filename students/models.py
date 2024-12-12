@@ -106,7 +106,6 @@ class StudentAnswer(models.Model):
     def __str__(self):
         return '{} {}'.format(self.student, self.answer)
 
-
 class SSTCard(models.Model):
     student = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='sst_cards')

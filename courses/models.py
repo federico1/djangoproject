@@ -1,16 +1,14 @@
-from django.db import models
-from django.contrib.auth.models import User
+from django.db import models, transaction
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from .fields import OrderField
 from django.template.loader import render_to_string
-from django.utils.safestring import mark_safe
 from django.conf import settings
 
-import random
 import datetime
 
 from students.models import Quiz
+
 
 class Subject(models.Model):
     title = models.CharField(max_length=200)
@@ -21,7 +19,7 @@ class Subject(models.Model):
     meta_tags = models.TextField(default=None, null=True, blank=True)
     meta_description = models.TextField(default=None, null=True, blank=True)
     video_link = models.TextField(default=None, null=True, blank=True)
-    
+
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               related_name='subject_created',
                               on_delete=models.CASCADE, null=True, blank=True)
@@ -242,7 +240,6 @@ class CourseMeta(models.Model):
         return '{}'.format(self.course.id)
 
 
-
 class Attendance(models.Model):
     CHECK_IN = 1
     CHECK_OUT = 2
@@ -278,6 +275,32 @@ class Enrollments(models.Model):
     is_deleted = models.BooleanField(default=False)
     completed_date = models.DateTimeField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
+    created_info = models.TextField(blank=True, null=True)
+
+    def create_enrollment(self, **kwargs):
+        try:
+            with transaction.atomic():
+                field_map = {
+                    'user': kwargs.get('user'),
+                    'course': kwargs.get('course'),
+                    'is_completed': False,
+                    'is_expired': False,
+                    'is_deleted': False,
+                    'created_info': kwargs.get('created_info')
+                }
+
+                profile = Enrollments(
+                    user=field_map['user'],
+                    course=field_map['course'],
+                    is_completed=field_map['is_completed'],
+                    is_expired=field_map['is_expired'],
+                    is_deleted=field_map['is_deleted'],
+                    created_info=field_map['created_info'],
+                )
+                profile.save()
+                return profile
+        except Exception as e:
+            return None
 
     def __str__(self):
         return '{}'.format(self.user)

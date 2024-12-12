@@ -234,14 +234,14 @@ class EnrollmentViewset(viewsets.ViewSet):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.data, status=status.HTTP_226_IM_USED)
-        elif request.user.is_superuser == True and serializer.is_valid():
+        # elif request.user.is_superuser == True and serializer.is_valid():
 
-            if not Enrollments.objects.filter(course=request.data['course'], user=request.data['user']).exists():
+        #     if not Enrollments.objects.filter(course=request.data['course'], user=request.data['user']).exists():
 
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            else:
-                return Response(serializer.data, status=status.HTTP_226_IM_USED)
+        #         serializer.save()
+        #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+        #     else:
+        #         return Response(serializer.data, status=status.HTTP_226_IM_USED)
 
         serializer.is_valid()
 
