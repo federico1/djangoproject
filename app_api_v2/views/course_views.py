@@ -6,7 +6,6 @@ from rest_framework import status
 from django.db import models
 from django.db.models import Func, Count
 
-
 from courses.models import Enrollments
 from app_api_v2.serializers import course_serializers
 

@@ -126,7 +126,7 @@
                });
 
                userDataTable = $("#listTable").DataTable({
-                  ajax: '{% url "api_backend_v1:view_backend_orders-get-list" %}' + "?format=json&_=" + $.now(),
+                  ajax: '{% url "api_admin_v1:view_admin_orders-get-list" %}' + "?format=json&_=" + $.now(),
                   processing: true,
                   serverSide: true,
                   drawCallback: function () {
