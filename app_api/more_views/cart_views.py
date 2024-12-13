@@ -29,9 +29,13 @@ class OrderApiView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = OrderSerializer(data=request.data)
+        serializer = OrderSerializer(data=request.data, context={'request': request})
 
         if serializer.is_valid():
+            user_id = serializer.validated_data.get('user').id
+            if request.user.id != user_id:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
             serializer.save()
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)

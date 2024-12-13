@@ -30,7 +30,7 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ('ref_id', 'user', 'total_amount', 'status', 'items', 'payments')
 
     def create(self, validated_data):
-       
+
         items_data = validated_data.pop('items')
         payments_data = validated_data.pop('payments')
 
@@ -49,7 +49,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
             if not Enrollments.objects.filter(course=item_data['course'], user=order.user).exists():
                 enrollment = Enrollments.objects.create(
-                course=item_data['course'], user=order.user)
+                course=item_data['course'], user=order.user, price=item_data['price'], created_by=self.context['request'].user.id)
 
             Item.objects.create(order=order, enrollment = enrollment, **item_data)
         

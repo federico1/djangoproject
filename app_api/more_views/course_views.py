@@ -220,12 +220,20 @@ class EnrollmentViewset(viewsets.ViewSet):
 
         if 'user' not in data:
             data['user'] = self.request.user.id
+        
+        course = Course.objects.get(pk=request.data['course'])
+
+        data['created_by'] = self.request.user.id
+
+        if course.is_free == True:
+            data['price'] = 0
+        else:
+            data['price'] =  course.discounted_price if course.discounted_price >0 else course.price
 
         serializer = course_serializers.EnrollmentSerializer(data=data)
 
         if request.user.is_authenticated and request.user.is_student == True and serializer.is_valid():
-            course = Course.objects.get(pk=request.data['course'])
-
+            
             if course.is_free == False:
                 return Response(serializer.data, status=status.HTTP_502_BAD_GATEWAY)
 

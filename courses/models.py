@@ -275,7 +275,8 @@ class Enrollments(models.Model):
     is_deleted = models.BooleanField(default=False)
     completed_date = models.DateTimeField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
-    created_info = models.TextField(blank=True, null=True)
+    created_by = models.TextField(blank=True, null=True)
+    price = models.IntegerField(blank=True, null=True, default=0)
 
     def create_enrollment(self, **kwargs):
         try:
