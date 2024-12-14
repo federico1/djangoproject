@@ -44,7 +44,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = (
-        'courses',
+    'courses',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -124,6 +124,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'djangoproject/static'),
     os.path.join(BASE_DIR, 'static/'),
@@ -172,7 +174,7 @@ LOGGING = {
     'handlers': {
         'file': {
             'level': 'ERROR',
-             'class': 'logging.handlers.RotatingFileHandler',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'debug_error.log',
             'maxBytes': 15728640,  # 1024 * 1024 * 15B = 15MB
             'backupCount': 10,
