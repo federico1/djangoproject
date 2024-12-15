@@ -35,7 +35,7 @@ urlpatterns = [
 
     # path('video-courses/', views.VideoCoursesView.as_view()),
     # path('video-courses/<int:pk>/', views.VideoCoursesView.as_view()),
-
+    
     path('users/', users_views.UserDetailView.as_view(), name="api_users_list"),
     path('users/<int:pk>/', users_views.UserDetailView.as_view(), name="api_user_detail"),
     #path('users/<int:pk>/', users_views.UserDetailView.as_view()),

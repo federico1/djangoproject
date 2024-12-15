@@ -1,11 +1,12 @@
 from django.views import generic
 from django.shortcuts import get_object_or_404
 from django.http import Http404
+from braces.views import LoginRequiredMixin
 
 from app_cart.models import Order
 
 
-class PurchaseHistoryView(generic.TemplateView):
+class PurchaseHistoryView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'orders/purchase_history.html'
 
     def get_context_data(self, *args, **kwargs):
@@ -14,7 +15,7 @@ class PurchaseHistoryView(generic.TemplateView):
         return context
 
 
-class InvoiceView(generic.TemplateView):
+class InvoiceView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'orders/invoice.html'
 
     def get_context_data(self, *args, **kwargs):
@@ -36,7 +37,7 @@ class InvoiceView(generic.TemplateView):
         return context
 
 
-class ReceiptView(generic.TemplateView):
+class ReceiptView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'orders/receipt.html'
 
     def get_context_data(self, *args, **kwargs):

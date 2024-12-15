@@ -2,6 +2,7 @@ from django.urls import path
 from django.views.decorators.cache import cache_page
 from .views import main_views, profile_views, quiz_views, inbox_views, order_views
 
+
 urlpatterns = [
      path('register/', main_views.StudentRegistrationView.as_view(),
          name='student_registration'),
@@ -33,4 +34,6 @@ urlpatterns = [
 
      path('edit-profile', profile_views.EditProfileView.as_view(),
          name='student_edit_profile'),
+     path('switch-to-business-account', profile_views.SwitchBusinessAccountView.as_view(),
+         name='student_switch_to_business_account'),
 ]

@@ -1,0 +1,126 @@
+{% extends "student_base.html" %}
+{% load staticfiles %}
+
+{% block title %}
+Switch to Business Account
+{% endblock %}
+
+{% block content %}
+
+<section class="section-padding popular-course-slider bg-feature pt-5">
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-lg-7">
+                <div class="section-heading center-heading">
+                    <h3>Switch to Business Account?</h3>
+                </div>
+            </div>
+        </div>
+
+        <main class="site-main woocommerce single single-product">
+            <section class="space-3">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <div class="alert alert-warning text-center">
+                                <strong>Are you sure you want to convert your account to a business type? Please read
+                                    the instructions carefully.</strong>
+                            </div>
+                            <div class="alert alert-info text-center">
+                                <ul>
+                                    <li>The business account is designed for companies (small, large, etc.).</li>
+                                    <li>You will not be able to enroll in courses yourself.</li>
+                                    <li>You can create employee accounts and assign courses to them.</li>
+                                    <li>You can find more details here <a title="Business Account Features & Demo"
+                                            href="{% url 'business_account_features' %}"> View Features & Demo!</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="my-3 text-center">
+                                <button id="btnSwitch" type="button" class="btn text-white btn-warning btn-lg">Yes
+                                    Confirm? Switch my account to business</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
+
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script type="application/javascript">
+
+    (function ($) {
+
+        $.UserProfileManager = function (options) {
+            var that = this;
+
+            var productObject = [];
+
+            var settings = $.extend({}, options);
+
+            var switchToBusiness = function () {
+
+                ShowLoadingModal('Please wait', 'Processing data.');
+
+                $.ajax({
+                    type: "POST",
+                    url: '{% url "api_student_v1:view_student_profile-switch-to-business-account" %}',
+                    data: JSON.stringify({}),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (response, textStatus, xhr) {
+                        if (textStatus == 'success') {
+                            Swal.close();
+                            Toast.fire({ icon: 'success', title: 'Your account has been upgraded to business. You need to login again' });
+                            $(".link-logout")[0].click();
+                        }
+                    },
+                    complete: function (xhr, textStatus) { },
+                    failure: function (errMsg) { }
+                });
+
+            };
+
+            var registerEvent = function () {
+
+                $("#btnSwitch").click(function () {
+
+                    switchToBusiness();
+                });
+
+
+            };
+
+            var init = function () {
+                registerEvent();
+            };
+
+            init();
+
+            return this;
+        };
+
+
+    })(jQuery);
+
+    $(document).ready(function () {
+        new $.UserProfileManager({});
+    });
+</script>
+
+{% endblock %}

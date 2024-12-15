@@ -91,7 +91,7 @@
                         </li>
 
                         <li class="nav-item">
-                           <a class="nav-link" href="{% url 'logout' %}?v={% now 'M-d-Y-H-i-s' %}"> Logout </a>
+                           <a class="nav-link link-logout" href="{% url 'logout' %}?v={% now 'M-d-Y-H-i-s' %}"> Logout </a>
                         </li>
                      </ul>
                   </div>
@@ -102,6 +102,9 @@
          </div>
       </header>
 
+      <div class="bg-white p-2 text-right">
+         <a href="{% url  'student_switch_to_business_account' %}" class="btn btn-success btn-sm">Switch to Business Account?</a>
+      </div>
       {% block content %}{% endblock %}
 
       <section class="footer pt-120">

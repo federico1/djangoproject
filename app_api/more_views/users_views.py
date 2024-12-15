@@ -3,13 +3,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from django.http import Http404
-from django.db.models import Count, Q
-from django.conf import settings
-from datetime import datetime
-from cryptography.fernet import Fernet
-from rest_framework.pagination import PageNumberPagination
-
-import json
+from django.db.models import Q
+from rest_framework.decorators import action
 
 from app_api.serializers import UserSerializer
 from app_api.permissions import IsTeacherUser

@@ -21,7 +21,6 @@ from django.conf.urls.static import static
 from django.urls import path
 from django.conf.urls import url
 from django.contrib.sitemaps.views import sitemap
-from django.conf.urls import (handler400, handler403, handler404, handler500)
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -73,6 +72,7 @@ urlpatterns = [
     url(r'api/', include('app_api.urls')),
     url(r'api/', include('app_api_v2.urls')),
     url(r'api/backend/', include('app_api_admin_v1.urls')),
+    url(r'api/student/', include('app_api_student_v1.urls')),
     path('', include('app_public.urls')),
     path('', include('app_cart.urls')),
     path('students/', include('app_students.urls')),

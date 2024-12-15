@@ -26,6 +26,7 @@ from app_students.forms import StudentSignupForm
 from app_students.file_utils import uploaded_file, get_client_ip
 from app_students.mail_utils import send_welcome_mail
 from students.decorators import student_required
+from app_students.decorators import ISStudentUserMixin
 
 from students.models import User
 from courses.models import Course, CourseProgress, StudentCertificate
@@ -67,7 +68,7 @@ class StudentRegistrationView(CreateView):
 
 @method_decorator(cache_page(2), name='dispatch')
 @method_decorator(vary_on_cookie, name='dispatch')
-class StudentHomeView(generic.TemplateView):
+class StudentHomeView(ISStudentUserMixin, generic.TemplateView):
     template_name = 'student_home.html'
 
     def get_context_data(self, *args, **kwargs):
@@ -78,7 +79,7 @@ class StudentHomeView(generic.TemplateView):
 
 @method_decorator(cache_page(2), name='dispatch')
 @method_decorator(vary_on_cookie, name='dispatch')
-class CourseListView(LoginRequiredMixin, ListView):
+class CourseListView(ISStudentUserMixin, LoginRequiredMixin, ListView):
     model = Course
     template_name = 'courses/list.html'
 

@@ -1,4 +1,3 @@
-from operator import le
 from django.views import generic
 from django.urls import reverse_lazy
 from django.views.generic.list import ListView
@@ -12,7 +11,6 @@ from django.views.generic.base import TemplateResponseMixin, View
 from django.forms.models import modelform_factory
 from django.apps import apps
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
-from django.db.models import Count
 from django.core.cache import cache
 from django.http import HttpResponse
 from django.utils.text import slugify
@@ -20,15 +18,14 @@ from django.core import serializers
 from django.views.decorators.cache import never_cache
 from django.utils.decorators import method_decorator
 
-from courses.models import Subject, Course, Module, Content, CourseProgress
+from courses.models import Course, Module, Content
 from .forms import ModuleFormSet
-from students.forms import CourseEnrollForm
-from students.models import User, Quiz
+from students.models import Quiz
 
 
 class OwnerMixin(object):
     def get_queryset(self):
-        
+
         qs = super(OwnerMixin, self).get_queryset()
 
         if 'q' in self.request.GET:
@@ -44,7 +41,8 @@ class OwnerEditMixin(object):
 
 class OwnerCourseMixin(OwnerMixin, LoginRequiredMixin):
     model = Course
-    fields = ['subject', 'title', 'slug', 'overview','is_free', 'price', 'discounted_price', 'owner_id']
+    fields = ['subject', 'title', 'slug', 'overview',
+              'is_free', 'price', 'discounted_price', 'owner_id']
     success_url = reverse_lazy('manage_course_list')
 
 
@@ -60,9 +58,11 @@ class ManageCourseListView(OwnerCourseMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['object_json'] = serializers.serialize('json', self.object_list)
+        context['object_json'] = serializers.serialize(
+            'json', self.object_list)
         cache.clear()
         return context
+
 
 @method_decorator([never_cache,], name="dispatch")
 class CourseCreateView(PermissionRequiredMixin,
@@ -76,6 +76,7 @@ class CourseUpdateView(PermissionRequiredMixin,
                        OwnerCourseEditMixin,
                        UpdateView):
     permission_required = 'courses.change_course'
+
 
 @method_decorator([never_cache,], name="dispatch")
 class CourseDeleteView(PermissionRequiredMixin,
@@ -149,7 +150,7 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
         form = self.get_form(self.model, instance=self.obj)
         return self.render_to_response({'form': form,
                                         'object': self.obj,
-                                        'module_object':Module.objects.get(pk=module_id)
+                                        'module_object': Module.objects.get(pk=module_id)
                                         })
 
     def post(self, request, module_id, model_name, id=None):
@@ -182,6 +183,7 @@ class ContentDeleteView(View):
         content.delete()
         return redirect('module_content_list', module.id)
 
+
 @method_decorator([never_cache,], name="dispatch")
 class ModuleContentListView(TemplateResponseMixin, View):
     template_name = 'manage/module/content_list.html'
@@ -203,6 +205,7 @@ class ModuleOrderView(CsrfExemptMixin,
                                   course__owner=request.user).update(order=order)
         cache.clear()
         return self.render_json_response({'saved': 'OK'})
+
 
 @method_decorator([never_cache,], name="dispatch")
 class ContentOrderView(CsrfExemptMixin,
@@ -229,24 +232,25 @@ class TeacherHomeView(generic.TemplateView):
         users_id = list(self.request.user.courses_created.values_list('students',
                                                                       flat=True))
         users_id = list(filter(lambda id: id is not None and id > 0, users_id))
-        
-        #students_count = users_id #User.objects.filter(id__in=users_id).count()
+
+        # students_count = users_id #User.objects.filter(id__in=users_id).count()
 
         context['students_count'] = len(users_id)
 
         return context
 
+
 @method_decorator([never_cache,], name="dispatch")
 class CourseDetailView(DetailView):
     model = Course
     template_name = 'course_detail/index.html'
-    
+
     def get_queryset(self):
         qs = super(CourseDetailView, self).get_queryset()
         return qs
 
     def get_context_data(self, **kwargs):
-        context = super(CourseDetailView,self).get_context_data(**kwargs)
+        context = super(CourseDetailView, self).get_context_data(**kwargs)
 
         course = self.get_object()
 
@@ -258,7 +262,8 @@ class CourseDetailView(DetailView):
             context['module'] = course.modules.get(id=self.kwargs['module_id'])
 
             if self.request.GET.get('type') == 'quiz':
-                 context['quiz'] = Quiz.objects.get(pk=self.request.GET.get('content'))
+                context['quiz'] = Quiz.objects.get(
+                    pk=self.request.GET.get('content'))
 
         return context
 
@@ -358,21 +363,22 @@ def ModuleCopy(request):
                 content_item.id = None
                 content_item.save()
 
-                Content.objects.create(module_id=module_object.id, item=content_item)
-        
+                Content.objects.create(
+                    module_id=module_object.id, item=content_item)
+
         result = module_object.id
 
     return HttpResponse(result, content_type='text/plain')
 
 
 def file_uploadC_content(request):
-    
+
     import os
     import time
     from django.conf import settings
 
     result = ""
-    
+
     if request.method == 'POST' and request.FILES['file']:
 
         file_name = request.POST.get('file_name')
@@ -387,17 +393,19 @@ def file_uploadC_content(request):
             name, ext = os.path.splitext(file_name)
             file_name = "{name}_{uid}{ext}".format(name=name, uid=rf, ext=ext)
 
-        directory = os.path.join(settings.MEDIA_ROOT, 'courses', course_id, module_id)
-        
+        directory = os.path.join(
+            settings.MEDIA_ROOT, 'courses', course_id, module_id)
+
         if not os.path.exists(directory):
             os.makedirs(directory)
 
-        directory = os.path.join(directory, file_name)    
+        directory = os.path.join(directory, file_name)
 
         with open(directory, 'wb+') as destination:
             for chunk in file.chunks():
                 destination.write(chunk)
 
-        result = os.path.join(settings.MEDIA_URL, 'courses', course_id, module_id, file_name).replace("\\", "/")
+        result = os.path.join(settings.MEDIA_URL, 'courses',
+                              course_id, module_id, file_name).replace("\\", "/")
 
     return HttpResponse(result)
