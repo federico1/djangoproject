@@ -69,9 +69,9 @@ My Purchase History
                                             <td class="text-right">
                                                 <!-- <button type="button" class="button alt mr-2"
                                                     value="Receipt">Receipt</button> -->
-                                                <a href="{% url 'student_purchase_invoice' order.ref_id order_item.pk  %}" target="_blank" type="button" class="button alt btn-info mb-2"
+                                                <a href="{% url 'business_purchase_invoice' order.ref_id order_item.pk  %}" target="_blank" type="button" class="button alt btn-info mb-2"
                                                     value="Invoice">Invoice</a>
-                                                    <a href="{% url 'student_purchase_receipt' order.ref_id order_item.pk  %}" target="_blank" type="button" class="button alt btn-info"
+                                                    <a href="{% url 'business_purchase_receipt' order.ref_id order_item.pk  %}" target="_blank" type="button" class="button alt btn-info"
                                                     value="Receipt">Receipt</a>
 
 
@@ -93,5 +93,6 @@ My Purchase History
         </div>
     </div>
 </section>
+
 
 {% endblock %}

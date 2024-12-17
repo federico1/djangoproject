@@ -1,13 +1,13 @@
 from django.views import generic
 from django.shortcuts import get_object_or_404
 from django.http import Http404
-from app_students.decorators import ISStudentUserMixin
+from braces.views import LoginRequiredMixin
 
 from app_cart.models import Order
 
 
-class PurchaseHistoryView(ISStudentUserMixin, generic.TemplateView):
-    template_name = 'orders/purchase_history.html'
+class PurchaseHistoryView(LoginRequiredMixin, generic.TemplateView):
+    template_name = 'business_orders/purchase_history.html'
 
     def get_context_data(self, *args, **kwargs):
         context = super(PurchaseHistoryView, self).get_context_data(
@@ -15,8 +15,8 @@ class PurchaseHistoryView(ISStudentUserMixin, generic.TemplateView):
         return context
 
 
-class InvoiceView(ISStudentUserMixin, generic.TemplateView):
-    template_name = 'orders/invoice.html'
+class InvoiceView(LoginRequiredMixin, generic.TemplateView):
+    template_name = 'business_orders/invoice.html'
 
     def get_context_data(self, *args, **kwargs):
         context = super(InvoiceView, self).get_context_data(
@@ -37,8 +37,8 @@ class InvoiceView(ISStudentUserMixin, generic.TemplateView):
         return context
 
 
-class ReceiptView(ISStudentUserMixin, generic.TemplateView):
-    template_name = 'orders/receipt.html'
+class ReceiptView(LoginRequiredMixin, generic.TemplateView):
+    template_name = 'business_orders/receipt.html'
 
     def get_context_data(self, *args, **kwargs):
         context = super(ReceiptView, self).get_context_data(

@@ -1,6 +1,6 @@
 from django.urls import path
 from django.views.decorators.cache import cache_page, never_cache
-from .views import dashboard_views, employee_views, public_views, course_views
+from .views import dashboard_views, employee_views, public_views, course_views, order_views
 
 
 urlpatterns = [
@@ -43,6 +43,14 @@ urlpatterns = [
          never_cache(cache_page(60*60)
                      (course_views.MyCoursesManageView.as_view())),
          name='business_my_courses_manage'),
+    path('order-history/', never_cache(cache_page(60*60)
+                                       (order_views.PurchaseHistoryView.as_view())),
+         name='business_purchase_history'),
+    path('purchase-invoice/<slug:ref>/<slug:item>/',
+         order_views.InvoiceView.as_view(), name='business_purchase_invoice'),
+    path('purchase-receipt/<slug:ref>/<slug:item>/',
+         order_views.ReceiptView.as_view(), name='business_purchase_receipt'),
+
     path('account-register/', never_cache(cache_page(60*60)
                                           (public_views.RegisterBusinessUserView.as_view())),
          name='business_user_register'),
