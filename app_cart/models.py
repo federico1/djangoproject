@@ -97,6 +97,7 @@ class Package(models.Model):
     sort_order = models.IntegerField(default=1)
     created = models.DateTimeField(auto_now_add=True)
     is_deleted = models.BooleanField(default=0)
+    free_credits = models.IntegerField(default=0)
     subjects = models.ManyToManyField(Subject, blank=True)
 
     class Meta:

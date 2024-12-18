@@ -40,16 +40,6 @@ class OrderView(generic.TemplateView):
         return context
 
 
-@method_decorator(compress_page, name="dispatch")
-class PackageCartView(generic.TemplateView):
-    template_name = "package_cart.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(PackageCartView, self).get_context_data(**kwargs)
-        context['id'] = self.kwargs['slug']
-        return context
-
-
 # this is for temporary invoice for some customers, will delete it after
 class TempInvoicePaymentView(View):
     template_name = "temp_invoice_payment.html"

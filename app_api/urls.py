@@ -71,11 +71,6 @@ urlpatterns = [
     path('student-course-progress/', student_views.CourseProgressView.as_view()),
 
     path('orders/', cart_views.OrderApiView.as_view()),
-    path('packages/', cart_views.PackageApiView.as_view()),
-    path('packages/<int:pk>/', cart_views.PackageApiView.as_view()),
-    path('package-courses/', cart_views.PackageCourseApiView.as_view()),
-    path('package-courses/<int:pk>/', cart_views.PackageCourseApiView.as_view()),
-    path('package-subjects/', cart_views.PackageSubjectApiView.as_view()),
 
     path('quiz/', quiz_views.QuizApiView.as_view()),
 

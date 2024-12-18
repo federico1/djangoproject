@@ -95,60 +95,10 @@ class CourseListView(TemplateResponseMixin, View):
                 courses = all_courses.filter(
                     is_free=False)
             
-            subject_packages = None
-
-            if subject:
-                subject_packages = subject.package_set.filter(is_deleted=False)
             
             return self.render_to_response({'subjects': subjects,
                                             'subject': subject,
                                             'courses': courses.order_by('is_free'),
-                                            'instructors': None,
-                                            'page_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                                            'subject_packages':subject_packages
-                                            })
-        except Subject.DoesNotExist:
-            url = '/'
-            if subject in obsele_subjects:
-                url = (reverse('course_list_subject', kwargs={
-                       "subject": obsele_subjects[subject]}))
-            return redirect(url)
-
-
-@method_decorator(compress_page, name="dispatch")
-class CourseListViewV2(TemplateResponseMixin, View):
-    model = Course
-    template_name = 'courses/course/list_v2.html'
-
-    def get(self, request, subject=None):
-        try:
-
-            subjects = Subject.objects.annotate(
-                total_courses=Count('courses'))
-
-            all_courses = Course.objects.annotate(
-                total_modules=Count('modules'))
-
-            if subject:
-                subject = Subject.objects.get(slug=subject)
-                courses = all_courses.filter(subject=subject)
-            else:
-                courses = all_courses
-
-            if request.GET.get('q') is not None:
-                courses = all_courses.filter(
-                    title__icontains=str(request.GET.get('q')))
-
-            if request.GET.get('teacher') is not None:
-                courses = all_courses.filter(
-                    owner=int(request.GET.get('teacher')))
-
-        # instructors = User.objects.annotate(
-        #                    total_courses=Count('courses_created')).filter(total_courses__gt=0)
-
-            return self.render_to_response({'subjects': subjects,
-                                            'subject': subject,
-                                            'courses': courses,
                                             'instructors': None,
                                             'page_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                                             })

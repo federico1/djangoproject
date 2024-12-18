@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CartView, CheckoutView, OrderView, PackageCartView, SendOrderConfirmMail, TempInvoicePaymentView, SaveTempInvoice, NotifySystemView
+from .views import CartView, CheckoutView, OrderView, SendOrderConfirmMail, TempInvoicePaymentView, SaveTempInvoice, NotifySystemView
 
 urlpatterns = [
     path('cart/',
@@ -11,10 +11,6 @@ urlpatterns = [
     path('order/<slug:slug>/',
          OrderView.as_view(),
          name='order_detail'),
-    path('package-buy/<slug:slug>/',
-         PackageCartView.as_view(),
-         name='package_cart'),
-
     path('invoice-manual/',
          TempInvoicePaymentView.as_view(),
          name='temp_invoice_manaul'),

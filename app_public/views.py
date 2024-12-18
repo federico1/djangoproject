@@ -56,11 +56,6 @@ class FaqView(generic.TemplateView):
 
 
 @method_decorator(compress_page, name="dispatch")
-class PackagesView(generic.TemplateView):
-    template_name = "packages/packages.html"
-
-
-@method_decorator(compress_page, name="dispatch")
 class BusinessAccountFeaturesView(generic.TemplateView):
     template_name = "student_manual/business_features.html"
 

@@ -1,7 +1,6 @@
 from rest_framework import serializers
-from app_cart.models import Order, Item, Payment, Package, PackageCourse
+from app_cart.models import Order, Item, Payment
 from .course_serializers import CourseCoreSerializer
-from students.models import User
 from courses.models import Enrollments
 
 
@@ -57,26 +56,3 @@ class OrderSerializer(serializers.ModelSerializer):
             Payment.objects.create(order=order, status=payment_status_id, **item_data)
 
         return order
-
-
-class PackageCourseSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = PackageCourse
-        fields = ('id', 'course', 'package', 'course_id')
-
-
-
-    def to_representation(self, instance):
-        self.fields['course'] = CourseCoreSerializer(read_only=True)
-        return super(PackageCourseSerializer, self).to_representation(instance)
-
-
-class PackageSerializer(serializers.ModelSerializer):
-    courses = PackageCourseSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Package
-        fields = ('id', 'name', 'price', 'sort_order', 'created', 'is_deleted', 'courses','subjects')
-
-
