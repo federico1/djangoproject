@@ -248,10 +248,15 @@ class CourseCertificateDetailView(LoginRequiredMixin, DetailView):
         context = super(CourseCertificateDetailView,
                         self).get_context_data(**kwargs)
 
+        enrollment_id = self.request.GET.get('enrl', None)
+
         context['certificate_valid'] = True
         student = self.request.user
         course = self.get_object()
-        enrolled = course.course_enrolled.filter(user=student)
+        enrolled = course.course_enrolled.filter(
+            user=student, id=enrollment_id)
+
+        context['enrollment'] = enrolled.last()
 
         if not enrolled.exists() or enrolled.last().is_completed == False:
             context['certificate_valid'] = False
@@ -273,10 +278,13 @@ class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
         context = super(CertificateTemplateDetailView,
                         self).get_context_data(**kwargs)
 
+        enrollment_id = self.request.GET.get('enrl', None)
+
         context['certificate_valid'] = True
-        student = self.request.user
+        student = User.objects.get(id=self.request.user.id)
         course = self.get_object()
-        enrolled = course.course_enrolled.filter(user=student)
+        enrolled = course.course_enrolled.filter(
+            user=student, id=enrollment_id)
 
         if not enrolled.exists() or enrolled.last().is_completed == False:
             context['certificate_valid'] = False
@@ -326,9 +334,13 @@ class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
 @student_required
 def download_certificate(request, pk):
     try:
+
+        enrollment_id = request.GET.get('enrl', None)
+
         student = User.objects.get(id=request.user.id)
         course = Course.objects.get(pk=pk)
-        enrolled = course.course_enrolled.filter(user=student)
+        enrolled = course.course_enrolled.filter(
+            user=student, id=enrollment_id)
 
         if enrolled.exists() or enrolled.last().is_completed == True:
 

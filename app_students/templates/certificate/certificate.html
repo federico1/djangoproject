@@ -10,15 +10,15 @@
     {% if certificate_valid == True %}
     <main class="page-content shadow">
         <div class="my-2 text-right">
-        
-            <a href="{% url 'student_course_certificate_download' object.id %}" target="_blank" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+        <div class="d-none text-white">{{enrollment.id}}</div>
+            <a href="{% url 'student_course_certificate_download' object.id %}?enrl={{enrollment.id}}" target="_blank" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                     class="fa fa-download" id="btnDownload"></i> Download Certificate </a>
         </div>
         <div class="row">
 
             <div class="col" id="pdfFrame">
                 <iframe class="embed-responsive embed-responsive-1by1"
-                    src="{% url 'student_course_certificate_template' object.id %}"></iframe>
+                    src="{% url 'student_course_certificate_template' object.id %}?enrl={{enrollment.id}}"></iframe>
             </div>
         </div>
     </main>

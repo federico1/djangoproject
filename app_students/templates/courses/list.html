@@ -70,7 +70,7 @@
                                                             <a href="{% url 'student_course_detail' course.id %}" class="py-2 px-3 badge badge-success">
                                                                 Start Class</a>
                                                             {% if enroll.is_completed %}
-                                                                <a href="{% url 'student_course_certificate' course.id %}" class="py-2 px-3 badge badge-primary">
+                                                                <a href="{% url 'student_course_certificate' course.id %}?enrl={{enroll.id}}" class="py-2 px-3 badge badge-primary">
                                                                     View Certificate
                                                                 </a>
                                                             {% endif %}
