@@ -33,6 +33,7 @@ from courses.models import Course, CourseProgress, StudentCertificate
 
 register = template.Library()
 
+
 @method_decorator(never_cache, name="dispatch")
 class StudentRegistrationView(CreateView):
     model = User
@@ -43,7 +44,7 @@ class StudentRegistrationView(CreateView):
         if request.user.is_authenticated:
             return HttpResponseRedirect(reverse_lazy('course_list'))
         return super().get(request, *args, **kwargs)
-    
+
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'student'
         return super().get_context_data(**kwargs)
@@ -65,6 +66,7 @@ class StudentRegistrationView(CreateView):
             return self.request.GET.get('next') + "#register=success"
 
         return reverse_lazy('cart_detail') + '?register=success'
+
 
 @method_decorator(cache_page(2), name='dispatch')
 @method_decorator(vary_on_cookie, name='dispatch')
@@ -221,7 +223,6 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
 
         return context
 
-
     def render_to_response(self, context, **response_kwargs):
 
         if 'not_found' in context:
@@ -234,6 +235,7 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
 
     def get(self, *args, **kwargs):
         return super().get(*args, **kwargs)
+
 
 @method_decorator(cache_page(2), name='dispatch')
 @method_decorator(vary_on_cookie, name='dispatch')
@@ -258,6 +260,7 @@ class CourseCertificateDetailView(LoginRequiredMixin, DetailView):
 
     def render_to_response(self, context, **response_kwargs):
         return super(CourseCertificateDetailView, self).render_to_response(context, **response_kwargs)
+
 
 @method_decorator(cache_page(2), name='dispatch')
 @method_decorator(vary_on_cookie, name='dispatch')
@@ -287,18 +290,18 @@ class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
             completed_date = enrolled_last.completed_date
             context['completed_date'] = completed_date.strftime('%m/%d/%Y')
 
-            if enrolled_last.certificates.count() <=0:
+            if enrolled_last.certificates.count() <= 0:
                 certificate = StudentCertificate(
-                course=course, user=student, enrollment=enrolled_last)
+                    course=course, user=student, enrollment=enrolled_last)
                 certificate.add_new_certificate()
 
                 context['ref_number'] = certificate.ref_number
             else:
                 context['ref_number'] = enrolled_last.certificates.first().ref_number
-        
+
         first_feature = course.features.first()
         credits = first_feature.credits if first_feature is not None else None
-        
+
         context['credits'] = credits if credits is not None else ''
         context['sign_image'] = '/static/cert-files/image002.png'
 
@@ -310,7 +313,6 @@ class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
             return redirect('course_list')
 
         return super(CertificateTemplateDetailView, self).render_to_response(context, **response_kwargs)
-
 
     def get_success_url(self):
 
@@ -324,7 +326,7 @@ class CertificateTemplateDetailView(LoginRequiredMixin, DetailView):
 @student_required
 def download_certificate(request, pk):
     try:
-        student = request.user
+        student = User.objects.get(id=request.user.id)
         course = Course.objects.get(pk=pk)
         enrolled = course.course_enrolled.filter(user=student)
 
@@ -334,7 +336,7 @@ def download_certificate(request, pk):
 
             certificate = None
 
-            if enrolled_last.certificates.count() <=0:
+            if enrolled_last.certificates.count() <= 0:
                 return HttpResponse("We are unable to create your certificate. Please contact to support.")
             else:
                 certificate = enrolled_last.certificates.first()
