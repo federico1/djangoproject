@@ -1,6 +1,6 @@
 from django.urls import path
 from django.views.decorators.cache import cache_page, never_cache
-from .views import PrivacyPolicyView, AboutView, ContactView, FaqView, RefundView, TermsView, BusinessAccountFeaturesView, post_contact_form
+from .views import PrivacyPolicyView, AboutView, ContactView, FaqView, RefundView, TermsView, BusinessAccountFeaturesView, StudentManualView, post_contact_form
 from .more_views.views_sst import SSTVerifyView
 
 urlpatterns = [
@@ -19,9 +19,9 @@ urlpatterns = [
     path('contact/',
          never_cache(cache_page(60*60)(ContactView.as_view())),
          name='contact_detail'),
-#     path('student-manual/',
-#          StudentManualView.as_view(),
-#          name='student_manual_detail'),
+    path('student-manual/',
+         StudentManualView.as_view(),
+         name='student_manual_detail'),
     path('sst-verify/',
          never_cache(cache_page(60*60)(SSTVerifyView.as_view())),
          name='sst_verify'),

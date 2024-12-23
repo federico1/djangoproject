@@ -4,65 +4,101 @@
 {% endblock %}
 {% block content %}
 
-    <section class="page-header">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="page-header-content">
-                        <h1>Student Manual</h1>
-                        <ul class="list-inline mb-0">
-                            <li class="list-inline-item">
-                                <a href="/">Home</a>
-                            </li>
-                            <li class="list-inline-item">/</li>
-                            <li class="list-inline-item">
-                                Student Manual
-                            </li>
-                        </ul>
-                    </div>
+<section class="page-header">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="page-header-content">
+                    <h1>Student Manual</h1>
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="list-inline-item">/</li>
+                        <li class="list-inline-item">
+                            Student Manual
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <main class="site-main page-wrapper woocommerce single single-product">
-        <section class="space-3">
-            <div class="container">
-                <div class="row" id="packagesList">
-                    <div class="col" id="pdfViewer" src="{% static 'files/NYCCST Student Manual.pdf' %}"></div>
+<main class="site-main page-wrapper woocommerce single single-product">
+    <section class="space-3">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div>
+                        <strong>Anti-Discrimination Policy</strong>
+                    </div>
+                    <div>
+                        <p>
+                            NYCCST does not tolerate discrimination, nor tolerate explicit references of a
+                            discriminatory nature, based on
+                            gender, gender identity, gender expression, race, nationality, color, religion, age,
+                            disability, veteran status,
+                            socioeconomic status, marital status, pregnancy, and/or sexual orientation.
+
+
+                        </p>
+
+                        <p>
+                            Harassment and/or intimidation based on any protected characteristic is strictly prohibited.
+                            All the following are
+                            considered harassment and/or intimidation: Written communications, verbal communications, or
+                            physical
+                            gestures or behavior that shows hostility, aversion, or bigotry toward an individual. Sexual
+                            harassment in the
+                            form of written, physical, and/or verbal communications or behavior is also prohibited.
+                        </p>
+                        <p>
+                            Incidents of harassment should be immediately reported to an administrator of the
+                            organization who will
+                            promptly arrange an internal investigation regarding the matter. NYCCST prohibits acts of
+                            retaliation against
+                            individuals who report or cooperate with investigations of harassment and discrimination
+                            cases.
+                        </p>
+                    </div>
                 </div>
             </div>
-        </section>
-        <!--shop category end-->
-    </main>
+            {% comment %} <div class="row" id="packagesList">
+                <div class="col" id="pdfViewer" src="{% static 'files/NYCCST Student Manual.pdf' %}"></div>
+            </div> {% endcomment %}
+        </div>
+    </section>
+    <!--shop category end-->
+</main>
 
 
 {% endblock %}
 {% block scripts %}
-    <style>
-        #pdfViewer {
-            width: 100%;
-            min-height: 600px;
-        }
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            var options = {
-                forceIframe: true,
-                pdfOpenParams: {
-                    view: 'FitH',
-                    page: '1'
-                }
-            };
+<style>
+    #pdfViewer {
+        width: 100%;
+        min-height: 600px;
+    }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var options = {
+            forceIframe: true,
+            pdfOpenParams: {
+                view: 'FitH',
+                page: '1'
+            }
+        };
 
-            var src = $('#pdfViewer').attr('src');
+        var src = $('#pdfViewer').attr('src');
 
-            PDFObject.embed(src, "#pdfViewer", options);
+        PDFObject.embed(src, "#pdfViewer", options);
 
-            $('html, body').animate({
-                scrollTop: $("#pdfViewer").offset().top
-            }, 1000);
-        });
-    </script>
+        $('html, body').animate({
+            scrollTop: $("#pdfViewer").offset().top
+        }, 1000);
+    });
+</script>
 {% endblock %}
