@@ -5,7 +5,7 @@
         <div class="row align-items-center justify-content-center">
             <div class="col-lg-7">
                 <div class="section-heading center-heading">
-                    <h3>Purchase Courses</h3>
+                    <h3>Enroll Free Courses</h3>
                 </div>
             </div>
         </div>
@@ -22,22 +22,12 @@
                     <button class="btn btn-primary" type="button" id="btnSearch" disabled>Search</button>
                    
                 </div>
-                <div class="col-md-2">
-                    <a href="{% url 'business_my_cart' %}" class="btn btn-success btn-block">
-                        <i class="fa fa-cart-plus"></i>
-                        View
-                        My Cart</a>
-                </div>
+              
             </div>
         </form>
 
         <div class="row">
             <div class="col-md-12">
-
-                <p class="alert alert-primary d-none">
-                    Note: <strong>Free courses</strong> are not included in this list. We offer a separate solution for accessing free courses.
-                    <a href="{% url 'business_buy_free_courses' %}">Please click here</a>
-                </p>
                 <table class="table table-bordered bg-white" id="tblProducts">
                     <thead>
                         <tr>
@@ -76,20 +66,13 @@
          {{subject_title}}
       </td>
       <td>
-        {{#ifCond discounted_price '>' 0 }}
-       Price: ${{discounted_price}}
-     <p>
-        <strike>${{price}}</strike>
-     </p>
-        {{/ifCond}}
-
-        {{#ifCond discounted_price '<=' 0 }}
-        Price: ${{price}}
-         {{/ifCond}}
+      
+       Price: $0
+    
       </td>
       <td>
          <button class="btn btn-info btn-sm link-add-cart" data-id="{{id}}">
-            Add To Cart
+            Enroll
          </button>
          <a class="btn btn-light btn-sm" target="_blank" href="/course/{{slug}}">
            View Details
@@ -123,6 +106,7 @@
 </style>
 <script type="application/javascript">
     (function ($) {
+
         $.PageManager = function (options) {
             var subjestList = [];
             var coursesList = [];
@@ -160,7 +144,7 @@
 
                     $.get('{% url "api_v1:courses-list" %}', {
                         format: "json",
-                        paid_only: true
+                        free_only: true
                     }, function (response) {
                         coursesList = response;
                         drawCoursesList(coursesList);

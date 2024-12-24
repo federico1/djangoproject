@@ -204,10 +204,11 @@
             var getList = function () {
                 var parms = {
                     format: 'json',
-                    version: new Date().toISOString()
+                    version: new Date().toISOString(),
+                    is_deleted:false
                 };
 
-                $.get('/api/packages/', parms, function (response) {
+                $.get('{% url "api_admin_v1:view_admin_packages-list" %}', parms, function (response) {
                     packagesList = response;
                     drawList();
                 });

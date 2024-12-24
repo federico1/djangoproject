@@ -92,12 +92,27 @@ class Payment(models.Model):
 
 
 class Package(models.Model):
+
+    DEFAULT = 0
+    COURSES_BUNDLE = 1
+    SUBJECT_LINKED = 2
+    FREE_CREDITS = 3
+
+    PACKAGE_TYPE = [
+        (DEFAULT, 'Default'),
+        (COURSES_BUNDLE, 'Courses Bundle'),
+        (SUBJECT_LINKED, 'Subject Linked'),
+        (FREE_CREDITS, 'Free Credits'),
+    ]
+
     name = models.CharField(max_length=200)
     price = models.DecimalField(max_digits=5, decimal_places=2)
     sort_order = models.IntegerField(default=1)
     created = models.DateTimeField(auto_now_add=True)
     is_deleted = models.BooleanField(default=0)
     free_credits = models.IntegerField(default=0)
+    package_type = models.IntegerField(
+        choices=PACKAGE_TYPE, default=DEFAULT)
     subjects = models.ManyToManyField(Subject, blank=True)
 
     class Meta:
@@ -120,3 +135,27 @@ class PackageCourse(models.Model):
 
     def __str__(self):
         return '{}. {}'.format(self.course, self.package)
+
+
+class BusinessUserCredit(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        # Ensure only business users can have credits
+        limit_choices_to={'is_business': True},
+        related_name='business_credits'
+    )
+    order = models.ForeignKey(
+        Order, related_name='credits', on_delete=models.DO_NOTHING, null=True)
+    credits_purchased = models.IntegerField(default=0)
+    credits_remaining = models.IntegerField(
+        default=0)  # Remaining credits from this batch
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.credits_remaining} credits remaining for {self.user.username}"
+
+    class Meta:
+        verbose_name = "Business User Credit"
+        verbose_name_plural = "Business User Credits"

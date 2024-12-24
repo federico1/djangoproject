@@ -329,6 +329,8 @@ class StudentCertificate(models.Model):
     def create_ref_number(self):
         r_number = "{0}{1}".format(self.course_id, self.enrollment_id)
         str_date = datetime.datetime.now().strftime("%Y%m%d")
+        print(r_number)
+        print(r_number[::-1])
         ref_number = 'NYCCST-{0}-{1}'.format(str_date, r_number[::-1])
 
         return ref_number
@@ -339,7 +341,9 @@ class Evaluation(models.Model):
     student = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='course_evaluations', on_delete=models.CASCADE)
     course = models.ForeignKey(Course, related_name='student_evaluations',
-                               on_delete=models.CASCADE)
+                               on_delete=models.CASCADE, null=True)
+    enrollment = models.ForeignKey(Enrollments, related_name='evaluations',
+                                   on_delete=models.CASCADE, null=True)
     recommend = models.TextField(null=False, blank=False)
     class_environment = models.TextField(null=False, blank=False)
     learning_outcomes = models.TextField(null=False, blank=False)

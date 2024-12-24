@@ -71,6 +71,7 @@ class CourseViewset(viewsets.ModelViewSet):
         c_search_term = request.query_params.get('q')
         c_result_type = request.query_params.get('result_type')
         paid_only = request.query_params.get('paid_only')
+        free_only = request.query_params.get('free_only')
 
         order_field = '-id'
 
@@ -81,7 +82,10 @@ class CourseViewset(viewsets.ModelViewSet):
             snippets = snippets.filter(title__icontains=str(c_search_term))
 
         if paid_only is not None:
-            snippets = snippets.filter(is_free = False)
+            snippets = snippets.filter(is_free=False)
+
+        if free_only is not None:
+            snippets = snippets.filter(is_free=True)
 
         if c_limit is not None:
             snippets = snippets.order_by(order_field)[:int(c_limit)]
@@ -220,7 +224,7 @@ class EnrollmentViewset(viewsets.ViewSet):
 
         if 'user' not in data:
             data['user'] = self.request.user.id
-        
+
         course = Course.objects.get(pk=request.data['course'])
 
         data['created_by'] = self.request.user.id
@@ -228,12 +232,12 @@ class EnrollmentViewset(viewsets.ViewSet):
         if course.is_free == True:
             data['price'] = 0
         else:
-            data['price'] =  course.discounted_price if course.discounted_price >0 else course.price
+            data['price'] = course.discounted_price if course.discounted_price > 0 else course.price
 
         serializer = course_serializers.EnrollmentSerializer(data=data)
 
         if request.user.is_authenticated and request.user.is_student == True and serializer.is_valid():
-            
+
             if course.is_free == False:
                 return Response(serializer.data, status=status.HTTP_502_BAD_GATEWAY)
 
