@@ -90,7 +90,8 @@ My Courses
 
                                             </div>
                                             <div class="small">
-                                                <a data-id="{{enroll.id}}" class="btn-rate-course font-weight-bold"
+                                                <a data-enroll="{{enroll.id}}" data-course="{{course.id}}"
+                                                    class="btn-rate-course font-weight-bold"
                                                     href="javascript:;">Evaluate Course & Instructor</a>
                                             </div>
                                         </div>
@@ -140,7 +141,8 @@ My Courses
 <script type="text/x-handlebars-template" id="courseEvlFormTemplate">
     <form class="d-flex flex-wrap">
 
-        <input type="hidden" name="enrollment_id" value="{{enrollment_id}}">
+        <input type="hidden" name="enrollment" value="{{enrollment_id}}">
+        <input type="hidden" name="course" value="{{course_id}}">
         <div class="question">
             <label>1) Considering your complete experience with our class, how likely are you to recommend
                 it to your friends or colleagues?</label>
@@ -324,8 +326,6 @@ My Courses
 
     </form>
 </script>
-
-
 {% endverbatim %}
 
 {% endblock %}
@@ -372,14 +372,17 @@ My Courses
                     e.stopImmediatePropagation();
                     e.stopPropagation();
 
-                    var id = $(this).attr('data-id');
+                    var id = $(this).attr('data-enroll');
+                    var course = $(this).attr('data-course');
 
                     var source = document.getElementById("courseEvlFormTemplate").innerHTML;
                     var template = Handlebars.compile(source);
 
-                    $("#evlCourse .modal-body").html(template({ enrollment_id: id }));
+                    $("#evlCourse .modal-body").html(template({ enrollment_id: id, course_id: course }));
 
                     $("#evlCourse").modal('show');
+
+                    $('#btnSubmitEvl').attr('disable', false);
 
                 });
 
@@ -387,15 +390,26 @@ My Courses
                     e.stopImmediatePropagation();
                     e.stopPropagation();
 
-                    var enrollId = $('#evlCourse form').eq(0).serializeArray()
-                        .find(a => a.name === 'enrollment_id').value;
+                    $('#btnSubmitEvl').attr('disable', true);
 
-                    var data = {
-                        enrollment_id: enrollId,
-                        data: $('#evlCourse form').eq(0).serializeArray().filter(a => a.name !== 'enrollment_id')
-                    };
+                    var formObject = $('#evlCourse form').eq(0).serializeObject()
 
-                    $("#evlCourse").modal('hide');
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/course-evaluation/",
+                        data: JSON.stringify(formObject),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                        },
+                        success: function (response) {
+                            $("#evlCourse").modal("hide");
+                            Swal.fire("Thank you!", "You response has been recorded!",
+                                "success");
+                        },
+                        failure: function (errMsg) { },
+                    });
 
                 });
 

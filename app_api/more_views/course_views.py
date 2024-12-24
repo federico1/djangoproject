@@ -409,6 +409,7 @@ class CourseEvaluationApiView(APIView):
 
     def post(self, request, format=None):
         serializer = course_serializers.EvaluationSerializer(data=request.data)
+        serializer.initial_data["student"] = request.user.id
 
         if serializer.is_valid():
 
