@@ -4,23 +4,23 @@
 {% load course %}
 {% load cache %}
 
-{% block title %}{% if object.metas.first.meta_title %}{{object.metas.first.meta_title}} | pdhsafety.com{%else%}{{ object.title }} Course | pdhsafety.com{% endif %}{% endblock %}
+{% block title %}
+{% if object.metas.first.meta_title %}{{object.metas.first.meta_title}} | pdhsafety.com{% else %}
+{{object.title }} Course | pdhsafety.com{% endif %}{% endblock %}
 
-{% block meta_desc %}{% if object.metas.first.meta_description %}{{object.metas.first.meta_description}}{%else%}Best Price Online {{ object.subject }}, Access 24/7 On All Devices. Easy To Take, Money Back Guarante{% endif %}{% endblock %}
+{% block meta_desc %}{% if object.metas.first.meta_description %}{{object.metas.first.meta_description}}{% else %}Best
+Price Online {{ object.subject }}, Access 24/7 On All Devices. Easy To Take, Money Back Guarante{% endif %}
+{% endblock %}
 
 {% block head %}
 
 {% if object.features.first.header and object.features.first.header.strip %}
 {{ object.features.first.header  |safe }}
-{%else%}
+{% else %}
 <link rel="canonical" href="https://pdhsafety.com{{ request.path }}" />
 {% endif %}
 
-
 {% if not object.is_free %}
-
-<!-- Begin Inspectlet Asynchronous Code -->
-<!-- End Inspectlet Asynchronous Code -->
 
 {% endif %}
 {% endblock %}
@@ -46,7 +46,7 @@
                             <p class="mb-0 small font-weight-bold text-white">
                                 <span class="text-white">
                                     Price: Free</span>
-                                </p>
+                            </p>
                             {% elif object.discounted_price > 0 %}
 
                             <p class="mb-0 small font-weight-bold text-white">Price:
@@ -91,8 +91,7 @@
 
                             {% else %}
 
-                            <a title="Add To Cart" href="javascript:;"
-                                class=" mt-0 btn btn-sm btn-main-2 link-add-cart"
+                            <a title="Add To Cart" href="javascript:;" class=" mt-0 btn btn-sm btn-main-2 link-add-cart"
                                 data-subject="{{ subject.title }}" data-subject-slug="{{ subject.slug }}"
                                 data-json="{{ object|jsonify }}">
                                 Add To Cart
@@ -175,8 +174,9 @@
 
                     <div class="section-module card mb-2 {% if forloop.counter0 > 6 %}d-none{%endif%}">
                         <div class="card-header">
-                            <a title="{{ m.title }}" class="text-dark font-weight-bold" data-toggle="collapse" href="#collapse{{m.id}}"
-                                role="button" aria-expanded="false" aria-controls="collapse{{m.id}}">
+                            <a title="{{ m.title }}" class="text-dark font-weight-bold" data-toggle="collapse"
+                                href="#collapse{{m.id}}" role="button" aria-expanded="false"
+                                aria-controls="collapse{{m.id}}">
                                 <i class="fa">{{forloop.counter}})</i>
                                 {{ m.title }}
                             </a>
@@ -196,7 +196,8 @@
 
                     {% if object.modules.count > 6%}
                     <div class="text-center bg-light py-2">
-                        <a title="View More Modules" class="text-primary h4 link-view-more-modules" href="javascript:;">View More Module</a>
+                        <a title="View More Modules" class="text-primary h4 link-view-more-modules"
+                            href="javascript:;">View More Module</a>
                     </div>
                     {%endif%}
 
@@ -211,32 +212,15 @@
                 </div> {% endcomment %}
 
                 {% if object.features.first.notes and object.features.first.notes.strip %}
-                <div class="single-course-details mb-5">
-                    {% comment %} <p class="course-title font-weight-bold text-dark">Course Features:</p> {% endcomment %}
+                <div class="single-course-details mb-5" id="section-notes">
                     <div>
                         {{ object.features.first.notes | safe }}
                     </div>
-                    {% comment %} <div>
-                        <ul>
-                            <li>
-                                Easy to take class
-                            </li>
-                            <li>
-                                Unlimited access, 24/7 on any device
-                            </li>
-                            <li>
-                                Regularly updated material
-                            </li>
-                            <li>
-                                Money back guarantee
-                            </li>
-                        </ul>
-                    </div> {% endcomment %}
                 </div>
                 {% endif %}
 
                 {% if object.features.first.outcomes and object.features.first.outcomes.strip %}
-                <div class="single-course-details mb-5">
+                <div class="single-course-details mb-5" id="section-outcomes">
                     {% comment %} <p class="course-title font-weight-bold text-dark">
                         Learning Outcomes:</p> {% endcomment %}
                     <div>
@@ -244,6 +228,26 @@
                     </div>
                 </div>
                 {% endif %}
+                <p><strong>Learning Outcomes:</strong></p>
+                <ul class="mb-2">
+                    <li>Understand safety protocols in the workplace.</li>
+                    <li>Recognize potential hazards and mitigate risks.</li>
+                </ul>
+                <p><strong> CEU Requirements CEU Requirements</strong></p>
+                <ul class="mb-2">
+                    <li>100% appearance for the course</li>
+                        <li>Fully involvement in all class trainings (determined by instructor)</li>
+                            <li>Completion of Continuing Education and Training Registration Form</li>
+                                <li>Completion of mandatory quiz assessments</li>
+                                    <li>As applicable, attainment of least passing score on required end-of-course examination</li>
+                                        <li> Participation and submittal of end-of-course assessment form (must provide name on form to obtain credit)</li>
+            </ul>
+                <p><strong> Prerequisites Prerequisites</strong></p>
+
+                <p> There are no prerequisites but, mandatory to do Video Cons in this course. Students must be able to
+                    orally
+                    communicate with instructor in primary language of the training</p>
+
 
                 {% comment %} <div class="single-course-details mb-5 d-none">
                     <h4 class="course-title">
@@ -260,8 +264,8 @@
                 <div class="course-sidebar">
                     <div class="course-single-thumb">
 
-                        <img  data-src="{% static 'edutim/images/courses/course-' %}{% random_int 1 5 %}.jpg"
-                            width="320" height="278" alt="course" class="img-fluid w-100 lazy" />
+                        <img data-src="{% static 'edutim/images/courses/course-' %}{% random_int 1 5 %}.jpg" width="320"
+                            height="278" alt="course" class="img-fluid w-100 lazy" />
                         <div class="course-price-wrapper">
                             <div class="course-price">
 
@@ -290,7 +294,7 @@
 
                                 {% if request.user.is_authenticated and request.user.is_business == True %}
                                 <a href="javascript:;" class="btn btn-main-2 btn-block link-enroll-business">
-                                   Enroll (Dashboard)
+                                    Enroll (Dashboard)
                                 </a>
                                 {% else %}
 
@@ -378,9 +382,9 @@
                                         <i class="fa fa-certificate"></i>Certificate :
                                     </span>
                                     {{ object.features.first.certificate_status }}:
-                                  
+
                                 </div>
-                              
+
                             </li>
                             {% endif %}
 
