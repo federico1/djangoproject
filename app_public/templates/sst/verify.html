@@ -211,7 +211,7 @@ Certificate Verification | pdhsafety.com
                 </div>
 
             </div>
-        </script>
+</script>
 
 <script type="text/x-handlebars-template" id='verifyCardTemplate'>
 
@@ -255,7 +255,7 @@ Certificate Verification | pdhsafety.com
             <button class="btn btn-sm btn-success" id="btnDownloadCard">Download Card</button>
         </div>
 
-    </script>
+</script>
 {% endverbatim %}
 
 {% endblock %}
@@ -371,6 +371,9 @@ Certificate Verification | pdhsafety.com
 
             var settings = $.extend({}, options);
 
+            const urlParams = new URLSearchParams(window.location.search);
+            const refQueryID = urlParams.get('ref_cert');
+
             var initForm = function () {
                 $("#fmVerify").ajaxForm({
                     beforeSend: function () {
@@ -450,6 +453,10 @@ Certificate Verification | pdhsafety.com
                     var template = Handlebars.compile(source);
                     $("#sstDetails").html(template(item));
 
+                    $('html, body').animate({
+                        scrollTop: $("#sstDetails").offset().top
+                    }, 1000);
+
                 } else {
                     var alert = $("<div />", { class: 'alert alert-primary mt-3' }).html('Card number is not valid.');
 
@@ -490,21 +497,32 @@ Certificate Verification | pdhsafety.com
                     var elem = document.querySelector("#verifyCard");
                     var course = elem.getAttribute('data-course');
 
-                    if(!course) {
+                    if (!course) {
                         course = "card-verify"
                     }
 
                     await html2canvas(elem, { backgroundColor: '#FFFFFF' }).then(canvas => {
 
-                       var cn =  canvas.toDataURL();
+                        var cn = canvas.toDataURL();
 
-                       downloadURI("data:" + cn, course+".png");
+                        downloadURI("data:" + cn, course + ".png");
                     });
 
-                  
+
                 });
 
                 $("#fmVerify .spinner-border").hide();
+
+                setTimeout(function () {
+                    if (refQueryID && refQueryID != '') {
+                        $('html, body').animate({
+                            scrollTop: $("#btnVerify").offset().top
+                        }, 1000);
+
+                        $("#txtCardNumber").val(refQueryID);
+                        $("#btnVerify").trigger('click');
+                    }
+                }, 1500);
 
             };
 
