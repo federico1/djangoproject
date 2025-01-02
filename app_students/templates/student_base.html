@@ -102,9 +102,12 @@
          </div>
       </header>
 
+      {% block after_header %}
       <div class="bg-white p-2 text-right">
          <a href="{% url  'student_switch_to_business_account' %}" class="btn btn-success btn-sm">Switch to Business Account?</a>
       </div>
+      {% endblock %}
+
       {% block content %}{% endblock %}
 
       <section class="footer pt-120">
