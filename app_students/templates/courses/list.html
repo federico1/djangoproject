@@ -17,6 +17,7 @@ My Courses
                 <div class="section-heading center-heading">
                     <h3>My Courses</h3>
                 </div>
+              
             </div>
         </div>
 
@@ -25,7 +26,7 @@ My Courses
             <div class="col-lg-12">
                 <section class="feature-3">
                     <div class="container">
-                        <div class="row align-items-center mb-4">
+                        <div class="row align-items-center mb-2">
                             <div class="col-md-4 mb-2">
                                 <div class="topbar-search">
                                     <form method="get" id="fmSearch" action="{% url 'student_courses' %}">
@@ -42,6 +43,17 @@ My Courses
                             </div>
 
                         </div>
+
+                        
+                            <div class="d-flex justify-content-end mb-4">
+                              
+                               <div>
+                                <a  class="font-weight-bold" target="_blank" href="{% url 'faq' %}#student-demo">How to take course?<a/>
+                                    |
+                                <a  class="font-weight-bold" target="_blank" href="{% url 'faq' %}#student-certificate">How to download certificate?<a/>
+                               </div>
+                            </div>
+                       
 
                         <div class="row">
                             {% for course in object_list %}

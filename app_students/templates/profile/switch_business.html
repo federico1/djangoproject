@@ -23,20 +23,32 @@ Switch to Business Account
                     <div class="row">
                         <div class="col-md-12">
 
-                            <div class="alert alert-warning text-center">
+                            <div class="alert alert-dark text-center">
                                 <strong>Are you sure you want to convert your account to a business type? Please read
                                     the instructions carefully.</strong>
                             </div>
-                            <div class="alert alert-info text-center">
-                                <ul>
-                                    <li>The business account is designed for companies (small, large, etc.).</li>
-                                    <li>You will not be able to enroll in courses yourself.</li>
-                                    <li>You can create employee accounts and assign courses to them.</li>
-                                    <li>You can find more details here <a title="Business Account Features & Demo"
-                                            href="{% url 'business_account_features' %}" target="_blank"> View Features & Demo!</a></li>
+                            <div class="alert alert-light text-dark text-center h5">
+                                <ul class="list-group">
+                                    <li class="list-group-item">The business account is designed for companies (small,
+                                        large, etc.).</li>
+                                    <li class="list-group-item">You will not be able to enroll in courses yourself.</li>
+                                    <li class="list-group-item">You can create employee accounts and assign courses to
+                                        them.</li>
+                                    <li class="list-group-item">You can find more details here <a
+                                            title="Business Account Features & Demo"
+                                            href="{% url 'business_account_features' %}" target="_blank"> View Features
+                                            & Demo!</a></li>
                                 </ul>
                             </div>
-
+                            {% if user.my_enrolled.count > 0 %}
+                            <div class="alert alert-danger">
+                                <strong>
+                                    Note: You have already enrolled in ({{user.my_enrolled.count}}) courses. You will
+                                    not be able to take these courses in your business account. Please contact the
+                                    support team if you wish to convert your student account to a business account.
+                                </strong>
+                            </div>
+                            {% endif %}
                             <div class="my-3 text-center">
                                 <button id="btnSwitch" type="button" class="btn text-white btn-warning btn-lg">Yes
                                     Confirm? Switch my account to business</button>
