@@ -13,6 +13,9 @@ urlpatterns = [
     path('ImpersonateUser/<int:pk>/',
          students.ImpersonateUserView.as_view(),
          name='impersonate_user'),
+    path('SwitchToStudent/<int:pk>/',
+         students.SwitchUserToStudentView.as_view(),
+         name='admin_switch_to_student'),
     path('evaluations',
          students.EvaluationListView.as_view(),
          name='admin_evaluations'),
@@ -28,5 +31,6 @@ urlpatterns = [
     path('orders',
          orders.OrdersView.as_view(),
          name='admin_orders'),
-    path('orders/<int:pk>/', orders.OrderDetailsView.as_view(), name='admin_order_details'),
+    path('orders/<int:pk>/', orders.OrderDetailsView.as_view(),
+         name='admin_order_details'),
 ]

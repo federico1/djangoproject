@@ -285,7 +285,9 @@
          <a href="javascript:;" class="btn btn-dark btn-sm link-course-user" id="{{id}}">
             Courses
          </a>
-
+         <a href="{{switchToStudent}}" target="_blank" class="btn btn-dark btn-sm" id="{{id}}">
+            Change to student
+         </a>
          <a href="javascript:;" class="btn btn-info btn-sm link-edit-user" id="{{id}}">
             Edit
          </a>
@@ -366,6 +368,7 @@
          var coursesList = [];
 
          var impersonateUserBaseLink = '{% url "impersonate_user" 804 %}';
+         var switchToStudentBaseLink = '{% url "admin_switch_to_student" 804 %}';
 
          var settings = $.extend({}, options);
 
@@ -391,6 +394,7 @@
 
                      if (data) {
                         data.impersonateLink = impersonateUserBaseLink.replace("804", data.id);
+                        data.switchToStudent = switchToStudentBaseLink.replace("804", data.id);
 
                         var source = document.getElementById("itemActionTemplate").innerHTML;
                         var template = Handlebars.compile(source);
