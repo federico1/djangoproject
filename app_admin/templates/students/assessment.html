@@ -3,138 +3,26 @@
 
 {% block content %}
 
+<div>
+    <div class="row mb-3">
+        <div class="col">
+           <select class="form-control" id="ddl_courses" name="ddl_courses"
+           >
+           <option value="">Select Course</option>
+        </select>
+        </div>
+        <div class="col">
+            <button type="button" class="btn btn-primary" id="btnGetRatings">Fetch Assessments</button>
+        </div>
+     </div>
+</div>
+
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">Assessment</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Assessments</h6>
     </div>
-    <div class="card-body">
-        <table class="table table-striped">
-
-            <tbody>
-                <tr title="The learning event meet my expectations">
-                    <td>
-                        The learning event meet my expectations.
-                    </td>
-                    <td>
-                        4.51
-                    </td>
-                  
-                </tr>
-
-
-                <tr title="The subject matter was well organized.">
-                    <td>
-                        The subject matter was well organized.
-                    </td>
-                    <td>
-                        4.67
-                    </td>
-                </tr>
-
-                <tr title="The materials and handouts were helpful.">
-                    <td>
-                        The materials and handouts were helpful.
-                    </td>
-                   <td>
-                        4.59
-                    </td>
-                </tr>
-
-                <tr title="The learning event achieved the defined learning outcomes.">
-                    <td>
-                        The learning event achieved the defined learning outcomes.
-                    </td>
-                     <td>
-                        4.34
-                    </td>
-                </tr>
-
-                <tr title="I liked how the facilitators presented and delivered the content.">
-                    <td>
-                        I liked how the facilitators presented and delivered the content.
-                    </td>
-                    <td>
-                        4.55
-                    </td>
-                </tr>
-
-                <tr title="The facilitators seemed knowledgeable about the subject matter.">
-                    <td>
-                        The facilitators seemed knowledgeable about the subject matter.
-                    </td>
-                    <td>
-                        4.81
-                    </td>
-                </tr>
-
-                <tr title="The facilitators conveyed a positive and respectful attitude toward the participants.">
-                    <td>
-                        The facilitators conveyed a positive and respectful attitude toward
-                        the participants.
-                    </td>
-                    <td>
-                        4.37
-                    </td>
-                </tr>
-
-                <tr title="I had the opportunity to provide feedback on how to apply my new skills on the job.">
-                    <td>
-                        I had the opportunity to provide feedback on how to apply my new
-                        skills on the job.
-                    </td>
-                    <td>
-                        4.49
-                    </td>
-                </tr>
-
-                <tr title="I was given clear direction on how to implement my action items.">
-                    <td>
-                        I was given clear direction on how to implement my action items.
-                    </td>
-                  <td>
-                        4.86
-                    </td>
-                </tr>
-
-                <tr title="I was provided with guidance and support to access training course.">
-                    <td>
-                        I was provided with guidance and support to access training course.
-                    </td>
-                     <td>
-                        4.79
-                    </td>
-                </tr>
-
-                <tr title="The learning event met my learning style.">
-                    <td>
-                        The learning event met my learning style.
-                    </td>
-                     <td>
-                        4.55
-                    </td>
-                </tr>
-
-                <tr title="The learning environment and facilities were appropriate for this event.">
-                    <td>
-                        The learning environment and facilities were appropriate for this
-                        event.
-                    </td>
-                <td>
-                        4.67
-                    </td>
-                </tr>
-
-                <tr title="I would recommend this learning event to my colleagues.">
-                    <td>
-                        I would recommend this learning event to my colleagues.
-                    </td>
-                     <td>
-                        4.78
-                    </td>
-                </tr>
-
-            </tbody>
-        </table>
+    <div class="card-body" id="student_ratings_area">
+        
     </div>
 </div>
 
@@ -175,10 +63,17 @@
 
             var that = this;
 
-            var evaluationsList = [];
-            var dataTableObject;
+            var allCoursesList = [];
+            var ratedCoursesList = [];
 
             var settings = $.extend({}, options);
+
+            var getCourses = function() {
+                $.get('/api/courses/', {}, function(response){
+                    allCoursesList = response;
+                    getRatedCourses();
+                });
+            };
 
             var getList = function () {
                 $.get('/api/course-evaluation/?format=json', {}, function (response) {
@@ -210,7 +105,95 @@
 
             };
 
+            var getRatedCourses = function () {
+    
+                $.ajax({
+                    type: "GET",
+                    url: '{% url "api_admin_v1:view_admin_asess_ratings-get-courses-ids" %}',
+                    data: {},
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (response, textStatus, xhr) {
+                        console.log(response)
+
+                        allCoursesList.forEach(function(item){
+                            if(response.find(a=>a.course == item.id)) {
+                                var option = `<option value="${item.id}">${item.title}</option>`;
+                                $("#ddl_courses").append(option);
+                            }
+                          
+                         });
+                    },
+                    complete: function (xhr, textStatus) { },
+                    failure: function (errMsg) { }
+                });
+
+            };
+
             var registerEvent = function () {
+
+                $("div").on("click", "#btnGetRatings", function (e) {
+                    e.stopPropagation();
+
+                    var id = $('#ddl_courses').val();
+                    getRatings(id);
+                });
+
+                var getRatings = function (id) {
+    
+                    $.ajax({
+                        type: "GET",
+                        url: '{% url "api_admin_v1:view_admin_asess_ratings-get-course-ratings" %}',
+                        data: {course_id:13},
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        },
+                        success: function (response, textStatus, xhr) {
+                            drawRating(response)
+                        },
+                        complete: function (xhr, textStatus) { },
+                        failure: function (errMsg) { }
+                    });
+    
+                };
+
+                const drawRating = function(list) {
+list.forEach(function(item) {
+    console.log($("#table-"+item.student.id))
+    if($("#table-"+item.student.id).length<=0) {
+        var html = `  <table class="table table-bordered mb-4" id="table-${item.student.id}">
+          <thead>
+            <tr>
+                <th>${item.student.first_name} ${item.student.last_name}</th>
+                <th>Rated</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+          </table>`
+        
+              $("#student_ratings_area").append(html);
+            }
+
+            var lisHTML = ` <tr>
+                <td>
+                    ${item.key_name}
+                </td>
+                <td>
+                    ${item.key_value}
+                </td>
+            </tr>`;
+
+            $("#table-"+item.student.id + " tbody").append(lisHTML);
+})
+                }
+
+           
 
                 $("div").on("click", ".link-view", function (e) {
                     e.stopPropagation();
@@ -240,7 +223,7 @@
 
             var init = function () {
                 registerEvent();
-                getList();
+                getCourses();
             };
 
             init();

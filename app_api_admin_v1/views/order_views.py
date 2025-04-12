@@ -6,8 +6,6 @@ from django.db.models import Q
 from app_cart.models import Order
 from ..serializers.order_serializers import OrderSerializer
 
-import json
-
 
 class OrderView(viewsets.ViewSet):
 
@@ -20,7 +18,6 @@ class OrderView(viewsets.ViewSet):
         dt_start = int(self.request.query_params.get('start'))
         dt_draw = self.request.query_params.get('draw')
         dt_search = self.request.query_params.get('search[value]')
-
 
         if dt_search:
             snippets = snippets.filter(Q(email__icontains=dt_search) | Q(first_name__icontains=dt_search) | Q(

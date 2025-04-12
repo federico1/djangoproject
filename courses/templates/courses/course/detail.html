@@ -236,12 +236,24 @@ Price Online {{ object.subject }}, Access 24/7 On All Devices. Easy To Take, Mon
                 <p><strong> CEU Requirements CEU Requirements</strong></p>
                 <ul class="mb-2">
                     <li>100% appearance for the course</li>
-                        <li>Fully involvement in all class trainings (determined by instructor)</li>
-                            <li>Completion of Continuing Education and Training Registration Form</li>
-                                <li>Completion of mandatory quiz assessments</li>
-                                    <li>As applicable, attainment of least passing score on required end-of-course examination</li>
-                                        <li> Participation and submittal of end-of-course assessment form (must provide name on form to obtain credit)</li>
-            </ul>
+                    <li>Fully involvement in all class trainings (determined by instructor)</li>
+                    <li>Completion of Continuing Education and Training Registration Form</li>
+                    <li>Completion of mandatory quiz assessments</li>
+                    <li>As applicable, attainment of least passing score on required end-of-course examination</li>
+                    <li> Participation and submittal of end-of-course assessment form (must provide name on form to
+                        obtain credit)</li>
+                </ul>
+
+                {% if object.features.first.credits and object.features.first.credits.strip %}
+
+                <p><strong>CEUs Awarded</strong></p>
+                <p>
+                <p>Participants who successfully complete this course and meet all requirements will be awarded
+                    <strong>{{object.features.first.credits}} IACET CEUs</strong>.
+                </p>
+                </p>
+                {% endif %}
+
                 <p><strong> Prerequisites Prerequisites</strong></p>
 
                 <p> There are no prerequisites but, mandatory to do Video Cons in this course. Students must be able to
