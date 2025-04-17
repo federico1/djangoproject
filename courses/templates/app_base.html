@@ -9,7 +9,8 @@
    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-   <meta name="description" content="{% block meta_desc %}Access top-quality online training courses for construction and general industries professionals. We provide free courses and bulk discounts. Start learning now!{% endblock %}" />
+   <meta name="description"
+      content="{% block meta_desc %}Access top-quality online training courses for construction and general industries professionals. We provide free courses and bulk discounts. Start learning now!{% endblock %}" />
    <meta name="author" content="{% block meta_author %}{% endblock %}" />
    <meta name="keywords" content="{% block meta_keywords %}{% endblock %}" />
    <meta name="robots" content="all" />
@@ -19,8 +20,8 @@
    <link rel="icon" type="image/png" href="{% static 'edutim/images/logo100.png' %}" />
 
    <link rel="dns-prefetch" href="https://www.googletagmanager.com/" />
-   <link href="https://www.googletagmanager.com/gtag/js?id=UA-190250545-1" rel="preload" as="script" />
-   <link href="https://www.googletagmanager.com/gtag/js?id=G-NKBKFHN4MT" rel="preload" as="script" />
+   <!-- <link href="https://www.googletagmanager.com/gtag/js?id=UA-190250545-1" rel="preload" as="script" /> -->
+   <!-- <link href="https://www.googletagmanager.com/gtag/js?id=G-NKBKFHN4MT" rel="preload" as="script" /> -->
 
    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"
       href="{% static 'edutim/combine.css' %}" />
@@ -71,7 +72,7 @@
       gtag("config", "G-NKBKFHN4MT");
    </script>
 
-   <!-- Google tag (gtag.js) -->
+   <!-- Google tag (gtag.js)
    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K1L4WGV6EM"></script>
    <script>
       window.dataLayer = window.dataLayer || [];
@@ -81,7 +82,7 @@
       gtag("js", new Date());
 
       gtag("config", "G-K1L4WGV6EM");
-   </script>
+   </script> -->
 
    {% block head %}
    <link rel="canonical" href="https://pdhsafety.com{{ request.path }}" />
@@ -95,7 +96,7 @@
          <div class="container">
             <div class="row align-items-center">
                <div class="col-lg-4 col-md-4">
-                 
+
 
                   <ul class="header-contact">
                      {% comment %} <li>
@@ -104,17 +105,24 @@
                      </li> {% endcomment %}
                      <li>
                         <span>Email :</span>
-                        <a class="text-white" title="mail@pdhsafety.com" href="mailto:mail@pdhsafety.com">mail@pdhsafety.com</a>
+                        <a class="text-white" title="mail@pdhsafety.com"
+                           href="mailto:mail@pdhsafety.com">mail@pdhsafety.com</a>
                      </li>
                   </ul>
                   {% comment %} <div class="header-socials header-socials-v2 d-none d-md-none d-lg-block d-xl-block">
                      <ul>
-                         <li><a title="facebook" target="_blank" href="https://www.facebook.com/people/NYC-Construction-Safety-Training/61561593072255/"><i class="fab fa-facebook-f"></i></a></li>
-                         <li><a title="x" target="_blank" href="https://x.com/nyc_safety"><i class="fab fa-twitter"></i></a></li>
-                         <li><a title="linkedin" target="_blank" href="https://www.linkedin.com/company/nyc-construction-safety-training/"><i class="fab fa-linkedin"></i></a></li>
-                         <li><a title="instagram" target="_blank" href="https://www.instagram.com/nyccst/"><i class="fab fa-pinterest"></i></a></li>
+                        <li><a title="facebook" target="_blank"
+                              href="https://www.facebook.com/people/NYC-Construction-Safety-Training/61561593072255/"><i
+                                 class="fab fa-facebook-f"></i></a></li>
+                        <li><a title="x" target="_blank" href="https://x.com/nyc_safety"><i
+                                 class="fab fa-twitter"></i></a></li>
+                        <li><a title="linkedin" target="_blank"
+                              href="https://www.linkedin.com/company/nyc-construction-safety-training/"><i
+                                 class="fab fa-linkedin"></i></a></li>
+                        <li><a title="instagram" target="_blank" href="https://www.instagram.com/nyccst/"><i
+                                 class="fab fa-pinterest"></i></a></li>
                      </ul>
-                 </div> {% endcomment %}
+                  </div> {% endcomment %}
                </div>
                <div class="col-lg-8 col-md-8">
                   <div class="header-right float-right">
@@ -124,8 +132,9 @@
                               {% if request.user.is_authenticated %}
                               <a title="Welcome" href="#">Welcome, {{ request.user.first_name }}</a>
                               {% else %}
-                             
-                              <a title="Student Register" href="{% url 'student_registration' %}" aria-label="Register">Student Register</a>
+
+                              <a title="Student Register" href="{% url 'student_registration' %}"
+                                 aria-label="Register">Student Register</a>
                               {% endif %}
                            </li>
                         </ul>
@@ -137,20 +146,20 @@
                         {% endif %} {% if request.user.is_student == True %}
                         <a title="Dashboard" href="{% url 'student_dashboard' %}" class="mb-1 btn btn-main btn-small"
                            aria-label="Student Dashboard">Student Dashboard</a>
-                           {% endif %} {% if request.user.is_business == True %}
-                           <a title="Dashboard" href="{% url 'business_dashboard' %}" class="mb-1 btn btn-main btn-small"
-                              aria-label="Business Dashboard">My Dashboard</a>
+                        {% endif %} {% if request.user.is_business == True %}
+                        <a title="Dashboard" href="{% url 'business_dashboard' %}" class="mb-1 btn btn-main btn-small"
+                           aria-label="Business Dashboard">My Dashboard</a>
                         {% endif %} {% if request.user.is_superuser == True %}
                         <a title="Dashboard" href="{% url 'admin_dashboard' %}" class="mb-1 btn btn-main btn-small"
                            aria-label="Admin Dashboard">Admin Dashboard</a>
                         {% endif %}
-                        <a title="Dashboard" href="{% url 'logout' %}?v={% now 'M-d-Y-H-i-s' %}" class="mb-1 btn btn-main btn-small"
-                           aria-label="Logout">
+                        <a title="Dashboard" href="{% url 'logout' %}?v={% now 'M-d-Y-H-i-s' %}"
+                           class="mb-1 btn btn-main btn-small" aria-label="Logout">
                            <i class="fa fa-sign-out-alt"></i>
                         </a>
                         {% else %}
-                        <a title="Dashboard" href="{% url 'login' %}" class="btn btn-main btn-small" aria-label="Login"> <i
-                              class="fa fa-user mr-2"></i>Login </a>
+                        <a title="Dashboard" href="{% url 'login' %}" class="btn btn-main btn-small" aria-label="Login">
+                           <i class="fa fa-user mr-2"></i>Login </a>
                         {% endif %}
                      </div>
                   </div>
@@ -163,14 +172,17 @@
 
       <div class="site-navigation main_menu">
          <nav class="navbar navbar-expand-lg">
-         
+
             <div class="container justify-content-start1">
 
-               <a title="NYC Construction Safety Training (PdhSafety.com)" class="navbar-brand text-dark" title="Make Safety Training Happen" href="/" aria-label="Home">
+               <a title="NYC Construction Safety Training (PdhSafety.com)" class="navbar-brand text-dark"
+                  title="Make Safety Training Happen" href="/" aria-label="Home">
                   <img src="{% static 'edutim/images/logo100.png' %}" width="100" height="100"
-                     alt="Make Safety Training Happen" title="NYC Construction Safety Training (PdhSafety.com)" class="img-fluid" />
+                     alt="Make Safety Training Happen" title="NYC Construction Safety Training (PdhSafety.com)"
+                     class="img-fluid" />
                </a>
-               <span class="mr-auto top-logo-tagline d-none d-md-none d-lg-block d-xl-block">Make Safety Training Happen</span>
+               <span class="mr-auto top-logo-tagline d-none d-md-none d-lg-block d-xl-block">Make Safety Training
+                  Happen</span>
 
                <form method="get" class="" action="{% url 'courses_list' %}">
                   <div class="input-group top-search-wrap">
@@ -178,7 +190,8 @@
                         placeholder="What do you want to learn?" title="Search courses here. " />
                      <div class="input-group-append">
 
-                        <button title="loading" aria-label="loading" class="btn btn-light d-none btn-loader" type="button" disabled>
+                        <button title="loading" aria-label="loading" class="btn btn-light d-none btn-loader"
+                           type="button" disabled>
                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                            <span class="sr-only">Loading...</span>
                         </button>
@@ -206,7 +219,7 @@
                   <span class="fa fa-bars"></span>
                </button>
 
-               <a title="Cart" class="navbar-toggler ml-auto" href="{% url 'cart_detail' %}?time={% now "U" %}">
+               <a title="Cart" class="navbar-toggler ml-auto" href="{% url 'cart_detail' %}?time={% now " U" %}">
                   <span class="fa fa-shopping-cart">Cart <span class="top-cart-count"></span> </span>
                </a>
 
@@ -218,23 +231,24 @@
                      </li>
 
                      <li class="nav-item dropdown">
-                        <a title="Courses" class="nav-link dropdown-toggle" href="{% url 'courses_list' %}" id="navbar3" role="button" data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">
+                        <a title="Courses" class="nav-link dropdown-toggle" href="{% url 'courses_list' %}" id="navbar3"
+                           role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                            Courses<i class="fa fa-angle-down"></i>
                         </a>
                         <div class="dropdown-menu subjects-child-dropdown" aria-labelledby="navbar3">
-                     
+
                            <div class="p-2 mb-2 bg-light">
-                     
+
                               <div class="input-group mb-3">
-                                 <input type="text" id="txtSearchSubjects" class="form-control" placeholder="Search Categories" />
+                                 <input type="text" id="txtSearchSubjects" class="form-control"
+                                    placeholder="Search Categories" />
                                  <div class="input-group-append">
                                     <button class="btn btn-outline-dark" id="btnClearSubjectSearch" type="button">
                                        <i class="fa fa-times"></i>
                                     </button>
                                  </div>
                               </div>
-   
+
                            </div>
                            <div id="listItems" style="max-height: 500px;overflow: auto;">
                               Loading..
@@ -243,20 +257,24 @@
                      </li>
                      {% if request.user.is_authenticated %}
                      <li class="nav-item">
-                        <a title="Accoutn Dashboard" class="nav-link" href="{% url 'business_dashboard' %}" aria-label="Business"> My Dashboard </a>
+                        <a title="Accoutn Dashboard" class="nav-link" href="{% url 'business_dashboard' %}"
+                           aria-label="Business"> My Dashboard </a>
                      </li>
                      <li class="nav-item">
-                        <a title="Business Account Features" class="nav-link" href="{% url 'business_account_features' %}" aria-label="Business"> Business Features </a>
+                        <a title="Business Account Features" class="nav-link"
+                           href="{% url 'business_account_features' %}" aria-label="Business"> Business Features </a>
                      </li>
-                   {% else %}
-                   <li class="nav-item">
-                     <a title="Business Account Register" class="nav-link" href="{% url 'business_user_register' %}" aria-label="Business"> Business Account </a>
-                  </li>
-                 
+                     {% else %}
+                     <li class="nav-item">
+                        <a title="Business Account Register" class="nav-link" href="{% url 'business_user_register' %}"
+                           aria-label="Business"> Business Account </a>
+                     </li>
+
                      {% endif %}
-                   
+
                      <li class="nav-item">
-                        <a title="Training Verification" class="nav-link" href="/sst-verify/"> Training Verification </a>
+                        <a title="Training Verification" class="nav-link" href="/sst-verify/"> Training Verification
+                        </a>
                      </li>
 
                      <li class="nav-item">
@@ -266,8 +284,9 @@
 
                   <ul class="header-contact-right">
                      <li>
-                        <a title="Cart" href="{% url 'cart_detail' %}?time={% now "U" %}" class="header-cart" alt="My Cart" aria-label="My Cart">
-                            My Cart <i class="fa fa-shopping-cart"></i>
+                        <a title="Cart" href="{% url 'cart_detail' %}?time={% now " U" %}" class="header-cart"
+                           alt="My Cart" aria-label="My Cart">
+                           My Cart <i class="fa fa-shopping-cart"></i>
                         </a>
                         <span class="top-cart-count">0 items</span>
                      </li>
@@ -314,7 +333,11 @@
                   <span class="widget-title">About Us</span>
                   <p class="mt-3">
                      NYC Construction Safety Training (PdhSafety.com)
-                     aims to offer quality training that is relevant and useful for the construction industry. These efforts include offering training courses that are essential for achieving success and career outcomes in the construction industry, ensuring that course material is both useful and applicable. We conduct perpetual reviews of training materials to maintain accuracy and relevance, and we are committed to developing a team of high-quality staff and instructors.
+                     aims to offer quality training that is relevant and useful for the construction industry. These
+                     efforts include offering training courses that are essential for achieving success and career
+                     outcomes in the construction industry, ensuring that course material is both useful and applicable.
+                     We conduct perpetual reviews of training materials to maintain accuracy and relevance, and we are
+                     committed to developing a team of high-quality staff and instructors.
                   </p>
                   <ul class="list-inline footer-socials">
                      <li class="list-inline-item">
@@ -336,7 +359,8 @@
                         </a>
                      </li>
                      <li class="list-inline-item" aria-label="Pinterest">
-                        <a title="instagram" class="pinterest" href="https://www.instagram.com/nyccst/" target="_blank" aria-label="Twitter">
+                        <a title="instagram" class="pinterest" href="https://www.instagram.com/nyccst/" target="_blank"
+                           aria-label="Twitter">
                            <i class="fab fa-pinterest"></i>
                         </a>
                      </li>
@@ -362,7 +386,7 @@
                      <li>
                         <a title="Business Register" href="{% url 'business_user_register' %}">Business Account</a>
                      </li>
-                    
+
                      {% endif %}
 
                      <li>
@@ -398,7 +422,8 @@
                         <a title="Training Verification" href="/sst-verify/">Training Verification</a>
                      </li>
                      <li>
-                        <a title="Business Account Features" href="{% url 'business_account_features' %}" aria-label="Business"> Business Features </a>
+                        <a title="Business Account Features" href="{% url 'business_account_features' %}"
+                           aria-label="Business"> Business Features </a>
                      </li>
 
                   </ul>
@@ -443,13 +468,14 @@
                <div class="col-lg-2">
                   <div class="footer-logo">
                      <img data-src="{% static 'edutim/images/logo100.png' %}" width="100" height="100"
-                      title="NYC Construction Safety Training (PdhSafety.com)" alt="NYC Construction Safety Training (PdhSafety.com)" class="lazy img-fluid" />
+                        title="NYC Construction Safety Training (PdhSafety.com)"
+                        alt="NYC Construction Safety Training (PdhSafety.com)" class="lazy img-fluid" />
                   </div>
                </div>
                <div class="col-lg-10">
                   <div class="copyright text-lg-center">
                      <p>Copyright © 2021 All rights reserved | NYC Construction Safety Training, LLC (PdhSafety.com)</p>
-                    
+
                   </div>
                </div>
             </div>
@@ -458,7 +484,8 @@
    </section>
 
    <div class="fixed-btm-top">
-      <a title="Scroll Top" href="#top-header" class="js-scroll-trigger scroll-to-top" aria-label="Scroll Top" alt="Scroll Top">
+      <a title="Scroll Top" href="#top-header" class="js-scroll-trigger scroll-to-top" aria-label="Scroll Top"
+         alt="Scroll Top">
          <i class="fa fa-angle-up"></i>
       </a>
    </div>
@@ -469,9 +496,9 @@
    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"
       href="{% static 'edutim/vendors/bicon/css/bicon.min.css' %}" />
 
-      <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"
+   <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"
       href="{% static 'edutim/vendors/owl/assets/owl.carousel.min.css' %}" />
-      <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"
+   <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"
       href="{% static 'edutim/vendors/owl/assets/owl.theme.default.min.css' %}" />
 
 
