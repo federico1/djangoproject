@@ -545,7 +545,7 @@ Price Online {{ object.subject }}, Access 24/7 On All Devices. Easy To Take, Mon
 
                         if (xhr.status == 201) {
 
-                            gtag("event", "add_to_cart", {
+                            gtag("event", "free_purchased", {
                                 currency: "USD",
                                 value: 0.00,
                                 items: [
@@ -644,6 +644,10 @@ Price Online {{ object.subject }}, Access 24/7 On All Devices. Easy To Take, Mon
 
                 try {
                     const isFree = '{{object.is_free}}' === 'True' ? true : false;
+
+                    gtag("event", "free_view_item", {
+                        item_id: '{{object.id}}'.trim(),
+                    });
 
                     if (isFree) return;
 
