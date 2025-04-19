@@ -4,159 +4,199 @@
 {% endblock %}
 {% block content %}
 
-    <section class="page-header">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="page-header-content">
-                        <h1>Frequently Asked Questions</h1>
-                        <ul class="list-inline mb-0">
-                            <li class="list-inline-item">
-                                <a href="/">Home</a>
-                            </li>
-                            <li class="list-inline-item">/</li>
-                            <li class="list-inline-item">
-                                FAQs
-                            </li>
-                        </ul>
-                    </div>
+<section class="page-header">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="page-header-content">
+                    <h1>Frequently Asked Questions</h1>
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="list-inline-item">/</li>
+                        <li class="list-inline-item">
+                            FAQs
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
 
-    <main class="site-main page-wrapper woocommerce single single-product">
-        <section class="space-3">
-            <div class="container">
-                <div class="row" id="packagesList">
-                    <div class="col-12">
-                        <div class="page-content">
-                            <div class="card">
-                                <div class="card-header">
-                                    <strong>
-                                        How do I register?
-                                    </strong>
-                                </div>
-                                <div class="card-body">
-                                    To register for an account, please
-                                    <a href="{% url 'student_registration' %}">
-                                        <strong>click here</strong>
-                                    </a>.
-                                </div>
+<main class="site-main page-wrapper woocommerce single single-product">
+    <section class="space-3">
+        <div class="container">
+            <div class="row" id="packagesList">
+                <div class="col-12">
+                    <div class="page-content">
+
+                        <div class="card" id="student-certificate">
+                            <div class="card-header">
+                                <strong>
+                                    Is PDH Safety accredited?
+                                </strong>
                             </div>
-                            <!-- end card -->
-                            <div class="card mt-2">
-                                <div class="card-header">
-                                    <strong>
-                                        What courses do you offer?
-                                    </strong>
-                                </div>
-                                <div class="card-body">
-                                   We offer a variety of online courses,  Certified Safety Professional (BCSP) Exam Prep, Hazardous Waste Operations and Emergency Response (HAZWOPER), Confined Space Training, Emergency and Fire Safety, Construction Safety, 
-                                    Environmental Health and Safety, Construction Safety and Health, Safety Management, Scaffold Training, Fall Protection in Construction and many more please     
-                                    <a href="{% url 'courses_list' %}">
-                                        <strong>click here</strong>
-                                    </a>.
-                                </div>
+                            <div class="card-body">
+                                <p>
+                                    Yes. PDH Safety is an IACET Accredited Provider. We comply with the ANSI/IACET
+                                    Standard,
+                                    which is recognized internationally as a mark of excellence in continuing education
+                                    and
+                                    training. Our accredited status means the courses we offer are eligible for IACET
+                                    CEUs,
+                                    ensuring you receive high-quality, industry-recognized training.
+                                </p>
                             </div>
-                            <!-- end card -->
-                            <div class="card mt-2">
-                                <div class="card-header">
-                                    <strong>
-                                        How can I contact you?
-                                    </strong>
-                                </div>
-                                <div class="card-body">
-                                    You can call us at 914-473-6791, email us at
-                                    <a href="mailto:mail@pdhsafety.com" class="text-primary">mail@pdhsafety.com</a>
-                                    or, please
-                                    <a href="{% url 'contact_detail' %}">
-                                        <strong>click here</strong>
-                                    </a>
-                                    and leave us a message.
-                                </div>
+                        </div>
+                        <!-- end card -->
+
+                        <div class="card mt-2">
+                            <div class="card-header">
+                                <strong>
+                                    How do I register?
+                                </strong>
                             </div>
-                            <!-- end card -->
-                            <div class="card mt-2">
-                                <div class="card-header">
-                                    <strong>
-                                        Proprietary Interest Policy
-                                    </strong>
-                                </div>
-                                <div class="card-body">
-                                    <p>
-                                        NYCCST does not tolerate discrimination, nor tolerate explicit references of a
-                                        discriminatory nature, based on
-                                        gender, gender identity, gender expression, race, nationality, color, religion, age,
-                                        disability, veteran status,
-                                        socioeconomic status, marital status, pregnancy, and/or sexual orientation.
-        
-        
-                                    </p>
-        
-                                    <p>
-                                        Harassment and/or intimidation based on any protected characteristic is strictly
-                                        prohibited.
-                                        All the following are
-                                        considered harassment and/or intimidation: Written communications, verbal
-                                        communications, or
-                                        physical
-                                        gestures or behavior that shows hostility, aversion, or bigotry toward an individual.
-                                        Sexual
-                                        harassment in the
-                                        form of written, physical, and/or verbal communications or behavior is also prohibited.
-                                    </p>
-                                    <p>
-                                        Incidents of harassment should be immediately reported to an administrator of the
-                                        organization who will
-                                        promptly arrange an internal investigation regarding the matter. NYCCST prohibits acts
-                                        of
-                                        retaliation against
-                                        individuals who report or cooperate with investigations of harassment and discrimination
-                                        cases.
-                                    </p>
-                                </div>
-                                </div>
+                            <div class="card-body">
+                                To register for an account, please
+                                <a href="{% url 'student_registration' %}">
+                                    <strong>click here</strong>
+                                </a>.
                             </div>
-                            <!-- end card -->
-                           
-                            <div class="card mt-2" id="student-demo">
-                                <div class="card-header">
-                                    <strong>
-                                        How to take the course?
-                                    </strong>
-                                </div>
-                                <div class="card-body">
-                                    <div style="padding:53.13% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1035306202?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Pdhsafety - Student Dashboard"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
-                                </div>
+                        </div>
+                        <!-- end card -->
+                        <div class="card mt-2">
+                            <div class="card-header">
+                                <strong>
+                                    What courses do you offer?
+                                </strong>
                             </div>
-                            <!-- end card -->
-                              
-                            <div class="card mt-2" id="student-certificate">
-                                <div class="card-header">
-                                    <strong>
-                                        How to download certificate?
-                                    </strong>
-                                </div>
-                                <div class="card-body">
-                                    <div style="padding:47.5% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1052206390?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Pdhsafety - How to download certificate"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
-                                </div>
+                            <div class="card-body">
+                                We offer a variety of online courses, Certified Safety Professional (BCSP) Exam Prep,
+                                Hazardous Waste Operations and Emergency Response (HAZWOPER), Confined Space Training,
+                                Emergency and Fire Safety, Construction Safety,
+                                Environmental Health and Safety, Construction Safety and Health, Safety Management,
+                                Scaffold Training, Fall Protection in Construction and many more please
+                                <a href="{% url 'courses_list' %}">
+                                    <strong>click here</strong>
+                                </a>.
                             </div>
-                            <!-- end card -->
+                        </div>
+                        <!-- end card -->
+                        <div class="card mt-2">
+                            <div class="card-header">
+                                <strong>
+                                    How can I contact you?
+                                </strong>
+                            </div>
+                            <div class="card-body">
+                                You can call us at 914-473-6791, email us at
+                                <a href="mailto:mail@pdhsafety.com" class="text-primary">mail@pdhsafety.com</a>
+                                or, please
+                                <a href="{% url 'contact_detail' %}">
+                                    <strong>click here</strong>
+                                </a>
+                                and leave us a message.
+                            </div>
+                        </div>
+                        <!-- end card -->
+                        <div class="card mt-2">
+                            <div class="card-header">
+                                <strong>
+                                    Proprietary Interest Policy
+                                </strong>
+                            </div>
+                            <div class="card-body">
+                                <p>
+                                    NYCCST does not tolerate discrimination, nor tolerate explicit references of a
+                                    discriminatory nature, based on
+                                    gender, gender identity, gender expression, race, nationality, color, religion, age,
+                                    disability, veteran status,
+                                    socioeconomic status, marital status, pregnancy, and/or sexual orientation.
+
+
+                                </p>
+
+                                <p>
+                                    Harassment and/or intimidation based on any protected characteristic is strictly
+                                    prohibited.
+                                    All the following are
+                                    considered harassment and/or intimidation: Written communications, verbal
+                                    communications, or
+                                    physical
+                                    gestures or behavior that shows hostility, aversion, or bigotry toward an
+                                    individual.
+                                    Sexual
+                                    harassment in the
+                                    form of written, physical, and/or verbal communications or behavior is also
+                                    prohibited.
+                                </p>
+                                <p>
+                                    Incidents of harassment should be immediately reported to an administrator of the
+                                    organization who will
+                                    promptly arrange an internal investigation regarding the matter. NYCCST prohibits
+                                    acts
+                                    of
+                                    retaliation against
+                                    individuals who report or cooperate with investigations of harassment and
+                                    discrimination
+                                    cases.
+                                </p>
+                            </div>
                         </div>
                     </div>
+                    <!-- end card -->
+
+                    <div class="card mt-2" id="student-demo">
+                        <div class="card-header">
+                            <strong>
+                                How to take the course?
+                            </strong>
+                        </div>
+                        <div class="card-body">
+                            <div style="padding:53.13% 0 0 0;position:relative;"><iframe
+                                    src="https://player.vimeo.com/video/1035306202?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                                    frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write"
+                                    style="position:absolute;top:0;left:0;width:100%;height:100%;"
+                                    title="Pdhsafety - Student Dashboard"></iframe></div>
+                            <script src="https://player.vimeo.com/api/player.js"></script>
+                        </div>
+                    </div>
+                    <!-- end card -->
+
+                    <div class="card mt-2" id="student-certificate">
+                        <div class="card-header">
+                            <strong>
+                                How to download certificate?
+                            </strong>
+                        </div>
+                        <div class="card-body">
+                            <div style="padding:47.5% 0 0 0;position:relative;"><iframe
+                                    src="https://player.vimeo.com/video/1052206390?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                                    frameborder="0"
+                                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+                                    style="position:absolute;top:0;left:0;width:100%;height:100%;"
+                                    title="Pdhsafety - How to download certificate"></iframe></div>
+                            <script src="https://player.vimeo.com/api/player.js"></script>
+                        </div>
+                    </div>
+                    <!-- end card -->
+
                 </div>
             </div>
-        </section>
-        <!--shop category end-->
-    </main>
+        </div>
+        </div>
+    </section>
+    <!--shop category end-->
+</main>
 
 
 {% endblock %}
 {% block scripts %}
-    <style></style>
-    <script>
-        $(document).ready(function () {});
-    </script>
+<style></style>
+<script>
+    $(document).ready(function () { });
+</script>
 {% endblock %}

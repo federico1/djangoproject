@@ -180,9 +180,11 @@
                   <img src="{% static 'edutim/images/logo100.png' %}" width="100" height="100"
                      alt="Make Safety Training Happen" title="NYC Construction Safety Training (PdhSafety.com)"
                      class="img-fluid" />
+                     <img src="{% static 'images/iacet.png' %}" height="100"
+                     alt="IACET Accredited" title="IACET Accredited" />
                </a>
-               <span class="mr-auto top-logo-tagline d-none d-md-none d-lg-block d-xl-block">Make Safety Training
-                  Happen</span>
+               {% comment %} <span class="mr-auto top-logo-tagline d-none d-md-none d-lg-block d-xl-block">Make Safety Training
+                  Happen</span> {% endcomment %}
 
                <form method="get" class="" action="{% url 'courses_list' %}">
                   <div class="input-group top-search-wrap">
@@ -324,6 +326,18 @@
    <!--search overlay end-->
 
    {% block content %}{% endblock %}
+
+   <section class="team section-padding bg-grey py-3 mb-4">
+      <div class="container">
+         <div class="row">
+            <div class="col text-center">
+               <img title="IACET Accredited" class="lazy img-fluid" data-src="{% static 'images/iacet_349.png' %}"
+             alt="IACET Accredited" />
+             <img title="Money back guarantee" class="lazy img-fluid" data-src="{% static 'images/money_back.png' %}" width="400" height="293" alt="money back" />
+            </div>
+         </div>
+      </div>
+   </section>
 
    <section class="footer pt-120">
       <div class="container">
