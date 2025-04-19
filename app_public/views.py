@@ -67,7 +67,7 @@ def bad_request(request):
 
 
 def post_contact_form(request):
-    
+
     if request.method == 'POST':
         ctx = {
             'name': request.POST['name'],
@@ -78,4 +78,4 @@ def post_contact_form(request):
 
         result = send_contact_alert(ctx)
 
-        return JsonResponse({'result': result})   
+        return JsonResponse({'result': result})

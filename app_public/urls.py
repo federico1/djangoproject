@@ -2,6 +2,7 @@ from django.urls import path
 from django.views.decorators.cache import cache_page, never_cache
 from .views import PrivacyPolicyView, AboutView, ContactView, FaqView, RefundView, TermsView, BusinessAccountFeaturesView, StudentManualView, post_contact_form
 from .more_views.views_sst import SSTVerifyView
+from .more_views.views_blogs import IACETAccreditation
 
 urlpatterns = [
     path('privacy-policy/',
@@ -31,7 +32,9 @@ urlpatterns = [
     path('business-account-features/',
          BusinessAccountFeaturesView.as_view(),
          name='business_account_features'),
-
+    path('blog/iacet-accreditation/',
+         IACETAccreditation.as_view(),
+         name='iacet_accreditation'),
     path(r'handle-ct-fm/',
          post_contact_form, name='post_contact_form'),
 ]

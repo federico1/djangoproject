@@ -1,0 +1,102 @@
+{% extends "app_base.html" %}
+{% load staticfiles %}
+{% load cache %}
+
+{% block title %} IACET Accredited | pdhsafety.com
+{% endblock %}
+
+{% block content %}
+
+{% cache 500 about %}
+<section class="page-header">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="page-header-content">
+                    <h1>IACET Accredited</h1>
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="list-inline-item">/</li>
+                        <li class="list-inline-item">
+                            Provider
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<main class="site-main page-wrapper woocommerce single single-product">
+    <section class="space-3">
+        <div class="container">
+            <div class="row" id="packagesList">
+                <div class="col">
+                    <div class="page-content">
+                        <section>
+                            <h1>🎉 We’re Now an IACET Accredited Provider!</h1>
+
+                            <p><strong>PDH Safety</strong> is proud to announce that we have officially earned
+                                accreditation from the <strong>International Accreditors for Continuing Education and
+                                    Training (IACET)</strong>!</p>
+
+                            <p>This prestigious recognition means that PDH Safety meets the <strong>ANSI/IACET Standard
+                                    for Continuing Education and Training</strong>, a globally recognized benchmark for
+                                excellence in instructional quality and learner support.</p>
+
+                            <h2>🏆 What This Means for You</h2>
+                            <ul>
+                                <li><strong>✅ Earn Recognized CEUs:</strong> Every eligible course now offers
+                                    <strong>IACET Continuing Education Units (CEUs)</strong> accepted by employers and
+                                    licensing bodies nationwide.
+                                </li>
+                                <li><strong>✅ Trusted Training:</strong> Our training programs meet rigorous standards
+                                    for design, delivery, and learner success.</li>
+                                <li><strong>✅ Professional Advantage:</strong> CEUs from PDH Safety help you maintain
+                                    licenses, meet compliance, and grow in your career.</li>
+                            </ul>
+
+                            <blockquote>
+                                <em>"Our mission has always been to deliver reliable, accessible, and top-tier safety
+                                    training. This accreditation validates that commitment and brings even more value to
+                                    our learners."</em>
+                            </blockquote>
+
+                            <h2>🧾 About IACET</h2>
+                            <p>IACET is a nonprofit organization that accredits education providers who follow the
+                                <strong>ANSI/IACET Standard</strong>, the only standard recognized by the American
+                                National Standards Institute for continuing education and training. Accreditation is
+                                awarded only after a rigorous review of instructional systems, learner outcomes, and
+                                business processes.
+                            </p>
+
+                            <h2>📌 What’s Next?</h2>
+                            <p>You’ll start seeing <strong>IACET CEU credits</strong> listed on eligible courses and the
+                                <strong>IACET Accredited Provider badge</strong> on our website, course materials, and
+                                certificates.
+                            </p>
+
+                            <p>We’re excited to help professionals like you meet your learning goals with confidence and
+                                credibility.</p>
+
+                            <p>📚 <a href="/courses">Start learning today — and earn CEUs
+                                    that count →</a></p>
+                        </section>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--shop category end-->
+</main>
+{% endcache %}
+
+{% endblock %}
+{% block scripts %}
+<script>
+    $(document).ready(function () { });
+</script>
+{% endblock %}
