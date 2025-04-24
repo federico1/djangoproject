@@ -1156,7 +1156,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         window.location.href =
-                            "{% url 'student_course_certificate' enrollment.course_id %}";
+                            "{% url 'student_course_certificate' enrollment.course_id %}?enrl={{enrollment.id}}"
                     }
                 });
             };
@@ -1177,7 +1177,6 @@
                 // getTimeLog();
                 checkContentCompleted();
             };
-
             init();
 
             return this;
