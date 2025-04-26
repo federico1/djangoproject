@@ -4,8 +4,9 @@
 {% load cache %}
 
 {% block title %}
-{% if subject %} Best {{ subject.title }} Courses Online | pdhsafety.com {%else%}
-Best Safety Training and Certification Courses Online | pdhsafety.com
+{% if subject %} IACET Accredited {{ subject.title }} Online Courses | pdhsafety.com 
+{%else%}
+Browse All Online Safety Training Courses | pdhsafety.com
 {% endif %}
 {% endblock %}
 
@@ -13,12 +14,16 @@ Best Safety Training and Certification Courses Online | pdhsafety.com
 
 {% if subject %} 
 
-{% if subject.meta_description %}
+Earn your {{ subject.title }} certification online with PDH Safety. IACET-accredited training. Fast, convenient, and recognized CEUs available.
+
+{% comment %} {% if subject.meta_description %}
 {{subject.meta_description}}
 {% else %}
 Best Price Online Courses - {{ subject.title }} (Easy Access 24/7 On All Devices) Easy To Take Course Satisfaction Guarantee.
-{% endif %}
+{% endif %} {% endcomment %}
 
+{% else %}
+Explore IACET-accredited online training courses in construction, OSHA compliance, fall protection, and more. Earn CEUs and certifications with PDH Safety.
 {% endif %}
 
 {% endblock %}
