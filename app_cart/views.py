@@ -17,7 +17,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 class CartView(generic.TemplateView):
     template_name = "cart.html"
 
-
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated and request.user.is_business == True:
             return redirect(reverse_lazy('business_dashboard') + '?source=cart')
@@ -111,6 +110,7 @@ def SendOrderConfirmMail(request):
 def NotifySystemView(request):
 
     result = 0
+    return
 
     if request.POST:
         title = request.POST['title']
