@@ -11,7 +11,8 @@
 
 {% block meta_desc %}
 {% if object.metas.first.meta_description %}{{object.metas.first.meta_description}}{% else %}
-Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider. Earn CEUs and a certificate. 100% online, fast, and trusted by industry professionals.
+Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider. Earn CEUs and a certificate. 100%
+online, fast, and trusted by industry professionals.
 {% endif %}
 {% endblock %}
 
@@ -38,11 +39,10 @@ Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider.
     <div class="course-single-wrapper">
 
         {% if not object.is_free %}
-        <div class="d-block d-sm-block d-md-none"
-            style="position: fixed;top:0px;z-index: 111;width: 100%;background: rgb(67, 67, 67);">
-            <div class="course-price-wrapper p-2">
-                <div class="row">
-                    <div class="col-12 mb-2">
+        <div class="d-block d-sm-block d-md-none add-to-cart-fixed-wrapper">
+            <div class="course-price-wrapper">
+                <div class="d-flex justify-content-between">
+                    <div>
                         <div class="course-price mb-0 mt-1">
 
                             {% if object.is_free %}
@@ -54,7 +54,7 @@ Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider.
 
                             <p class="mb-0 small font-weight-bold text-white">Price:
                                 <span class="text-white">${{ object.discounted_price }}</span>
-                                <del class="text-white">${{ object.price }}</del>
+                                <!-- <del class="text-white">${{ object.price }}</del> -->
                             </p>
 
                             {% else %}
@@ -66,12 +66,12 @@ Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider.
 
                         </div>
                     </div>
-                    <div class="col-12">
+                    <div>
 
                         {% if request.user.is_authenticated and request.user.is_business == True %}
                         <div class="buy-btn text-left">
                             <a title="Dashboard" href="javascript:;"
-                                class=" mt-0 btn btn-sm btn-main-2 link-enroll-business">
+                                class=" mt-0 btn btn-warning font-weight-bold link-enroll-business">
                                 Enroll (Dashboard)
                             </a>
                         </div>
@@ -82,19 +82,20 @@ Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider.
                             {% if request.user.is_authenticated %}
 
                             <a title="Take Free Course" href="javascript:;"
-                                class="btn btn-main-2 btn-block link-free-enroll">
+                                class="btn  btn-warning font-weight-bold btn-block link-free-enroll">
                                 Take Free Course
                             </a>
                             {% else %}
                             <a title="Enroll Free Course" href="javascript:;"
-                                class="btn btn-main-2 btn-block link-free-auth">
+                                class="btn  btn-warning font-weight-bold btn-block link-free-auth">
                                 Enroll Free Course
                             </a>
                             {% endif %}
 
                             {% else %}
 
-                            <a title="Add To Cart" href="javascript:;" class=" mt-0 btn btn-sm btn-main-2 link-add-cart"
+                            <a title="Add To Cart" href="javascript:;"
+                                class=" mt-0 btn btn-warning font-weight-bold link-add-cart"
                                 data-subject="{{ subject.title }}" data-subject-slug="{{ subject.slug }}"
                                 data-json="{{ object|jsonify }}">
                                 Add To Cart
@@ -106,7 +107,7 @@ Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider.
                         {% endif %}
 
                     </div>
-                    <!--  end .col-4 -->
+
                 </div>
             </div>
         </div>
@@ -208,25 +209,25 @@ Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider.
 
                 {% if object.features.first.outcomes and object.features.first.outcomes.strip %}
                 <div class="single-course-details mb-5" id="section-outcomes">
-               <p class="course-title font-weight-bold text-dark">
-                        Learning Outcomes:</p> 
+                    <p class="course-title font-weight-bold text-dark">
+                        Learning Outcomes:</p>
                     <div>
                         {{ object.features.first.outcomes  |safe }}
                     </div>
                 </div>
 
                 {% endif %}
-               
+
                 {% if object.features.first.credits and object.features.first.credits.strip %}
 
-               <div id="section-credits">
-                <p><strong>CEUs Awarded</strong></p>
-                <p>
-                <p>Participants who successfully complete this course and meet all requirements will be awarded
-                    <strong>{{object.features.first.credits}} IACET CEUs</strong>.
-                </p>
-                </p>
-               </div>
+                <div id="section-credits">
+                    <p><strong>CEUs Awarded</strong></p>
+                    <p>
+                    <p>Participants who successfully complete this course and meet all requirements will be awarded
+                        <strong>{{object.features.first.credits}} IACET CEUs</strong>.
+                    </p>
+                    </p>
+                </div>
                 {% endif %}
 
 
@@ -236,8 +237,8 @@ Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider.
                     <div>
                         {{ object.features.first.completion_requirements  |safe }}
                     </div>
-                </div> 
-          
+                </div>
+
                 {% if object.features.first.notes and object.features.first.notes.strip %}
                 <div class="single-course-details mb-5" id="section-notes">
                     <div>
@@ -465,6 +466,15 @@ Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider.
 
     .img-section button i {
         font-size: 2em;
+    }
+
+    .add-to-cart-fixed-wrapper {
+        position: fixed;
+        bottom: 0px;
+        z-index: 111;
+        width: 100%;
+        background: rgb(0 0 0);
+        padding: 5px 10px;
     }
 </style>
 <script>

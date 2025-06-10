@@ -45,22 +45,6 @@
 
    {% endcomment %}
 
-   <!-- Global site tag (gtag.js) - Google Analytics -->
-   {% comment %}
-   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-190250545-1"></script>
-
-   <script>
-      window.dataLayer = window.dataLayer || [];
-
-      function gtag() {
-         dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      gtag("config", "UA-190250545-1");
-   </script>
-   {% endcomment %}
-
    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NKBKFHN4MT"></script>
    <script>
       window.dataLayer = window.dataLayer || [];
@@ -71,18 +55,6 @@
 
       gtag("config", "G-NKBKFHN4MT");
    </script>
-
-   <!-- Google tag (gtag.js)
-   <script async src="https://www.googletagmanager.com/gtag/js?id=G-K1L4WGV6EM"></script>
-   <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-         dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      gtag("config", "G-K1L4WGV6EM");
-   </script> -->
 
    {% block head %}
    <link rel="canonical" href="https://pdhsafety.com{{ request.path }}" />
@@ -180,12 +152,10 @@
                   <img src="{% static 'edutim/images/logo100.png' %}" width="100" height="100"
                      alt="Make Safety Training Happen" title="NYC Construction Safety Training (PdhSafety.com)"
                      class="img-fluid" />
-                  <img src="{% static 'images/iacet.png' %}" height="100" alt="IACET Accredited"
-                     title="IACET Accredited" />
                </a>
-               {% comment %} <span class="mr-auto top-logo-tagline d-none d-md-none d-lg-block d-xl-block">Make Safety
+              <span class="mr-auto top-logo-tagline d-none d-md-none d-lg-block d-xl-block">Make Safety
                   Training
-                  Happen</span> {% endcomment %}
+                  Happen</span>
 
                <form method="get" class="" action="{% url 'courses_list' %}">
                   <div class="input-group top-search-wrap">
