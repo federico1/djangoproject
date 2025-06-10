@@ -161,15 +161,6 @@ Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider.
         <div class="row">
             <div class="col-lg-8">
 
-                {% if object.features.first.details_long and object.features.first.details_long.strip %}
-                <div class="single-course-details mb-5">
-                    <div>
-                        {{ object.features.first.details_long  |safe }}
-                    </div>
-                </div>
-
-                {% endif %}
-
                 <div class="single-course-details mb-5">
                     <p class="course-title font-weight-bold text-dark">Course Modules - ({{object.modules.count}})</p>
 
@@ -214,6 +205,15 @@ Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider.
                     </div>
                 </div> {% endcomment %}
 
+                {% if object.features.first.details_long and object.features.first.details_long.strip %}
+                <div class="single-course-details mb-5" id="section-details-long">
+                    <div>
+                        {{ object.features.first.details_long  |safe }}
+                    </div>
+                </div>
+
+                {% endif %}
+
                 {% if object.features.first.notes and object.features.first.notes.strip %}
                 <div class="single-course-details mb-5" id="section-notes">
                     <div>
@@ -224,19 +224,21 @@ Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider.
 
                 {% if object.features.first.outcomes and object.features.first.outcomes.strip %}
                 <div class="single-course-details mb-5" id="section-outcomes">
-                    {% comment %} <p class="course-title font-weight-bold text-dark">
-                        Learning Outcomes:</p> {% endcomment %}
+               <p class="course-title font-weight-bold text-dark">
+                        Learning Outcomes:</p> 
                     <div>
                         {{ object.features.first.outcomes  |safe }}
                     </div>
                 </div>
+
+                
                 {% endif %}
-                <p><strong>Learning Outcomes:</strong></p>
+                {% comment %} <p><strong>Learning Outcomes:</strong></p>
                 <ul class="mb-2">
                     <li>Understand safety protocols in the workplace.</li>
                     <li>Recognize potential hazards and mitigate risks.</li>
                 </ul>
-                <p><strong> CEU Requirements CEU Requirements</strong></p>
+                <p><strong> CEU Requirements</strong></p>
                 <ul class="mb-2">
                     <li>100% appearance for the course</li>
                     <li>Fully involvement in all class trainings (determined by instructor)</li>
@@ -245,35 +247,34 @@ Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider.
                     <li>As applicable, attainment of least passing score on required end-of-course examination</li>
                     <li> Participation and submittal of end-of-course assessment form (must provide name on form to
                         obtain credit)</li>
-                </ul>
+                </ul> {% endcomment %}
 
                 {% if object.features.first.credits and object.features.first.credits.strip %}
 
+               <div id="section-credits">
                 <p><strong>CEUs Awarded</strong></p>
                 <p>
                 <p>Participants who successfully complete this course and meet all requirements will be awarded
                     <strong>{{object.features.first.credits}} IACET CEUs</strong>.
                 </p>
                 </p>
+               </div>
                 {% endif %}
 
-                <p><strong> Prerequisites Prerequisites</strong></p>
+                {% comment %} <p><strong> Prerequisites Prerequisites</strong></p>
 
                 <p> There are no prerequisites but, mandatory to do Video Cons in this course. Students must be able to
                     orally
-                    communicate with instructor in primary language of the training</p>
+                    communicate with instructor in primary language of the training</p> {% endcomment %}
 
 
-                {% comment %} <div class="single-course-details mb-5 d-none">
+                <div class="single-course-details mb-5" id="section-completion-requirements">
                     <h4 class="course-title">
                         Completion Requirements:</h4>
                     <div>
                         {{ object.features.first.completion_requirements  |safe }}
                     </div>
-                </div> {% endcomment %}
-
-
-
+                </div>
             </div>
             <div class="col-lg-4">
                 <div class="course-sidebar">
@@ -344,12 +345,12 @@ Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider.
                         </div>
                     </div>
 
-                    {% comment %} <div class="course-widget course-details-info d-none">
-                        <h4 class="course-title">Credits </h4>
+                    <div class="course-widget course-details-info" id="section-schedule">
+                        <h4 class="course-title">Schedule </h4>
                         <p>
                             {{ object.features.first.schedule  |safe }}
                         </p>
-                    </div> {% endcomment %}
+                    </div>
 
                     <div class="course-widget course-details-info">
                         <p class="course-title font-weight-bold text-dark">This Course Includes</p>
@@ -436,19 +437,8 @@ Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider.
     </div>
 </section>
 
-<section class="team section-padding bg-grey py-3 mb-4">
-    <div class="container">
-        <div class="row">
-            <div class="col text-center">
-                <img class="lazy img-fluid" data-src="{% static 'images/money_back.png' %}" width="400" height="294"
-                    alt="money back">
-            </div>
-        </div>
-    </div>
-</section>
 {% endcache %}
 
-{{subject.courses.count}}
 {% endwith %}
 
 
