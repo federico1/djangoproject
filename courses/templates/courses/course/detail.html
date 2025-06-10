@@ -197,14 +197,6 @@ Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider.
 
                 </div>
 
-                {% comment %} <div class="single-course-details mb-5">
-                    <div class="alert alert-info">
-                        This Certificate of Training shall not imply or suggest that OSHA Outreach Training Program
-                        training was completed or will result in in individual being certified. Students are not
-                        eligible to request and/or receive an OSHA student completion card.
-                    </div>
-                </div> {% endcomment %}
-
                 {% if object.features.first.details_long and object.features.first.details_long.strip %}
                 <div class="single-course-details mb-5" id="section-details-long">
                     <div>
@@ -214,13 +206,11 @@ Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider.
 
                 {% endif %}
 
-                {% if object.features.first.notes and object.features.first.notes.strip %}
-                <div class="single-course-details mb-5" id="section-notes">
-                    <div>
-                        {{ object.features.first.notes | safe }}
-                    </div>
+                <div>
+                <h5>
+                    This Certificate of Training shall not imply or suggest that OSHA Outreach Training Program training was completed or will result in individual being certified. Students are not eligible to request and/or receive an OSHA student completion card
+                </h5>
                 </div>
-                {% endif %}
 
                 {% if object.features.first.outcomes and object.features.first.outcomes.strip %}
                 <div class="single-course-details mb-5" id="section-outcomes">
@@ -231,24 +221,8 @@ Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider.
                     </div>
                 </div>
 
-                
                 {% endif %}
-                {% comment %} <p><strong>Learning Outcomes:</strong></p>
-                <ul class="mb-2">
-                    <li>Understand safety protocols in the workplace.</li>
-                    <li>Recognize potential hazards and mitigate risks.</li>
-                </ul>
-                <p><strong> CEU Requirements</strong></p>
-                <ul class="mb-2">
-                    <li>100% appearance for the course</li>
-                    <li>Fully involvement in all class trainings (determined by instructor)</li>
-                    <li>Completion of Continuing Education and Training Registration Form</li>
-                    <li>Completion of mandatory quiz assessments</li>
-                    <li>As applicable, attainment of least passing score on required end-of-course examination</li>
-                    <li> Participation and submittal of end-of-course assessment form (must provide name on form to
-                        obtain credit)</li>
-                </ul> {% endcomment %}
-
+               
                 {% if object.features.first.credits and object.features.first.credits.strip %}
 
                <div id="section-credits">
@@ -261,12 +235,6 @@ Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider.
                </div>
                 {% endif %}
 
-                {% comment %} <p><strong> Prerequisites Prerequisites</strong></p>
-
-                <p> There are no prerequisites but, mandatory to do Video Cons in this course. Students must be able to
-                    orally
-                    communicate with instructor in primary language of the training</p> {% endcomment %}
-
 
                 <div class="single-course-details mb-5" id="section-completion-requirements">
                     <h4 class="course-title">
@@ -274,7 +242,15 @@ Complete {{ object.subject }} online with PDH Safety. IACET Accredited Provider.
                     <div>
                         {{ object.features.first.completion_requirements  |safe }}
                     </div>
+                </div> 
+          
+                {% if object.features.first.notes and object.features.first.notes.strip %}
+                <div class="single-course-details mb-5" id="section-notes">
+                    <div>
+                        {{ object.features.first.notes | safe }}
+                    </div>
                 </div>
+                {% endif %}
             </div>
             <div class="col-lg-4">
                 <div class="course-sidebar">
