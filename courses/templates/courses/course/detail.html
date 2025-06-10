@@ -38,17 +38,16 @@ online, fast, and trusted by industry professionals.
 
     <div class="course-single-wrapper">
 
-        {% if not object.is_free %}
         <div class="d-block d-sm-block d-md-none add-to-cart-fixed-wrapper">
             <div class="course-price-wrapper">
                 <div class="d-flex justify-content-between">
                     <div>
-                        <div class="course-price mb-0 mt-1">
+                        <div class="course-price">
 
                             {% if object.is_free %}
                             <p class="mb-0 small font-weight-bold text-white">
                                 <span class="text-white">
-                                    Price: Free</span>
+                                    Free Course</span>
                             </p>
                             {% elif object.discounted_price > 0 %}
 
@@ -71,7 +70,7 @@ online, fast, and trusted by industry professionals.
                         {% if request.user.is_authenticated and request.user.is_business == True %}
                         <div class="buy-btn text-left">
                             <a title="Dashboard" href="javascript:;"
-                                class=" mt-0 btn btn-warning font-weight-bold link-enroll-business">
+                                class="mt-0 btn btn-warning font-weight-bold link-enroll-business">
                                 Enroll (Dashboard)
                             </a>
                         </div>
@@ -82,20 +81,20 @@ online, fast, and trusted by industry professionals.
                             {% if request.user.is_authenticated %}
 
                             <a title="Take Free Course" href="javascript:;"
-                                class="btn  btn-warning font-weight-bold btn-block link-free-enroll">
-                                Take Free Course
+                                class="mt-0  btn btn-warning font-weight-bold link-free-enroll">
+                                Enroll Now
                             </a>
                             {% else %}
                             <a title="Enroll Free Course" href="javascript:;"
-                                class="btn  btn-warning font-weight-bold btn-block link-free-auth">
-                                Enroll Free Course
+                                class="mt-0 btn btn-warning font-weight-bold link-free-auth">
+                                Enroll Now
                             </a>
                             {% endif %}
 
                             {% else %}
 
                             <a title="Add To Cart" href="javascript:;"
-                                class=" mt-0 btn btn-warning font-weight-bold link-add-cart"
+                                class="mt-0 btn btn-warning font-weight-bold link-add-cart"
                                 data-subject="{{ subject.title }}" data-subject-slug="{{ subject.slug }}"
                                 data-json="{{ object|jsonify }}">
                                 Add To Cart
@@ -111,7 +110,6 @@ online, fast, and trusted by industry professionals.
                 </div>
             </div>
         </div>
-        {% endif %}
 
         <div class="container">
             <div class="row">
