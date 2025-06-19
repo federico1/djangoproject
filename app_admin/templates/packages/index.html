@@ -205,7 +205,7 @@
                 var parms = {
                     format: 'json',
                     version: new Date().toISOString(),
-                    is_deleted:false
+                    is_deleted: false
                 };
 
                 $.get('{% url "api_admin_v1:view_admin_packages-list" %}', parms, function (response) {
